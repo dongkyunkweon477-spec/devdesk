@@ -1,0 +1,43 @@
+package com.devdesk.pj.main;
+
+import org.apache.commons.dbcp2.BasicDataSource;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class DBManger_new {
+    private static final BasicDataSource dataSource;
+    static {
+        dataSource = new BasicDataSource();
+        dataSource.setUrl("jdbc:oracle:thin:@192.168.0.39:1521:XE");
+        dataSource.setUsername("c##sm1004");
+        dataSource.setPassword("sm1004");
+        dataSource.setMinIdle(10);        // 최소 유휴 커넥션
+        dataSource.setMaxIdle(20);        // 최대 유휴 커넥션
+        dataSource.setMaxOpenPreparedStatements(100); // 풀에서 열린 최대 준비된 sql문 개수
+
+    }
+    public static Connection connect() throws SQLException {
+        return dataSource.getConnection();
+    }
+    public static void close(Connection con, PreparedStatement pstmt, ResultSet rs) {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            pstmt.close();
+            if (con != null) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+
+}
