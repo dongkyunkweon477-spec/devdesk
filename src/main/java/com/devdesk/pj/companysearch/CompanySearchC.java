@@ -11,7 +11,10 @@ import java.io.IOException;
 public class CompanySearchC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.getRequestDispatcher("/company-search/companySearch.jsp").forward(request, response);
+
+
+        request.setAttribute("content", "/company-search/companySearch.jsp");
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
 
     }
 

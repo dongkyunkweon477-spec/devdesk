@@ -6,9 +6,12 @@
     <meta charset="UTF-8">
     <title>게시판 목록 레이아웃</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review-board.css">
+
 </head>
 <body>
 
+
+<jsp:include page="/company-search/companySearch.jsp"/>
 <div class="board-container">
     <%-- 임시로 5개의 항목을 반복 출력하는 부분 --%>
     <% for(int i=1; i<=5; i++) { %>
