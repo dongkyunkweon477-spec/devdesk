@@ -53,11 +53,13 @@ public class BoardDAO {
                 bo = new BoardVO();
                 bo.setCategory(rs.getString("b_category"));
                 bo.setTitle(rs.getString("b_title"));
-                bo.setMember_id(rs.getInt("b_member_id"));
+                bo.setMember_id(rs.getInt("member_id"));
                 bo.setCreated_date(rs.getString("b_created_date"));
                 bo.setView_count(rs.getInt("b_view_count"));
                 boards.add(bo);
-            }return boards;
+            }
+            request.setAttribute("boards", boards);
+            return boards;
 
         }catch (Exception e){
             e.printStackTrace();
