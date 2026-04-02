@@ -8,13 +8,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "calenderC", value = "/calender")
-public class calenderC extends HttpServlet {
+public class CalenderC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
     //index_cal.jsp로 이동
         request.getRequestDispatcher("calendar/index_cal.jsp").forward(request,response);
-
+        //일시키기
+        ScheduleDAO.SCAO.showAllSch(request);
     }
 
     public void destroy() {
