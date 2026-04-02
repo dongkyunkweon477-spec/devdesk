@@ -31,10 +31,11 @@
     <div>
         <c:forEach var="b" items="${boards}">
             <div class="board-row">
-                <div>
+                <div>${b.title}</div>
+<%--                <div>--%>
 <%--                    <span onclick="location.href='review-detail?pk=${r.no}'">${r.title }</span> <br>--%>
-                </div>
-                <div>${b.date}</div>
+<%--                </div>--%>
+                <div>${b.created_date}</div>
             </div>
         </c:forEach>
     </div>

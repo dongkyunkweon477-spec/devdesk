@@ -16,3 +16,8 @@ b_updated_date  DATE,                         -- 수정일
 );
 
 create sequence board_seq;
+
+INSERT INTO board (b_board_id, b_category, b_title, b_content)
+VALUES (board_seq.NEXTVAL, '자유토크', '가입인사입니다.', '잘 부탁드립니다.');
+
+select * from board;
