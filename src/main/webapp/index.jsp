@@ -20,7 +20,7 @@
         <!-- 로고 -->
         <div class="title">
             <img onclick="" src="images/Devlogo.png" alt="">
-            <a href="">DevDesk</a>
+            <a href="main">DevDesk</a>
         </div>
         <!-- 메뉴 -->
         <div class="menu-left">
