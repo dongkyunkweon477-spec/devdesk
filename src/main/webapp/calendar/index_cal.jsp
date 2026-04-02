@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -36,8 +37,11 @@
 
             // db연결
             events: [
-                { title: ${db데이터}, start: '2026-04-05' },
-                { title: '카카오 면접', start: '2026-04-10' }
+                <c:forEach var="sch" items="${list}" varStatus="status">
+                {
+                    title: '${sch.company_name} 면접',
+                    start: '${sch.schedule_date}'
+                }<c:if test="${!status.last}">,</c:if> </c:forEach>
             ]
         });
 

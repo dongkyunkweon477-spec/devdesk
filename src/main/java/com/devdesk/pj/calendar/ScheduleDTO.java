@@ -11,13 +11,13 @@ import java.util.Date;
 @WebServlet
 
 public class ScheduleDTO {
-    private int schedule_ID;
-    private int member_ID;
+    private String schedule_ID;
+    private String member_ID;
     private String company_name;
-    private Date schedule_date;
+    private java.sql.Date schedule_date;
     private String schedule_time;
     private String interview_type;
     private String memo;
-    private Date created_date;
-
+    private java.sql.Date created_date;
+    private String google_event_id;
 }

@@ -20,26 +20,32 @@ public class ScheduleDAO {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        String sql = "select * from schedule";
+        String sql = "select * from schedule ";
+                            // 작업끝나면 sql에 추가할게요=> where id = ?
         try {
             con = DBManager_new.connect();
             pstmt = con.prepareStatement(sql);
             rs = pstmt.executeQuery();
             ScheduleDTO scheduleDTO = null;
-            ArrayList<ScheduleDTO> schedules = new ArrayList<ScheduleDTO>();
+            ArrayList<ScheduleDTO> schedules = new ArrayList<>();
 
             while (rs.next()) {
                 String id = rs.getString("schedule_id");
                 String member_id = rs.getString("member_id");
                 String company_name = rs.getString("company_name");
-                Date schedule_date = rs.getDate("schedule_date");
+                java.sql.Date schedule_date = rs.getDate("schedule_date");
                 String schedule_time = rs.getString("schedule_time");
+                String interview_type = rs.getString("interview_type");
                 String memo = rs.getString("memo");
-                Date created_date = rs.getDate("created_date");
+                java.sql.Date created_date = rs.getDate("created_date");
                 String google_event_id = rs.getString("google_event_id");
-               
 
-                schedules.add(scheduleDTO);
+                ScheduleDTO schedule = new ScheduleDTO(
+                        id, member_id, company_name, schedule_date, schedule_time,
+                        interview_type, memo, created_date, google_event_id
+                );
+
+                schedules.add(schedule);
             }
             return schedules;
 
