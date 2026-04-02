@@ -41,10 +41,41 @@ public class MemberDAO {
         return result;
     }
 
-    public void signUp(HttpServletRequest request) {
+    public boolean signUp(HttpServletRequest request) {
 
+    boolean result = false;
+    Connection con = null;
+    PreparedStatement pstmt = null;
 
+    String sql = "INSERT INTO MEMBER (MEMBER_ID, EMAIL, PASSWORD, NICKNAME, JOB_CATEGORY) "
+            + "VALUES (SEQ_MEMBER_ID.NEXTVAL, ?, ?, ?, ?)";
 
+        try {
+            // 🚨 DAO 안에서 request 상자를 뜯어서 값을 꺼냅니다!
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            String nickname = request.getParameter("nickname");
+            String jobCategory = request.getParameter("jobCategory");
 
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+
+            // 꺼낸 값을 쿼리의 물음표에 채워 넣습니다.
+            pstmt.setString(1, email);
+            pstmt.setString(2, password);
+            pstmt.setString(3, nickname);
+            pstmt.setString(4, jobCategory);
+
+            if (pstmt.executeUpdate() == 1) { // 1줄 들어가면 성공!
+                result = true;
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            DBManager_new.close(con, pstmt, null);
+        }
+
+        return result;
     }
 }

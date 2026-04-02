@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div class="login-area">
+<div azclass="login-area">
     <%--  <span style="color: red">${msg}</span>--%>
     <%--  <jsp:include page="${loginPage}"></jsp:include>--%>
 </div>
