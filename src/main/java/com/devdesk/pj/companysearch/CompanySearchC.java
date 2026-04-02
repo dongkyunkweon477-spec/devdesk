@@ -7,11 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "CompanySearchC", value = "/companysearch")
+@WebServlet("/company-search")
 public class CompanySearchC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.getRequestDispatcher("/companysearch/companySearch.jsp").forward(request, response);
+        request.getRequestDispatcher("/company-search/companySearch.jsp").forward(request, response);
+
     }
 
     public void destroy() {
