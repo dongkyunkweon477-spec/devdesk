@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review-board.css">
 </head>
 <body>
+<<<<<<< HEAD
 
 <div class="board-container">
     <%-- 임시로 5개의 항목을 반복 출력하는 부분 --%>
@@ -69,5 +70,8 @@
     </div>
 </div>
 
+=======
+<h1>review page~~~~</h1>
+>>>>>>> 5dfd6c4f8f2b2b86297ebf7782151d70f469e637
 </body>
 </html>
