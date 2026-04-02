@@ -11,6 +11,8 @@ import java.io.IOException;
 public class BoardC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        // 전체 조회하는 일
+        BoardDAO.showAllBoard(request);
 
         request.setAttribute("content", "/board/board.jsp");
         request.getRequestDispatcher("index.jsp").forward(request, response);

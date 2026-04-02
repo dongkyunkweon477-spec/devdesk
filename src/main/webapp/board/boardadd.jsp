@@ -7,7 +7,7 @@
 <body>
 <div class="write-container">
 
-    <h2>✍ 글쓰기</h2>
+    <h2>✍ 글 작성하기</h2>
 
     <form action="board_add">
 
