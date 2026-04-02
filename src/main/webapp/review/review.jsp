@@ -1,14 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>게시판 목록 레이아웃</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review-board.css">
-</head>
-<body>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/review-board.css">
 
+
+<jsp:include page="/company-search/companySearch.jsp"/>
 <div class="board-container">
     <%-- 임시로 5개의 항목을 반복 출력하는 부분 --%>
     <% for(int i=1; i<=5; i++) { %>
@@ -68,6 +63,3 @@
         <button class="page-btn">다음</button>
     </div>
 </div>
-
-</body>
-</html>

@@ -1,4 +1,4 @@
-package com.devdesk.pj.companysearch;
+package com.devdesk.pj.application;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,17 +7,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/company-search")
-public class CompanySearchC extends HttpServlet {
+@WebServlet(name = "ApplicationinsertC", value = "/application-insert")
+public class ApplicationinsertC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-
-        request.setAttribute("content", "/company-search/companySearch.jsp");
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        ApplicationDAO.addApplication(request);
+        response.sendRedirect("application_list");
+
+
+    }
 
     public void destroy() {
     }
 }
+
