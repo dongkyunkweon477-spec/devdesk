@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<<<<<<< HEAD
     <meta charset="UTF-8">
     <title>게시판 목록 레이아웃</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review-board.css">
@@ -73,5 +74,11 @@
 =======
 <h1>review page~~~~</h1>
 >>>>>>> 5dfd6c4f8f2b2b86297ebf7782151d70f469e637
+=======
+    <title>review</title>
+</head>
+<body>
+
+>>>>>>> b8ad14f885f9e1161f05260b8572471a1b34febc
 </body>
 </html>
