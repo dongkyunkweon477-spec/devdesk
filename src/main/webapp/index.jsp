@@ -1,4 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +20,7 @@
         <!-- 로고 -->
         <div class="title">
             <img onclick="" src="images/Devlogo.png" alt="">
-            <a href="#">DevDesk</a>
+            <a href="">DevDesk</a>
         </div>
         <!-- 메뉴 -->
         <div class="menu-left">
@@ -27,6 +28,7 @@
             <a href="report">이력서 관리</a>
             <a href="#">면접 일정</a>
             <a href="review">면접 후기</a>
+            <a href="board">커뮤니티</a>
         </div>
         <!-- 로그인 -->
         <div class="menu-right">
@@ -35,9 +37,11 @@
             <a href="account">회원가입</a>
         </div>
     </div>
+
     <div class="content">
-        <%--    <jsp:include page="${content}"></jsp:include>--%>
+            <jsp:include page="${content}"></jsp:include>
     </div>
+
 </div>
 
 <div class="footer">

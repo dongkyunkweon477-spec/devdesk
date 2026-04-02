@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <title>review</title>
 </head>
 <body>
-<h1>review page~~~~</h1>
+
 </body>
 </html>
