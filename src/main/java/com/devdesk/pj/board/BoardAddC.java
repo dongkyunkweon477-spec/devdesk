@@ -1,4 +1,4 @@
-package com.devdesk.pj.review;
+package com.devdesk.pj.board;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,15 +7,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "ReviewC", value = "/review")
-public class ReviewC extends HttpServlet {
+@WebServlet(name = "BoardC", value = "/board_add")
+public class BoardAddC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-<<<<<<< HEAD
+    //일
+        BoardDAO.addBoard(request);
 
-        request.getRequestDispatcher("/review/review.jsp").forward(request, response);
-=======
->>>>>>> b8ad14f885f9e1161f05260b8572471a1b34febc
+
+        request.setAttribute("content", "board/boardadd.jsp");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
     public void destroy() {
