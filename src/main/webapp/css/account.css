@@ -1,0 +1,154 @@
+/* 1. 전체 배경: 아주 연한 보라빛이 도는 깔끔한 배경 */
+.account-body {
+    background-color: #F8F6FA;
+    margin: 0;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+}
+
+/* 2. 화면 중앙 정렬 및 여백 */
+.signup-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+/* 3. 회원가입 폼을 감싸는 하얀색 카드 (첫 번째 사진 느낌) */
+.signup-card {
+    background-color: #FFFFFF;
+    width: 100%;
+    max-width: 500px;
+    padding: 50px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* 부드러운 그림자 */
+}
+
+/* 4. 제목 부분 */
+.signup-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.signup-header h2 {
+    color: #333333;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.signup-header p {
+    color: #666666;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* 5. 각 입력 항목들을 감싸는 묶음 */
+.form-group {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+/* 필수 항목 빨간 별표 */
+.required {
+    color: #FF4D4F;
+}
+
+/* 6. 입력창(Input) 및 셀렉트 박스 디자인 */
+.form-group input,
+.form-group select {
+    padding: 14px;
+    border: 1px solid #DDDDDD;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+/* 입력창 클릭 시 테두리가 DevDesk 보라색으로 변함 */
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #7C3AED;
+}
+
+/* 7. 이메일 & 중복확인 버튼 나란히 배치 */
+.input-with-btn {
+    display: flex;
+    gap: 10px;
+}
+
+.input-with-btn input {
+    flex: 1; /* 입력창이 남은 공간을 다 차지하게 함 */
+}
+
+/* 중복확인 버튼: DevDesk의 연보라 배경 + 진보라 텍스트 */
+.btn-check {
+    background-color: #F3E8FF;
+    color: #7C3AED;
+    border: none;
+    border-radius: 6px;
+    padding: 0 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    white-space: nowrap;
+}
+
+.btn-check:hover {
+    background-color: #E9D5FF;
+}
+
+.check-msg {
+    font-size: 13px;
+    margin-top: 5px;
+    margin-left: 2px;
+}
+
+/* 8. 하단 버튼 영역 (가입완료 / 취소) */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+/* 가입 완료 버튼: 찐한 DevDesk 보라색 */
+.btn-submit {
+    background-color: #7C3AED;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    padding: 15px 40px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #6D28D9;
+}
+
+/* 가입 취소 버튼: 연한 회색 */
+.btn-cancel {
+    background-color: #F1F1F1;
+    color: #666666;
+    border: none;
+    border-radius: 6px;
+    padding: 15px 40px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-cancel:hover {
+    background-color: #E4E4E4;
+}

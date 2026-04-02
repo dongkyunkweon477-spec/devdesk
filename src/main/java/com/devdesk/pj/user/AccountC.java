@@ -12,10 +12,10 @@ public class AccountC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
+        request.getRequestDispatcher("/user/account.jsp").forward(request, response);
 
-
-        request.setAttribute("content", "user/account.jsp");
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
+        //request.setAttribute("content", "user/account.jsp");
+        //request.getRequestDispatcher("/index.jsp").forward(request, response);
 
     }
 
@@ -44,8 +44,6 @@ public class AccountC extends HttpServlet {
     }
 
     public void destroy() {
-
-
 
     }
 }
