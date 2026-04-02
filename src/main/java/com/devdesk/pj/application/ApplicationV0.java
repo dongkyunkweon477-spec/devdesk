@@ -14,4 +14,7 @@ public class ApplicationV0 {
     private String status;
     private Date appDate;
     private String memo;
+    private Date interviewDate;
+    private String interviewTime;
+    private String interviewType;
 }

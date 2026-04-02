@@ -22,6 +22,10 @@ CREATE TABLE application (
 
 
 );
+ALTER TABLE application ADD interview_date DATE;
+ALTER TABLE application MODIFY interview_time VARCHAR2(20);
+ALTER TABLE application MODIFY interview_type VARCHAR2(50);
+
 CREATE TABLE til (
                      til_id NUMBER PRIMARY KEY,
                      member_id NUMBER NOT NULL,
