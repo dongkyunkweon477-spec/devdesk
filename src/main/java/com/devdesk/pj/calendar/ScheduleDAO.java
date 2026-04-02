@@ -37,6 +37,8 @@ public class ScheduleDAO {
                 String memo = rs.getString("memo");
                 Date created_date = rs.getDate("created_date");
                 String google_event_id = rs.getString("google_event_id");
+               
+
                 schedules.add(scheduleDTO);
             }
             return schedules;

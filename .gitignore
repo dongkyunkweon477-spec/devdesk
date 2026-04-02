@@ -42,6 +42,11 @@ bin/
 ### Mac OS ###
 .DS_Store
 .idea
+<<<<<<< HEAD
 DBManager_new.java
 
 .sql
+=======
+*.sql
+DBManager_new.java
+>>>>>>> e032149468a5d61a54d45e852be1400806353420
