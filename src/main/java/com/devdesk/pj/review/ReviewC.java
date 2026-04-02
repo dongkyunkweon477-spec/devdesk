@@ -11,11 +11,8 @@ import java.io.IOException;
 public class ReviewC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-<<<<<<< HEAD
 
         request.getRequestDispatcher("/review/review.jsp").forward(request, response);
-=======
->>>>>>> b8ad14f885f9e1161f05260b8572471a1b34febc
     }
 
     public void destroy() {

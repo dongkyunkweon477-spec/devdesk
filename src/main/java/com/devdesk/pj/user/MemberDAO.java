@@ -48,7 +48,7 @@ public class MemberDAO {
     PreparedStatement pstmt = null;
 
     String sql = "INSERT INTO MEMBER (MEMBER_ID, EMAIL, PASSWORD, NICKNAME, JOB_CATEGORY) "
-            + "VALUES (SEQ_MEMBER_ID.NEXTVAL, ?, ?, ?, ?)";
+            + "VALUES (member_id_seq.NEXTVAL, ?, ?, ?, ?)";
 
         try {
             // 🚨 DAO 안에서 request 상자를 뜯어서 값을 꺼냅니다!
