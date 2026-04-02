@@ -60,6 +60,7 @@ a:hover {
 .title {
     display: flex;
     align-items: center;
+    gap: 10px;
 }
 /* DevDesk 왼쪽으로 이동 */
 .title {
@@ -74,7 +75,8 @@ a:hover {
     gap: 10px;
 }
 .title img {
-    height: 40px;  /* 로고 크기 */
+    height: 40px;
+    display: block;
 }
 
 /* 메뉴를 같은 줄에 올리기 */

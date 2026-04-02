@@ -18,9 +18,8 @@
     <div class="header">
         <!-- 로고 -->
         <div class="title">
-            <a href="#">
-                <img src="images/DevDesk_logo.png" alt="">
-                DevDesk</a>
+            <img onclick="" src="images/Devlogo.png" alt="">
+            <a href="#">DevDesk</a>
         </div>
         <!-- 메뉴 -->
         <div class="menu-left">
