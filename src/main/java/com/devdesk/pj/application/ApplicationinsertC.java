@@ -7,16 +7,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "ApplicationC", value = "/application")
-public class ApplicationC extends HttpServlet {
+@WebServlet(name = "ApplicationinsertC", value = "/application-insert")
+public class ApplicationinsertC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        ApplicationDAO.selectAllCompanies(request);
-        request.getRequestDispatcher("/application/application.jsp").forward(request,response);
     }
 
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        ApplicationDAO.addApplication(request);
+        response.sendRedirect("application_list");
 
+
+    }
 
     public void destroy() {
     }
 }
+

@@ -9,6 +9,11 @@ INSERT INTO application (
 ) VALUES (
              2, 3, 1, '프론트엔드 개발자', 'INTERVIEW', SYSDATE, '면접 예정'
          );
+INSERT INTO application (
+    app_id, member_id, company_id, position, stage, apply_date, memo
+) VALUES (
+             3, 3, 2, '프론트엔드 개발자', 'INTERVIEW', SYSDATE, '면접 예정'
+         );
 INSERT INTO til (
     til_id, member_id, title, content
 ) VALUES (
@@ -62,6 +67,8 @@ INSERT INTO tag (
              3, '합격'
          );
 
+SELECT * FROM application ;
+select * from COMPANY;
 select * from APPLICATION;
 select * from TIL;
 select * from RESUME;
@@ -69,7 +76,7 @@ select * from RESUME_FIELD;
 select * from TAG;
 
 create sequence application_seq;
-create sequence application_seq;
-create sequence application_seq;
-create sequence application_seq;
-create sequence application_seq;
+create sequence til_seq;
+create sequence resume_seq;
+create sequence resume_filed_seq;
+create sequence tag_seq;

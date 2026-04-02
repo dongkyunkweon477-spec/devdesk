@@ -7,12 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "ApplicationC", value = "/application")
-public class ApplicationC extends HttpServlet {
+@WebServlet(name = "ApplicationListC", value = "/application_list")
+public class ApplicationListC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        ApplicationDAO.selectAllApplications(request);
         ApplicationDAO.selectAllCompanies(request);
-        request.getRequestDispatcher("/application/application.jsp").forward(request,response);
+        request.getRequestDispatcher("/application/applicationList.jsp").forward(request,response);
     }
 
 

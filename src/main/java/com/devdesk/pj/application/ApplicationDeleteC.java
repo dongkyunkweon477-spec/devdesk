@@ -7,12 +7,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "ApplicationC", value = "/application")
-public class ApplicationC extends HttpServlet {
+@WebServlet(name = "ApplicationDeleteC", value = "/application_delete")
+public class ApplicationDeleteC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    }
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        ApplicationDAO.deleteApplication(request);
         ApplicationDAO.selectAllCompanies(request);
-        request.getRequestDispatcher("/application/application.jsp").forward(request,response);
+        ApplicationDAO.selectAllApplications(request);
+        request.getRequestDispatcher("/application/applicationList.jsp").forward(request,response);
     }
 
 

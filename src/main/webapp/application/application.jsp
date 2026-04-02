@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
           pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,7 +56,7 @@
 <div class="container">
     <h2>지원 등록</h2>
 
-    <form action="/application/insert" method="post">
+    <form action="application-insert" method="post">
 
         <!-- 회사 선택 -->
         <label>회사</label>
@@ -63,8 +64,8 @@
             <option value="">-- 선택 --</option>
             <!-- 서버에서 받아온 회사 리스트 -->
             <c:forEach var="company" items="${companyList}">
-                <option value="${company.company_id}">
-                        ${company.company_name}
+                <option value="${company.companyId}">
+                        ${company.companyName}
                 </option>
             </c:forEach>
         </select>
