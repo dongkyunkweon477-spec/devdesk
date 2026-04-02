@@ -8,6 +8,7 @@ import javax.servlet.annotation.*;
 @WebServlet(name = "helloServlet", value = "/main")
 public class HelloServlet extends HttpServlet {
 
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 //        AccountDAO.ADAO.loginCheck(request); // 로그인 하고 확인
         request.setAttribute("content","home.jsp");

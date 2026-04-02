@@ -45,3 +45,5 @@ bin/
 *.sql
 DBManager_new.java
 CLAUDE.md
+.sql
+

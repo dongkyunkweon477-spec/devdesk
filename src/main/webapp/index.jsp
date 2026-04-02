@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<div class="login-area">
+<div azclass="login-area">
     <%--  <span style="color: red">${msg}</span>--%>
     <%--  <jsp:include page="${loginPage}"></jsp:include>--%>
 </div>
@@ -32,7 +32,7 @@
         </div>
         <!-- 로그인 -->
         <div class="menu-right">
-            <a href="user">로그인</a>
+            <a href="login">로그인</a>
             <span>|</span>
             <a href="account">회원가입</a>
         </div>

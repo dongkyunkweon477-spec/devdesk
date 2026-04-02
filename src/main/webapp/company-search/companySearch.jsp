@@ -1,3 +1,4 @@
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/companySearch.css">
@@ -71,4 +72,3 @@
 <c:if test="${empty companies and not empty param.companyName}">
     <p>검색 결과가 없습니다.</p>
 </c:if>
-
