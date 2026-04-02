@@ -58,6 +58,7 @@
       <th>지원일</th>
       <th>메모</th>
       <th>삭제</th>
+      <th>수정</th>
     </tr>
 
 
@@ -78,6 +79,12 @@
             <button type="submit" onclick="return confirm('삭제하시겠습니까?');">
               삭제
             </button>
+          </form>
+        </td>
+        <td>
+          <form action="application_update" method="get">
+            <input type="hidden" name="app_id" value="${app.appId}">
+            <button type="submit">수정</button>
           </form>
         </td>
       </tr>

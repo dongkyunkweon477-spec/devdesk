@@ -187,6 +187,71 @@ public class ApplicationDAO {
             DBManager_new.close(con, pstmt, null);
         }
     }
+    public static ApplicationV0 selectApplication(HttpServletRequest request) {
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        ApplicationV0 dto = null;
+
+        String sql = "SELECT a.app_id, c.company_name, a.position, a.stage, a.apply_date, a.memo "
+                + "FROM application a "
+                + "JOIN company c ON a.company_id = c.company_id "
+                + "WHERE a.app_id = ?";
+
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+
+            int appId = Integer.parseInt(request.getParameter("app_id"));
+            pstmt.setInt(1, appId);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                dto = new ApplicationV0();
+                dto.setAppId(rs.getString("app_id"));
+                dto.setCompanyName(rs.getString("company_name"));
+                dto.setPosition(rs.getString("position"));
+                dto.setStatus(rs.getString("stage"));
+                dto.setAppDate(rs.getDate("apply_date"));
+                dto.setMemo(rs.getString("memo"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, pstmt, rs);
+        }
+
+        return dto;
+    }
+
+    public static void updateApplication(HttpServletRequest request) {
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        String sql = "UPDATE application SET stage = ? WHERE app_id = ?";
+
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+
+            pstmt.setString(1, request.getParameter("status"));
+            pstmt.setInt(2, Integer.parseInt(request.getParameter("app_id")));
+
+            int result = pstmt.executeUpdate();
+            System.out.println("상태 변경 결과: " + result);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, pstmt, null);
+        }
+    }
+
 
 }
 
