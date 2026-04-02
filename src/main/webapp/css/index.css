@@ -1,0 +1,217 @@
+/* ===== 폰트 ===== */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Pretendard:wght@400;500;600&display=swap');
+
+/* ===== 기본 ===== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Pretendard', sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+}
+
+/* 링크 */
+a {
+    text-decoration: none;
+    color: #334155;
+    transition: 0.3s;
+}
+
+a:hover {
+    color: #a78bfa; /* 연보라 포인트 */
+}
+
+/* 헤더처럼 묶기 위해 container 기준 */
+.container {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+}
+
+/* ===== 타이틀 ===== */
+/* ===== 헤더 한 줄 병합 ===== */
+.title,
+.menu-left,
+.menu-right {
+    position: static; /* 🔥 fixed 제거 */
+}
+
+/* ===== 헤더 ===== */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    height: 70px;
+    padding: 0 40px;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+/* DevDesk 왼쪽으로 이동 */
+.title {
+    justify-content: flex-start;
+}
+
+.title a {
+    font-size: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #7c3aed;
+    letter-spacing: 1px;
+    gap: 10px;
+}
+.title img {
+    height: 40px;
+    display: block;
+}
+
+/* 메뉴를 같은 줄에 올리기 */
+.menu-left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.menu-left a {
+    font-size: 15px;
+    position: relative;
+    color: #475569;
+    padding-bottom: 4px;
+}
+
+/* 밑줄 효과 유지 */
+.menu-left a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: #a78bfa;
+    transition: width 0.3s ease;
+}
+
+
+.menu-left a:hover {
+    color: #7c3aed;
+}
+
+.menu-left a:hover::after {
+    width: 100%;
+}
+
+/* 메뉴 왼 오 */
+.menu-left,
+.menu-right {
+    z-index: 1100; /* title보다 높게 */
+}
+
+/* 메뉴 오른쪽 */
+.menu-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.menu-right a {
+    font-size: 14px;
+    color: #64748b;
+}
+
+.menu-right a:hover {
+    color: #7c3aed;
+}
+
+.menu-right span {
+    margin: 0 4px;
+    color: #cbd5f5;
+}
+
+/* ===== 메뉴 구분선 ===== */
+.menu-left::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: -40px;
+    width: 100vw;
+    height: 1px;
+    display: none;
+    pointer-events: none;
+    background-color: #e2e8f0;
+}
+
+/* ===== 콘텐츠 ===== */
+.content {
+    margin-top: 120px;
+    padding: 50px;
+    min-height: 800px;
+}
+
+/* 로그인 버튼 스타일 유지 */
+.menu-right a:first-child {
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.menu-right a:last-child {
+    padding: 6px 12px;
+    border-radius: 6px;
+    background-color: #ede9fe;
+    color: #6d28d9;
+}
+
+.menu-right a:last-child:hover {
+    background-color: #ddd6fe;
+}
+
+/* ===== 푸터 ===== */
+.footer {
+    width: 100%;
+    border-top: 1px solid #e2e8f0;
+    background-color: #ffffff;
+    margin-top: 60px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
+}
+
+.footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+/* 오른쪽 메뉴 */
+.footer-right a {
+    margin-left: 20px;
+    color: #64748b;
+    transition: 0.3s;
+}
+
+.footer-right a:hover {
+    color: #7c3aed;
+}
+
+.footer-message {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
