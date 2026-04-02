@@ -42,4 +42,8 @@ bin/
 ### Mac OS ###
 .DS_Store
 .idea
+*.sql
 DBManager_new.java
+CLAUDE.md
+.sql
+
