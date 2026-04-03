@@ -51,13 +51,14 @@ public class BoardDAO {
         ArrayList<BoardVO> boards = new ArrayList<>();
         String sql = "SELECT * FROM board ORDER BY b_board_id DESC";
 
-        try{
+        try {
             con = DBManager_new.connect();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
-            while (rs.next()){
+            while (rs.next()) {
                 bo = new BoardVO();
+                bo.setBoard_id(rs.getInt("b_board_id"));
                 bo.setCategory(rs.getString("b_category"));
                 bo.setTitle(rs.getString("b_title"));
                 bo.setMember_id(rs.getInt("member_id"));
@@ -68,10 +69,10 @@ public class BoardDAO {
             request.setAttribute("boards", boards);
             return boards;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            DBManager_new.close(con,ps,rs);
+        } finally {
+            DBManager_new.close(con, ps, rs);
         }
         return null;
     }
@@ -79,6 +80,56 @@ public class BoardDAO {
     public static void delBoard(HttpServletRequest request) {
 
     }
+
+    public static void getBoard(HttpServletRequest request) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        String sql = "select * from board where b_board_id = ?";
+
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, request.getParameter("id"));
+            rs = pstmt.executeQuery();
+            BoardVO boardVO = null;
+
+            if (rs.next()) {
+                int member_id = rs.getInt("member_id");
+                int board_id = rs.getInt("b_board_id");
+                String title = rs.getString("b_title");
+                String content = rs.getString("b_content");
+                String category = rs.getString("b_category");
+                String created_date = rs.getString("b_created_date");
+                int view_count = rs.getInt("b_view_count");
+                int like_count = rs.getInt("b_like_count");
+                char hidden_yn = rs.getString("b_hidden_yn").charAt(0);
+
+                boardVO = new BoardVO();
+                boardVO.setMember_id(member_id);
+                boardVO.setBoard_id(board_id);
+                boardVO.setTitle(title);
+                boardVO.setContent(content);
+                boardVO.setCategory(category);
+                boardVO.setCreated_date(created_date);
+                boardVO.setView_count(view_count);
+                boardVO.setLike_count(like_count);
+                boardVO.setHidden_yn(hidden_yn);
+
+            }
+            System.out.println(boardVO);
+            request.setAttribute("board", boardVO);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            DBManager_new.close(con, pstmt, rs);
+        }
+
+
+    }
+
 
 //    public void paging(HttpServletRequest request, int pageNum) {
 //        request.setAttribute("currentPage", pageNum);

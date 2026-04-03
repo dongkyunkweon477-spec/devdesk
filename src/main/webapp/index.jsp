@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<div azclass="login-area">
+<div class="login-area">
     <%--  <span style="color: red">${msg}</span>--%>
     <%--  <jsp:include page="${loginPage}"></jsp:include>--%>
 </div>
@@ -26,7 +26,7 @@
         <div class="menu-left">
             <a href="ws">워크 스페이스</a>
             <a href="report">이력서 관리</a>
-            <a href="#">면접 일정</a>
+            <a href="calender">면접 일정</a>
             <a href="review">면접 후기</a>
             <a href="board">커뮤니티</a>
         </div>

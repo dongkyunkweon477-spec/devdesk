@@ -11,9 +11,9 @@ import java.io.IOException;
 public class BoardAddC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    //일
+        //일
 //        BoardDAO.addBoard(request);
-
+        // loginCheck
         request.setAttribute("content", "board/boardadd.jsp");
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
@@ -21,7 +21,7 @@ public class BoardAddC extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         BoardDAO.addBoard(request);
-
+        // loginCheck
         response.sendRedirect("board");
     }
 
