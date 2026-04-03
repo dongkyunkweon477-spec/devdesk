@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-//@WebServlet(name = "calenderC", value = "")
-public class CalendarC extends HttpServlet {
+@WebServlet(name = "CalendarAddC", value = "/add-calender")
+public class CalendarAddC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
@@ -17,8 +17,8 @@ public class CalendarC extends HttpServlet {
         ArrayList<ScheduleDTO> schList = ScheduleDAO.SCAO.showAllSch();
         request.setAttribute("list", schList);
 
-        //index_cal.jsp로 이동
-        request.getRequestDispatcher("calendar/index_cal.jsp").forward(request, response);
+    //index_cal.jsp로 이동
+        request.getRequestDispatcher("calendar/index_cal.jsp").forward(request,response);
     }
 
     public void destroy() {
