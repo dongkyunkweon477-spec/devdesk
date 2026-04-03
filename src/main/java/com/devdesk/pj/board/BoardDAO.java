@@ -77,8 +77,30 @@ public class BoardDAO {
         return null;
     }
 
-    public static void delBoard(HttpServletRequest request) {
+    public static int delBoard(HttpServletRequest request) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        String sql = "DELETE FROM board WHERE b_board_id = ?";
 
+        try {
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, request.getParameter("id"));
+            int result = ps.executeUpdate();
+            request.setCharacterEncoding("UTF-8");
+
+            if (result == 1) {
+                System.out.println("delete success");
+            }
+            return result;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, null);
+        }
+
+        return 0;
     }
 
     public static void getBoard(HttpServletRequest request) {

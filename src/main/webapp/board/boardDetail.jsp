@@ -39,7 +39,7 @@
     <c:if test="${sessionScope.loginMember.member_id == board.member_id}">
         <div class="detail-buttons">
             <button class="edit-btn" onclick="location.href='BoardUpdateC?id=${board.member_id}'">수정</button>
-            <button class="delete-btn" onclick="deleteBoard(${board.member_id})">삭제</button>
+            <button class="delete-btn" onclick="deleteBoard(${board.board_id})">삭제</button>
         </div>
     </c:if>
 </div>
@@ -47,7 +47,7 @@
 <script>
     function deleteBoard(id) {
         if (confirm("정말 삭제하시겠습니까?")) {
-            location.href = "BoardDeleteC?id=" + id;
+            location.href = "board_del?id=" + id;
         }
     }
 </script>
