@@ -7,9 +7,9 @@
 <body>
 <div class="write-container">
 
-    <h2>✍ 글쓰기</h2>
+    <h2>✍ 글 작성하기</h2>
 
-    <form action="board_add">
+    <form action="board_add" method="post">
 
         <!-- hidden: 컨트롤러 분기용 -->
         <input type="hidden" name="cmd" value="write">
@@ -21,7 +21,6 @@
                 <option value="">선택하세요</option>
                 <option value="자유토크">자유토크</option>
                 <option value="이력서">이력서</option>
-                <option value="면접후기">면접후기</option>
                 <option value="TIP">자기만의 TIP</option>
             </select>
         </div>
@@ -40,9 +39,11 @@
         </div>
 
         <!-- 버튼 -->
+
         <div class="form-actions">
             <button type="submit" class="submit-btn">등록</button>
-            <button type="button" class="cancel-btn">취소</button>
+        </form>
+            <button type="button" class="cancel-btn" onclick="history.back()">취소</button>
         </div>
 
     </form>
