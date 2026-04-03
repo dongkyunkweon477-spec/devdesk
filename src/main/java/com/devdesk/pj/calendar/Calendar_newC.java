@@ -14,7 +14,7 @@ public class Calendar_newC extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         Object sessionMemberId = request.getSession().getAttribute("memberId");
-        int memberId = 3; // 💥 테스트용 3번 유저! (나중에 로그인 기능 붙이면 아래 if문이 작동합니다)
+        int memberId = 3; //  테스트용 3번 유저! (나중에 로그인 기능 붙이면 아래 if문이 작동합니다)
 
         if (sessionMemberId != null) {
             memberId = (int) sessionMemberId;
