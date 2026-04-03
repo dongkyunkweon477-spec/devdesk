@@ -12,29 +12,36 @@ public class BoardDAO {
     public static void addBoard(HttpServletRequest request) {
         Connection con = null;
         PreparedStatement ps = null;
-        String sql = "INSERT INTO board (b_board_id, b_category, b_title, b_content) "
-                + "VALUES (board_seq.NEXTVAL, ?, ?, ?)";
+
+        String sql = "INSERT INTO board (b_board_id, member_id,b_category, b_title, b_content) " +
+                " VALUES (board_seq.NEXTVAL, ?, ?, ?, ?)";
 
         try {
+            request.setCharacterEncoding("UTF-8");
+
             con = DBManager_new.connect();
             ps = con.prepareStatement(sql);
-            request.setCharacterEncoding("UTF-8");
-            ps.executeUpdate();
 
-            ps.setString(1, request.getParameter("category"));
-            ps.setString(2, request.getParameter("title"));
-            ps.setString(3, request.getParameter("txt"));
+            // ✔ 파라미터 세팅 먼저
+            ps.setInt(1, 3);
+            ps.setString(2, request.getParameter("category"));
+            ps.setString(3, request.getParameter("title"));
+            ps.setString(4, request.getParameter("txt"));
 
-            if (ps.executeUpdate() == 1){
+            // ✔ 실행은 한 번만
+            int result = ps.executeUpdate();
+
+            if (result == 1) {
                 System.out.println("add success");
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            DBManager_new.close(con,ps,null);
+        } finally {
+            DBManager_new.close(con, ps, null);
         }
     }
+
 
     public static ArrayList<BoardVO> showAllBoard(HttpServletRequest request) {
         Connection con = null;
@@ -42,7 +49,7 @@ public class BoardDAO {
         ResultSet rs = null;
         BoardVO bo = null;
         ArrayList<BoardVO> boards = new ArrayList<>();
-        String sql = "SELECT * FROM board";
+        String sql = "SELECT * FROM board ORDER BY b_board_id DESC";
 
         try{
             con = DBManager_new.connect();
@@ -67,6 +74,10 @@ public class BoardDAO {
             DBManager_new.close(con,ps,rs);
         }
         return null;
+    }
+
+    public static void delBoard(HttpServletRequest request) {
+
     }
 
 //    public void paging(HttpServletRequest request, int pageNum) {

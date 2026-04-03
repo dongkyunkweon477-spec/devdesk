@@ -20,7 +20,6 @@
                 <option>전체</option>
                 <option>자유토크</option>
                 <option>이력서</option>
-                <option>면접후기</option>
                 <option>자기만의 TIP</option>
             </select>
 
@@ -34,6 +33,7 @@
     <div>
         <c:forEach var="b" items="${boards}">
             <div class="board-row">
+                <div class="col-category">${b.category}</div>
                 <div class="col-title">${b.title}</div>
                 <div class="col-date">${b.created_date}</div>
             </div>
