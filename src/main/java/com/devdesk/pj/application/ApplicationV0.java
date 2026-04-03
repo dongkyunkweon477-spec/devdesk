@@ -14,4 +14,5 @@ public class ApplicationV0 {
     private String status;
     private Date appDate;
     private String memo;
+    private String statusName;
 }

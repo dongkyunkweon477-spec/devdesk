@@ -17,7 +17,12 @@ CREATE TABLE application (
                                      REFERENCES company(company_id),
 
                              CONSTRAINT chk_stage
-                                 CHECK (stage IN ('APPLIED', 'DOCUMENT', 'INTERVIEW', 'PASS', 'FAIL'))
+                                 CHECK (stage IN ('APPLIED', 'DOCUMENT', 'FIRST_INTERVIEW', 'SECOND_INTERVIEW','THIRD_INTERVIEW','PASS', 'FAIL')));
+
+
+
+
+
 
 
 
