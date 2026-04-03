@@ -123,6 +123,7 @@ public class BoardDAO {
                 String content = rs.getString("b_content");
                 String category = rs.getString("b_category");
                 String created_date = rs.getString("b_created_date");
+                String updated_date = rs.getString("b_updated_date");
                 int view_count = rs.getInt("b_view_count");
                 int like_count = rs.getInt("b_like_count");
                 char hidden_yn = rs.getString("b_hidden_yn").charAt(0);
@@ -134,6 +135,7 @@ public class BoardDAO {
                 boardVO.setContent(content);
                 boardVO.setCategory(category);
                 boardVO.setCreated_date(created_date);
+                boardVO.setUpdated_date(updated_date);
                 boardVO.setView_count(view_count);
                 boardVO.setLike_count(like_count);
                 boardVO.setHidden_yn(hidden_yn);
@@ -150,6 +152,35 @@ public class BoardDAO {
         }
 
 
+    }
+
+    public static int updateBoard(HttpServletRequest request) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        String sql = "UPDATE board SET b_title = ?, b_content = ?, b_updated_date = SYSDATE WHERE b_board_id = ?";
+
+        try {
+            request.setCharacterEncoding("UTF-8");
+
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+
+            ps.setString(1, request.getParameter("title"));
+            ps.setString(2, request.getParameter("content"));
+            ps.setString(3, request.getParameter("board_id"));
+
+            int result = ps.executeUpdate();
+            if (result == 1) {
+                System.out.println("update success");
+            }
+            return result;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, null);
+        }
+        return 0;
     }
 
 

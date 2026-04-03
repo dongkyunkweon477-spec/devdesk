@@ -28,6 +28,12 @@
                 <div class="detail-label">작성일</div>
                 <div class="detail-content">${board.created_date}</div>
             </div>
+            <c:if test="${not empty board.updated_date}">
+                <div class="detail-row">
+                    <div class="detail-label">최종 수정일</div>
+                    <div class="detail-content">${board.updated_date}</div>
+                </div>
+            </c:if>
         </div>
 
         <div class="detail-row content-area">
@@ -38,7 +44,7 @@
 
     <c:if test="${sessionScope.loginMember.member_id == board.member_id}">
         <div class="detail-buttons">
-            <button class="edit-btn" onclick="location.href='BoardUpdateC?id=${board.member_id}'">수정</button>
+            <button class="edit-btn" onclick="location.href='board_update?id=${board.board_id}'">수정</button>
             <button class="delete-btn" onclick="deleteBoard(${board.board_id})">삭제</button>
         </div>
     </c:if>
