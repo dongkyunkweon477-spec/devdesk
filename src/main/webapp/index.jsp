@@ -1,10 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
     <title>DevDesk</title>
-<%--    <link rel="stylesheet" href="css/index.css">--%>
+    <%--    <link rel="stylesheet" href="css/index.css">--%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
 
 </head>
@@ -32,14 +32,29 @@
         </div>
         <!-- 로그인 -->
         <div class="menu-right">
-            <a href="login">로그인</a>
-            <span>|</span>
-            <a href="account">회원가입</a>
+
+            <c:choose>
+                <%-- 1. 로그인 전 --%>
+                <c:when test="${empty sessionScope.user}">
+                    <a href="login" class="btn-text">로그인</a>
+                    <span class="divider">|</span>
+                    <a href="account" class="btn-primary">회원가입</a>
+                </c:when>
+
+                <%-- 2. 로그인 후 --%>
+                <c:otherwise>
+                    <span class="welcome-msg">${sessionScope.user.nickname}님 환영합니다!</span>
+
+                    <a href="mypage" class="btn-text">마이페이지</a>
+                    <a href="logout" class="btn-secondary">로그아웃</a>
+                </c:otherwise>
+            </c:choose>
+
         </div>
     </div>
 
     <div class="content">
-            <jsp:include page="${content}"></jsp:include>
+        <jsp:include page="${content}"></jsp:include>
     </div>
 
 </div>
