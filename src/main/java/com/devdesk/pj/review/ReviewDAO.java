@@ -51,7 +51,9 @@ public class ReviewDAO {
 
 
     public ArrayList<ReviewVO> getReviewAll() {
-        String sql = "select * from review order by r_created_date desc";
+        String sql = "select r.* , c.company_name from review r join" +
+                " company c on r.r_company_id = c.company_id" +
+                " order by r_created_date desc";
         ArrayList<ReviewVO> reviews = new ArrayList<>();
         try (
                 Connection con = DBManager_new.connect();
@@ -66,5 +68,41 @@ public class ReviewDAO {
         }
 
         return reviews;
+    }
+
+    public void insertReview(ReviewVO vo) {
+        String sql = "insert into review(r_id , r_company_id , r_member_id , r_title " +
+                ", r_job_position , r_interview_type , r_difficulty , r_result , r_content , " +
+                "r_interviewer_count,r_student_count,r_atmosphere," +
+                "r_contact_method,r_contact_days)"
+                + "values(review_seq.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        try (
+                Connection con = DBManager_new.connect();
+                PreparedStatement pstmt = con.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, vo.getReviewCompanyId());
+            pstmt.setInt(2, vo.getReviewMemberId());
+            pstmt.setString(3, vo.getReviewTitle());
+            pstmt.setString(4, vo.getReviewJobPosition());
+            pstmt.setString(5, vo.getReviewInterviewType());
+            pstmt.setInt(6, vo.getReviewDifficulty());
+            pstmt.setString(7, vo.getReviewResult());
+            pstmt.setString(8, vo.getReviewContent());
+            pstmt.setInt(9, vo.getReviewInterviewerCount());
+            pstmt.setInt(10, vo.getReviewStudentCount());
+            pstmt.setString(11, vo.getReviewAtmosphere());
+            pstmt.setString(12, vo.getReviewContactMethod());
+            pstmt.setInt(13, vo.getReviewContactDays());
+            if (pstmt.executeUpdate() > 0) {
+                System.out.println("insert success");
+            } else {
+                System.out.println("insert fail");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

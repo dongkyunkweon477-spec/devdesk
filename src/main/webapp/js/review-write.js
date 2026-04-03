@@ -63,11 +63,11 @@ function initFormSubmit() {
 
         // 필수 필드 체크
         const required = [
-            { id: '#title', msg: '제목을 입력하세요' },
-            { id: '#jobPosition', msg: '지원 직무를 입력하세요' },
-            { id: '#interviewType', msg: '면접 유형을 선택하세요' },
-            { id: '#result', msg: '전형 결과를 선택하세요' },
-            { id: '#difficulty', msg: '난이도를 선택하세요' }
+            {id: '#title', msg: '제목을 입력하세요'},
+            {id: '#jobPosition', msg: '지원 직무를 입력하세요'},
+            {id: '#interviewType', msg: '면접 유형을 선택하세요'},
+            {id: '#result', msg: '전형 결과를 선택하세요'},
+            {id: '#difficulty', msg: '난이도를 선택하세요'}
         ];
 
         required.forEach(function (field) {
@@ -92,5 +92,52 @@ function initFormSubmit() {
                 scrollTop: firstError.offset().top - 100
             }, 300);
         }
+        console.log('companyId:', $('input[name="companyId"]').val());
+        console.log('title:', $('input[name="title"]').val());
+        console.log('jobPosition:', $('input[name="jobPosition"]').val());
+        console.log('interviewType:', $('select[name="interviewType"]').val());
+        console.log('difficulty:', $('input[name="difficulty"]').val());
+        console.log('result:', $('select[name="result"]').val());
+        console.log('content:', $('textarea[name="content"]').val().length + '자');
+        console.log('interviewerCount:', $('select[name="interviewerCount"]').val());
+        console.log('studentCount:', $('select[name="studentCount"]').val());
+        console.log('atmosphere:', $('select[name="atmosphere"]').val());
+        console.log('contactMethod:', $('select[name="contactMethod"]').val());
+        console.log('contactDays:', $('select[name="contactDays"]').val());
+
+ 
     });
 }
+
+$('#companySearchInput').on('input', function () {
+    const keyword = $(this).val().trim();
+    if (keyword.length < 1) {
+        $('#companyDropdown').hide();
+        return;
+    }
+
+    $.ajax({
+        url: '/company-search/ajax',
+        type: 'get',
+        dataType: 'json',
+        data: {companyName: keyword}
+    }).done(function (data) {
+        let html = '';
+        $.each(data, function (i, c) {
+            html += '<div class="dropdown-item" data-id="' + c.companyId
+                + '" data-name="' + c.companyName + '">'
+                + c.companyName
+                + '<span class="dropdown-meta">' + c.companyIndustry + '</span>'
+                + '</div>';
+        });
+        $('#companyDropdown').html(html).show();
+    });
+});
+
+$(document).on('click', '.dropdown-item', function () {
+    console.log('id:', $(this).data('id'));
+    console.log('name:', $(this).data('name'));
+    $('#selectedCompanyId').val($(this).data('id'));
+    $('#companySearchInput').val($(this).data('name'));
+    $('#companyDropdown').hide();
+});

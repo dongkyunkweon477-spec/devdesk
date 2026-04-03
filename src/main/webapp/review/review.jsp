@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review-board.css">
@@ -13,6 +13,11 @@
     </c:if>
 
     <%-- 임시로 5개의 항목을 반복 출력하는 부분 --%>
+    <div class="review-toolbar">
+        <a href="${pageContext.request.contextPath}/review/write" class="btn-write">
+            + 후기 작성
+        </a>
+    </div>
     <c:forEach var="r" items="${reviews}">
         <div class="card">
             <div class="card-header">
@@ -79,17 +84,12 @@
                 <div>[추천] ${r.reviewLikeCount}</div>
                 <div class="footer-right">
                     <span>
-                        <fmt:formatDate value="${r.reviewCreatedDate}" pattern="yyyy년 M월 d일" />
+                        <fmt:formatDate value="${r.reviewCreatedDate}" pattern="yyyy년 M월 d일"/>
                     </span>
                 </div>
             </div>
         </div>
-
-
-
     </c:forEach>
-
-
 
 
     <%-- 하단 페이징 영역 (디자인용) --%>
