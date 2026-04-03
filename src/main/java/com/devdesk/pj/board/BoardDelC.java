@@ -7,15 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/board")
-public class BoardC extends HttpServlet {
+@WebServlet(name = "BoardDelC", value = "/board_del")
+public class BoardDelC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        // 전체 조회하는 일
-        BoardDAO.showAllBoard(request);
+    //일
+        BoardDAO.delBoard(request);
 
-        request.setAttribute("content", "board/board.jsp");
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+//        request.setAttribute("content", "board/boardadd.jsp");
+//        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
     public void destroy() {
