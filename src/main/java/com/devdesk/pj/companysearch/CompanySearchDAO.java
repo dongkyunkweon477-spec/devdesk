@@ -50,15 +50,7 @@ public class CompanySearchDAO {
             try(ResultSet rs = pstmt.executeQuery()) {
                 CompanySearchVO company = new CompanySearchVO();
                 while (rs.next()){
-
-                    company.setCompanyId(rs.getInt("company_id"));
-                    company.setCompanyName(rs.getString("company_name"));
-                    company.setCompanyIndustry(rs.getString("company_industry"));
-                    company.setCompanyLocation(rs.getString("company_location"));
-                    company.setCompanyRating(rs.getDouble("company_rating"));
-                    company.setCompanySize(rs.getInt("company_size"));
-                    company.setCompanyCreatedDate(rs.getDate("company_created_date"));
-                    company.setCompanyApplicationDate(rs.getDate("company_application_date"));
+                   company = CompanySearchVO.fromRS(rs);
                     companies.add(company.toJson());
                 }
             }
@@ -68,4 +60,5 @@ public class CompanySearchDAO {
 
         return companies;
     }
+
 }
