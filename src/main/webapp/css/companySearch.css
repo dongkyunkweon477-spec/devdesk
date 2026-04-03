@@ -1,0 +1,162 @@
+/* ===== 검색 페이지 ===== */
+.search-wrap {
+    max-width: 960px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.search-wrap h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 24px;
+}
+
+/* ===== 검색 폼 ===== */
+.search-form {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+}
+
+.form-group input[type="text"],
+.form-group select {
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
+    color: #1e293b;
+    background: #f8fafc;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #a78bfa;
+    background: #fff;
+}
+
+/* 범위 입력 */
+.range-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.range-group input[type="number"] {
+    width: 80px;
+    height: 38px;
+    padding: 0 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
+    color: #1e293b;
+    background: #f8fafc;
+    text-align: center;
+}
+
+.range-group input[type="number"]:focus {
+    outline: none;
+    border-color: #a78bfa;
+    background: #fff;
+}
+
+.range-group .tilde {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+/* 검색 버튼 */
+#searchBtn {
+    height: 38px;
+    padding: 0 24px;
+    background: #7c3aed;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Pretendard', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#searchBtn:hover {
+    background: #6d28d9;
+}
+
+/* ===== 결과 테이블 ===== */
+.result-section {
+    margin-top: 28px;
+}
+
+.result-count {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+#resultTable {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#resultTable thead {
+    background: #f1f5f9;
+}
+
+#resultTable th {
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+#resultTable td {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+#resultTable tbody tr:hover {
+    background: #faf5ff;
+}
+
+#resultTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.no-result {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
+    font-size: 14px;
+}
