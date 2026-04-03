@@ -27,14 +27,16 @@ public class AccountC extends HttpServlet {
         if (isSuccess) {
             System.out.println("회원가입 성공!");
 
-            // 가입 성공 시 메인 화면으로 완전히 이동 (URL 변경)
-            resp.sendRedirect(req.getContextPath() + "/index.jsp");
+            // 💡 추가 1: 화면에 "ㅇㅇㅇ님"이라고 띄워주기 위해 방금 입력한 닉네임을 바구니에 담습니다.
+            req.setAttribute("welcomeName", req.getParameter("nickname"));
+
+            // 💡 추가 2: 성공 화면(accountSuccess.jsp) 알맹이를 세팅해서 껍데기(index.jsp)로 보냅니다!
+            req.setAttribute("content", "/user/accountSuccess.jsp");
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
+
         } else {
             System.out.println("회원가입 실패");
-
-            // 실패 시 다시 회원가입 화면(알맹이)을 세팅해서 껍데기로 보냄
-            req.setAttribute("content", "user/account.jsp");
-            req.getRequestDispatcher("/index.jsp").forward(req, resp);
+            // ... (기존 실패 로직 그대로 유지)
         }
 
 

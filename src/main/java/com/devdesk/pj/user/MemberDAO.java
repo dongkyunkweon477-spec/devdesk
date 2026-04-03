@@ -19,7 +19,7 @@ public class MemberDAO {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        String sql = "select * from member where email = ?";
+        String sql = "select count(*) from member where email = ?";
 
         try {
 
