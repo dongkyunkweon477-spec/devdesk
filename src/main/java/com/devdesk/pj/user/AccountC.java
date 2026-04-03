@@ -25,14 +25,14 @@ public class AccountC extends HttpServlet {
         boolean isSuccess = MemberDAO.MBAO.signUp(req);
 
         if (isSuccess) {
-            System.out.println("회원가입 성공!");
+            System.out.println("✅ 회원가입 성공!");
 
-            // 💡 추가 1: 화면에 "ㅇㅇㅇ님"이라고 띄워주기 위해 방금 입력한 닉네임을 바구니에 담습니다.
-            req.setAttribute("welcomeName", req.getParameter("nickname"));
+            // 💡 중요: sendRedirect로 튕겨내면 request 바구니가 증발합니다!
+            // 그래서 닉네임을 URL 뒤에 파라미터로 몰래 달아서 보냅니다. (?name=홍길동)
+            String encodedName = java.net.URLEncoder.encode(req.getParameter("nickname"), "UTF-8");
 
-            // 💡 추가 2: 성공 화면(accountSuccess.jsp) 알맹이를 세팅해서 껍데기(index.jsp)로 보냅니다!
-            req.setAttribute("content", "/user/accountSuccess.jsp");
-            req.getRequestDispatcher("/index.jsp").forward(req, resp);
+            // 영은 님 아이디어대로 새로운 주소(/account-done)로 튕겨냅니다!
+            resp.sendRedirect(req.getContextPath() + "/account-done?name=" + encodedName);
 
         } else {
             System.out.println("회원가입 실패");
