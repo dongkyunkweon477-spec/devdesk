@@ -120,6 +120,7 @@ public class ApplicationDAO {
                 dto.setCompanyName(rs.getString("company_name"));
                 dto.setPosition(rs.getString("position"));
                 dto.setStatus(rs.getString("stage"));
+                dto.setStatusName(getStatusName(rs.getString("stage"))); // 한글
                 dto.setAppDate(rs.getDate("apply_date"));
                 dto.setMemo(rs.getString("memo"));
                 dto.setInterviewDate(rs.getDate("interview_date"));
@@ -202,7 +203,7 @@ public class ApplicationDAO {
                 System.out.println("삭제 실패");
             }
 
-            if (pstmt.executeUpdate()==1){
+            if (pstmt.executeUpdate() == 1) {
                 System.out.println("delete success");
 
             }
@@ -214,6 +215,7 @@ public class ApplicationDAO {
             DBManager_new.close(con, pstmt, null);
         }
     }
+
     public static ApplicationV0 selectApplication(HttpServletRequest request) {
 
         Connection con = null;
@@ -241,7 +243,8 @@ public class ApplicationDAO {
                 dto.setAppId(rs.getString("app_id"));
                 dto.setCompanyName(rs.getString("company_name"));
                 dto.setPosition(rs.getString("position"));
-                dto.setStatus(rs.getString("stage"));
+                dto.setStatus(rs.getString("stage")); // DB값
+                dto.setStatusName(getStatusName(rs.getString("stage"))); // 한글
                 dto.setAppDate(rs.getDate("apply_date"));
                 dto.setMemo(rs.getString("memo"));
                 dto.setInterviewDate(rs.getDate("interview_date"));
@@ -283,6 +286,24 @@ public class ApplicationDAO {
         }
     }
 
+    public static String getStatusName(String status) {
+        switch (status) {
+            case "APPLIED":
+                return "지원완료";
+            case "FIRST_INTERVIEW":
+                return "1차 면접";
+            case "SECOND_INTERVIEW":
+                return "2차 면접";
+            case "THIRD_INTERVIEW":
+                return "3차 면접";
+            case "PASS":
+                return "합격";
+            case "FAIL":
+                return "불합격";
+            default:
+                return status;
+        }
+    }
 
 }
 
