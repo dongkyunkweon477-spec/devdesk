@@ -1,0 +1,88 @@
+/* 1. 화면 중앙 정렬 (index.jsp 여백 고려) */
+.signup-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    padding: 20px 0;
+}
+
+/* 2. 하얀색 둥근 카드 디자인 (회원가입 폼과 동일한 디자인) */
+.signup-card {
+    background-color: #FFFFFF;
+    width: 100%;
+    max-width: 500px;
+    padding: 60px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* 부드러운 그림자 */
+    margin-top: -40px; /* index.css 여백 보정 */
+    text-align: center; /* 카드 안의 모든 내용을 가운데 정렬 */
+}
+
+/* 3. 로고 & 텍스트 브랜드 영역 (수정됨) */
+.logo-container {
+    display: flex;
+    justify-content: center; /* 카드 중앙에 배치 */
+    margin-bottom: 25px;
+}
+
+/* index.css의 .title 과 동일한 스타일을 적용합니다 */
+.success-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 로고와 글씨 사이 간격 */
+    margin-bottom: 15px; /* 아래 '회원가입 완료' 글씨와의 간격 */
+}
+
+.success-brand img {
+    height: 80px; /* index.css의 헤더 로고 크기와 동일하게 */
+    display: block;
+}
+
+.success-brand span {
+    font-size: 28px; /* 헤더보다 조금 더 크게 줘서 포인트를 줍니다 (헤더는 24px) */
+    font-family: 'JetBrains Mono', monospace; /* index.css에 있는 전용 폰트! */
+    color: #7c3aed; /* DevDesk 보라색 */
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+/* 4. 제목 및 텍스트 폰트 설정 */
+.success-title {
+    color: #1e293b;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    letter-spacing: -0.5px;
+}
+
+.success-message {
+    color: #64748b;
+    font-size: 16px;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.highlight-name {
+    color: #7c3aed; /* DevDesk 보라색 */
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* 5. 로그인 바로가기 버튼 디자인 */
+.btn-login {
+    background-color: #7c3aed;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 16px 0;
+    width: 200px; /* 버튼 가로 길이 */
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-login:hover {
+    background-color: #6d28d9; /* 마우스 올렸을 때 살짝 진해짐 */
+}
