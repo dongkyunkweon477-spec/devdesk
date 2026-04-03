@@ -8,6 +8,10 @@
     <title>지원 등록</title>
 
     <style>
+        #interviewSection {
+            transition: all 0.3s ease;
+        }
+
         body {
             font-family: Arial;
             background-color: #f5f6f7;
@@ -95,11 +99,52 @@
         <!-- hidden (로그인 사용자) -->
         <input type="hidden" name="member_id" value="${sessionScope.loginUser.member_id}">
 
+        <!-- 면접 일정 (숨김 영역) -->
+        <div id="interviewSection" style="display:none;">
+
+            <label>면접 날짜</label>
+            <input type="date" name="interview_date">
+
+            <label>면접 시간</label>
+            <input type="time" name="interview_time">
+
+            <label>면접 유형</label>
+            <select name="interview_type">
+                <option value="">-- 선택 --</option>
+                <option value="ONLINE">화상</option>
+                <option value="OFFLINE">대면</option>
+                <option value="PHONE">전화</option>
+            </select>
+
+        </div>
+
+
+
         <!-- 제출 -->
         <button type="submit">등록하기</button>
 
     </form>
 </div>
 
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const stageSelect = document.querySelector("select[name='stage']");
+        const interviewSection = document.getElementById("interviewSection");
+
+        function toggleInterview() {
+            if (stageSelect.value === "INTERVIEW") {
+                interviewSection.style.display = "block";
+                interviewSection.style.opacity = "1";
+            } else {
+                interviewSection.style.display = "none";
+            }
+        }
+
+        stageSelect.addEventListener("change", toggleInterview);
+
+        toggleInterview();
+    });
+</script>
 </body>
 </html>

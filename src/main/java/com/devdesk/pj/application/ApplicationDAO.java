@@ -16,8 +16,8 @@ public class ApplicationDAO {
         PreparedStatement pstmt = null;
 
         String sql = "INSERT INTO application "
-                + "(app_id, member_id, company_id, position, stage, apply_date, memo, created_date) "
-                + "VALUES (APPLICATION_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, SYSDATE)";
+                + "(app_id, member_id, company_id, position, stage, apply_date, memo, interview_date, interview_time, interview_type, created_date) "
+                + "VALUES (APPLICATION_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, SYSDATE)";
 
         try {
             con = DBManager_new.connect();
@@ -32,6 +32,9 @@ public class ApplicationDAO {
             String stage = request.getParameter("stage");
             String applyDate = request.getParameter("apply_date");
             String memo = request.getParameter("memo");
+            String interviewDate = request.getParameter("interview_date");
+            String interviewTime = request.getParameter("interview_time");
+            String interviewType = request.getParameter("interview_type");
 
             // 디버깅 출력
             System.out.println(memberId);
@@ -55,6 +58,17 @@ public class ApplicationDAO {
             }
 
             pstmt.setString(6, memo);
+            if (interviewDate != null && !interviewDate.isEmpty()) {
+                pstmt.setDate(7, java.sql.Date.valueOf(interviewDate));
+            } else {
+                pstmt.setNull(7, java.sql.Types.DATE);
+            }
+
+// interview_time
+            pstmt.setString(8, interviewTime);
+
+// interview_type
+            pstmt.setString(9, interviewType);
 
             // 실행
             int result = pstmt.executeUpdate();
@@ -78,7 +92,17 @@ public class ApplicationDAO {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        String sql = "SELECT a.APP_ID,c.COMPANY_ID,c.company_name, a.position, a.stage, a.apply_date, a.memo FROM application a JOIN company c ON a.company_id = c.company_id ORDER BY a.created_date DESC";
+        String sql = "SELECT \n" +
+                "a.app_id,\n" +
+                "a.COMPANY_ID,\n" +
+                "c.company_name,\n" +
+                "a.position,\n" +
+                "a.stage,\n" +
+                "a.apply_date,\n" +
+                "a.memo,\n" +
+                "a.interview_date,\n" +
+                "a.interview_time,\n" +
+                "a.interview_type FROM application a JOIN company c ON a.company_id = c.company_id ORDER BY a.created_date DESC";
         ;
 
 
@@ -99,6 +123,9 @@ public class ApplicationDAO {
                 dto.setStatusName(getStatusName(rs.getString("stage"))); // 한글
                 dto.setAppDate(rs.getDate("apply_date"));
                 dto.setMemo(rs.getString("memo"));
+                dto.setInterviewDate(rs.getDate("interview_date"));
+                dto.setInterviewTime(rs.getString("interview_time"));
+                dto.setInterviewType(rs.getString("interview_type"));
                 dtos.add(dto);
             }
             System.out.println(dtos);
@@ -220,6 +247,9 @@ public class ApplicationDAO {
                 dto.setStatusName(getStatusName(rs.getString("stage"))); // 한글
                 dto.setAppDate(rs.getDate("apply_date"));
                 dto.setMemo(rs.getString("memo"));
+                dto.setInterviewDate(rs.getDate("interview_date"));
+                dto.setInterviewTime(rs.getString("interview_time"));
+                dto.setInterviewType(rs.getString("interview_type"));
             }
 
         } catch (Exception e) {
@@ -236,8 +266,9 @@ public class ApplicationDAO {
         Connection con = null;
         PreparedStatement pstmt = null;
 
-        String sql = "UPDATE application SET stage = ? WHERE app_id = ?";
-
+        String sql = "UPDATE application "
+                + "SET stage = ?, interview_date = ?, interview_time = ?, interview_type = ? "
+                + "WHERE app_id = ?";
         try {
             con = DBManager_new.connect();
             pstmt = con.prepareStatement(sql);
