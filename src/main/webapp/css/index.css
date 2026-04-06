@@ -62,6 +62,7 @@ a:hover {
     align-items: center;
     gap: 10px;
 }
+
 /* DevDesk 왼쪽으로 이동 */
 .title {
     justify-content: flex-start;
@@ -74,6 +75,7 @@ a:hover {
     letter-spacing: 1px;
     gap: 10px;
 }
+
 .title img {
     height: 40px;
     display: block;
@@ -120,37 +122,57 @@ a:hover {
     z-index: 1100; /* title보다 높게 */
 }
 
-/* 메뉴 오른쪽 */
+/* ===== 메뉴 오른쪽 (수정됨) ===== */
 .menu-right {
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
+/* 기본 a 태그 뼈대 */
 .menu-right a {
     font-size: 14px;
     color: #64748b;
+    padding: 6px 12px;
+    border-radius: 6px;
 }
 
-.menu-right a:hover {
-    color: #7c3aed;
-}
-
-.menu-right span {
+/* 구분선 ( | ) */
+.menu-right .divider {
     margin: 0 4px;
     color: #cbd5f5;
 }
 
-/* ===== 메뉴 구분선 ===== */
-.menu-left::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: -40px;
-    width: 100vw;
-    height: 1px;
-    display: none;
-    pointer-events: none;
+/* 환영 메시지 (ㅇㅇㅇ님 환영합니다!) */
+.menu-right .welcome-msg {
+    color: #7c3aed;
+    font-weight: 600;
+    margin-right: 15px;
+}
+
+/* [버튼 1] 로그인, 마이페이지 (텍스트 버튼) */
+.menu-right a.btn-text:hover {
+    color: #7c3aed;
+    background-color: #f8fafc; /* 마우스 올렸을 때 아주 연한 배경 */
+}
+
+/* [버튼 2] 회원가입 (보라색 강조 버튼) */
+.menu-right a.btn-primary {
+    background-color: #ede9fe;
+    color: #6d28d9;
+}
+
+.menu-right a.btn-primary:hover {
+    background-color: #ddd6fe;
+}
+
+/* [버튼 3] 로그아웃 (회색 차분한 버튼) */
+.menu-right a.btn-secondary {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.menu-right a.btn-secondary:hover {
     background-color: #e2e8f0;
 }
 
@@ -184,7 +206,7 @@ a:hover {
     border-top: 1px solid #e2e8f0;
     background-color: #ffffff;
     margin-top: 60px;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
 }
 
 .footer-inner {

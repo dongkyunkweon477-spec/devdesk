@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="css/board_add.css">
+<%--    <link rel="stylesheet" href="css/board_add.css"--%>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/board-add.css">
 </head>
 <body>
 <div class="write-container">
@@ -42,9 +43,9 @@
 
         <div class="form-actions">
             <button type="submit" class="submit-btn">등록</button>
-        </form>
             <button type="button" class="cancel-btn" onclick="history.back()">취소</button>
         </div>
+        </form>
 
     </form>
 

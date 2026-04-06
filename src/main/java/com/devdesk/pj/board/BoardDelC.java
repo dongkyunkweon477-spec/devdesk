@@ -11,11 +11,10 @@ import java.io.IOException;
 public class BoardDelC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    //일
+        //일
         BoardDAO.delBoard(request);
-
-//        request.setAttribute("content", "board/boardadd.jsp");
-//        request.getRequestDispatcher("index.jsp").forward(request, response);
+        // loginCheck
+        response.sendRedirect("board");
     }
 
     public void destroy() {

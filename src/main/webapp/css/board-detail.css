@@ -1,0 +1,161 @@
+/* ===== 게시판 상세 컨테이너 ===== */
+.board-container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+
+/* ===== 상단 헤더 영역 ===== */
+.board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.board-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 인덱스의 JetBrains Mono 느낌을 살린 데코 */
+.board-header h2::before {
+    content: '>';
+    color: #7c3aed;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* ===== 본문 영역 ===== */
+.detail-view {
+    padding: 30px;
+}
+
+/* 행 레이아웃 */
+.detail-row {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: flex-start;
+}
+
+.detail-label {
+    width: 100px;
+    font-weight: 600;
+    color: #64748b;
+    font-size: 14px;
+    padding-top: 2px;
+}
+
+.detail-content {
+    flex: 1;
+    color: #334155;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* 제목 강조 */
+.title-bold {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+/* 작성자, 작성일 정보 그룹 (연보라 배경 테두리) */
+.detail-info-group {
+    display: flex;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin: 20px 0 30px 0;
+    gap: 40px;
+}
+
+.detail-info-group .detail-row {
+    margin-bottom: 0;
+}
+
+.detail-info-group .detail-label {
+    width: auto;
+    margin-right: 15px;
+}
+
+/* 내용 영역 */
+.content-area {
+    flex-direction: column;
+}
+
+.content-area .detail-label {
+    width: 100%;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 10px;
+}
+
+.text-box {
+    min-height: 300px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    padding: 10px 0;
+}
+
+/* ===== 하단 버튼 영역 ===== */
+.detail-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 20px 30px;
+    background-color: #fcfcfd;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* 공통 버튼 스타일 */
+.board-actions button,
+.detail-buttons button {
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+    border: none;
+}
+
+/* 목록으로 버튼 (기존 인덱스 스타일 계승) */
+.write-btn {
+    background-color: #ede9fe;
+    color: #6d28d9;
+}
+
+.write-btn:hover {
+    background-color: #ddd6fe;
+}
+
+/* 수정 버튼 (진보라 포인트) */
+.edit-btn {
+    background-color: #7c3aed;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #6d28d9;
+}
+
+/* 삭제 버튼 (경고 의미의 붉은 계열이지만 부드럽게) */
+.delete-btn {
+    background-color: #fee2e2;
+    color: #ef4444;
+}
+
+.delete-btn:hover {
+    background-color: #fecaca;
+}
