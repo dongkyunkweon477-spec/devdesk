@@ -11,8 +11,11 @@ public class HelloServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 //        AccountDAO.ADAO.loginCheck(request); // 로그인 하고 확인
-        request.setAttribute("content","home.jsp");
-        request.getRequestDispatcher("index.jsp").forward(request,response);
+        request.setAttribute("content", "home.jsp");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
+
+        response.sendRedirect("main");
+
     }
 
     public void destroy() {

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>DevDesk - 회원가입</title>
+    <title>DevDesk</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/account.css">
 </head>
 <body class="account-body">
@@ -61,7 +61,7 @@
         let msgSpan = document.getElementById("idCheckMsg"); // 메시지가 뜰 <span> 태그
 
         // 1. 빈칸 검사 (alert 대신 화면에 바로 빨간 글씨로 띄워줍니다!)
-        if(email.trim() === "") {
+        if (email.trim() === "") {
             msgSpan.style.color = "#FF4D4F"; // 에러는 붉은색
             msgSpan.innerText = "이메일을 먼저 입력해주세요!";
             return; // 여기서 함수 종료 (서버로 안 보냄)
