@@ -2,9 +2,9 @@ INSERT INTO application (app_id, member_id, company_id, position, stage, apply_d
 VALUES (1, 3, 1, '백엔드 개발자', 'APPLIED', SYSDATE, '첫 지원');
 
 INSERT INTO application (app_id, member_id, company_id, position, stage, apply_date, memo)
-VALUES (2, 3, 1, '프론트엔드 개발자', 'FIRST_INTERVIEW', SYSDATE, '면접 예정');
+VALUES (2, 16, 1, '프론트엔드 개발자', 'FIRST_INTERVIEW', SYSDATE, '면접 예정');
 INSERT INTO application (app_id, member_id, company_id, position, stage, apply_date, memo)
-VALUES (3, 3, 2, '프론트엔드 개발자', 'SECOND_INTERVIEW', SYSDATE, '면접 예정');
+VALUES (3, 16, 2, '프론트엔드 개발자', 'SECOND_INTERVIEW', SYSDATE, '면접 예정');
 INSERT INTO til (til_id, member_id, title, content)
 VALUES (1, 3, 'Oracle FK 정리', 'FK 제약조건과 CASCADE 학습');
 
@@ -31,8 +31,15 @@ VALUES (2, '서류');
 INSERT INTO tag (tag_id, tag_name)
 VALUES (3, '합격');
 
+SELECT STAGE, COUNT(*) AS CNT
+FROM APPLICATION
+WHERE MEMBER_ID = ?
+GROUP BY STAGE;
+
 SELECT *
 FROM application;
+SELECT *
+FROM MEMBER;
 select *
 from COMPANY;
 select *
@@ -52,3 +59,9 @@ create sequence resume_seq;
 create sequence resume_filed_seq;
 create sequence tag_seq;
 
+SELECT USER
+FROM DUAL;
+
+SELECT COUNT(*)
+FROM APPLICATION
+WHERE MEMBER_ID = 16;

@@ -1,5 +1,6 @@
 package com.devdesk.pj.application;
 
+import com.devdesk.pj.dashboard.StageCountVO;
 import com.devdesk.pj.main.DBManager_new;
 
 import javax.servlet.http.HttpServletRequest;
@@ -285,6 +286,59 @@ public class ApplicationDAO {
             default:
                 return status;
         }
+    }
+
+    public static StageCountVO countGroupByStage(int memberId) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+
+        String sql = "SELECT STAGE, COUNT(*) AS CNT " +
+                "FROM APPLICATION " +
+                "WHERE MEMBER_ID = ? " +
+                "GROUP BY STAGE";
+
+        StageCountVO vo = new StageCountVO();
+
+        // pstmt, rs 생략
+        try {
+
+            while (rs.next()) {
+                String stage = rs.getString("STAGE");
+                int cnt = rs.getInt("CNT");
+
+                switch (stage) {
+                    case "APPLIED":
+                        vo.setApplied(cnt);
+                        break;
+                    case "DOCUMENT_PASS":
+                        vo.setDocumentPass(cnt);
+                        break;
+                    case "FIRST_INTERVIEW":
+                        vo.setFirstInterview(cnt);
+                        break;
+                    case "SECOND_INTERVIEW":
+                        vo.setSecondInterview(cnt);
+                        break;
+                    case "THIRD_INTERVIEW":
+                        vo.setThirdInterview(cnt);
+                        break;
+                    case "CODING_TEST":
+                        vo.setCodingTest(cnt);
+                        break;
+                    case "PASSED":
+                        vo.setPassed(cnt);
+                        break;
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            DBManager_new.close(con, pstmt, rs);
+        }
+
+        return vo;
     }
 
 }
