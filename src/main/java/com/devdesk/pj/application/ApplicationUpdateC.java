@@ -14,15 +14,14 @@ public class ApplicationUpdateC extends HttpServlet {
         ApplicationV0 dto = ApplicationDAO.selectApplication(request);
         request.setAttribute("app", dto);
 
-        request.getRequestDispatcher("/application/applicationUpdate.jsp")
-                .forward(request, response);
-    }
- public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-     ApplicationDAO.updateApplication(request);
-
-     response.sendRedirect("application_list");
+        request.getRequestDispatcher("/application/applicationUpdate.jsp").forward(request, response);
     }
 
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        ApplicationDAO.updateApplication(request);
+
+        response.sendRedirect("application_list");
+    }
 
 
     public void destroy() {
