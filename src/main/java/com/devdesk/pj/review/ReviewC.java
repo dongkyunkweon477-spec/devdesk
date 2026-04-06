@@ -24,7 +24,7 @@ public class ReviewC extends HttpServlet {
         }
         request.setAttribute("reviews", reviews);
         request.setAttribute("content", "/review/review.jsp");
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     public void destroy() {

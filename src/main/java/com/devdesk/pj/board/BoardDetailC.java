@@ -25,7 +25,7 @@ public class BoardDetailC extends HttpServlet {
         // 어디로
         // loginCheck
         request.setAttribute("content", "board/boardDetail.jsp");
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     public void destroy() {

@@ -1,6 +1,8 @@
 package com.devdesk.pj.user;
 
 import com.devdesk.pj.main.DBManager_new;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import sun.security.util.Password;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +57,6 @@ public class MemberDAO {
                 + "VALUES (member_id_seq.NEXTVAL, ?, ?, ?, ?)";
 
         try {
-            // 🚨 DAO 안에서 request 상자를 뜯어서 값을 꺼냅니다!
             String email = request.getParameter("email");
             String password = request.getParameter("password");
             String nickname = request.getParameter("nickname");
@@ -64,7 +65,6 @@ public class MemberDAO {
             con = DBManager_new.connect();
             pstmt = con.prepareStatement(sql);
 
-            // 꺼낸 값을 쿼리의 물음표에 채워 넣습니다.
             pstmt.setString(1, email);
             pstmt.setString(2, password);
             pstmt.setString(3, nickname);
@@ -111,10 +111,13 @@ public class MemberDAO {
                     memberDTO.setMember_id(rs.getInt("member_id")); // 선민 추가
                     memberDTO.setEmail(rs.getString("email"));
                     memberDTO.setNickname(rs.getString("nickname"));
+                    memberDTO.setJob_category(rs.getString("job_category"));
+                    memberDTO.setMember_id(rs.getInt("member_id"));
+
 
                     HttpSession hs = request.getSession();
                     hs.setAttribute("user", memberDTO);
-                    hs.setMaxInactiveInterval(5 * 60);
+                    hs.setMaxInactiveInterval(30 * 60);
 
                 } else {
                     //비번
@@ -136,4 +139,8 @@ public class MemberDAO {
 
 
     }
+
+    //public boolean updateProfile(HttpServletRequest request) {
+
+    //}
 }

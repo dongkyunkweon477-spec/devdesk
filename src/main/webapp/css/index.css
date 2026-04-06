@@ -86,6 +86,11 @@ a:hover {
     display: flex;
     align-items: center;
     gap: 30px;
+
+    /*로그인 시에도 중앙정렬 유지하는 부분 추가*/
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .menu-left a {

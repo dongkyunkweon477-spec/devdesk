@@ -105,7 +105,7 @@ function initFormSubmit() {
         console.log('contactMethod:', $('select[name="contactMethod"]').val());
         console.log('contactDays:', $('select[name="contactDays"]').val());
 
- 
+
     });
 }
 
@@ -140,4 +140,16 @@ $(document).on('click', '.dropdown-item', function () {
     $('#selectedCompanyId').val($(this).data('id'));
     $('#companySearchInput').val($(this).data('name'));
     $('#companyDropdown').hide();
+});
+
+$(function () {
+    // 수정 모드일 때 기존 난이도 표시
+    var initDiff = $('#difficulty').val();
+    if (initDiff) {
+        var labels = ['', '매우 쉬움', '쉬움', '보통', '어려움', '매우 어려움'];
+        $('.difficulty-stars .star').each(function () {
+            $(this).toggleClass('active', $(this).data('value') <= initDiff);
+        });
+        $('#difficultyLabel').text(labels[initDiff]);
+    }
 });

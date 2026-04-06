@@ -2,11 +2,13 @@ package com.devdesk.pj.review;
 
 import com.devdesk.pj.main.DBManager_new;
 
-import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class ReviewDAO {
     static final ReviewDAO REVIEW_DAO = new ReviewDAO();
@@ -105,4 +107,94 @@ public class ReviewDAO {
 
 
     }
+
+    public int updateReview(ReviewVO vo) {
+        String sql = "UPDATE review SET r_title=?, r_job_position=?, r_interview_type=?,"
+                + " r_difficulty=?, r_result=?, r_content=?,"
+                + " r_interviewer_count=?, r_student_count=?,"
+                + " r_atmosphere=?, r_contact_method=?, r_contact_days=?,"
+                + " r_updated_date=SYSDATE"
+                + " WHERE r_id=?";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, vo.getReviewTitle());
+            pstmt.setString(2, vo.getReviewJobPosition());
+            pstmt.setString(3, vo.getReviewInterviewType());
+            pstmt.setInt(4, vo.getReviewDifficulty());
+            pstmt.setString(5, vo.getReviewResult());
+            pstmt.setString(6, vo.getReviewContent());
+            pstmt.setInt(7, vo.getReviewInterviewerCount());
+            pstmt.setInt(8, vo.getReviewStudentCount());
+            pstmt.setString(9, vo.getReviewAtmosphere());
+            pstmt.setString(10, vo.getReviewContactMethod());
+            pstmt.setInt(11, vo.getReviewContactDays());
+            pstmt.setInt(12, vo.getReviewId());
+            return pstmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public int deleteReview(int reviewId) {
+        String sql = "delete from review where r_id = ?";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, reviewId);
+            return pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public ReviewVO getReviewById(int reviewId) {
+        String sql = "select r.*, c.company_name from review r " +
+                "join company c on r.r_company_id = c.company_id " +
+                "where r.r_id = ?";
+        ReviewVO review = null;
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, reviewId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    review = ReviewVO.fromResultSet(rs);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return review;
+    }
+
+    public Map<String, Object> getCompanyStats(int companyId) {
+        String sql = "select count (*) as total_count," +
+                "round (avg(r_difficulty),1) as avg_difficulty, round(count(case when r_result = 'pass' then 1 end)* 100.0 / count(*), 1) as pass_rate" +
+                "from review where r_company_id = ?";
+        Map<String, Object> stats = new HashMap<>();
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, companyId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    stats.put("totalCount", rs.getInt("total_count"));
+                    stats.put("avgDifficulty", rs.getDouble("avg_difficulty"));
+                    stats.put("passRate", rs.getDouble("pass_rate"));
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return stats;
+
+    }
+
+
 }
