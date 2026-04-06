@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/company/insert")
+@WebServlet("/company/edit")
 public class CompanyUpdateC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -15,7 +15,7 @@ public class CompanyUpdateC extends HttpServlet {
         int companyId = Integer.parseInt(request.getParameter("companyId"));
         CompanySearchVO company = CompanySearchDAO.COMPANY_SEARCH_DAO.getCompanyById(companyId);
         request.setAttribute("company", company);
-        request.setAttribute("content", "/company/companyEdit.jsp");
+        request.setAttribute("content", "/company-search/companyUpdateForm.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 

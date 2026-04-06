@@ -61,6 +61,8 @@
                 <th>위치</th>
                 <th>평점</th>
                 <th>규모</th>
+                <th></th>
+                <th></th>
             </tr>
             </thead>
             <tbody id="resultBody"></tbody>

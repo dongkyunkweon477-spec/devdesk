@@ -113,13 +113,18 @@ public class CompanySearchDAO {
     }
 
     public void deleteCompany(int companyId) {
-        String sql = "delete from company where company_id = ?";
+        String sqlDelRev = "delete from review where r_company_id = ?";
+        String sqlDelComp = "delete from company where company_id = ?";
         try (
                 Connection con = DBManager_new.connect();
-                PreparedStatement pstmt = con.prepareStatement(sql);
         ) {
-            pstmt.setInt(1, companyId);
-            pstmt.executeUpdate();
+            try (PreparedStatement pstmt = con.prepareStatement(sqlDelRev)) {
+                pstmt.setInt(1, companyId);
+            }
+            try (PreparedStatement pstmt = con.prepareStatement(sqlDelComp)) {
+                pstmt.setInt(1, companyId);
+                pstmt.executeUpdate();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

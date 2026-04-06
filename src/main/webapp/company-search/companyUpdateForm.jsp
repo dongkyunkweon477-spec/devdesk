@@ -46,7 +46,25 @@
     </div>
 
     <div class="form-actions">
+        <button type="button" class="btn-delete" onclick="confirmDelete(${company.companyId})">삭제</button>
+        <div style="flex:1"></div>
         <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
         <button type="submit" class="btn-submit">수정하기</button>
     </div>
 </form>
+
+<%-- 삭제 확인 모달 --%>
+<div class="modal-overlay" id="deleteModal" style="display:none">
+    <div class="modal-box">
+        <p>정말 삭제하시겠습니까?</p>
+        <p class="modal-sub">이 기업에 등록된 면접 후기도 함께 삭제됩니다.</p>
+        <div class="modal-btns">
+            <button class="btn-cancel" onclick="document.getElementById('deleteModal').style.display='none'">취소</button>
+            <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/company/delete"
+                  style="display:inline">
+                <input type="hidden" name="companyId" id="deleteCompanyId"/>
+                <button type="submit" class="btn-delete-confirm">삭제</button>
+            </form>
+        </div>
+    </div>
+</div>
