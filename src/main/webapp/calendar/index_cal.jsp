@@ -14,22 +14,17 @@
         body { font-family: 'Arial', sans-serif; padding: 20px; background-color: #f7fafc;}
         #calendar { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);}
 
-        /* 1. 기본 상세 팝업 */
-        #event-popup {
-            display: none; position: absolute; background: #ffffff; border: 1px solid #e2e8f0;
-            padding: 15px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-radius: 8px; z-index: 1000; width: 250px;
-        }
+        /* 팝업 공통 */
+        #event-popup { display: none; position: absolute; background: #ffffff; border: 1px solid #e2e8f0; padding: 15px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-radius: 8px; z-index: 1000; width: 250px; }
         #event-popup h3 { margin: 0 0 10px 0; color: #2b6cb0; font-size: 18px; }
         .pop-info { margin-bottom: 8px; font-size: 13px; color: #4a5568; }
         .pop-info strong { display: inline-block; width: 60px; color: #2d3748; }
         .pop-close { float: right; cursor: pointer; color: #a0aec0; font-weight: bold; margin-top: -2px; }
-
-        /* 팝업 내 버튼들 */
         .btn-group-sm { display: flex; gap: 5px; margin-top: 15px; border-top: 1px solid #edf2f7; padding-top: 10px;}
         .btn-edit { background: #3182ce; color: white; flex: 1; border: none; padding: 6px; border-radius: 4px; cursor: pointer; font-size:12px;}
         .btn-delete { background: #e53e3e; color: white; flex: 1; border: none; padding: 6px; border-radius: 4px; cursor: pointer; font-size:12px;}
 
-        /* 2. 일정 추가/수정 모달 */
+        /* 모달 공통 */
         #modal-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
         #schedule-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 8px; width: 320px; z-index: 1000; }
         #schedule-modal h3 { margin-top: 0; color: #1a365d; border-bottom: 2px solid #edf2f7; padding-bottom: 10px;}
@@ -62,10 +57,12 @@
 <div id="modal-backdrop"></div>
 <div id="schedule-modal">
     <h3 id="modal-title">새 일정 추가</h3>
-    <input type="hidden" id="form-id"> <div class="form-group">
-    <label>지원서 번호 (APP_ID)</label>
-    <input type="number" id="form-appId" value="1">
-</div>
+    <input type="hidden" id="form-id">
+
+    <div class="form-group">
+        <label>지원서 번호 (APP_ID)</label>
+        <input type="number" id="form-appId" value="1">
+    </div>
     <div class="form-group">
         <label>회사 이름</label>
         <input type="text" id="form-company" value="네이버">
@@ -85,7 +82,9 @@
             <option value="1차면접">1차면접</option>
             <option value="2차면접">2차면접</option>
             <option value="임원면접">임원면접</option>
+            <option value="direct">직접 입력...</option>
         </select>
+        <input type="text" id="form-type-direct" placeholder="ex) SPI, 인성면접" style="display:none; margin-top:5px;">
     </div>
     <div class="form-group">
         <label>메모</label>
@@ -99,7 +98,7 @@
 
 <script>
     $(document).ready(function () {
-        var currentEvent = null; // 현재 클릭한 일정을 기억하는 변수
+        var currentEvent = null;
 
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -125,7 +124,6 @@
                 </c:forEach>
             ],
 
-            // ✨ 1. 기존 일정 클릭 시 (상세 팝업 띄우기)
             eventClick: function (info) {
                 currentEvent = info.event;
                 var x = info.jsEvent.pageX; var y = info.jsEvent.pageY;
@@ -139,56 +137,90 @@
                 $('#event-popup').css({ top: y + 15 + 'px', left: x + 15 + 'px' }).fadeIn(150);
             },
 
-            // ✨ 2. 빈 날짜 클릭 시 (등록 모달 띄우기)
+            // 빈 날짜 클릭 시 (새 일정 추가)
             select: function (info) {
                 $('#modal-title').text("새 일정 추가");
-                $('#form-id').val(""); // 새 등록이므로 ID 비우기
-                $('#form-date').val(info.startStr); // 클릭한 날짜 넣기
+                $('#form-id').val("");
+                $('#form-date').val(info.startStr);
+
+                // ✨ 모달 띄울 때 '직접 입력' 창 초기화
+                $('#form-type').val("코딩테스트");
+                $('#form-type-direct').hide().val("");
 
                 $('#modal-backdrop, #schedule-modal').fadeIn(200);
             }
         });
         calendar.render();
 
-        // [상세 팝업] 닫기
         $('#close-popup').click(function () { $('#event-popup').fadeOut(150); });
 
-        // --- ✨ [수정 버튼] 클릭 시 모달 띄우기 ---
-        $('#btn-go-edit').click(function() {
-            $('#event-popup').hide(); // 팝업 숨기고
-            $('#modal-title').text("일정 수정"); // 모달 제목 변경
+        // --- ✨ 면접 전형 드롭다운 변경 이벤트 ---
+        $('#form-type').change(function() {
+            if ($(this).val() === 'direct') {
+                $('#form-type-direct').show().focus(); // 직접입력 선택 시 입력창 표시
+            } else {
+                $('#form-type-direct').hide().val(""); // 다른 거 선택 시 입력창 숨김 및 초기화
+            }
+        });
 
-            // 모달 안에 기존 데이터 채워주기
+        // 수정 버튼 클릭 시
+        $('#btn-go-edit').click(function() {
+            $('#event-popup').hide();
+            $('#modal-title').text("일정 수정");
+
             $('#form-id').val(currentEvent.id);
             $('#form-company').val(currentEvent.extendedProps.company);
             $('#form-date').val(currentEvent.startStr);
             $('#form-time').val(currentEvent.extendedProps.time);
-            $('#form-type').val(currentEvent.extendedProps.type);
             $('#form-memo').val(currentEvent.extendedProps.memo);
+
+            // ✨ 기존 면접 타입이 목록에 있는지 확인
+            var existingType = currentEvent.extendedProps.type;
+            var isOptionExists = $('#form-type option').filter(function() {
+                return $(this).val() === existingType;
+            }).length > 0;
+
+            if(isOptionExists) {
+                // 목록에 있으면 그걸 선택
+                $('#form-type').val(existingType);
+                $('#form-type-direct').hide().val("");
+            } else {
+                // 목록에 없으면(사용자가 직접 입력했던 거라면) '직접 입력' 선택 후 입력창에 값 띄우기
+                $('#form-type').val("direct");
+                $('#form-type-direct').show().val(existingType);
+            }
 
             $('#modal-backdrop, #schedule-modal').fadeIn(200);
         });
 
-        // --- ✨ [삭제 버튼] 클릭 시 ---
         $('#btn-do-delete').click(function() {
             if(!confirm("정말 이 일정을 삭제하시겠습니까?")) return;
 
             $.ajax({
-                url: '/delete-calendar', // 삭제 컨트롤러
+                url: '/delete-calendar',
                 type: 'POST',
                 data: { schedule_id: currentEvent.id },
                 success: function() {
                     alert("삭제되었습니다.");
-                    location.reload(); // 새로고침
+                    location.reload();
                 }
             });
         });
 
-        // --- ✨ [모달 저장 버튼] (등록 & 수정 동시 처리) ---
         $('#btn-save-schedule').click(function() {
             var id = $('#form-id').val();
-            // 숨겨진 ID 값이 있으면 '수정(Update)', 없으면 '추가(Add)' 로 판단
             var targetUrl = id ? '/update-calendar' : '/add-calender';
+
+            // ✨ 어떤 값을 DB로 보낼지 결정!
+            var selectedType = $('#form-type').val();
+            var finalType = (selectedType === 'direct') ? $('#form-type-direct').val() : selectedType;
+
+            // 직접 입력인데 칸이 비어있으면 경고
+            if (selectedType === 'direct' && finalType.trim() === '') {
+                alert("면접 전형을 직접 입력해 주세요.");
+                $('#form-type-direct').focus();
+                return;
+            }
 
             var requestData = {
                 schedule_id: id,
@@ -196,7 +228,7 @@
                 company_name: $('#form-company').val(),
                 date: $('#form-date').val(),
                 time: $('#form-time').val(),
-                type: $('#form-type').val(),
+                type: finalType, // ✨ 최종 결정된 타입을 보냄
                 memo: $('#form-memo').val()
             };
 
@@ -206,7 +238,7 @@
                 data: requestData,
                 success: function() {
                     alert("정상적으로 처리되었습니다.");
-                    location.reload(); // 성공 시 새로고침
+                    location.reload();
                 },
                 error: function() {
                     alert("처리 중 에러가 발생했습니다.");
@@ -214,7 +246,6 @@
             });
         });
 
-        // 모달 닫기
         $('#btn-modal-close, #modal-backdrop').click(function() {
             $('#modal-backdrop, #schedule-modal').fadeOut(200);
         });
