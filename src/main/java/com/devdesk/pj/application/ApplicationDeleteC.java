@@ -12,13 +12,13 @@ public class ApplicationDeleteC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     }
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ApplicationDAO.deleteApplication(request);
         ApplicationDAO.selectAllCompanies(request);
         ApplicationDAO.selectAllApplications(request);
-        request.getRequestDispatcher("/application/applicationList.jsp").forward(request,response);
+        request.getRequestDispatcher("/application/application_list.jsp").forward(request, response);
     }
-
 
 
     public void destroy() {

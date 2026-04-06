@@ -115,4 +115,23 @@ public class ReviewDAO {
 
     }
 
+    public ReviewVO getReviewById(int reviewId) {
+        String sql = "select r.*, c.company_name from review r " +
+                     "join company c on r.r_company_id = c.company_id " +
+                     "where r.r_id = ?";
+        ReviewVO review = null;
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, reviewId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    review = ReviewVO.fromResultSet(rs);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return review;
+    }
 }
