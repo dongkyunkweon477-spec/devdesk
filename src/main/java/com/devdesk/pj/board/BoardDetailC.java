@@ -7,23 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "BoardUpdateC", value = "/board_update")
-public class BoardUpdateC extends HttpServlet {
+@WebServlet(name = "BoardDetailC", value = "/BoardDetailC")
+public class BoardDetailC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         //일
         BoardDAO.getBoard(request);
+
+        // 어디로
         // loginCheck
-        request.setAttribute("content", "board/boardUp.jsp");
+        request.setAttribute("content", "board/boardDetail.jsp");
         request.getRequestDispatcher("index.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //일
-        BoardDAO.updateBoard(request);
-
-        response.sendRedirect("board");
     }
 
     public void destroy() {

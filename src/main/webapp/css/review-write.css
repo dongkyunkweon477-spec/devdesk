@@ -1,0 +1,337 @@
+/* ===== 후기 작성 페이지 ===== */
+/* index.css 기준: Pretendard, 보라색 포인트(#7c3aed), 슬레이트 계열 */
+
+/* ===== 전체 래퍼 ===== */
+.write-wrap {
+    max-width: 720px;
+    margin: 32px auto 60px;
+    padding: 0 20px;
+}
+
+/* ===== 기업 헤더 ===== */
+.company-header {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.company-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #7c3aed;
+    background: #ede9fe;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+.company-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 6px 0;
+}
+
+.company-meta {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* ===== 폼 섹션 ===== */
+.form-section {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    background: #7c3aed;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+/* ===== 필드 레이아웃 ===== */
+.field-row {
+    margin-bottom: 18px;
+}
+
+.field-row:last-child {
+    margin-bottom: 0;
+}
+
+.field-row.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.field-row.three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+}
+
+/* ===== 라벨 ===== */
+.field-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.field-label.required::after {
+    content: ' *';
+    color: #ef4444;
+}
+
+.field-hint {
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 0 0 4px 0;
+    line-height: 1.5;
+}
+
+/* ===== 인풋 & 셀렉트 공통 ===== */
+.field-group input[type="text"],
+.field-group select,
+.field-group textarea {
+    padding: 0 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
+    color: #1e293b;
+    background: #f8fafc;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.field-group input[type="text"]:focus,
+.field-group select:focus,
+.field-group textarea:focus {
+    outline: none;
+    border-color: #a78bfa;
+    background: #ffffff;
+}
+
+.field-group input[type="text"] {
+    height: 38px;
+}
+
+.field-group select {
+    height: 38px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8.5L1 3.5h10L6 8.5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+}
+
+.field-group textarea {
+    padding: 10px 12px;
+    resize: vertical;
+    min-height: 180px;
+    line-height: 1.7;
+}
+
+/* ===== 글자수 카운터 ===== */
+.char-count {
+    font-size: 12px;
+    color: #94a3b8;
+    text-align: right;
+}
+
+.textarea-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.char-min {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.char-min.warning {
+    color: #ef4444;
+}
+
+/* ===== 난이도 별점 ===== */
+.difficulty-stars {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-top: 4px;
+}
+
+.difficulty-stars .star {
+    font-size: 22px;
+    color: #e2e8f0;
+    cursor: pointer;
+    transition: color 0.15s, transform 0.15s;
+    user-select: none;
+}
+
+.difficulty-stars .star:hover {
+    transform: scale(1.12);
+}
+
+.difficulty-stars .star.active {
+    color: #f59e0b;
+}
+
+.difficulty-label {
+    font-size: 13px;
+    color: #64748b;
+    margin-left: 8px;
+    min-width: 40px;
+}
+
+/* ===== 하단 버튼 ===== */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 8px;
+}
+
+.btn-cancel {
+    height: 42px;
+    padding: 0 24px;
+    background: #ffffff;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Pretendard', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+    background: #f8fafc;
+    color: #475569;
+}
+
+.btn-submit {
+    height: 42px;
+    padding: 0 32px;
+    background: #7c3aed;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Pretendard', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-submit:hover {
+    background: #6d28d9;
+}
+
+.btn-submit:disabled {
+    background: #c4b5fd;
+    cursor: not-allowed;
+}
+
+/* ===== 기업 검색 드롭다운 ===== */
+.company-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+.dropdown-item {
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #334155;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.dropdown-item:hover {
+    background: #f5f3ff;
+}
+
+.dropdown-meta {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-left: 8px;
+}
+
+/* ===== 유효성 에러 ===== */
+.field-group.error input,
+.field-group.error select,
+.field-group.error textarea {
+    border-color: #ef4444;
+    background: #fef2f2;
+}
+
+.field-group .error-msg {
+    font-size: 12px;
+    color: #ef4444;
+    display: none;
+}
+
+.field-group.error .error-msg {
+    display: block;
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 640px) {
+    .field-row.two-col,
+    .field-row.three-col {
+        grid-template-columns: 1fr;
+    }
+
+    .form-section {
+        padding: 20px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-cancel,
+    .btn-submit {
+        width: 100%;
+    }
+}
