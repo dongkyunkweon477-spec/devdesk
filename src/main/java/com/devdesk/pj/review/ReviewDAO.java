@@ -105,4 +105,14 @@ public class ReviewDAO {
 
 
     }
+
+    public void updateReview() {
+
+
+    }
+
+    public void deleteReview() {
+
+    }
+
 }
