@@ -15,7 +15,7 @@ public class BoardUpdateC extends HttpServlet {
         BoardDAO.getBoard(request);
         // loginCheck
         request.setAttribute("content", "board/boardUp.jsp");
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     @Override

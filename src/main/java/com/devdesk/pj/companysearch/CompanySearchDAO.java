@@ -3,6 +3,7 @@ package com.devdesk.pj.companysearch;
 import com.devdesk.pj.main.DBManager_new;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.*;
@@ -81,4 +82,74 @@ public class CompanySearchDAO {
         return null;
     }
 
+    public int insertCompany(CompanySearchVO vo) {
+        String sql = "insert into company(company_id, company_name, company_industry, " +
+                "company_location, company_rating, company_size, company_created_date, company_application_date) " +
+                "values(company_seq.nextval, ?, ?, ?, ?, ?, ?, ?)";
+        try (
+                Connection con = DBManager_new.connect();
+                PreparedStatement pstmt = con.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, vo.getCompanyName());
+            pstmt.setString(2, vo.getCompanyIndustry());
+            pstmt.setString(3, vo.getCompanyLocation());
+            pstmt.setDouble(4, vo.getCompanyRating());
+            pstmt.setInt(5, vo.getCompanySize());
+            pstmt.setDate(6, (Date) vo.getCompanyCreatedDate());
+            pstmt.setDate(7, (Date) vo.getCompanyApplicationDate());
+
+            if (pstmt.executeUpdate() > 0) {
+                System.out.println("Company insert success");
+                return 1;
+            } else {
+                System.out.println("Company insert fail");
+                return 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+    }
+
+    public void deleteCompany(int companyId) {
+        String sqlDelRev = "delete from review where r_company_id = ?";
+        String sqlDelComp = "delete from company where company_id = ?";
+        try (
+                Connection con = DBManager_new.connect();
+        ) {
+            try (PreparedStatement pstmt = con.prepareStatement(sqlDelRev)) {
+                pstmt.setInt(1, companyId);
+                pstmt.executeUpdate();
+            }
+            try (PreparedStatement pstmt = con.prepareStatement(sqlDelComp)) {
+                pstmt.setInt(1, companyId);
+                pstmt.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateCompany(CompanySearchVO vo) {
+        String sql = "update company set company_name=?, company_industry=?, " +
+                "company_location=?, company_rating=?, company_size=? , company_application_date=? " +
+                "where company_id=?";
+        try (
+                Connection con = DBManager_new.connect();
+                PreparedStatement pstmt = con.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, vo.getCompanyName());
+            pstmt.setString(2, vo.getCompanyIndustry());
+            pstmt.setString(3, vo.getCompanyLocation());
+            pstmt.setDouble(4, vo.getCompanyRating());
+            pstmt.setInt(5, vo.getCompanySize());
+            pstmt.setDate(6, (Date) vo.getCompanyApplicationDate());
+            pstmt.setInt(7, vo.getCompanyId());
+
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
