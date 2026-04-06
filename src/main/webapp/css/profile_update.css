@@ -42,17 +42,11 @@
     font-size: 50px !important; /* 글자 크기도 시원하게 키움 */
 
     /* 5. 디테일 (그림자, 커서, 애니메이션) */
-    cursor: pointer;
     box-shadow: 0 4px 15px rgba(167, 139, 250, 0.3); /* 은은한 보라색 그림자 */
-    transition: all 0.2s ease-in-out;
+    transition: none !important;
     overflow: hidden; /* 이미지가 원 밖으로 나가지 않게 */
 }
 
-/* 마우스 올렸을 때 살짝 커지는 효과 (옵션) */
-.large-avatar:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(167, 139, 250, 0.4);
-}
 
 /* 실제 파일 인풋은 숨김 */
 #fileInput {
