@@ -48,7 +48,8 @@ public class CommentDAO {
         ResultSet rs = null;
         ArrayList<CommentVO> comments = new ArrayList<>();
 
-        String sql = "SELECT * FROM comments WHERE b_board_id = ? ORDER BY c_created_date ASC";
+        String sql = "SELECT c.*, m.nickname FROM comments c JOIN member m ON c.member_id = m.member_id WHERE c.b_board_id = ? ORDER BY c.c_created_date ASC";
+
 
         try {
             con = DBManager_new.connect();
@@ -63,7 +64,7 @@ public class CommentDAO {
                 c.setMember_id(rs.getInt("member_id"));
                 c.setContent(rs.getString("c_content"));
                 c.setCreated_date(String.valueOf(rs.getDate("c_created_date")));
-
+                c.setNickname(rs.getString("nickname"));
                 comments.add(c);
             }
 

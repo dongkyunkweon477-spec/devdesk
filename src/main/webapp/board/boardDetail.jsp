@@ -25,7 +25,7 @@
         <div class="detail-info-group">
             <div class="detail-row">
                 <div class="detail-label">작성자</div>
-                <div class="detail-content">(ID: ${board.member_id})</div>
+                <div class="detail-content">(ID: ${board.nickname})</div>
             </div>
             <div class="detail-row">
                 <div class="detail-label">작성일</div>
@@ -60,8 +60,6 @@
             <div class="comment-form">
                 <form action="comment_add" method="post">
                     <input type="hidden" name="board_id" value="${board.board_id}">
-                    유저: ${sessionScope.user} <br>
-                    member_id1: ${sessionScope.user.member_id} <br>
                     <input type="hidden" name="member_id" value="${sessionScope.user.member_id}">
                     <div class="comment-input-wrapper">
                         <textarea name="content" placeholder="댓글을 입력하세요" required></textarea>
@@ -75,7 +73,7 @@
             <c:forEach var="comment" items="${commentList}">
                 <div class="comment-item">
                     <div class="comment-info">
-                        <span class="comment-writer">사용자(ID: ${comment.member_id})</span>
+                        <span class="comment-writer">사용자(ID: ${comment.nickname})</span>
                         <span class="comment-date">${comment.created_date}</span>
                     </div>
                     <div class="comment-content">

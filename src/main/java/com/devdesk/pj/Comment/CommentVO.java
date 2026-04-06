@@ -11,4 +11,6 @@ public class CommentVO {
     private String content;
     private String created_date;
 
+    private String nickname;
+
 }
