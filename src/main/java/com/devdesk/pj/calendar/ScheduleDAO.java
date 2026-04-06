@@ -2,12 +2,10 @@ package com.devdesk.pj.calendar;
 
 import com.devdesk.pj.main.DBManager_new;
 
-import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ScheduleDAO {
     public static final ScheduleDAO SCAO = new ScheduleDAO();
@@ -15,7 +13,7 @@ public class ScheduleDAO {
     private ScheduleDAO() {}
 
 
-    public ArrayList<ScheduleDTO> showAllSch(HttpServletRequest request) {
+    public ArrayList<ScheduleDTO> showAllSch() {
 
         Connection con = null;
         PreparedStatement pstmt = null;

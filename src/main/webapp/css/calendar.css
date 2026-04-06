@@ -1,0 +1,23 @@
+body { font-family: 'Arial', sans-serif; padding: 20px; background-color: #f7fafc;}
+#calendar { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);}
+
+/* 팝업 공통 */
+#event-popup { display: none; position: absolute; background: #ffffff; border: 1px solid #e2e8f0; padding: 15px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-radius: 8px; z-index: 1000; width: 250px; }
+#event-popup h3 { margin: 0 0 10px 0; color: #2b6cb0; font-size: 18px; }
+.pop-info { margin-bottom: 8px; font-size: 13px; color: #4a5568; }
+.pop-info strong { display: inline-block; width: 60px; color: #2d3748; }
+.pop-close { float: right; cursor: pointer; color: #a0aec0; font-weight: bold; margin-top: -2px; }
+.btn-group-sm { display: flex; gap: 5px; margin-top: 15px; border-top: 1px solid #edf2f7; padding-top: 10px;}
+.btn-edit { background: #3182ce; color: white; flex: 1; border: none; padding: 6px; border-radius: 4px; cursor: pointer; font-size:12px;}
+.btn-delete { background: #e53e3e; color: white; flex: 1; border: none; padding: 6px; border-radius: 4px; cursor: pointer; font-size:12px;}
+
+/* 모달 공통 */
+#modal-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+#schedule-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 8px; width: 320px; z-index: 1000; }
+#schedule-modal h3 { margin-top: 0; color: #1a365d; border-bottom: 2px solid #edf2f7; padding-bottom: 10px;}
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 4px; color: #4a5568;}
+.form-group input, .form-group select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #cbd5e0; border-radius: 4px; }
+.btn-group { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.btn-save { background: #2b6cb0; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+.btn-cancel { background: #e2e8f0; color: #4a5568; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
