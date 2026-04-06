@@ -7,6 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class DashboardDAO {
@@ -88,4 +92,49 @@ public class DashboardDAO {
         request.setAttribute("stageCounts", vo);
         return vo;  // ✅ finally 밖으로
     }
+
+    public static List<Map<String, Object>> getFunnelData(StageCountVO sc) {
+        List<Map<String, Object>> funnelData = new ArrayList<>();
+
+        addFunnel(funnelData, "이력서 제출", "서류 합격",
+                "#9da3b8", "#ffd166",
+                sc.getApplied(), sc.getDocumentPass());
+
+        addFunnel(funnelData, "서류 합격", "1차 면접",
+                "#ffd166", "#4ecdc4",
+                sc.getDocumentPass(), sc.getFirstInterview());
+
+        addFunnel(funnelData, "1차 면접", "2차 면접",
+                "#4ecdc4", "#5b7cf8",
+                sc.getFirstInterview(), sc.getSecondInterview());
+
+        addFunnel(funnelData, "2차 면접", "3차 면접",
+                "#5b7cf8", "#8b6ef5",
+                sc.getSecondInterview(), sc.getThirdInterview());
+
+        addFunnel(funnelData, "3차 면접", "합격",
+                "#8b6ef5", "#56e39f",
+                sc.getThirdInterview(), sc.getPassed());
+
+        return funnelData;
+    }
+
+
+    // 헬퍼 메서드
+    private static void addFunnel(List<Map<String, Object>> list,
+                                  String fromLabel, String toLabel,
+                                  String fromColor, String toColor,
+                                  int from, int to) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("fromLabel", fromLabel);
+        map.put("toLabel", toLabel);
+        map.put("fromColor", fromColor);
+        map.put("toColor", toColor);
+        // from이 0이면 0% 처리 (나누기 0 방지)
+        int pct = (from == 0) ? 0 : (int) Math.round((double) to / from * 100);
+        map.put("pct", pct);
+        list.add(map);
+    }
+
+
 }
