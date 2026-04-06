@@ -120,6 +120,7 @@ public class CompanySearchDAO {
         ) {
             try (PreparedStatement pstmt = con.prepareStatement(sqlDelRev)) {
                 pstmt.setInt(1, companyId);
+                pstmt.executeUpdate();
             }
             try (PreparedStatement pstmt = con.prepareStatement(sqlDelComp)) {
                 pstmt.setInt(1, companyId);
