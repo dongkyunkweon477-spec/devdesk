@@ -8,10 +8,9 @@ import java.util.Date;
 
 @Data
 @AllArgsConstructor
-@WebServlet
 
 public class ScheduleDTO {
-    private String schedule_ID;
+    private String scheduleID;
     private String member_ID;
     private String company_name;
     private java.sql.Date schedule_date;
