@@ -16,6 +16,8 @@ public class MemberDAO {
     private MemberDAO() {
     }
 
+    // 로그인 상태를 확인하는 전용 문지기 메서드
+
     public int idCheak(String email) {
         int result = 0;
         Connection con = null;
