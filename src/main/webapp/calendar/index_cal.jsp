@@ -10,31 +10,7 @@
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <style>
-        body { font-family: 'Arial', sans-serif; padding: 20px; background-color: #f7fafc;}
-        #calendar { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);}
-
-        /* 팝업 공통 */
-        #event-popup { display: none; position: absolute; background: #ffffff; border: 1px solid #e2e8f0; padding: 15px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-radius: 8px; z-index: 1000; width: 250px; }
-        #event-popup h3 { margin: 0 0 10px 0; color: #2b6cb0; font-size: 18px; }
-        .pop-info { margin-bottom: 8px; font-size: 13px; color: #4a5568; }
-        .pop-info strong { display: inline-block; width: 60px; color: #2d3748; }
-        .pop-close { float: right; cursor: pointer; color: #a0aec0; font-weight: bold; margin-top: -2px; }
-        .btn-group-sm { display: flex; gap: 5px; margin-top: 15px; border-top: 1px solid #edf2f7; padding-top: 10px;}
-        .btn-edit { background: #3182ce; color: white; flex: 1; border: none; padding: 6px; border-radius: 4px; cursor: pointer; font-size:12px;}
-        .btn-delete { background: #e53e3e; color: white; flex: 1; border: none; padding: 6px; border-radius: 4px; cursor: pointer; font-size:12px;}
-
-        /* 모달 공통 */
-        #modal-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
-        #schedule-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 8px; width: 320px; z-index: 1000; }
-        #schedule-modal h3 { margin-top: 0; color: #1a365d; border-bottom: 2px solid #edf2f7; padding-bottom: 10px;}
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 4px; color: #4a5568;}
-        .form-group input, .form-group select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #cbd5e0; border-radius: 4px; }
-        .btn-group { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-        .btn-save { background: #2b6cb0; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
-        .btn-cancel { background: #e2e8f0; color: #4a5568; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
 </head>
 <body>
 
@@ -58,23 +34,52 @@
 <div id="schedule-modal">
     <h3 id="modal-title">새 일정 추가</h3>
     <input type="hidden" id="form-id">
+    <input type="hidden" id="form-appId" value="87">
 
     <div class="form-group">
-        <label>지원서 번호 (APP_ID)</label>
-        <input type="number" id="form-appId" value="1">
-    </div>
-    <div class="form-group">
         <label>회사 이름</label>
-        <input type="text" id="form-company" value="네이버">
+        <input type="text" id="form-company" list="company-options" placeholder="회사명 검색 또는 직접 입력">
+        <datalist id="company-options">
+            <c:forEach var="company" items="${companyList}">
+                <option value="${company}"></option>
+            </c:forEach>
+        </datalist>
     </div>
+
     <div class="form-group">
         <label>날짜</label>
         <input type="date" id="form-date">
     </div>
+
     <div class="form-group">
         <label>시간</label>
-        <input type="time" id="form-time">
+        <div style="display: flex; gap: 5px;">
+            <select id="form-hour" style="flex: 1;">
+                <option value="08">08시</option>
+                <option value="09">09시</option>
+                <option value="10">10시</option>
+                <option value="11">11시</option>
+                <option value="12">12시</option>
+                <option value="13">13시</option>
+                <option value="14">14시</option>
+                <option value="15">15시</option>
+                <option value="16">16시</option>
+                <option value="17">17시</option>
+                <option value="18">18시</option>
+                <option value="19">19시</option>
+            </select>
+
+            <select id="form-minute" style="flex: 1;">
+                <option value="00">00분</option>
+                <option value="10">10분</option>
+                <option value="20">20분</option>
+                <option value="30">30분</option>
+                <option value="40">40분</option>
+                <option value="50">50분</option>
+            </select>
+        </div>
     </div>
+
     <div class="form-group">
         <label>면접 전형</label>
         <select id="form-type">
@@ -86,10 +91,12 @@
         </select>
         <input type="text" id="form-type-direct" placeholder="ex) SPI, 인성면접" style="display:none; margin-top:5px;">
     </div>
+
     <div class="form-group">
         <label>메모</label>
         <input type="text" id="form-memo">
     </div>
+
     <div class="btn-group">
         <button class="btn-cancel" id="btn-modal-close">취소</button>
         <button class="btn-save" id="btn-save-schedule">저장</button>
@@ -137,13 +144,16 @@
                 $('#event-popup').css({ top: y + 15 + 'px', left: x + 15 + 'px' }).fadeIn(150);
             },
 
-            // 빈 날짜 클릭 시 (새 일정 추가)
             select: function (info) {
+                $('#form-hour').val("14");
+                $('#form-minute').val("00");
                 $('#modal-title').text("새 일정 추가");
                 $('#form-id').val("");
                 $('#form-date').val(info.startStr);
 
-                // ✨ 모달 띄울 때 '직접 입력' 창 초기화
+                // 모달 띄울 때 회사 입력창 초기화
+                $('#form-company').val("");
+
                 $('#form-type').val("코딩테스트");
                 $('#form-type-direct').hide().val("");
 
@@ -154,16 +164,14 @@
 
         $('#close-popup').click(function () { $('#event-popup').fadeOut(150); });
 
-        // --- ✨ 면접 전형 드롭다운 변경 이벤트 ---
         $('#form-type').change(function() {
             if ($(this).val() === 'direct') {
-                $('#form-type-direct').show().focus(); // 직접입력 선택 시 입력창 표시
+                $('#form-type-direct').show().focus();
             } else {
-                $('#form-type-direct').hide().val(""); // 다른 거 선택 시 입력창 숨김 및 초기화
+                $('#form-type-direct').hide().val("");
             }
         });
 
-        // 수정 버튼 클릭 시
         $('#btn-go-edit').click(function() {
             $('#event-popup').hide();
             $('#modal-title').text("일정 수정");
@@ -171,21 +179,26 @@
             $('#form-id').val(currentEvent.id);
             $('#form-company').val(currentEvent.extendedProps.company);
             $('#form-date').val(currentEvent.startStr);
-            $('#form-time').val(currentEvent.extendedProps.time);
+            var existingTime = currentEvent.extendedProps.time;
+            if (existingTime) {
+                var timeArr = existingTime.split(':'); // ["14", "30"]
+                $('#form-hour').val(timeArr[0]);
+                $('#form-minute').val(timeArr[1]);
+            } else {
+                $('#form-hour').val("14");
+                $('#form-minute').val("00");
+            }
             $('#form-memo').val(currentEvent.extendedProps.memo);
 
-            // ✨ 기존 면접 타입이 목록에 있는지 확인
             var existingType = currentEvent.extendedProps.type;
             var isOptionExists = $('#form-type option').filter(function() {
                 return $(this).val() === existingType;
             }).length > 0;
 
             if(isOptionExists) {
-                // 목록에 있으면 그걸 선택
                 $('#form-type').val(existingType);
                 $('#form-type-direct').hide().val("");
             } else {
-                // 목록에 없으면(사용자가 직접 입력했던 거라면) '직접 입력' 선택 후 입력창에 값 띄우기
                 $('#form-type').val("direct");
                 $('#form-type-direct').show().val(existingType);
             }
@@ -211,14 +224,12 @@
             var id = $('#form-id').val();
             var targetUrl = id ? '/update-calendar' : '/add-calender';
 
-            // ✨ 어떤 값을 DB로 보낼지 결정!
             var selectedType = $('#form-type').val();
             var finalType = (selectedType === 'direct') ? $('#form-type-direct').val() : selectedType;
 
-            // 직접 입력인데 칸이 비어있으면 경고
-            if (selectedType === 'direct' && finalType.trim() === '') {
-                alert("면접 전형을 직접 입력해 주세요.");
-                $('#form-type-direct').focus();
+            // 회사 이름이나 면접 전형이 비어있으면 경고
+            if (!$('#form-company').val().trim() || (selectedType === 'direct' && finalType.trim() === '')) {
+                alert("회사 이름과 면접 전형을 정확히 입력해 주세요.");
                 return;
             }
 
@@ -227,8 +238,11 @@
                 app_id: $('#form-appId').val(),
                 company_name: $('#form-company').val(),
                 date: $('#form-date').val(),
-                time: $('#form-time').val(),
-                type: finalType, // ✨ 최종 결정된 타입을 보냄
+
+                // ✨ 바꾼 코드: 선택한 시간과 분을 "14:30" 형태로 다시 합쳐서 서버로 보냄!
+                time: $('#form-hour').val() + ":" + $('#form-minute').val(),
+
+                type: finalType,
                 memo: $('#form-memo').val()
             };
 

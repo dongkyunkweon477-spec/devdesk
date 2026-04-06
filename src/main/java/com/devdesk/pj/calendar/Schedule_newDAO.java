@@ -61,7 +61,7 @@ public class Schedule_newDAO {
 
         // 1. 택배 상자(request)에서 AJAX가 보낸 데이터 하나씩 꺼내기
         // (이름은 JSP의 AJAX data에서 보낸 키값과 100% 똑같아야 합니다!)
-        int memberId = 3; // 💥 현재 로그인 세션이 없으니 임시로 3번 유저 강제 배정!
+        int memberId = 6;
         int appId = Integer.parseInt(request.getParameter("app_id"));
         String companyName = request.getParameter("company_name");
         String date = request.getParameter("date");
@@ -136,5 +136,32 @@ public class Schedule_newDAO {
             DBManager_new.close(con, pstmt, null);
         }
     }
+    // --- 캘린더 모달의 회사 드롭다운을 채우기 위해 이름만 가져오는 메서드 ---
+    public ArrayList<String> getAllCompanyNames() {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        ArrayList<String> names = new ArrayList<>();
+
+        String sql = "SELECT COMPANY_NAME FROM COMPANY ORDER BY COMPANY_NAME ASC";
+
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                names.add(rs.getString("COMPANY_NAME"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, pstmt, rs);
+        }
+
+        return names;
+    }
+
+
     }
 
