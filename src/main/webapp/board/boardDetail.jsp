@@ -88,7 +88,7 @@
                                     onclick="openEdit(${comment.comments_id})">수정
                             </button>
                             <button type="button" class="c-delete-btn"
-                                    onclick="deleteComment(${comment.comments_id})">삭제
+                                    onclick="delComment(${comment.comments_id}, ${board.board_id})">삭제
                             </button>
                         </div>
                     </c:if>
@@ -106,6 +106,12 @@
     function deleteBoard(id) {
         if (confirm("정말 삭제하시겠습니까?")) {
             location.href = "board_del?id=" + id;
+        }
+    }
+
+    function delComment(no, boardId) {
+        if (confirm("댓글을 삭제하시겠습니까?")) {
+            location.href = "comment_del?id=" + no + "&board_id=" + boardId;
         }
     }
 </script>

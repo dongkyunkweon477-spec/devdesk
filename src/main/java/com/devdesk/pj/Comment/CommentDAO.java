@@ -79,4 +79,27 @@ public class CommentDAO {
         return comments;
     }
 
+    public static void delComment(HttpServletRequest request) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        String sql = "DELETE FROM comments WHERE c_comments_id = ?";
+
+        try {
+            request.setCharacterEncoding("UTF-8");
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, Integer.parseInt(request.getParameter("id")));
+
+            int result = ps.executeUpdate();
+
+            if (result == 1) {
+                System.out.println("delete success");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, null);
+        }
+    }
 }
