@@ -10,13 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@WebServlet(name = "CalendarAddC", value = "/add-calender")
+@WebServlet(name = "CalendarAddC", value = "/add-calendar")
 public class CalendarAddC extends HttpServlet {
 
         public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 
-            ApplicationDAO.SCAO.addSchedule(request);
+            Schedule_newDAO.SCAO.addSchedule(request);
             response.sendRedirect("application_list");
 
 
