@@ -14,7 +14,7 @@ public class ApplicationListC extends HttpServlet {
         ApplicationDAO.selectAllApplications(request);
         ApplicationDAO.selectAllCompanies(request);
         request.setAttribute("content", "/application/application_list.jsp");
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
 
