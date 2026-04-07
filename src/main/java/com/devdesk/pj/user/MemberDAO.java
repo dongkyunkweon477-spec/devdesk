@@ -110,7 +110,11 @@ public class MemberDAO {
                     System.out.println("로그인 성공");
 
                     MemberDTO memberDTO = new MemberDTO();
+<<<<<<< HEAD
+                    memberDTO.setMember_id(rs.getInt("member_id")); // 선민 추가
+=======
                     memberDTO.setMember_id(rs.getInt("member_id")); // 추가
+>>>>>>> d2375a00eacbac43bf0748e865a93432a9789abf
                     memberDTO.setEmail(rs.getString("email"));
                     memberDTO.setNickname(rs.getString("nickname"));
                     memberDTO.setJob_category(rs.getString("job_category"));
@@ -141,7 +145,44 @@ public class MemberDAO {
 
     }
 
-    //public boolean updateProfile(HttpServletRequest request) {
+    public boolean updateProfile(HttpServletRequest request) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
 
-    //}
+        try {
+            String nickname = request.getParameter("nickname");
+            String job_category = request.getParameter("job_category");
+
+            HttpSession hs = request.getSession();
+            MemberDTO user = (MemberDTO) hs.getAttribute("user");
+
+            String sql = "UPDATE MEMBER SET nickname = ?, job_category = ? WHERE email = ?";
+
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, nickname);
+            pstmt.setString(2, job_category);
+            pstmt.setString(3, user.getEmail());
+
+            if (pstmt.executeUpdate() == 1) {
+                System.out.println("프로필 텍스트 수정 성공!");
+
+                // 세션 정보 업데이트
+                user.setNickname(nickname);
+                user.setJob_category(job_category);
+
+                hs.setAttribute("user", user);
+                return true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            DBManager_new.close(con, pstmt, null);
+        }
+        return false;
+    }
+
+
 }

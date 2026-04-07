@@ -1,24 +1,18 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>DevDesk</title>
-    <link rel="stylesheet" href="css/profile_update.css">
-</head>
-<body>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<link rel="stylesheet" href="css/mypage.css">
+<link rel="stylesheet" href="css/profile_update.css">
+
 <div class="mypage-wrapper">
     <h2 class="mypage-title">프로필 수정</h2>
 
-    <form action="profile-update" method="post" enctype="multipart/form-data">
+    <form action="profile-update" method="post">
         <div class="update-container">
 
             <div class="photo-upload-section">
-                <div id="imagePreview" class="profile-avatar large-avatar">
+                <div class="profile-avatar large-avatar">
                     ${sessionScope.user.nickname.substring(0,1)}
                 </div>
-                <input type="file" id="fileInput" name="profile_img" accept="image/*" onchange="previewImage(this)">
-                <button type="button" class="btn-select-photo" onclick="document.getElementById('fileInput').click();">
-                    사진 선택
-                </button>
             </div>
 
             <div class="info-input-section">
@@ -50,22 +44,3 @@
         </div>
     </form>
 </div>
-
-<script>
-    function previewImage(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                var preview = document.getElementById('imagePreview');
-                preview.innerText = '';
-                preview.style.backgroundImage = 'url(' + e.target.result + ')';
-                preview.style.backgroundSize = 'cover';
-                preview.style.backgroundPosition = 'center';
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>
-
-</body>
-</html>

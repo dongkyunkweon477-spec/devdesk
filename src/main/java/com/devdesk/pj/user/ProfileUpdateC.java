@@ -1,7 +1,5 @@
 package com.devdesk.pj.user;
 
-import com.devdesk.pj.auth.AuthDAO;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,17 +12,19 @@ public class ProfileUpdateC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        if (AuthDAO.ADAO.isLoggedIn(request)) {
-            request.setAttribute("content", "user/profile_update.jsp");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
-        } else {
-            response.sendRedirect("login");
-        }
+        request.setAttribute("content", "user/profile_update.jsp");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
 
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        if (MemberDAO.MBAO.updateProfile(request)) {
+            response.sendRedirect("mypage");
+        } else {
+            response.sendRedirect("profile-update");
+        }
 
     }
 
