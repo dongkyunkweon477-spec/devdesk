@@ -1,8 +1,10 @@
 $(function () {
+    var totalCompanyCount = parseInt($('#resultCount').text()) || 0;
     initToggleBtns();
     initSearch();
-    initClear();
-    doSearch();
+    initClear(totalCompanyCount);
+    // doSearch();
+    $('#resultArea').html('<div class="cs-no-result">검색 조건을 선택하고 검색 버튼을 눌러주세요.</div>');
 });
 
 /* ===== 토글 버튼 (업종, 지역) ===== */
@@ -33,8 +35,9 @@ function doSearch() {
     var industry = $('#industryBtns .cs-opt-btn.active').attr('data-value') || '';
     var location = $('#locationBtns .cs-opt-btn.active').attr('data-value') || '';
 
+    var contextPath = $('#contextPath').val();
     $.ajax({
-        url: '/company-search/ajax',
+        url: contextPath + '/company-search/ajax',
         dataType: 'json',
         data: {
             companyName: $('#companyName').val(),
@@ -107,23 +110,24 @@ function showResult(data) {
 }
 
 /* ===== 조건 초기화 ===== */
-function initClear() {
+function initClear(totalCompanyCount) {
     $('#clearBtn').on('click', function () {
-        // 토글 버튼 초기화
+        // 모든 입력 필드 및 버튼 상태 초기화
         $('.cs-options').each(function () {
             $(this).find('.cs-opt-btn').removeClass('active');
             $(this).find('.cs-opt-btn').first().addClass('active');
         });
-
-        // 입력값 초기화
         $('#companyName').val('');
         $('#minRating').val('0');
-        $('#maxRating').val('5');
+        $('#maxRating').val('5.0');
         $('#minSize').val('');
         $('#maxSize').val('');
 
-        // 결과 초기화
-        $('#resultArea').empty();
-        $('#resultCount').text('0');
+        // 결과 영역을 초기 상태 메시지로 변경
+        $('#resultArea').html('<div class="cs-no-result">검색 조건을 선택하고 검색 버튼을 눌러주세요.</div>');
+
+        // 개수 표시를 초기 전체 개수로 복구
+        $('#resultCount').text(totalCompanyCount);
     });
+
 }

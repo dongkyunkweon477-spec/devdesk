@@ -3,8 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/companySearch.css">
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <input type="hidden" id="userRole" value="${sessionScope.user.nickname == '관리자' ? 'ADMIN' : 'USER'}"/>
+<input type="hidden" id="contextPath" value="${pageContext.request.contextPath}"/>
 
 <div class="cs-wrap">
     <h2 class="cs-title">기업 검색</h2>
@@ -74,13 +74,13 @@
                 <input type="text" id="companyName" placeholder="기업명을 입력하세요"/>
             </div>
         </div>
-
+        <button class="cs-search-btn" onclick="location.href='/company/insert'">임시버튼</button>
     </div>
 
     <%-- ===== 검색 바 ===== --%>
     <div class="cs-action-bar">
         <div class="cs-result-count">
-            검색 결과 : <span id="resultCount">0</span>건
+            등록 기업 : <span id="resultCount">${totalCompanyCount}</span>개
         </div>
         <div class="cs-action-btns">
             <button type="button" class="cs-clear-btn" id="clearBtn">조건 초기화</button>
