@@ -186,4 +186,29 @@ public class CompanySearchDAO {
             e.printStackTrace();
         }
     }
+
+    public Map<String, Object> getCompanyStats(int companyId) {
+        String sql = "select count(*) as total_count," +
+                " round(avg(r_difficulty),1) as avg_difficulty," +
+                " round(count(case when r_result = 'PASS' then 1 end) * 100.0 / count(*), 1) as pass_rate" +
+                " from review where r_company_id = ?";
+        Map<String, Object> stats = new HashMap<>();
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, companyId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    stats.put("totalCount", rs.getInt("total_count"));
+                    stats.put("avgDifficulty", rs.getDouble("avg_difficulty"));
+                    stats.put("passRate", rs.getDouble("pass_rate"));
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return stats;
+
+    }
 }

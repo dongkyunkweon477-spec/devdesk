@@ -31,9 +31,13 @@ public class ReviewC extends HttpServlet {
             totalCount = ReviewDAO.REVIEW_DAO.getReviewCount(null);
 
         }
+        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
         request.setAttribute("reviews", reviews);
         request.setAttribute("totalCount", totalCount);
         request.setAttribute("pageSize", pageSize);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("companyId", companyIdP);
         request.setAttribute("content", "/review/review.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
