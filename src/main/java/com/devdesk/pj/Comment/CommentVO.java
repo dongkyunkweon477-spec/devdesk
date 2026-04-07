@@ -7,7 +7,7 @@ public class CommentVO {
     private int comments_id;
     private int board_id;
     private int member_id;
-    private int parent_id;
+    private Integer parent_id;
     private String content;
     private String created_date;
 
