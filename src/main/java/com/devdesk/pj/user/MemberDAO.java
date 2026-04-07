@@ -112,8 +112,6 @@ public class MemberDAO {
                     memberDTO.setEmail(rs.getString("email"));
                     memberDTO.setNickname(rs.getString("nickname"));
                     memberDTO.setJob_category(rs.getString("job_category"));
-                    memberDTO.setMember_id(rs.getInt("member_id"));
-
 
                     HttpSession hs = request.getSession();
                     hs.setAttribute("user", memberDTO);
