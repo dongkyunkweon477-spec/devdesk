@@ -257,7 +257,6 @@
                 return;
             }
 
-            // ✅ 진짜 데이터 포장하는 곳은 여기입니다! 여기에 apply_date를 꼭 넣어주세요!
             var requestData = {
                 schedule_id: id,
                 app_id: $('#form-appId').val(),

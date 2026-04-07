@@ -13,20 +13,20 @@ import java.util.ArrayList;
 @WebServlet(name = "CalendarAddC", value = "/add-calendar")
 public class CalendarAddC extends HttpServlet {
 
-        @Override
-        protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-            request.setCharacterEncoding("UTF-8");
-            try {
-                //등록~
-                Schedule_newDAO.SCAO.addSchedule(request);
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
 
-                // AJAX에게 "저장 성공했어!" 라고 알려주는 부분 (Redirect 금지)
-                response.setContentType("text/plain; charset=UTF-8");
-                response.getWriter().write("success");
+        try {
+            Schedule_newDAO.SCAO.addSchedule(request);
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            }
+            response.setContentType("text/plain; charset=UTF-8");
+            response.getWriter().write("success");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("fail");
         }
+    }
 }
