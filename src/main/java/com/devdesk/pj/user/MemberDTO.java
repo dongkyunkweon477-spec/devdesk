@@ -23,5 +23,6 @@ public class MemberDTO {
     private String status;
     private Date created_date;
     private Date updated_date;
+    private String profile_img;
 
 }

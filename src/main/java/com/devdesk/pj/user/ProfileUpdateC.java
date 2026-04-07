@@ -26,6 +26,15 @@ public class ProfileUpdateC extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        if (AuthDAO.ADAO.isLoggedIn(request)) {
+            if (MemberDAO.MBAO.updateProfile(request)) {
+                response.sendRedirect("mypage");
+            } else {
+                response.sendRedirect("profile-update");
+            }
+        } else {
+            response.sendRedirect("login");
+        }
     }
 
 
