@@ -45,7 +45,7 @@
         </div>
     </div>
 
-    <c:if test="${sessionScope.loginMember.member_id == board.member_id}">
+    <c:if test="${sessionScope.user.member_id == board.member_id}">
         <div class="detail-buttons">
             <button class="edit-btn" onclick="location.href='board_update?id=${board.board_id}'">수정</button>
             <button class="delete-btn" onclick="deleteBoard(${board.board_id})">삭제</button>
@@ -55,6 +55,7 @@
     <div class="comment-section">
         <hr class="comment-divider">
         <h3>댓글</h3>
+        <hr class="comment-divider">
 
         <c:if test="${not empty sessionScope.user}">
             <div class="comment-form">
@@ -71,26 +72,56 @@
 
         <div class="comment-list">
             <c:forEach var="comment" items="${commentList}">
-                <div class="comment-item">
-                    <div class="comment-info">
-                        <span class="comment-writer">사용자(ID: ${comment.nickname})</span>
-                        <span class="comment-date">${comment.created_date}</span>
-                    </div>
-                    <div class="comment-content">
-                            ${comment.content}
+                <!-- 부모 댓글만 표시 -->
+                <c:if test="${empty comment.parent_id}">
+                    <div class="comment-item">
+                        <div class="comment-info">
+                            <span class="comment-writer">사용자(ID: ${comment.nickname})</span>
+                            <span class="comment-date">${comment.created_date}</span>
+                        </div>
+                        <div class="comment-content">
+                                ${comment.content}
+                        </div>
+
+                        <button class="reply-btn"
+                                onclick="showReplyForm(${comment.comments_id}, ${board.board_id}, '${sessionScope.user.member_id}')">
+                            답글
+                        </button>
+
+                        <c:if test="${sessionScope.user.member_id == comment.member_id}">
+                            <div class="comment-actions">
+                                <button type="button" class="c-edit-btn"
+                                        onclick="openEdit(${comment.comments_id})">수정
+                                </button>
+                                <button type="button" class="c-delete-btn"
+                                        onclick="delComment(${comment.comments_id}, ${board.board_id})">삭제
+                                </button>
+                            </div>
+                        </c:if>
                     </div>
 
-                    <c:if test="${sessionScope.user.member_id == comment.member_id}">
-                        <div class="comment-actions">
-                            <button type="button" class="c-edit-btn"
-                                    onclick="openEdit(${comment.comments_id})">수정
-                            </button>
-                            <button type="button" class="c-delete-btn"
-                                    onclick="delComment(${comment.comments_id}, ${board.board_id})">삭제
-                            </button>
-                        </div>
-                    </c:if>
-                </div>
+                    <!-- 이 부모 댓글에 대한 대댓글 표시 -->
+                    <c:forEach var="reply" items="${commentList}">
+                        <c:if test="${reply.parent_id == comment.comments_id}">
+                            <div class="reply-item">
+                                <div class="reply-info">
+                                    <span class="reply-writer">사용자(ID: ${reply.nickname})</span>
+                                    <span class="reply-date">${reply.created_date}</span>
+                                </div>
+                                <div class="reply-content">
+                                        ${reply.content}
+                                </div>
+                                <c:if test="${sessionScope.user.member_id == reply.member_id}">
+                                    <div class="reply-actions">
+                                        <button type="button" class="c-delete-btn"
+                                                onclick="delComment(${reply.comments_id}, ${board.board_id})">삭제
+                                        </button>
+                                    </div>
+                                </c:if>
+                            </div>
+                        </c:if>
+                    </c:forEach>
+                </c:if>
             </c:forEach>
 
             <c:if test="${empty commentList}">
@@ -111,6 +142,57 @@
         if (confirm("댓글을 삭제하시겠습니까?")) {
             location.href = "comment_del?id=" + no + "&board_id=" + boardId;
         }
+    }
+
+    // 대댓글 폼 표시 함수
+    function showReplyForm(commentId, boardId, memberId) {
+        console.log('showReplyForm called:', commentId, boardId, memberId);
+
+        // 기존에 열린 대댓글 폼이 있다면 닫기
+        hideAllReplyForms();
+
+        // 대댓글 폼 HTML 생성 - 문자열 연결 방식으로 변경
+        const replyFormHtml =
+            '<div id="reply-form-' + commentId + '" class="reply-form">' +
+            '<form action="comment_add" method="post">' +
+            '<input type="hidden" name="board_id" value="' + boardId + '">' +
+            '<input type="hidden" name="member_id" value="' + memberId + '">' +
+            '<input type="hidden" name="parent_id" value="' + commentId + '">' +
+            '<div class="reply-input-wrapper">' +
+            '<textarea name="content" placeholder="답글을 입력하세요" required></textarea>' +
+            '<div class="reply-buttons">' +
+            '<button type="submit">답글 등록</button>' +
+            '<button type="button" onclick="hideReplyForm(' + commentId + ')">취소</button>' +
+            '</div>' +
+            '</div>' +
+            '</form>' +
+            '</div>';
+
+        console.log('Generated HTML:', replyFormHtml);
+
+        // 해당 댓글 아래에 대댓글 폼 추가
+        const replyButton = document.querySelector('button[onclick*="showReplyForm(' + commentId + '"]');
+        console.log('Reply button found:', replyButton);
+
+        if (replyButton) {
+            replyButton.insertAdjacentHTML('afterend', replyFormHtml);
+        } else {
+            console.error('Reply button not found for commentId:', commentId);
+        }
+    }
+
+    // 대댓글 폼 숨기기 함수
+    function hideReplyForm(commentId) {
+        const replyForm = document.getElementById(`reply-form-${commentId}`);
+        if (replyForm) {
+            replyForm.remove();
+        }
+    }
+
+    // 모든 대댓글 폼 숨기기 함수
+    function hideAllReplyForms() {
+        const replyForms = document.querySelectorAll('.reply-form');
+        replyForms.forEach(form => form.remove());
     }
 </script>
 </body>
