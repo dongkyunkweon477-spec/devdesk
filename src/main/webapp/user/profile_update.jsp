@@ -6,29 +6,13 @@
 <div class="mypage-wrapper">
     <h2 class="mypage-title">프로필 수정</h2>
 
-    <form action="profile-update" method="post" enctype="multipart/form-data">
+    <form action="profile-update" method="post">
         <div class="update-container">
 
             <div class="photo-upload-section">
-                <%-- 프로필 사진 분기 처리 --%>
-                <c:choose>
-                    <c:when test="${empty sessionScope.user.profile_img}">
-                        <div id="imagePreview" class="profile-avatar large-avatar">
-                                ${sessionScope.user.nickname.substring(0,1)}
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div id="imagePreview" class="profile-avatar large-avatar"
-                             style="background-image: url('images/profile/${sessionScope.user.profile_img}'); background-size: cover; background-position: center; color: transparent;">
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-
-                <input type="file" id="fileInput" name="profile_img" accept="image/*" onchange="previewImage(this)"
-                       style="display: none;">
-                <button type="button" class="btn-select-photo" onclick="document.getElementById('fileInput').click();">
-                    사진 선택
-                </button>
+                <div class="profile-avatar large-avatar">
+                    ${sessionScope.user.nickname.substring(0,1)}
+                </div>
             </div>
 
             <div class="info-input-section">
@@ -60,21 +44,3 @@
         </div>
     </form>
 </div>
-
-<script>
-    // 사진 선택 시 화면에서 바로 미리보기 해주는 함수
-    function previewImage(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                var preview = document.getElementById('imagePreview');
-                preview.innerText = ''; // 기존 닉네임 첫 글자 지우기
-                preview.style.color = 'transparent';
-                preview.style.backgroundImage = 'url(' + e.target.result + ')';
-                preview.style.backgroundSize = 'cover';
-                preview.style.backgroundPosition = 'center';
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>

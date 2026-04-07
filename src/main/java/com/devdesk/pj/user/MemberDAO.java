@@ -110,13 +110,10 @@ public class MemberDAO {
                     System.out.println("로그인 성공");
 
                     MemberDTO memberDTO = new MemberDTO();
-                    memberDTO.setMember_id(rs.getInt("member_id")); // 추가
                     memberDTO.setMember_id(rs.getInt("member_id")); // 선민 추가
                     memberDTO.setEmail(rs.getString("email"));
                     memberDTO.setNickname(rs.getString("nickname"));
                     memberDTO.setJob_category(rs.getString("job_category"));
-                    memberDTO.setMember_id(rs.getInt("member_id"));
-                    memberDTO.setProfile_img(rs.getString("profile_img"));
 
                     HttpSession hs = request.getSession();
                     hs.setAttribute("user", memberDTO);
@@ -148,62 +145,33 @@ public class MemberDAO {
         Connection con = null;
         PreparedStatement pstmt = null;
 
-        String path = request.getServletContext().getRealPath("images/profile");
-
-        java.io.File folder = new java.io.File(path);
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        int maxSize = 5 * 1024 * 1024; // 5MB
-
         try {
-            com.oreilly.servlet.MultipartRequest mr = new com.oreilly.servlet.MultipartRequest(
-                    request, path, maxSize, "UTF-8", new com.oreilly.servlet.multipart.DefaultFileRenamePolicy());
-
-            String nickname = mr.getParameter("nickname");
-            String job_category = mr.getParameter("job_category");
-            String new_img = mr.getFilesystemName("profile_img"); // 새로 업로드된 파일명
+            String nickname = request.getParameter("nickname");
+            String job_category = request.getParameter("job_category");
 
             HttpSession hs = request.getSession();
             MemberDTO user = (MemberDTO) hs.getAttribute("user");
 
-            String sql = "";
-            if (new_img != null) {
-                sql = "UPDATE MEMBER SET nickname = ?, job_category = ?, profile_img = ? WHERE email = ?";
-            } else {
-                sql = "UPDATE MEMBER SET nickname = ?, job_category = ? WHERE email = ?";
-            }
+            String sql = "UPDATE MEMBER SET nickname = ?, job_category = ? WHERE email = ?";
 
             con = DBManager_new.connect();
             pstmt = con.prepareStatement(sql);
-
-            if (new_img != null) {
-                pstmt.setString(1, nickname);
-                pstmt.setString(2, job_category);
-                pstmt.setString(3, new_img);
-                pstmt.setString(4, user.getEmail());
-            } else {
-                pstmt.setString(1, nickname);
-                pstmt.setString(2, job_category);
-                pstmt.setString(3, user.getEmail());
-            }
+            pstmt.setString(1, nickname);
+            pstmt.setString(2, job_category);
+            pstmt.setString(3, user.getEmail());
 
             if (pstmt.executeUpdate() == 1) {
-                System.out.println("프로필 DB 수정 성공!");
+                System.out.println("프로필 텍스트 수정 성공!");
 
+                // 세션 정보 업데이트
                 user.setNickname(nickname);
                 user.setJob_category(job_category);
-                if (new_img != null) {
-                    user.setProfile_img(new_img);
-                }
 
-                hs.setAttribute("user", user); // 바뀐 정보를 다시 세션에 덮어쓰기
+                hs.setAttribute("user", user);
                 return true;
             }
 
         } catch (Exception e) {
-            System.out.println("프로필 수정 중 에러 발생!");
             e.printStackTrace();
             return false;
         } finally {

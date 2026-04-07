@@ -12,19 +12,10 @@
     <h2 class="mypage-title">마이페이지</h2>
 
     <div class="profile-info-box">
-        <%-- 프로필 사진 분기 처리 --%>
-        <c:choose>
-            <c:when test="${empty sessionScope.user.profile_img}">
-                <div class="profile-avatar">
-                        ${sessionScope.user.nickname.substring(0,1)}
-                </div>
-            </c:when>
-            <c:otherwise>
-                <div class="profile-avatar"
-                     style="background-image: url('images/profile/${sessionScope.user.profile_img}'); background-size: cover; background-position: center; color: transparent;">
-                </div>
-            </c:otherwise>
-        </c:choose>
+        <%-- 프로필 사진 (닉네임 첫 글자로 고정) --%>
+        <div class="profile-avatar">
+            ${sessionScope.user.nickname.substring(0,1)}
+        </div>
 
         <div class="profile-details">
             <p class="nickname">${sessionScope.user.nickname} 님</p>
