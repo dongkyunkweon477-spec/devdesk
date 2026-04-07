@@ -173,5 +173,40 @@ public class TilDAO {
         }
     }
 
+    public List<TilV0> getRecentTils(int memberId, int limit) {
+        List<TilV0> list = new ArrayList<>();
+        // Oracle에서 최근 5개만 가져오기
+        String sql = "SELECT * FROM ("
+                + "  SELECT * FROM til WHERE member_id = ? ORDER BY created_date DESC"
+                + ") WHERE ROWNUM <= ?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, memberId);
+            pstmt.setInt(2, limit);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                TilV0 vo = new TilV0();
+                vo.setTilId(rs.getString("til_id"));
+                vo.setTitle(rs.getString("title"));
+                vo.setTag(rs.getString("tag"));
+                vo.setCreatedAt(rs.getString("created_date"));
+                list.add(vo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, pstmt, rs);
+        }
+        return list;
+    }
+
+
 }
 
