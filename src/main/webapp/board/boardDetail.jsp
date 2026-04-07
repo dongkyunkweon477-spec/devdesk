@@ -154,15 +154,21 @@
         // 기존에 열린 수정 폼이 있다면 닫기
         hideAllEditForms();
         
-        // 해당 댓글 요소 찾기
-        const commentElement = document.querySelector('[data-comment-id="' + commentId + '"] .comment-content, [data-reply-id="' + commentId + '"] .reply-content');
+        // 부모 댓글 찾기
+        const parentComment = document.querySelector('[data-comment-id="' + commentId + '"] .comment-content');
         
-        if (!commentElement) {
+        // 대댓글 찾기
+        const replyComment = document.querySelector('[data-reply-id="' + commentId + '"] .reply-content');
+        
+        // 찾은 요소 선택
+        const targetElement = parentComment || replyComment;
+        
+        if (!targetElement) {
             console.error('Comment element not found for commentId:', commentId);
             return;
         }
         
-        const originalContent = commentElement.textContent.trim();
+        const originalContent = targetElement.textContent.trim();
         
         // 수정 폼 HTML 생성
         const editFormHtml =
@@ -181,18 +187,26 @@
             '</div>';
         
         // 댓글 내용을 수정 폼으로 교체
-        commentElement.style.display = 'none';
-        commentElement.insertAdjacentHTML('afterend', editFormHtml);
+        targetElement.style.display = 'none';
+        targetElement.insertAdjacentHTML('afterend', editFormHtml);
     }
     
     // 수정 폼 숨기기 함수
     function hideEditForm(commentId) {
         const editForm = document.getElementById('edit-form-' + commentId);
-        const commentElement = document.querySelector('[data-comment-id="' + commentId + '"] .comment-content, [data-reply-id="' + commentId + '"] .reply-content');
         
-        if (editForm && commentElement) {
+        // 부모 댓글 찾기
+        const parentComment = document.querySelector('[data-comment-id="' + commentId + '"] .comment-content');
+        
+        // 대댓글 찾기
+        const replyComment = document.querySelector('[data-reply-id="' + commentId + '"] .reply-content');
+        
+        // 찾은 요소 선택
+        const targetElement = parentComment || replyComment;
+        
+        if (editForm && targetElement) {
             editForm.remove();
-            commentElement.style.display = 'block';
+            targetElement.style.display = 'block';
         }
     }
     
