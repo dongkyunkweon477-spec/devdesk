@@ -42,8 +42,10 @@ public class ReviewC extends HttpServlet {
         request.setAttribute("companyId", companyIdP);
         List<String> industries = CompanySearchDAO.COMPANY_SEARCH_DAO.getAllIndustries();
         List<String> locations = CompanySearchDAO.COMPANY_SEARCH_DAO.getAllLocation();
+        int totalCompanyCount = CompanySearchDAO.COMPANY_SEARCH_DAO.getTotalCompanyCount();
         request.setAttribute("industries", industries);
         request.setAttribute("locations", locations);
+        request.setAttribute("totalCompanyCount", totalCompanyCount);
         request.setAttribute("content", "/review/review.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }

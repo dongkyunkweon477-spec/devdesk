@@ -15,6 +15,8 @@ public class CompanySearchC extends HttpServlet {
 
         List<String> industries = CompanySearchDAO.COMPANY_SEARCH_DAO.getAllIndustries();
         List<String> locations = CompanySearchDAO.COMPANY_SEARCH_DAO.getAllLocation();
+        int totalCompanyCount = CompanySearchDAO.COMPANY_SEARCH_DAO.getTotalCompanyCount();
+        request.setAttribute("totalCompanyCount", totalCompanyCount);
         request.setAttribute("locations", locations);
         request.setAttribute("industries", industries);
         request.setAttribute("content", "/company-search/companySearch.jsp");

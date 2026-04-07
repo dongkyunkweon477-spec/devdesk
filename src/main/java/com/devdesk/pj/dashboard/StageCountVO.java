@@ -10,10 +10,16 @@ public class StageCountVO {
     private int thirdInterview;
     private int codingTest;
     private int passed;
+    private String tagColor;
+    private String tagBg;
+    private String timeAgo;
 
+
+    // getter / setter 추가
     public int getApplied() {
         return applied;
     }
+
 
     public int getDocumentPass() {
         return documentPass;
@@ -67,15 +73,31 @@ public class StageCountVO {
         this.passed = passed;
     }
 
-    @Override
-    public String toString() {
-        return "applied=" + applied +
-                ", documentPass=" + documentPass +
-                ", firstInterview=" + firstInterview +
-                ", secondInterview=" + secondInterview +
-                ", thirdInterview=" + thirdInterview +
-                ", codingTest=" + codingTest +
-                ", passed=" + passed;
+
+    public String getTagColor() {
+        return tagColor;
+    }
+
+    public void setTagColor(String tagColor) {
+        this.tagColor = tagColor;
+    }
+
+    public String getTagBg() {
+        return tagBg;
+    }
+
+    public void setTagBg(String tagBg) {
+        this.tagBg = tagBg;
+    }
+
+    public String getTimeAgo() {
+        return timeAgo;
+    }
+
+    public void setTimeAgo(String timeAgo) {
+        this.timeAgo = timeAgo;
     }
 }
+
+
 
