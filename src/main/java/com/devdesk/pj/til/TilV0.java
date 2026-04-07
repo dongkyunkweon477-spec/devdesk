@@ -10,5 +10,14 @@ public class TilV0 {
     private String tag;
     private double studyTime;
     private String content;
-    private String createdAt;  // "2025-04-07" 형식
+    private String createdAt;  // "2025-04-07"
+    private String tagColor;
+    private String tagBg;
+    private String timeAgo;
+
+    public void setTagColor(String hashtag) {
+    }
+
+    public void setTagBg(String orDefault) {
+    }
 }

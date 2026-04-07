@@ -111,7 +111,7 @@ public class MemberDAO {
 
                     MemberDTO memberDTO = new MemberDTO();
 
-<<<<<<< HEAD
+
                     memberDTO.setMember_id(rs.getInt("member_id")); // 추가
 
 
@@ -120,7 +120,7 @@ public class MemberDAO {
                     memberDTO.setJob_category(rs.getString("job_category"));
                     memberDTO.setMember_id(rs.getInt("member_id"));
 
-=======
+
                     memberDTO.setMember_id(rs.getInt("member_id")); // 선민 추가
 
                     memberDTO.setMember_id(rs.getInt("member_id")); // 추가
@@ -128,7 +128,7 @@ public class MemberDAO {
                     memberDTO.setEmail(rs.getString("email"));
                     memberDTO.setNickname(rs.getString("nickname"));
                     memberDTO.setJob_category(rs.getString("job_category"));
->>>>>>> c2547aea6b9aa5da13af8c84b650c34812728a76
+
 
                     HttpSession hs = request.getSession();
                     hs.setAttribute("user", memberDTO);
