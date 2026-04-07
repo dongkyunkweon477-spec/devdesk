@@ -23,7 +23,7 @@ public class BoardDAO {
             ps = con.prepareStatement(sql);
 
             // ✔ 파라미터 세팅 먼저
-            ps.setInt(1, 3);
+            ps.setInt(1, Integer.parseInt(request.getParameter("member_id")));
             ps.setString(2, request.getParameter("category"));
             ps.setString(3, request.getParameter("title"));
             ps.setString(4, request.getParameter("txt"));
