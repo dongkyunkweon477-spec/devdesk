@@ -80,7 +80,7 @@ function showResult(data) {
             editLink = '<span class="cs-action" onclick="event.preventDefault(); location.href=\'/company/edit?companyId=' + c.companyId + '\'">수정</span>';
         }
 
-        html += '<a class="cs-card" href="/review/company?companyId=' + c.companyId + '">'
+        html += '<a class="cs-card" href="/company-detail?companyId=' + c.companyId + '">'
             + '<div class="cs-card-top">'
             + '  <div class="cs-logo">' + c.companyName.substring(0, 1) + '</div>'
             + '  <div class="cs-info">'
