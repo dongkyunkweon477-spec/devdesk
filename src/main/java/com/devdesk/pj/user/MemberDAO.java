@@ -132,7 +132,6 @@ public class MemberDAO {
 
                     HttpSession hs = request.getSession();
                     hs.setAttribute("user", memberDTO);
-                    hs.setMaxInactiveInterval(5 * 60);
                     hs.setMaxInactiveInterval(30 * 60);
 
                 } else {
