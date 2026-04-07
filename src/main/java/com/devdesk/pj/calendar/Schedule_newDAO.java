@@ -99,8 +99,6 @@ public class Schedule_newDAO {
             pstmt.close();
             rs.close();
 
-
-
             int newAppId = 0;
             pstmt = con.prepareStatement("SELECT APPLICATION_SEQ.NEXTVAL FROM DUAL");
             rs = pstmt.executeQuery();
@@ -216,23 +214,47 @@ public class Schedule_newDAO {
             DBManager_new.close(con, pstmt, rs);
         }
     }
-    // --- 3. 일정 삭제 (Delete) ---
+    // --- Delete ---
     public void deleteSchedule(int scheduleId) {
         Connection con = null;
         PreparedStatement pstmt = null;
-        String sql = "DELETE FROM SCHEDULE WHERE SCHEDULE_ID = ?";
+        ResultSet rs = null;
+
         try {
             con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
+            con.setAutoCommit(false);
+
+            int appId = 0;
+            String findAppSql = "SELECT APP_ID FROM SCHEDULE WHERE SCHEDULE_ID = ?";
+            pstmt = con.prepareStatement(findAppSql);
+            pstmt.setInt(1, scheduleId);
+            rs = pstmt.executeQuery();
+            if(rs.next()) appId = rs.getInt("APP_ID");
+            pstmt.close();
+
+            String delSchSql = "DELETE FROM SCHEDULE WHERE SCHEDULE_ID = ?";
+            pstmt = con.prepareStatement(delSchSql);
             pstmt.setInt(1, scheduleId);
             pstmt.executeUpdate();
+            pstmt.close();
+
+            if (appId > 0) {
+                String delAppSql = "DELETE FROM APPLICATION WHERE APP_ID = ?";
+                pstmt = con.prepareStatement(delAppSql);
+                pstmt.setInt(1, appId);
+                pstmt.executeUpdate();
+            }
+
+            con.commit();
         } catch (Exception e) {
+            try { if(con != null) con.rollback(); } catch (Exception ex) {}
             e.printStackTrace();
         } finally {
-            DBManager_new.close(con, pstmt, null);
+            try { if(con != null) con.setAutoCommit(true); } catch (Exception ex) {}
+            DBManager_new.close(con, pstmt, rs);
         }
     }
-    // --- 캘린더 모달의 회사 드롭다운을 채우기 위해 이름만 가져오는 메서드 ---
+
     public ArrayList<String> getAllCompanyNames() {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -256,5 +278,7 @@ public class Schedule_newDAO {
         }
         return names;
     }
+
+
 }
 

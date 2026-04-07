@@ -232,16 +232,23 @@
         });
 
         $('#btn-do-delete').click(function() {
-            if(!confirm("정말 이 일정을 삭제하시겠습니까?")) return;
+            $('#event-popup').fadeOut(150);
+            $('#customConfirmModal').css('display', 'flex').hide().fadeIn(200);
 
-            $.ajax({
-                url: '/delete-calendar',
-                type: 'POST',
-                data: { schedule_id: currentEvent.id },
-                success: function() {
-                    alert("삭제되었습니다.");
-                    location.reload();
-                }
+            $('#btn-real-delete').off('click').on('click', function() {
+                $('#customConfirmModal').fadeOut(200);
+
+                $.ajax({
+                    url: '/delete-calendar',
+                    type: 'POST',
+                    data: { schedule_id: currentEvent.id },
+                    success: function() {
+                        showCustomAlert("일정이 삭제되었습니다.", true);
+                    },
+                    error: function() {
+                        showCustomAlert("DELETE ERROR");
+                    }
+                });
             });
         });
 
@@ -253,7 +260,7 @@
             var finalType = (selectedType === 'direct') ? $('#form-type-direct').val() : selectedType;
 
             if (!$('#form-company').val().trim() || (selectedType === 'direct' && finalType.trim() === '')) {
-                alert("회사 이름과 면접 전형을 확인해 주세요.");
+                showCustomAlert("회사 이름과 면접 전형을 확인해 주세요.");
                 return;
             }
 
@@ -274,16 +281,16 @@
                 type: 'POST',
                 data: requestData,
                 success: function() {
-                    showCustomAlert("추가완료><", true);
+                    showCustomAlert("일정이 정상적으로 저장되었습니다! ><", true);
                 },
                 error: function() {
-                    showCustomAlert("에러발생 :("); // 예쁜 알림창
+                    showCustomAlert("저장 중 오류가 발생했습니다. (회사 이름을 확인해주세요)");
                 }
             });
-        });
 
         $('#btn-modal-close, #modal-backdrop').click(function() {
             $('#modal-backdrop, #schedule-modal').fadeOut(200);
+        });
         });
     });
 
