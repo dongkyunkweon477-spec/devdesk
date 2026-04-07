@@ -16,7 +16,7 @@ public class LikeDAO {
             pstmt.setInt(1, board_id);
             pstmt.setInt(2, member_id);
             try (ResultSet rs = pstmt.executeQuery()) {
-                return rs.next();
+                return rs.next(); // 데이터가 있으면 true, 없으면 false
             }
         } catch (Exception e) {
             e.printStackTrace();

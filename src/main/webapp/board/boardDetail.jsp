@@ -17,8 +17,8 @@
             <c:if test="${not empty sessionScope.user}">
                 <div class="like-section">
                     <button type="button" class="like-btn" id="likeBtn" onclick="toggleLike()">
-                        <span class="like-icon" id="likeIcon">${board.like_count > 0 ? '❤️' : '🤍'}</span>
-                        <span class="like-count" id="likeCount">${board.like_count}</span>
+                        <span id="likeIcon">${isLiked ? '❤️' : '🤍'}</span>
+                        <span id="likeCount">${board.like_count}</span>
                     </button>
                 </div>
             </c:if>
@@ -145,11 +145,6 @@
 </div>
 
 <script>
-    // // 페이지 로드 시 좋아요 상태 가져오기
-    // window.onload = function () {
-    //     loadLikeStatus();
-    // };
-
     // 좋아요 상태 로드
     function loadLikeStatus() {
         const boardId = ${board.board_id};
