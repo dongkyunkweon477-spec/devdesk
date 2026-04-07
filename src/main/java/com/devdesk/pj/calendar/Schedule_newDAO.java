@@ -58,43 +58,95 @@ public class Schedule_newDAO {
     public void addSchedule(HttpServletRequest request) {
         Connection con = null;
         PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
-        // 1. 택배 상자(request)에서 AJAX가 보낸 데이터 하나씩 꺼내기
-        // (이름은 JSP의 AJAX data에서 보낸 키값과 100% 똑같아야 합니다!)
-        int memberId = 6;
-        int appId = Integer.parseInt(request.getParameter("app_id"));
+        int memberId = 6; // **나중에 개인 멤버 아이디가 나오게 세팅을 해야할듯???
         String companyName = request.getParameter("company_name");
+        String position = request.getParameter("position");
+        String applyDate = request.getParameter("apply_date");
         String date = request.getParameter("date");
         String time = request.getParameter("time");
         String type = request.getParameter("type");
         String memo = request.getParameter("memo");
 
-        // 2. 어떤 컬럼에 넣을지 명시적으로 적어주는 가장 안전한 SQL!
-        // (CREATED_DATE는 DEFAULT SYSDATE가 있으니 생략하면 알아서 들어갑니다)
-        String sql = "INSERT INTO SCHEDULE " +
-                "(SCHEDULE_ID, MEMBER_ID, COMPANY_NAME, SCHEDULE_DATE, SCHEDULE_TIME, INTERVIEW_TYPE, MEMO, APP_ID) " +
-                "VALUES (SEQ_SCHEDULE.nextval, ?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ?)";
-
         try {
             con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
+            con.setAutoCommit(false);
 
-            // 3. 물음표(?) 순서와 타입(Int, String)에 맞게 데이터 장전!
-            pstmt.setInt(1, memberId);        // 첫 번째 ? : MEMBER_ID
-            pstmt.setString(2, companyName);  // 두 번째 ? : COMPANY_NAME
-            pstmt.setString(3, date);         // 세 번째 ? : SCHEDULE_DATE
-            pstmt.setString(4, time);         // 네 번째 ? : SCHEDULE_TIME
-            pstmt.setString(5, type);         // 다섯 번째 ? : INTERVIEW_TYPE
-            pstmt.setString(6, memo);         // 여섯 번째 ? : MEMO
-            pstmt.setInt(7, appId);           // 일곱 번째 ? : APP_ID
 
-            // 4. 발사!
+            int newAppId = 0;
+            String seqSql = "SELECT APPLICATION_SEQ.NEXTVAL FROM DUAL";
+            pstmt = con.prepareStatement(seqSql);
+            rs = pstmt.executeQuery();
+            if(rs.next()) {
+                newAppId = rs.getInt(1);
+            }
+            pstmt.close();
+            rs.close();
+
+            int companyId = 1;
+            String findCompanySql = "SELECT COMPANY_ID FROM COMPANY WHERE COMPANY_NAME = ?";
+            pstmt = con.prepareStatement(findCompanySql);
+            pstmt.setString(1, companyName);
+            rs = pstmt.executeQuery();
+            if(rs.next()) {
+                companyId = rs.getInt("COMPANY_ID");
+            }
+            pstmt.close();
+            rs.close();
+
+            if(position == null || position.trim().isEmpty()) {
+                position = "미정";
+            }
+
+
+            String appSql = "";
+            if (applyDate != null && !applyDate.trim().isEmpty()) {
+                // 🌟 POSITION 컬럼에 '미정'이라는 글자 대신 ? 를 넣습니다.
+                appSql = "INSERT INTO APPLICATION (APP_ID, MEMBER_ID, COMPANY_ID, POSITION, STAGE, APPLY_DATE, CREATED_DATE) " +
+                        "VALUES (?, ?, ?, ?, 'APPLIED', TO_DATE(?, 'YYYY-MM-DD'), SYSDATE)";
+                pstmt = con.prepareStatement(appSql);
+                pstmt.setInt(1, newAppId);
+                pstmt.setInt(2, memberId);
+                pstmt.setInt(3, companyId);
+                pstmt.setString(4, position); // ✨ 4번째 물음표에 직무 이름 쏙!
+                pstmt.setString(5, applyDate);
+            } else {
+                appSql = "INSERT INTO APPLICATION (APP_ID, MEMBER_ID, COMPANY_ID, POSITION, STAGE, APPLY_DATE, CREATED_DATE) " +
+                        "VALUES (?, ?, ?, ?, 'APPLIED', SYSDATE, SYSDATE)";
+                pstmt = con.prepareStatement(appSql);
+                pstmt.setInt(1, newAppId);
+                pstmt.setInt(2, memberId);
+                pstmt.setInt(3, companyId);
+                pstmt.setString(4, position); // ✨ 4번째 물음표에 직무 이름 쏙!
+            }
+            pstmt.executeUpdate();
+            pstmt.close();
+
+
+            String schSql = "INSERT INTO SCHEDULE " +
+                    "(SCHEDULE_ID, MEMBER_ID, COMPANY_NAME, SCHEDULE_DATE, SCHEDULE_TIME, INTERVIEW_TYPE, MEMO, APP_ID) " +
+                    "VALUES (SEQ_SCHEDULE.nextval, ?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ?)";
+
+            pstmt = con.prepareStatement(schSql);
+            pstmt.setInt(1, memberId);
+            pstmt.setString(2, companyName);
+            pstmt.setString(3, date);
+            pstmt.setString(4, time);
+            pstmt.setString(5, type);
+            pstmt.setString(6, memo);
+            pstmt.setInt(7, newAppId); // 달력 일정에도 같은 번호를 넣어 완벽하게 연결!
+
             pstmt.executeUpdate();
 
+            con.commit(); // 모든 과정 성공 시 도장 쾅!
+
         } catch (Exception e) {
+            try { if (con != null) con.rollback(); } catch (Exception ex) {}
             e.printStackTrace();
         } finally {
-            DBManager_new.close(con, pstmt, null);
+            try { if (con != null) con.setAutoCommit(true); } catch (Exception ex) {}
+            DBManager_new.close(con, pstmt, rs);
         }
     }
 
