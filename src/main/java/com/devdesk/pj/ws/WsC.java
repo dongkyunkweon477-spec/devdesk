@@ -10,6 +10,8 @@ import java.io.IOException;
 public class WsC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendRedirect("/til-list");
+
     }
 
     public void destroy() {
