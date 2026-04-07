@@ -23,7 +23,7 @@ public class BoardDAO {
             ps = con.prepareStatement(sql);
 
             // ✔ 파라미터 세팅 먼저
-            ps.setInt(1, 3);
+            ps.setInt(1, Integer.parseInt(request.getParameter("member_id")));
             ps.setString(2, request.getParameter("category"));
             ps.setString(3, request.getParameter("title"));
             ps.setString(4, request.getParameter("txt"));
@@ -49,7 +49,9 @@ public class BoardDAO {
         ResultSet rs = null;
         BoardVO bo = null;
         ArrayList<BoardVO> boards = new ArrayList<>();
-        String sql = "SELECT * FROM board ORDER BY b_board_id DESC";
+        String sql = "SELECT b.*, " +
+                "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count " +
+                "FROM board b ORDER BY b.b_board_id DESC";
 
         try {
             con = DBManager_new.connect();
@@ -64,6 +66,7 @@ public class BoardDAO {
                 bo.setMember_id(rs.getInt("member_id"));
                 bo.setCreated_date(rs.getString("b_created_date"));
                 bo.setView_count(rs.getInt("b_view_count"));
+                bo.setComment_count(rs.getInt("comment_count"));
                 boards.add(bo);
             }
             request.setAttribute("boards", boards);
@@ -107,7 +110,8 @@ public class BoardDAO {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        String sql = "select * from board where b_board_id = ?";
+//        String sql = "select * from board where b_board_id = ?";
+        String sql = "SELECT b.*, m.nickname FROM board b JOIN member m ON b.member_id = m.member_id WHERE b.b_board_id = ?";
 
         try {
             con = DBManager_new.connect();
@@ -127,6 +131,7 @@ public class BoardDAO {
                 int view_count = rs.getInt("b_view_count");
                 int like_count = rs.getInt("b_like_count");
                 char hidden_yn = rs.getString("b_hidden_yn").charAt(0);
+                String nickname = rs.getString("nickname");
 
                 boardVO = new BoardVO();
                 boardVO.setMember_id(member_id);
@@ -139,6 +144,7 @@ public class BoardDAO {
                 boardVO.setView_count(view_count);
                 boardVO.setLike_count(like_count);
                 boardVO.setHidden_yn(hidden_yn);
+                boardVO.setNickname(nickname);
 
             }
             System.out.println(boardVO);

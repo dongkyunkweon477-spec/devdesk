@@ -12,8 +12,8 @@ public class CommentDAO {
     public static void addComment(HttpServletRequest request) {
         Connection con = null;
         PreparedStatement ps = null;
-        String sql = "insert into comments (c_comments_id, b_board_id, member_id, c_content, c_created_date) " +
-                "values (seq_comments.nextval, ?, ?, ?, sysdate)";
+        String sql = "insert into comments (c_comments_id, b_board_id, member_id, c_content, parent_id, c_created_date) " +
+                "values (seq_comments.nextval, ?, ?, ?, ?, sysdate)";
 
         try {
             System.out.println("board_id: [" + request.getParameter("board_id") + "]");
@@ -27,6 +27,13 @@ public class CommentDAO {
             ps.setInt(1, Integer.parseInt(request.getParameter("board_id")));
             ps.setInt(2, Integer.parseInt(request.getParameter("member_id")));
             ps.setString(3, request.getParameter("content"));
+            
+            String parentIdStr = request.getParameter("parent_id");
+            if (parentIdStr == null || parentIdStr.trim().isEmpty()) {
+                ps.setNull(4, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(4, Integer.parseInt(parentIdStr));
+            }
 
             int result = ps.executeUpdate();
             if (result == 1) {
@@ -48,7 +55,12 @@ public class CommentDAO {
         ResultSet rs = null;
         ArrayList<CommentVO> comments = new ArrayList<>();
 
-        String sql = "SELECT * FROM comments WHERE b_board_id = ? ORDER BY c_created_date ASC";
+        String sql = "SELECT c.*, m.nickname " +
+                "FROM comments c " +
+                "JOIN member m ON c.member_id = m.member_id " +
+                "WHERE c.b_board_id = ? " +
+                "ORDER BY NVL(c.parent_id, c.c_comments_id), c.c_created_date";
+
 
         try {
             con = DBManager_new.connect();
@@ -63,7 +75,8 @@ public class CommentDAO {
                 c.setMember_id(rs.getInt("member_id"));
                 c.setContent(rs.getString("c_content"));
                 c.setCreated_date(String.valueOf(rs.getDate("c_created_date")));
-
+                c.setNickname(rs.getString("nickname"));
+                c.setParent_id(rs.getObject("parent_id") != null ? rs.getInt("parent_id") : null); // parent_id 설정 추가
                 comments.add(c);
             }
 
