@@ -82,6 +82,45 @@ public class CompanySearchDAO {
         return null;
     }
 
+    public List<String> getAllIndustries() {
+        String sql = "select distinct company_industry from company order by company_industry";
+        List<String> list = new ArrayList<>();
+        try (
+                Connection con = DBManager_new.connect();
+                PreparedStatement pstmt = con.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery();
+        ) {
+            while (rs.next()) {
+                list.add(rs.getString("company_industry"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<String> getAllLocation() {
+        String sql = "select distinct SUBSTR(company_location, 1, INSTR(company_location, ' ') - 1) AS region " +
+                "from company where company_location is not null " +
+                "order by region";
+        List<String> list = new ArrayList<>();
+        try (
+                Connection con = DBManager_new.connect();
+                PreparedStatement pstmt = con.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery();
+        ) {
+            while (rs.next()) {
+                String region = rs.getString("region");
+                if (region != null && !region.isBlank()) {
+                    list.add(region);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public int insertCompany(CompanySearchVO vo) {
         String sql = "insert into company(company_id, company_name, company_industry, " +
                 "company_location, company_rating, company_size, company_created_date, company_application_date) " +
@@ -151,5 +190,30 @@ public class CompanySearchDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Map<String, Object> getCompanyStats(int companyId) {
+        String sql = "select count(*) as total_count," +
+                " round(avg(r_difficulty),1) as avg_difficulty," +
+                " round(count(case when r_result = 'PASS' then 1 end) * 100.0 / count(*), 1) as pass_rate" +
+                " from review where r_company_id = ?";
+        Map<String, Object> stats = new HashMap<>();
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, companyId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    stats.put("totalCount", rs.getInt("total_count"));
+                    stats.put("avgDifficulty", rs.getDouble("avg_difficulty"));
+                    stats.put("passRate", rs.getDouble("pass_rate"));
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return stats;
+
     }
 }

@@ -11,10 +11,39 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ReviewDAO {
-    static final ReviewDAO REVIEW_DAO = new ReviewDAO();
+    public static final ReviewDAO REVIEW_DAO = new ReviewDAO();
 
     private ReviewDAO() {
     }
+
+    public int getReviewCount(Integer companyId) {
+        String sql;
+        if (companyId != null) {
+            sql = "select count(*) from review where r_company_id = ?";
+        } else {
+            sql = "select count(*) from review";
+        }
+        try (
+                Connection con = DBManager_new.connect();
+                PreparedStatement pstmt = con.prepareStatement(sql);
+        ) {
+            if (companyId != null) {
+                pstmt.setInt(1, companyId);
+            }
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
 
     public ArrayList<ReviewVO> getReviewsByCompany(int companyId, int page, int pageSize) {
 
@@ -52,18 +81,29 @@ public class ReviewDAO {
     }
 
 
-    public ArrayList<ReviewVO> getReviewAll() {
-        String sql = "select r.* , c.company_name from review r join" +
-                " company c on r.r_company_id = c.company_id" +
-                " order by r_created_date desc";
+    public ArrayList<ReviewVO> getReviewAll(int page, int pageSize) {
+        String sql = "SELECT * FROM ("
+                + "  SELECT ROWNUM rn, t.* FROM ("
+                + "    SELECT r.*, c.company_name"
+                + "    FROM review r"
+                + "    JOIN company c ON r.r_company_id = c.company_id"
+                + "    ORDER BY r.r_created_date DESC"
+                + "  ) t"
+                + ") WHERE rn BETWEEN ? AND ?";
+        int start = (page - 1) * pageSize + 1;
+        int end = page * pageSize;
         ArrayList<ReviewVO> reviews = new ArrayList<>();
         try (
                 Connection con = DBManager_new.connect();
                 PreparedStatement pstmt = con.prepareStatement(sql);
-                ResultSet rs = pstmt.executeQuery();
+
         ) {
-            while (rs.next()) {
-                reviews.add(ReviewVO.fromResultSet(rs));
+            pstmt.setInt(1, start);
+            pstmt.setInt(2, end);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    reviews.add(ReviewVO.fromResultSet(rs));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -170,30 +210,6 @@ public class ReviewDAO {
             e.printStackTrace();
         }
         return review;
-    }
-
-    public Map<String, Object> getCompanyStats(int companyId) {
-        String sql = "select count (*) as total_count," +
-                "round (avg(r_difficulty),1) as avg_difficulty, round(count(case when r_result = 'pass' then 1 end)* 100.0 / count(*), 1) as pass_rate" +
-                "from review where r_company_id = ?";
-        Map<String, Object> stats = new HashMap<>();
-        try (Connection con = DBManager_new.connect();
-             PreparedStatement pstmt = con.prepareStatement(sql)) {
-            pstmt.setInt(1, companyId);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    stats.put("totalCount", rs.getInt("total_count"));
-                    stats.put("avgDifficulty", rs.getDouble("avg_difficulty"));
-                    stats.put("passRate", rs.getDouble("pass_rate"));
-                }
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return stats;
-
     }
 
 
