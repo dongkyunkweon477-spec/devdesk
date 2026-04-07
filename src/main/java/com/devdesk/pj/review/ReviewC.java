@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import com.devdesk.pj.companysearch.CompanySearchDAO;
 
 @WebServlet(name = "ReviewC", value = "/review")
 public class ReviewC extends HttpServlet {
@@ -38,6 +40,10 @@ public class ReviewC extends HttpServlet {
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("companyId", companyIdP);
+        List<String> industries = CompanySearchDAO.COMPANY_SEARCH_DAO.getAllIndustries();
+        List<String> locations = CompanySearchDAO.COMPANY_SEARCH_DAO.getAllLocation();
+        request.setAttribute("industries", industries);
+        request.setAttribute("locations", locations);
         request.setAttribute("content", "/review/review.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }

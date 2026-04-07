@@ -100,7 +100,9 @@ public class CompanySearchDAO {
     }
 
     public List<String> getAllLocation() {
-        String sql = "select distinct company_location from company order by company_location";
+        String sql = "select distinct SUBSTR(company_location, 1, INSTR(company_location, ' ') - 1) AS region " +
+                "from company where company_location is not null " +
+                "order by region";
         List<String> list = new ArrayList<>();
         try (
                 Connection con = DBManager_new.connect();
@@ -108,7 +110,10 @@ public class CompanySearchDAO {
                 ResultSet rs = pstmt.executeQuery();
         ) {
             while (rs.next()) {
-                list.add(rs.getString("company_location"));
+                String region = rs.getString("region");
+                if (region != null && !region.isBlank()) {
+                    list.add(region);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

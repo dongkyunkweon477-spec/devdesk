@@ -1,44 +1,144 @@
-/* ===== 검색 페이지 ===== */
-.search-wrap {
+/* ===== 기업 검색 페이지 — 就活会議 스타일 ===== */
+
+.cs-wrap {
     max-width: 960px;
     margin: 40px auto;
     padding: 0 20px;
 }
 
-.search-wrap h2 {
+.cs-title {
     font-size: 22px;
     font-weight: 600;
     color: #1e293b;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
-/* ===== 검색 폼 ===== */
-.search-form {
+/* ===== 검색 박스 ===== */
+.cs-search-box {
     background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
-    padding: 24px 28px;
+    padding: 8px 0;
+}
+
+.cs-row {
+    display: flex;
+    align-items: flex-start;
+    padding: 14px 24px;
+    gap: 20px;
+}
+
+.cs-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+    min-width: 60px;
+    padding-top: 6px;
+    flex-shrink: 0;
+}
+
+.cs-divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 0 24px;
+}
+
+/* ===== 버튼 토글 옵션 ===== */
+.cs-options {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
-    align-items: flex-end;
+    gap: 8px;
 }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.form-group label {
+.cs-opt-btn {
+    padding: 6px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
     font-size: 13px;
-    font-weight: 500;
+    font-family: 'Pretendard', sans-serif;
+    color: #475569;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.cs-opt-btn:hover {
+    border-color: #a78bfa;
+    color: #7c3aed;
+}
+
+.cs-opt-btn.active {
+    background: #7c3aed;
+    color: #ffffff;
+    border-color: #7c3aed;
+}
+
+/* ===== 범위 입력 ===== */
+.cs-range-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cs-range-group select {
+    height: 36px;
+    padding: 0 28px 0 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
+    color: #1e293b;
+    background: #f8fafc;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%2364748b' d='M5 7L1 3h8L5 7z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    cursor: pointer;
+}
+
+.cs-range-group select:focus {
+    outline: none;
+    border-color: #a78bfa;
+}
+
+.cs-range-group input[type="number"] {
+    width: 100px;
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
+    color: #1e293b;
+    background: #f8fafc;
+    text-align: center;
+}
+
+.cs-range-group input[type="number"]:focus {
+    outline: none;
+    border-color: #a78bfa;
+    background: #ffffff;
+}
+
+.cs-tilde {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.cs-range-unit {
+    font-size: 13px;
     color: #64748b;
 }
 
-.form-group input[type="text"],
-.form-group select {
-    height: 38px;
+/* ===== 텍스트 입력 ===== */
+.cs-input-group {
+    flex: 1;
+}
+
+.cs-input-group input[type="text"] {
+    width: 100%;
+    max-width: 320px;
+    height: 36px;
     padding: 0 12px;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
@@ -46,185 +146,82 @@
     font-family: 'Pretendard', sans-serif;
     color: #1e293b;
     background: #f8fafc;
-    transition: border-color 0.2s;
 }
 
-.form-group input:focus,
-.form-group select:focus {
+.cs-input-group input[type="text"]:focus {
     outline: none;
     border-color: #a78bfa;
-    background: #fff;
+    background: #ffffff;
 }
 
-/* 범위 입력 */
-.range-group {
+/* ===== 하단 액션 바 ===== */
+.cs-action-bar {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 6px;
+    margin-top: 16px;
+    margin-bottom: 24px;
+    padding: 14px 24px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
 }
 
-.range-group input[type="number"] {
-    width: 80px;
-    height: 38px;
-    padding: 0 8px;
+.cs-result-count {
+    font-size: 14px;
+    color: #64748b;
+}
+
+.cs-result-count span {
+    font-size: 20px;
+    font-weight: 600;
+    color: #7c3aed;
+}
+
+.cs-action-btns {
+    display: flex;
+    gap: 10px;
+}
+
+.cs-clear-btn {
+    padding: 8px 20px;
+    background: #ffffff;
+    color: #64748b;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     font-size: 14px;
     font-family: 'Pretendard', sans-serif;
-    color: #1e293b;
-    background: #f8fafc;
-    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
-.range-group input[type="number"]:focus {
-    outline: none;
-    border-color: #a78bfa;
-    background: #fff;
+.cs-clear-btn:hover {
+    border-color: #94a3b8;
+    color: #475569;
 }
 
-.range-group .tilde {
-    color: #94a3b8;
-    font-size: 14px;
-}
-
-/* 검색 버튼 */
-#searchBtn {
-    height: 38px;
-    padding: 0 24px;
+.cs-search-btn {
+    padding: 8px 32px;
     background: #7c3aed;
-    color: #fff;
+    color: #ffffff;
     border: none;
     border-radius: 8px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     font-family: 'Pretendard', sans-serif;
     cursor: pointer;
     transition: background 0.2s;
 }
 
-#searchBtn:hover {
+.cs-search-btn:hover {
     background: #6d28d9;
 }
 
-/* ===== 결과 테이블 ===== */
-.result-section {
-    margin-top: 28px;
-}
-
-.result-count {
-    font-size: 13px;
-    color: #64748b;
-    margin-bottom: 12px;
-}
-
-#resultTable {
-    width: 100%;
-    border-collapse: collapse;
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-#resultTable thead {
-    background: #f1f5f9;
-}
-
-#resultTable th {
-    padding: 12px 16px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #475569;
-    text-align: left;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-#resultTable td {
-    padding: 12px 16px;
-    font-size: 14px;
-    color: #334155;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-#resultTable tbody tr:hover {
-    background: #faf5ff;
-}
-
-#resultTable tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.no-result {
-    text-align: center;
-    padding: 40px;
-    color: #94a3b8;
-    font-size: 14px;
-}
-
-.edit-link {
-    color: #64748b;
-    font-size: 13px;
-    font-weight: 500;
-    text-decoration: none;
-    margin-left: 10px;
-}
-
-.edit-link:hover {
-    color: #7c3aed;
-    text-decoration: underline;
-}
-
-.btn-delete {
-    height: 42px;
-    padding: 0 24px;
-    background: #ffffff;
-    color: #ef4444;
-    border: 1px solid #ef4444;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    font-family: 'Pretendard', sans-serif;
-    cursor: pointer;
-}
-
-.btn-delete:hover {
-    background: #fef2f2;
-}
-
-.btn-delete-confirm {
-    height: 42px;
-    padding: 0 24px;
-    background: #ef4444;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    font-family: 'Pretendard', sans-serif;
-    cursor: pointer;
-}
-
-.btn-delete-confirm:hover {
-    background: #dc2626;
-}
-
-.modal-sub {
-    font-size: 13px;
-    color: #94a3b8;
-    margin: 0 0 20px 0;
-}
-
-.modal-btns {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
+/* ===== 검색 결과 카드 그리드 ===== */
 .cs-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
-    margin-top: 20px;
 }
 
 .cs-card {
@@ -274,7 +271,7 @@
     margin: 0 0 4px;
 }
 
-.cs-industry {
+.cs-industry-text {
     font-size: 12px;
     color: #64748b;
 }
@@ -344,4 +341,36 @@
 
 .cs-action.primary:hover {
     background: #6d28d9;
+}
+
+/* ===== 결과 없음 ===== */
+.cs-no-result {
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+    font-size: 15px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 640px) {
+    .cs-row {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .cs-label {
+        padding-top: 0;
+    }
+
+    .cs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cs-action-bar {
+        flex-direction: column;
+        gap: 12px;
+    }
 }

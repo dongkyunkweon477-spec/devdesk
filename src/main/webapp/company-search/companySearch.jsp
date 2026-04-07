@@ -1,61 +1,95 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/companySearch.css">
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<script src="${pageContext.request.contextPath}/js/companySearch.js"></script>
+<input type="hidden" id="userRole" value="${sessionScope.user.nickname == '관리자' ? 'ADMIN' : 'USER'}"/>
 
-<div class="search-wrap">
-    <h2>회사 검색</h2>
+<div class="cs-wrap">
+    <h2 class="cs-title">기업 검색</h2>
 
-    <div class="search-form">
-        <div class="form-group">
-            <label>회사명</label>
-            <input type="text" id="companyName" placeholder="회사명 입력">
-        </div>
-        <div class="form-group">
-            <label>업종</label>
-            <select id="companyIndustry">
-                <option value="">전체</option>
+    <%-- ===== 검색 폼 ===== --%>
+    <div class="cs-search-box">
+
+        <div class="cs-row">
+            <span class="cs-label">업종</span>
+            <div class="cs-options" id="industryBtns">
+                <button type="button" class="cs-opt-btn active" data-value="">전체</button>
                 <c:forEach var="ind" items="${industries}">
-                    <option value="${ind}">${ind}</option>
+                    <button type="button" class="cs-opt-btn" data-value="${ind}">${ind}</button>
                 </c:forEach>
-            </select>
+            </div>
         </div>
-        <div class="form-group">
-            <label>지역</label>
-            <select id="companyIndustry">
-                <option value="">전체</option>
+
+        <div class="cs-divider"></div>
+
+        <div class="cs-row">
+            <span class="cs-label">지역</span>
+            <div class="cs-options" id="locationBtns">
+                <button type="button" class="cs-opt-btn active" data-value="">전체</button>
                 <c:forEach var="loc" items="${locations}">
-                    <option value="${loc}">${loc}</option>
+                    <button type="button" class="cs-opt-btn" data-value="${loc}">${loc}</button>
                 </c:forEach>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>평점</label>
-            <div class="range-group">
-                <input type="number" id="minRating" min="0" max="5" value="0" step="0.5">
-                <span class="tilde">~</span>
-                <input type="number" id="maxRating" min="0" max="5" value="5" step="0.5">
             </div>
         </div>
-        <div class="form-group">
-            <label>규모(인원)</label>
-            <div class="range-group">
-                <input type="number" id="minSize" min="0" value="0">
-                <span class="tilde">~</span>
-                <input type="number" id="maxSize" min="0" value="10000">
+
+        <div class="cs-divider"></div>
+
+        <div class="cs-row">
+            <span class="cs-label">평점</span>
+            <div class="cs-range-group">
+                <select id="minRating">
+                    <c:forEach var="r" begin="0" end="10">
+                        <option value="${r / 2}">${r / 2}</option>
+                    </c:forEach>
+                </select>
+                <span class="cs-tilde">~</span>
+                <select id="maxRating">
+                    <c:forEach var="r" begin="0" end="10">
+                        <c:set var="val" value="${(10 - r) / 2}"/>
+                        <option value="${val}" ${val == 5.0 ? 'selected' : ''}>${val}</option>
+                    </c:forEach>
+                </select>
             </div>
         </div>
-        <button id="searchBtn">검색</button>
+
+        <div class="cs-divider"></div>
+
+        <div class="cs-row">
+            <span class="cs-label">규모</span>
+            <div class="cs-range-group">
+                <input type="number" id="minSize" placeholder="0" min="0"/>
+                <span class="cs-tilde">~</span>
+                <input type="number" id="maxSize" placeholder="10000" min="0"/>
+                <span class="cs-range-unit">명</span>
+            </div>
+        </div>
+
+        <div class="cs-divider"></div>
+
+        <div class="cs-row">
+            <span class="cs-label">기업명</span>
+            <div class="cs-input-group">
+                <input type="text" id="companyName" placeholder="기업명을 입력하세요"/>
+            </div>
+        </div>
+
     </div>
 
-    <div class="result-section">
-        <div id="resultArea"></div>
+    <%-- ===== 검색 바 ===== --%>
+    <div class="cs-action-bar">
+        <div class="cs-result-count">
+            검색 결과 : <span id="resultCount">0</span>건
+        </div>
+        <div class="cs-action-btns">
+            <button type="button" class="cs-clear-btn" id="clearBtn">조건 초기화</button>
+            <button type="button" class="cs-search-btn" id="searchBtn">검색</button>
+        </div>
     </div>
+
+    <%-- ===== 검색 결과 (카드) ===== --%>
+    <div id="resultArea"></div>
 </div>
 
-<c:if test="${empty companies and not empty param.companyName}">
-    <p>검색 결과가 없습니다.</p>
-</c:if>
-
-<button onclick="location.href='${pageContext.request.contextPath}/company/insert';">기업등록</button>
+<script src="${pageContext.request.contextPath}/js/companySearch.js"></script>

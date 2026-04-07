@@ -1,66 +1,88 @@
 $(function () {
-    searchCompany();
-})
+    initToggleBtns();
+    initSearch();
+    initClear();
+    doSearch();
+});
 
-function searchCompany() {
-    $('#searchBtn').on('click', function () {
-        $.ajax({
-            url: '/company-search/ajax',
-            type: 'get',
-            dataType: 'json',
-            data: {
-                companyName: $('#companyName').val(),
-                companyIndustry: $('#companyIndustry').val(),
-                companyLocation: $('#companyLocation').val(),
-                minRating: $('#minRating').val(),
-                maxRating: $('#maxRating').val(),
-                minSize: $('#minSize').val(),
-                maxSize: $('#maxSize').val()
-            }
-        }).done(function (data) {
-            let tBody = $('#resultBody');
-            tBody.empty();
-            if (data && data.length > 0) {
-                $('#resultTable').show();
-                showResult(data);
-            } else {
-                $('#resultTable').hide();
-            }
-        }).fail(function (xhr, status, error) {
-            console.error("Search failed: " + error);
-        });
+/* ===== 토글 버튼 (업종, 지역) ===== */
+function initToggleBtns() {
+    $(document).on('click', '.cs-opt-btn', function () {
+        console.log('clicked:', $(this).attr('data-value'));
+        $(this).closest('.cs-options').find('.cs-opt-btn').removeClass('active');
+        $(this).addClass('active');
     });
 }
 
+/* ===== 검색 ===== */
+function initSearch() {
+    $('#searchBtn').on('click', function () {
+        doSearch();
+    });
+
+    // 엔터키
+    $('#companyName').on('keypress', function (e) {
+        if (e.which === 13) doSearch();
+    });
+}
+
+function doSearch() {
+    var activeIndustry = $('#industryBtns .cs-opt-btn.active');
+    var activeLocation = $('#locationBtns .cs-opt-btn.active');
+
+    var industry = $('#industryBtns .cs-opt-btn.active').attr('data-value') || '';
+    var location = $('#locationBtns .cs-opt-btn.active').attr('data-value') || '';
+
+    $.ajax({
+        url: '/company-search/ajax',
+        dataType: 'json',
+        data: {
+            companyName: $('#companyName').val(),
+            companyIndustry: industry,
+            companyLocation: location,
+            minRating: $('#minRating').val(),
+            maxRating: $('#maxRating').val(),
+            minSize: $('#minSize').val(),
+            maxSize: $('#maxSize').val()
+        }
+    }).done(function (data) {
+        $('#resultCount').text(data.length);
+        showResult(data);
+    }).fail(function (xhr, status, error) {
+        console.error('Search failed: ' + error);
+    });
+}
+
+/* ===== 결과 카드 렌더링 ===== */
 function showResult(data) {
-    let container = $('#resultArea');
+    var container = $('#resultArea');
     container.empty();
 
     if (!data || data.length === 0) {
-        container.html('<div class="no-result">검색 결과가 없습니다.</div>');
+        container.html('<div class="cs-no-result">검색 결과가 없습니다.</div>');
         return;
     }
 
-    let role = $('#userRole').val();
-    let html = '<div class="cs-grid">';
+    var role = $('#userRole').val();
+    var html = '<div class="cs-grid">';
 
     $.each(data, function (i, c) {
-        let stars = '';
-        for (let s = 1; s <= 5; s++) {
+        var stars = '';
+        for (var s = 1; s <= 5; s++) {
             stars += '<span class="' + (s <= c.companyRating ? 'on' : '') + '">★</span>';
         }
 
-        let editLink = '';
+        var editLink = '';
         if (role === 'ADMIN') {
             editLink = '<span class="cs-action" onclick="event.preventDefault(); location.href=\'/company/edit?companyId=' + c.companyId + '\'">수정</span>';
         }
 
-        html += '<a class="cs-card" href="/company-detail?companyId=' + c.companyId + '">'
+        html += '<a class="cs-card" href="/review/company?companyId=' + c.companyId + '">'
             + '<div class="cs-card-top">'
             + '  <div class="cs-logo">' + c.companyName.substring(0, 1) + '</div>'
             + '  <div class="cs-info">'
             + '    <p class="cs-name">' + c.companyName + '</p>'
-            + '    <span class="cs-industry">' + c.companyIndustry + ' · ' + c.companyLocation + '</span>'
+            + '    <span class="cs-industry-text">' + c.companyIndustry + ' · ' + c.companyLocation + '</span>'
             + '  </div>'
             + '</div>'
             + '<div class="cs-card-body">'
@@ -84,7 +106,24 @@ function showResult(data) {
     container.html(html);
 }
 
-function confirmDelete(companyId) {
-    document.getElementById('deleteCompanyId').value = companyId;
-    document.getElementById('deleteModal').style.display = 'flex';
+/* ===== 조건 초기화 ===== */
+function initClear() {
+    $('#clearBtn').on('click', function () {
+        // 토글 버튼 초기화
+        $('.cs-options').each(function () {
+            $(this).find('.cs-opt-btn').removeClass('active');
+            $(this).find('.cs-opt-btn').first().addClass('active');
+        });
+
+        // 입력값 초기화
+        $('#companyName').val('');
+        $('#minRating').val('0');
+        $('#maxRating').val('5');
+        $('#minSize').val('');
+        $('#maxSize').val('');
+
+        // 결과 초기화
+        $('#resultArea').empty();
+        $('#resultCount').text('0');
+    });
 }
