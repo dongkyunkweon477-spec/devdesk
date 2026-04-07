@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "UserC", value = "/login")
-public class UserC extends HttpServlet {
+@WebServlet(name = "loginC", value = "/login")
+public class loginC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
@@ -26,7 +26,7 @@ public class UserC extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/");
         } else {
             request.setAttribute("content", "user/login.jsp");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
     }
 

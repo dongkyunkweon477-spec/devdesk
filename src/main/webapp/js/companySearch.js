@@ -44,9 +44,14 @@ function showResult(data) {
             <td>${c.companyLocation}</td>
             <td>${c.companyRating}</td>
             <td>${c.companySize}명</td>
-            <td><a href="/review/write?companyId=${c.companyId}" class="write-link">면접 후기 쓰기"</a></td>
-            
+            <td><a href="/review/write?companyId=${c.companyId}" class="write-link">면접 후기 쓰기</a></td>
+             <td><a href="/company/edit?companyId=${c.companyId}" class="edit-link">수정</a></td>
         </tr>`;
     });
     tbody.html(html);
+}
+
+function confirmDelete(companyId) {
+    document.getElementById('deleteCompanyId').value = companyId;
+    document.getElementById('deleteModal').style.display = 'flex';
 }

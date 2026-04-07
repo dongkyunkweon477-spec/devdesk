@@ -15,7 +15,7 @@ public class BoardC extends HttpServlet {
         BoardDAO.showAllBoard(request);
 
         request.setAttribute("content", "board/board.jsp");
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     public void destroy() {

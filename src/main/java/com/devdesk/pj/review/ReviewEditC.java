@@ -9,40 +9,41 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
-@WebServlet("/review/write")
-public class ReviewWriteFormC extends HttpServlet {
+@WebServlet("/review/edit")
+public class ReviewEditC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String companyIdP = request.getParameter("companyId");
-        if (companyIdP != null && !companyIdP.isBlank()) {
-            CompanySearchVO company = CompanySearchDAO.COMPANY_SEARCH_DAO.getCompanyById(Integer.parseInt(companyIdP));
-            request.setAttribute("company", company);
+        int reviewId = Integer.parseInt(request.getParameter("reviewId"));
+        ReviewVO review = ReviewDAO.REVIEW_DAO.getReviewById(reviewId);
+        int memberId = (int) request.getSession().getAttribute("memberId");
+        if (review.getReviewMemberId() != memberId) {
+            response.sendRedirect(request.getContextPath() + "/review");
+            return;
         }
-
-        request.setAttribute("content", "/review/reviewWrite.jsp");
+        CompanySearchVO company = CompanySearchDAO.COMPANY_SEARCH_DAO.getCompanyById(review.getReviewCompanyId());
+        request.setAttribute("r", review);
+        request.setAttribute("company", company);
+        request.setAttribute("content", "/review/reviewEdit.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("utf-8");
-
-        String companyId = request.getParameter("companyId");
-        String difficulty = request.getParameter("difficulty");
-
-        if (companyId == null || companyId.isBlank() || difficulty == null || difficulty.isBlank()) {
-            response.sendRedirect(request.getContextPath() + "/review/write");
+        int reviewId = Integer.parseInt(request.getParameter("reviewId"));
+        int memberId = (int) request.getSession().getAttribute("memberId");
+        ReviewVO review = ReviewDAO.REVIEW_DAO.getReviewById(reviewId);
+        if (review.getReviewMemberId() != memberId) {
+            response.sendRedirect(request.getContextPath() + "/review");
             return;
         }
-
         ReviewVO vo = new ReviewVO();
-        vo.setReviewCompanyId(Integer.parseInt(companyId));
-        vo.setReviewMemberId((int) request.getSession().getAttribute("memberId"));
+        vo.setReviewId(reviewId);
         vo.setReviewTitle(request.getParameter("title"));
         vo.setReviewJobPosition(request.getParameter("jobPosition"));
         vo.setReviewInterviewType(request.getParameter("interviewType"));
-        vo.setReviewDifficulty(Integer.parseInt(difficulty));
+        vo.setReviewDifficulty(Integer.parseInt(request.getParameter("difficulty")));
         vo.setReviewResult(request.getParameter("result"));
         vo.setReviewContent(request.getParameter("content"));
 
@@ -55,9 +56,8 @@ public class ReviewWriteFormC extends HttpServlet {
         String cd = request.getParameter("contactDays");
         if (cd != null && !cd.isBlank()) vo.setReviewContactDays(Integer.parseInt(cd));
 
-        ReviewDAO.REVIEW_DAO.insertReview(vo);
-        response.sendRedirect(request.getContextPath() + "/review");
-
+        ReviewDAO.REVIEW_DAO.updateReview(vo);
+        response.sendRedirect(request.getContextPath() + "/review/detail?reviewId=" + reviewId);
 
     }
 

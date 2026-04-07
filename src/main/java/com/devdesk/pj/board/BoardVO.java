@@ -15,5 +15,7 @@ public class BoardVO {
     private char hidden_yn;
     private String created_date;
     private String updated_date;
+    
+    private String nickname;
 
 }

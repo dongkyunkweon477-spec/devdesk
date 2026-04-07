@@ -107,7 +107,8 @@ public class BoardDAO {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        String sql = "select * from board where b_board_id = ?";
+//        String sql = "select * from board where b_board_id = ?";
+        String sql = "SELECT b.*, m.nickname FROM board b JOIN member m ON b.member_id = m.member_id WHERE b.b_board_id = ?";
 
         try {
             con = DBManager_new.connect();
@@ -127,6 +128,7 @@ public class BoardDAO {
                 int view_count = rs.getInt("b_view_count");
                 int like_count = rs.getInt("b_like_count");
                 char hidden_yn = rs.getString("b_hidden_yn").charAt(0);
+                String nickname = rs.getString("nickname");
 
                 boardVO = new BoardVO();
                 boardVO.setMember_id(member_id);
@@ -139,6 +141,7 @@ public class BoardDAO {
                 boardVO.setView_count(view_count);
                 boardVO.setLike_count(like_count);
                 boardVO.setHidden_yn(hidden_yn);
+                boardVO.setNickname(nickname);
 
             }
             System.out.println(boardVO);
