@@ -74,7 +74,7 @@
             <c:forEach var="comment" items="${commentList}">
                 <!-- 부모 댓글만 표시 -->
                 <c:if test="${empty comment.parent_id}">
-                    <div class="comment-item">
+                    <div class="comment-item" data-comment-id="${comment.comments_id}">
                         <div class="comment-info">
                             <span class="comment-writer">사용자(ID: ${comment.nickname})</span>
                             <span class="comment-date">${comment.created_date}</span>
@@ -103,7 +103,7 @@
                     <!-- 이 부모 댓글에 대한 대댓글 표시 -->
                     <c:forEach var="reply" items="${commentList}">
                         <c:if test="${reply.parent_id == comment.comments_id}">
-                            <div class="reply-item">
+                            <div class="reply-item" data-reply-id="${reply.comments_id}">
                                 <div class="reply-info">
                                     <span class="reply-writer">사용자(ID: ${reply.nickname})</span>
                                     <span class="reply-date">${reply.created_date}</span>
@@ -113,6 +113,9 @@
                                 </div>
                                 <c:if test="${sessionScope.user.member_id == reply.member_id}">
                                     <div class="reply-actions">
+                                        <button type="button" class="c-edit-btn"
+                                                onclick="openEdit(${reply.comments_id})">수정
+                                        </button>
                                         <button type="button" class="c-delete-btn"
                                                 onclick="delComment(${reply.comments_id}, ${board.board_id})">삭제
                                         </button>
@@ -142,6 +145,64 @@
         if (confirm("댓글을 삭제하시겠습니까?")) {
             location.href = "comment_del?id=" + no + "&board_id=" + boardId;
         }
+    }
+
+    // 댓글 수정 폼 표시 함수
+    function openEdit(commentId) {
+        console.log('openEdit called:', commentId);
+        
+        // 기존에 열린 수정 폼이 있다면 닫기
+        hideAllEditForms();
+        
+        // 해당 댓글 요소 찾기
+        const commentElement = document.querySelector('[data-comment-id="' + commentId + '"] .comment-content, [data-reply-id="' + commentId + '"] .reply-content');
+        
+        if (!commentElement) {
+            console.error('Comment element not found for commentId:', commentId);
+            return;
+        }
+        
+        const originalContent = commentElement.textContent.trim();
+        
+        // 수정 폼 HTML 생성
+        const editFormHtml =
+            '<div id="edit-form-' + commentId + '" class="edit-form">' +
+            '<form action="comment_update" method="post">' +
+            '<input type="hidden" name="comment_id" value="' + commentId + '">' +
+            '<input type="hidden" name="board_id" value="${board.board_id}">' +
+            '<div class="edit-input-wrapper">' +
+            '<textarea name="content" required>' + originalContent + '</textarea>' +
+            '<div class="edit-buttons">' +
+            '<button type="submit">수정 완료</button>' +
+            '<button type="button" onclick="hideEditForm(' + commentId + ')">취소</button>' +
+            '</div>' +
+            '</div>' +
+            '</form>' +
+            '</div>';
+        
+        // 댓글 내용을 수정 폼으로 교체
+        commentElement.style.display = 'none';
+        commentElement.insertAdjacentHTML('afterend', editFormHtml);
+    }
+    
+    // 수정 폼 숨기기 함수
+    function hideEditForm(commentId) {
+        const editForm = document.getElementById('edit-form-' + commentId);
+        const commentElement = document.querySelector('[data-comment-id="' + commentId + '"] .comment-content, [data-reply-id="' + commentId + '"] .reply-content');
+        
+        if (editForm && commentElement) {
+            editForm.remove();
+            commentElement.style.display = 'block';
+        }
+    }
+    
+    // 모든 수정 폼 숨기기 함수
+    function hideAllEditForms() {
+        const editForms = document.querySelectorAll('.edit-form');
+        const commentContents = document.querySelectorAll('.comment-content, .reply-content');
+        
+        editForms.forEach(form => form.remove());
+        commentContents.forEach(content => content.style.display = 'block');
     }
 
     // 대댓글 폼 표시 함수

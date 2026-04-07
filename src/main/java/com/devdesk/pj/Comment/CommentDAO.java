@@ -27,7 +27,7 @@ public class CommentDAO {
             ps.setInt(1, Integer.parseInt(request.getParameter("board_id")));
             ps.setInt(2, Integer.parseInt(request.getParameter("member_id")));
             ps.setString(3, request.getParameter("content"));
-            
+
             String parentIdStr = request.getParameter("parent_id");
             if (parentIdStr == null || parentIdStr.trim().isEmpty()) {
                 ps.setNull(4, java.sql.Types.INTEGER);
@@ -113,6 +113,41 @@ public class CommentDAO {
             e.printStackTrace();
         } finally {
             DBManager_new.close(con, ps, null);
+        }
+    }
+
+    public static boolean updateComment(HttpServletRequest request) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        String commentId = request.getParameter("comment_id");
+        String content = request.getParameter("content");
+
+        String sql = "UPDATE comments SET c_content = ? WHERE c_comments_id = ?";
+
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+
+            pstmt.setString(1, content);
+            pstmt.setString(2, commentId);
+
+            int result = pstmt.executeUpdate();
+
+            if (result == 1) {
+                System.out.println("댓글 수정 성공");
+                return true;
+            } else {
+                System.out.println("댓글 수정 실패");
+                return false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("댓글 수정 실패 - 예외 발생");
+            return false;
+        } finally {
+            DBManager_new.close(con, pstmt, null);
         }
     }
 }
