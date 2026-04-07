@@ -13,16 +13,27 @@ public class ReviewC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setCharacterEncoding("UTF-8");
+        int page = 1;
+        int pageSize = 5;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
         String companyIdP = request.getParameter("companyId");
+        int totalCount;
         ArrayList<ReviewVO> reviews;
         if (companyIdP != null && !companyIdP.isBlank()) {
             int companyId = Integer.parseInt(request.getParameter("companyId"));
-            reviews = ReviewDAO.REVIEW_DAO.getReviewsByCompany(companyId, 1, 5);
+            reviews = ReviewDAO.REVIEW_DAO.getReviewsByCompany(companyId, page, pageSize);
+            totalCount = ReviewDAO.REVIEW_DAO.getReviewCount(companyId);
             request.setAttribute("reviews", reviews);
         } else {
-            reviews = ReviewDAO.REVIEW_DAO.getReviewAll();
+            reviews = ReviewDAO.REVIEW_DAO.getReviewAll(page, pageSize);
+            totalCount = ReviewDAO.REVIEW_DAO.getReviewCount(null);
+
         }
         request.setAttribute("reviews", reviews);
+        request.setAttribute("totalCount", totalCount);
+        request.setAttribute("pageSize", pageSize);
         request.setAttribute("content", "/review/review.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }

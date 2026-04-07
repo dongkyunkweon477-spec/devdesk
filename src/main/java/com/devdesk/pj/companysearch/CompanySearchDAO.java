@@ -82,6 +82,40 @@ public class CompanySearchDAO {
         return null;
     }
 
+    public List<String> getAllIndustries() {
+        String sql = "select distinct company_industry from company order by company_industry";
+        List<String> list = new ArrayList<>();
+        try (
+                Connection con = DBManager_new.connect();
+                PreparedStatement pstmt = con.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery();
+        ) {
+            while (rs.next()) {
+                list.add(rs.getString("company_industry"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<String> getAllLocation() {
+        String sql = "select distinct company_location from company order by company_location";
+        List<String> list = new ArrayList<>();
+        try (
+                Connection con = DBManager_new.connect();
+                PreparedStatement pstmt = con.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery();
+        ) {
+            while (rs.next()) {
+                list.add(rs.getString("company_location"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public int insertCompany(CompanySearchVO vo) {
         String sql = "insert into company(company_id, company_name, company_industry, " +
                 "company_location, company_rating, company_size, company_created_date, company_application_date) " +

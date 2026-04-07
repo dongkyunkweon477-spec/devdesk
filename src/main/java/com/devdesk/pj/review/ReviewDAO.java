@@ -16,6 +16,35 @@ public class ReviewDAO {
     private ReviewDAO() {
     }
 
+    public int getReviewCount(Integer companyId) {
+        String sql;
+        if (companyId != null) {
+            sql = "select count(*) from review where r_company_id = ?";
+        } else {
+            sql = "select count(*) from review";
+        }
+        try (
+                Connection con = DBManager_new.connect();
+                PreparedStatement pstmt = con.prepareStatement(sql);
+        ) {
+            if (companyId != null) {
+                pstmt.setInt(1, companyId);
+            }
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+
     public ArrayList<ReviewVO> getReviewsByCompany(int companyId, int page, int pageSize) {
 
         String sql = "SELECT * FROM ("
@@ -52,18 +81,29 @@ public class ReviewDAO {
     }
 
 
-    public ArrayList<ReviewVO> getReviewAll() {
-        String sql = "select r.* , c.company_name from review r join" +
-                " company c on r.r_company_id = c.company_id" +
-                " order by r_created_date desc";
+    public ArrayList<ReviewVO> getReviewAll(int page, int pageSize) {
+        String sql = "SELECT * FROM ("
+                + "  SELECT ROWNUM rn, t.* FROM ("
+                + "    SELECT r.*, c.company_name"
+                + "    FROM review r"
+                + "    JOIN company c ON r.r_company_id = c.company_id"
+                + "    ORDER BY r.r_created_date DESC"
+                + "  ) t"
+                + ") WHERE rn BETWEEN ? AND ?";
+        int start = (page - 1) * pageSize + 1;
+        int end = page * pageSize;
         ArrayList<ReviewVO> reviews = new ArrayList<>();
         try (
                 Connection con = DBManager_new.connect();
                 PreparedStatement pstmt = con.prepareStatement(sql);
-                ResultSet rs = pstmt.executeQuery();
+
         ) {
-            while (rs.next()) {
-                reviews.add(ReviewVO.fromResultSet(rs));
+            pstmt.setInt(1, start);
+            pstmt.setInt(2, end);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    reviews.add(ReviewVO.fromResultSet(rs));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -16,21 +16,18 @@
             <label>업종</label>
             <select id="companyIndustry">
                 <option value="">전체</option>
-                <option value="IT">IT</option>
-                <option value="금융">금융</option>
-                <option value="제조">제조</option>
-                <option value="유통">유통</option>
+                <c:forEach var="ind" items="${industries}">
+                    <option value="${ind}">${ind}</option>
+                </c:forEach>
             </select>
         </div>
         <div class="form-group">
             <label>지역</label>
-            <select id="companyLocation">
+            <select id="companyIndustry">
                 <option value="">전체</option>
-                <option value="서울">서울</option>
-                <option value="경기">경기</option>
-                <option value="인천">인천</option>
-                <option value="부산">부산</option>
-                <option value="대전">대전</option>
+                <c:forEach var="loc" items="${locations}">
+                    <option value="${loc}">${loc}</option>
+                </c:forEach>
             </select>
         </div>
         <div class="form-group">
@@ -53,20 +50,7 @@
     </div>
 
     <div class="result-section">
-        <table id="resultTable" style="display:none;">
-            <thead>
-            <tr>
-                <th>회사명</th>
-                <th>업종</th>
-                <th>위치</th>
-                <th>평점</th>
-                <th>규모</th>
-                <th></th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody id="resultBody"></tbody>
-        </table>
+        <div id="resultArea"></div>
     </div>
 </div>
 
