@@ -35,7 +35,10 @@
             <div class="board-row" onclick="location.href='BoardDetailC?id=${b.board_id}'">
                     <%--            <div class="board-row" onclick="location.href='BoardDetailC?id=${b.b_board_id}'">--%>
                 <div class="col-category">${b.category}</div>
-                <div class="col-title">${b.title}</div>
+                <div class="col-title">
+                    ${b.title}
+                    <span class="comment-count">[${b.comment_count}]</span>
+                </div>
                 <div class="col-date">
                     <div class="col-date">
                         <c:choose>

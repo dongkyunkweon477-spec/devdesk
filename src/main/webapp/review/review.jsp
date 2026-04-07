@@ -94,12 +94,19 @@
 
     <%-- 하단 페이징 영역 (디자인용) --%>
     <div class="pagination">
-        <button class="page-btn">이전</button>
-        <button class="page-btn active">1</button>
-        <button class="page-btn">2</button>
-        <button class="page-btn">3</button>
-        <button class="page-btn">4</button>
-        <button class="page-btn">5</button>
-        <button class="page-btn">다음</button>
+        <c:if test="${currentPage > 1}">
+            <a href="${pageContext.request.contextPath}/review?page=${currentPage - 1}${not empty companyId ? '&companyId='.concat(companyId) : ''}"
+               class="page-btn">이전</a>
+        </c:if>
+
+        <c:forEach begin="1" end="${totalPages}" var="p">
+            <a href="${pageContext.request.contextPath}/review?page=${p}${not empty companyId ? '&companyId='.concat(companyId) : ''}"
+               class="page-btn ${p == currentPage ? 'active' : ''}">${p}</a>
+        </c:forEach>
+
+        <c:if test="${currentPage < totalPages}">
+            <a href="${pageContext.request.contextPath}/review?page=${currentPage + 1}${not empty companyId ? '&companyId='.concat(companyId) : ''}"
+               class="page-btn">다음</a>
+        </c:if>
     </div>
 </div>

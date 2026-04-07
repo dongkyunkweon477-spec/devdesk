@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,21 +12,19 @@
     <h2 class="mypage-title">마이페이지</h2>
 
     <div class="profile-info-box">
+        <%-- 프로필 사진 (닉네임 첫 글자로 고정) --%>
         <div class="profile-avatar">
             ${sessionScope.user.nickname.substring(0,1)}
         </div>
+
         <div class="profile-details">
             <p class="nickname">${sessionScope.user.nickname} 님</p>
-
             <p><strong>계정(이메일) :</strong> ${sessionScope.user.email}</p>
-
             <p><strong>관심 직무 :</strong> ${sessionScope.user.job_category}</p>
-
         </div>
     </div>
 
     <div class="mypage-menu-grid">
-
         <button class="menu-card" onclick="location.href='profile-update'">
             <h4>👤 프로필 수정</h4>
             <p>닉네임, 연락처 등 내 정보를 변경합니다.</p>
@@ -45,7 +44,6 @@
             <h4>❌ 회원 탈퇴</h4>
             <p>더 이상 DevDesk를 이용하지 않으실 경우 진행합니다.</p>
         </button>
-
     </div>
 </div>
 

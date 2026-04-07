@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Title</title>
-<%--    <link rel="stylesheet" href="css/board_add.css"--%>
+    <%--    <link rel="stylesheet" href="css/board_add.css"--%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/board-add.css">
 </head>
 <body>
@@ -14,6 +14,9 @@
 
         <!-- hidden: 컨트롤러 분기용 -->
         <input type="hidden" name="cmd" value="write">
+
+        <!-- hidden: 로그인 사용자 ID -->
+        <input type="hidden" name="member_id" value="${sessionScope.user.member_id}">
 
         <!-- 카테고리 -->
         <div class="form-group">
@@ -45,14 +48,14 @@
             <button type="submit" class="submit-btn">등록</button>
             <button type="button" class="cancel-btn" onclick="history.back()">취소</button>
         </div>
-        </form>
+    </form>
 
     </form>
 
     <script type="text/javascript">
         const textarea = document.querySelector("textarea[name='txt']");
         const cntSpan = document.querySelector("#cntSpan");
-        textarea.addEventListener('input', ()=>{
+        textarea.addEventListener('input', () => {
             const len = textarea.value.length;
             cntSpan.innerText = len;
         });
