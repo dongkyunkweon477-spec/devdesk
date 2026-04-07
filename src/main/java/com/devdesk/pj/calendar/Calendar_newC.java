@@ -32,3 +32,4 @@ public class Calendar_newC extends HttpServlet {
         request.getRequestDispatcher("calendar/index_cal.jsp").forward(request, response);
     }
 }
+

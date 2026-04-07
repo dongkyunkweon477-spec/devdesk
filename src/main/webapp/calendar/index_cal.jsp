@@ -144,6 +144,7 @@
                     start: '${sch.schedule_date}',
                     extendedProps: {
                         company: '${sch.company_name}',
+                        position: '${sch.position}', // ✨ 여기에 position이 꼭 있어야 합니다!
                         time: '${sch.schedule_time}',
                         type: '${sch.interview_type}',
                         memo: '${sch.schedule_memo}'
@@ -157,6 +158,7 @@
                 var x = info.jsEvent.pageX; var y = info.jsEvent.pageY;
 
                 $('#pop-title').text(currentEvent.title);
+                $('#pop-position').text(currentEvent.extendedProps.position || "미정");
                 $('#pop-date').text(currentEvent.startStr);
                 $('#pop-time').text(currentEvent.extendedProps.time || "미정");
                 $('#pop-type').text(currentEvent.extendedProps.type || "-");
@@ -199,6 +201,7 @@
 
             $('#form-id').val(currentEvent.id);
             $('#form-company').val(currentEvent.extendedProps.company);
+            $('#form-position').val(currentEvent.extendedProps.position);
             $('#form-date').val(currentEvent.startStr);
             var existingTime = currentEvent.extendedProps.time;
             if (existingTime) {
@@ -209,6 +212,7 @@
                 $('#form-hour').val("14");
                 $('#form-minute').val("00");
             }
+            $('#modal-backdrop, #schedule-modal').fadeIn(200);
             $('#form-memo').val(currentEvent.extendedProps.memo);
 
             var existingType = currentEvent.extendedProps.type;
@@ -258,7 +262,8 @@
                 schedule_id: id,
                 app_id: $('#form-appId').val(),
                 company_name: $('#form-company').val(),
-                apply_date: $('#form-apply-date').val(), // ✨ 지원 일자 추가 완료!
+                position: $('#form-position').val(),
+                apply_date: $('#form-apply-date').val(),
                 date: $('#form-date').val(),
                 time: $('#form-hour').val() + ":" + $('#form-minute').val(),
                 type: finalType,
