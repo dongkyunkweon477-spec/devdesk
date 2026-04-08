@@ -111,7 +111,7 @@
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             locale: 'ko',
-            headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek' },
+            headerToolbar: {left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek'},
             editable: true,
             selectable: true,
 
@@ -133,7 +133,8 @@
 
             eventClick: function (info) {
                 currentEvent = info.event;
-                var x = info.jsEvent.pageX; var y = info.jsEvent.pageY;
+                var x = info.jsEvent.pageX;
+                var y = info.jsEvent.pageY;
 
                 $('#pop-title').text(currentEvent.title);
                 $('#pop-date').text(currentEvent.startStr);
@@ -141,7 +142,7 @@
                 $('#pop-type').text(currentEvent.extendedProps.type || "-");
                 $('#pop-memo').text(currentEvent.extendedProps.memo || "-");
 
-                $('#event-popup').css({ top: y + 15 + 'px', left: x + 15 + 'px' }).fadeIn(150);
+                $('#event-popup').css({top: y + 15 + 'px', left: x + 15 + 'px'}).fadeIn(150);
             },
 
             select: function (info) {
@@ -162,9 +163,11 @@
         });
         calendar.render();
 
-        $('#close-popup').click(function () { $('#event-popup').fadeOut(150); });
+        $('#close-popup').click(function () {
+            $('#event-popup').fadeOut(150);
+        });
 
-        $('#form-type').change(function() {
+        $('#form-type').change(function () {
             if ($(this).val() === 'direct') {
                 $('#form-type-direct').show().focus();
             } else {
@@ -172,7 +175,7 @@
             }
         });
 
-        $('#btn-go-edit').click(function() {
+        $('#btn-go-edit').click(function () {
             $('#event-popup').hide();
             $('#modal-title').text("일정 수정");
 
@@ -191,11 +194,11 @@
             $('#form-memo').val(currentEvent.extendedProps.memo);
 
             var existingType = currentEvent.extendedProps.type;
-            var isOptionExists = $('#form-type option').filter(function() {
+            var isOptionExists = $('#form-type option').filter(function () {
                 return $(this).val() === existingType;
             }).length > 0;
 
-            if(isOptionExists) {
+            if (isOptionExists) {
                 $('#form-type').val(existingType);
                 $('#form-type-direct').hide().val("");
             } else {
@@ -206,23 +209,23 @@
             $('#modal-backdrop, #schedule-modal').fadeIn(200);
         });
 
-        $('#btn-do-delete').click(function() {
-            if(!confirm("정말 이 일정을 삭제하시겠습니까?")) return;
+        $('#btn-do-delete').click(function () {
+            if (!confirm("정말 이 일정을 삭제하시겠습니까?")) return;
 
             $.ajax({
                 url: '/delete-calendar',
                 type: 'POST',
-                data: { schedule_id: currentEvent.id },
-                success: function() {
+                data: {schedule_id: currentEvent.id},
+                success: function () {
                     alert("삭제되었습니다.");
                     location.reload();
                 }
             });
         });
 
-        $('#btn-save-schedule').click(function() {
+        $('#btn-save-schedule').click(function () {
             var id = $('#form-id').val();
-            var targetUrl = id ? '/update-calendar' : '/add-calender';
+            var targetUrl = id ? '/update-calendar' : '/add-calendar';
 
             var selectedType = $('#form-type').val();
             var finalType = (selectedType === 'direct') ? $('#form-type-direct').val() : selectedType;
@@ -250,17 +253,17 @@
                 url: targetUrl,
                 type: 'POST',
                 data: requestData,
-                success: function() {
+                success: function () {
                     alert("정상적으로 처리되었습니다.");
                     location.reload();
                 },
-                error: function() {
+                error: function () {
                     alert("처리 중 에러가 발생했습니다.");
                 }
             });
         });
 
-        $('#btn-modal-close, #modal-backdrop').click(function() {
+        $('#btn-modal-close, #modal-backdrop').click(function () {
             $('#modal-backdrop, #schedule-modal').fadeOut(200);
         });
     });

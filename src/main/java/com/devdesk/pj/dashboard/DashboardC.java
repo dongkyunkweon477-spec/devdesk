@@ -15,6 +15,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Arrays;
 
+import com.devdesk.pj.calendar.Schedule_newDAO;
+import com.devdesk.pj.calendar.Schedule_newDTO;
+
+import java.util.ArrayList;
+
 @WebServlet("/dashboard")
 public class DashboardC extends HttpServlet {
 
@@ -72,6 +77,72 @@ public class DashboardC extends HttpServlet {
 
         request.setAttribute("recentTils", rawTils);
 
+        // 예정 일정 가공
+        Schedule_newDAO scheduleDao = Schedule_newDAO.SCAO;
+        ArrayList<Schedule_newDTO> rawSchedules = scheduleDao.getCalendarEvents(memberId);
+
+
+// 오늘 날짜
+        java.util.Calendar today = java.util.Calendar.getInstance();
+
+// 타입별 배지 색상
+        Map<String, String> typeBgMap = new HashMap<>();
+        typeBgMap.put("1차 면접", "rgba(78,205,196,0.15)");
+        typeBgMap.put("2차 면접", "rgba(91,124,248,0.15)");
+        typeBgMap.put("3차 면접", "rgba(139,110,245,0.15)");
+        typeBgMap.put("코딩테스트", "rgba(255,209,102,0.15)");
+        typeBgMap.put("최종 면접", "rgba(86,227,159,0.15)");
+
+        Map<String, String> typeColorMap = new HashMap<>();
+        typeColorMap.put("1차 면접", "#4ecdc4");
+        typeColorMap.put("2차 면접", "#5b7cf8");
+        typeColorMap.put("3차 면접", "#8b6ef5");
+        typeColorMap.put("코딩테스트", "#ffd166");
+        typeColorMap.put("최종 면접", "#56e39f");
+
+        String[] MONTHS = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+
+        List<DashboardScheduleVO> upcomingSchedules = new ArrayList<>();
+        // 오늘 자정 기준
+        java.util.Calendar todayMidnight = java.util.Calendar.getInstance();
+        todayMidnight.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        todayMidnight.set(java.util.Calendar.MINUTE, 0);
+        todayMidnight.set(java.util.Calendar.SECOND, 0);
+        todayMidnight.set(java.util.Calendar.MILLISECOND, 0);
+
+        for (Schedule_newDTO raw : rawSchedules) {
+            if (raw.getSchedule_date() == null) continue;
+
+            // 오늘 자정보다 이전 날짜만 제외
+            if (raw.getSchedule_date().before(todayMidnight.getTime())) continue;
+
+            java.util.Calendar c = java.util.Calendar.getInstance();
+            c.setTime(raw.getSchedule_date());
+
+            DashboardScheduleVO vo = new DashboardScheduleVO();
+            vo.setMonth(MONTHS[c.get(java.util.Calendar.MONTH)]);
+            vo.setDay(String.format("%02d", c.get(java.util.Calendar.DAY_OF_MONTH)));
+            vo.setCompany(raw.getCompany_name());
+            vo.setTime(raw.getSchedule_time());
+            String type = raw.getInterview_type() != null ? raw.getInterview_type() : "면접";
+            vo.setType(type);
+            vo.setBadgeBg(typeBgMap.getOrDefault(type, "rgba(157,163,184,0.15)"));
+            vo.setBadgeColor(typeColorMap.getOrDefault(type, "#9da3b8"));
+            vo.setToday(isSameDay(c, today));
+            upcomingSchedules.add(vo);
+        }
+
+        System.out.println("=== upcomingSchedules 크기: " + upcomingSchedules.size());
+
+        request.setAttribute("upcomingSchedules", upcomingSchedules);
+
+
+        for (Schedule_newDTO r : rawSchedules) {
+            System.out.println("  날짜: " + r.getSchedule_date()
+                    + " / 회사: " + r.getCompany_name()
+                    + " / 타입: [" + r.getInterview_type() + "]");
+        }
+
 
         DashboardDAO.countGroupbystage(request);
         DashboardDAO.getFunnelData(DashboardDAO.countGroupbystage(request));
@@ -97,6 +168,11 @@ public class DashboardC extends HttpServlet {
         } catch (Exception e) {
             return createdAt;
         }
+    }
+
+    private boolean isSameDay(java.util.Calendar a, java.util.Calendar b) {
+        return a.get(java.util.Calendar.YEAR) == b.get(java.util.Calendar.YEAR)
+                && a.get(java.util.Calendar.DAY_OF_YEAR) == b.get(java.util.Calendar.DAY_OF_YEAR);
     }
 
 
