@@ -181,16 +181,60 @@ public class ReviewDAO {
     }
 
     public int deleteReview(int reviewId) {
-        String sql = "delete from review where r_id = ?";
-        try (Connection con = DBManager_new.connect();
-             PreparedStatement pstmt = con.prepareStatement(sql);
-        ) {
-            pstmt.setInt(1, reviewId);
-            return pstmt.executeUpdate();
+
+        String deleteLikeSql = "DELETE FROM review_like WHERE review_id = ?";
+        String deleteBookmarkSql = "DELETE FROM review_bookmark WHERE review_id = ?";
+
+        String deleteReviewSql = "DELETE FROM review WHERE r_id = ?";
+
+        Connection con = null;
+        try {
+            con = DBManager_new.connect();
+            con.setAutoCommit(false); // 트랜잭션 시작
+
+
+            try (PreparedStatement pstmt1 = con.prepareStatement(deleteLikeSql)) {
+                pstmt1.setInt(1, reviewId);
+                pstmt1.executeUpdate();
+            }
+
+
+            try (PreparedStatement pstmt2 = con.prepareStatement(deleteBookmarkSql)) {
+                pstmt2.setInt(1, reviewId);
+                pstmt2.executeUpdate();
+            }
+
+
+            int result = 0;
+            try (PreparedStatement pstmt3 = con.prepareStatement(deleteReviewSql)) {
+                pstmt3.setInt(1, reviewId);
+                result = pstmt3.executeUpdate();
+            }
+
+            con.commit(); // 모두 성공 시 커밋
+            return result;
+
         } catch (Exception e) {
             e.printStackTrace();
+            if (con != null) {
+                try {
+                    con.rollback(); // 에러 발생 시 롤백
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
         return 0;
+
     }
 
     public ReviewVO getReviewById(int reviewId) {
@@ -231,13 +275,18 @@ public class ReviewDAO {
         String deleteSql = "DELETE FROM review_like WHERE member_id = ? AND review_id = ?";
         String plusSql = "UPDATE review SET r_like_count = r_like_count + 1 WHERE r_id = ?";
         String minusSql = "UPDATE review SET r_like_count = r_like_count - 1 WHERE r_id = ?";
+
+
         try (Connection con = DBManager_new.connect()) {
+            con.setAutoCommit(false);
+
+            boolean exists = false;
             try (PreparedStatement pstmt = con.prepareStatement(checkSql)) {
                 pstmt.setInt(1, memberId);
                 pstmt.setInt(2, reviewId);
                 try (ResultSet rs = pstmt.executeQuery()) {
                     rs.next();
-                    boolean exists = rs.getInt(1) > 0;
+                    exists = rs.getInt(1) > 0;
 
                     if (exists) {
                         try (PreparedStatement del = con.prepareStatement(deleteSql)) {
@@ -249,6 +298,7 @@ public class ReviewDAO {
                             minus.setInt(1, reviewId);
                             minus.executeUpdate();
                         }
+                        con.commit();
                         return false;
                     } else {
                         try (PreparedStatement ins = con.prepareStatement(insertSql)) {
@@ -262,6 +312,7 @@ public class ReviewDAO {
                             plus.executeUpdate();
 
                         }
+                        con.commit();
                         return true;
                     }
                 }
@@ -276,6 +327,96 @@ public class ReviewDAO {
 
     public boolean isLiked(int memberId, int reviewId) {
         String sql = "SELECT COUNT(*) FROM review_like WHERE member_id = ? AND review_id = ?";
+        try (
+                Connection con = DBManager_new.connect();
+                PreparedStatement pstmt = con.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, memberId);
+            pstmt.setInt(2, reviewId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean toggleBookmark(int memberId, int reviewId) {
+        String checkSql = "SELECT COUNT(*) FROM review_bookmark WHERE member_id = ? AND review_id = ?";
+        String insertSql = "INSERT INTO review_bookmark (member_id, review_id) VALUES (?, ?)";
+        String deleteSql = "DELETE FROM review_bookmark WHERE member_id = ? AND review_id = ?";
+        String plusSql = "UPDATE review SET r_bookmark_count = r_bookmark_count + 1 WHERE r_id = ?";
+        String minusSql = "UPDATE review SET r_bookmark_count = r_bookmark_count - 1 WHERE r_id = ?";
+
+        Connection con = null;
+        try {
+            con = DBManager_new.connect();
+            // 자동 커밋 해제 (트랜잭션 시작)
+            con.setAutoCommit(false);
+
+            boolean exists = false;
+            try (PreparedStatement pstmt = con.prepareStatement(checkSql)) {
+                pstmt.setInt(1, memberId);
+                pstmt.setInt(2, reviewId);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        exists = rs.getInt(1) > 0;
+                    }
+                }
+            }
+
+            if (exists) {
+                // 이미 북마크가 존재하면 삭제 및 카운트 감소
+                try (PreparedStatement del = con.prepareStatement(deleteSql)) {
+                    del.setInt(1, memberId);
+                    del.setInt(2, reviewId);
+                    del.executeUpdate();
+                }
+                try (PreparedStatement minus = con.prepareStatement(minusSql)) {
+                    minus.setInt(1, reviewId);
+                    minus.executeUpdate();
+                }
+                con.commit(); // 두 작업 모두 성공 시 확정
+                return false;
+            } else {
+                // 북마크가 없으면 추가 및 카운트 증가
+                try (PreparedStatement ins = con.prepareStatement(insertSql)) {
+                    ins.setInt(1, memberId);
+                    ins.setInt(2, reviewId);
+                    ins.executeUpdate();
+                }
+                try (PreparedStatement plus = con.prepareStatement(plusSql)) {
+                    plus.setInt(1, reviewId);
+                    plus.executeUpdate();
+                }
+                con.commit(); // 두 작업 모두 성공 시 확정
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (con != null) {
+                try {
+                    con.rollback(); // 중간에 오류 발생 시 모든 작업 취소
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true); // 커넥션 풀 반환 전 기본값으로 원상 복구
+                    con.close(); // 자원 해제
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isBookmarked(int memberId, int reviewId) {
+        String sql = "SELECT COUNT(*) FROM review_bookmark WHERE member_id = ? AND review_id = ?";
         try (
                 Connection con = DBManager_new.connect();
                 PreparedStatement pstmt = con.prepareStatement(sql);

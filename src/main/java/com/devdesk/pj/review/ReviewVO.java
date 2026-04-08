@@ -34,6 +34,7 @@ public class ReviewVO {
     private Date reviewCreatedDate;
     private Date reviewUpdatedDate;
     private int reviewRating;
+
     private String companyName;    // JOIN용
     private String memberNickname; // JOIN용
 
@@ -67,6 +68,8 @@ public class ReviewVO {
         try {
             r.setCompanyName(rs.getString("company_name"));
             r.setMemberNickname(rs.getString("member_nickname"));
+
+
         } catch (Exception e) {
 
         }

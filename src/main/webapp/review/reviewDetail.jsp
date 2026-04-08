@@ -147,6 +147,11 @@
                 id="likeBtn" data-id="${r.reviewId}">
             ♥ 추천 <span id="likeCount">${r.reviewLikeCount}</span>
         </button>
+        <button class="bookmark-btn ${isBookmarked ? 'bookmarked' : ''}"
+                id="bookmarkBtn" data-id="${r.reviewId}">
+            <span class="icon">🔖</span> 북마크 <span id="bookmarkCount">${r.reviewBookmarkCount}</span>
+        </button>
+
         <button class="btn-cancel" onclick="history.back()">목록으로</button>
         <c:if test="${sessionScope.user.member_id == r.reviewMemberId}">
             <a href="${pageContext.request.contextPath}/review/edit?reviewId=${r.reviewId}"

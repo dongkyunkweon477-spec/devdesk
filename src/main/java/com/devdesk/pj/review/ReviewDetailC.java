@@ -31,7 +31,10 @@ public class ReviewDetailC extends HttpServlet {
         if (user != null) {
             boolean isLiked = ReviewDAO.REVIEW_DAO.isLiked(user.getMember_id(), reviewId);
             request.setAttribute("isLiked", isLiked);
+            boolean isBookmarked = ReviewDAO.REVIEW_DAO.isBookmarked(user.getMember_id(), reviewId);
+            request.setAttribute("isBookmarked", isBookmarked);
         }
+
         ReviewVO review = ReviewDAO.REVIEW_DAO.getReviewById(reviewId);
         CompanySearchVO company = CompanySearchDAO.COMPANY_SEARCH_DAO.getCompanyById(review.getReviewCompanyId());
         request.setAttribute("r", review);

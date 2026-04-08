@@ -168,3 +168,34 @@
     border-color: #ef4444;
     color: #ef4444;
 }
+
+.bookmark-btn {
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    color: #666;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* 마우스 호버 시 */
+.bookmark-btn:hover {
+    background-color: #f8f9fa;
+    border-color: #bbb;
+}
+
+/* 북마크 활성화 상태 (Active) */
+.bookmark-btn.bookmarked {
+    background-color: #e7f3ff;
+    border-color: #007bff;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.bookmark-btn.bookmarked .icon {
+    /* 활성화 시 아이콘에 변화를 주고 싶을 때 */
+}
