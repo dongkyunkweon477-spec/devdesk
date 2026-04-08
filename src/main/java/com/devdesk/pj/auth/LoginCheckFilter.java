@@ -25,7 +25,7 @@ import java.io.IOException;
         "/company/insert",
         "/company/edit",
         "/company/delete",
-        "/calendar",
+      //  "/calendar",
         "/add-calendar",
         "/update-calendar",
         "/delete-calendar"

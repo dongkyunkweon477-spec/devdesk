@@ -75,7 +75,10 @@ public class Schedule_newDAO {
         MemberDTO user = (MemberDTO) request.getSession().getAttribute("user");
         int memberId = user.getMember_id();
 
+        //기업명 양 옆 공백 제거
         String companyName = request.getParameter("company_name");
+        if(companyName != null) companyName = companyName.trim();
+
         String position = request.getParameter("position");
         String applyDate = request.getParameter("apply_date");
         String date = request.getParameter("date");
@@ -83,6 +86,11 @@ public class Schedule_newDAO {
         String type = request.getParameter("type");
         String memo = request.getParameter("memo");
         String stage = mapTypeToStage(type);
+
+            System.out.println("✅ [일정 추가] 화면에서 넘어온 회사명: [" + companyName + "]");
+
+            con = DBManager_new.connect();
+            con.setAutoCommit(false);
 
             int companyId = 0;
             String findCompanySql = "SELECT COMPANY_ID FROM COMPANY WHERE COMPANY_NAME = ?";
@@ -93,7 +101,9 @@ public class Schedule_newDAO {
 
             if(rs.next()) {
                 companyId = rs.getInt("COMPANY_ID");
+                System.out.println("✅ [DB 검색 성공] 찾은 회사 번호: " + companyId);
             } else {
+                System.out.println("❌ [DB 검색 실패] DB 명단에 일치하는 글자가 없습니다!");
                 throw new Exception("등록하려는 회사가 존재하지 않습니다: " + companyName);
             }
             pstmt.close();
@@ -123,7 +133,7 @@ public class Schedule_newDAO {
             pstmt.executeUpdate();
             pstmt.close();
 
-            // 자식 테이블(SCHEDULE) 인서트
+            // SCHEDULE 인서트
             String schSql = "INSERT INTO SCHEDULE (SCHEDULE_ID, MEMBER_ID, COMPANY_NAME, SCHEDULE_DATE, SCHEDULE_TIME, INTERVIEW_TYPE, MEMO, APP_ID) " +
                     "VALUES (SEQ_SCHEDULE.nextval, ?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ?)";
             pstmt = con.prepareStatement(schSql);

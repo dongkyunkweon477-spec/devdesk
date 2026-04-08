@@ -38,7 +38,7 @@
 
     <div class="form-group">
         <label>회사 이름</label>
-        <input type="text" id="form-company" list="company-options" placeholder="회사명 검색 또는 직접 입력">
+        <input type="text" id="form-company" list="company-options" placeholder="회사명 검색">
         <datalist id="company-options">
             <c:forEach var="company" items="${companyList}">
                 <option value="${company}"></option>
@@ -117,6 +117,18 @@
     $(document).ready(function () {
         $('#customAlertModal, #customConfirmModal').hide();
         var currentEvent = null;
+
+        $('#form-company').on('click', function() {
+            var currentVal = $(this).val();
+            if (currentVal !== "") {
+                $(this).data('saved-company', currentVal);
+                $(this).val('');
+            }
+        }).on('blur', function() {
+            if ($(this).val() === "" && $(this).data('saved-company')) {
+                $(this).val($(this).data('saved-company'));
+            }
+        });
 
         function showCustomAlert(message, reloadAfter = false) {
             $('#alertMessage').text(message);
@@ -281,19 +293,18 @@
                 type: 'POST',
                 data: requestData,
                 success: function() {
-                    showCustomAlert("일정이 정상적으로 저장되었습니다! ><", true);
+                    showCustomAlert("츄가완료!! ><", true);
                 },
                 error: function() {
                     showCustomAlert("저장 중 오류가 발생했습니다. (회사 이름을 확인해주세요)");
                 }
             });
+        });
 
         $('#btn-modal-close, #modal-backdrop').click(function() {
             $('#modal-backdrop, #schedule-modal').fadeOut(200);
         });
         });
-    });
-
 
 </script>
 
