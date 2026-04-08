@@ -161,6 +161,7 @@ public class CompanySearchDAO {
     }
 
     public void deleteCompany(int companyId) {
+
         String sqlDelRev = "delete from review where r_company_id = ?";
         String sqlDelComp = "delete from company where company_id = ?";
         try (

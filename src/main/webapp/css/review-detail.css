@@ -158,16 +158,19 @@
 .rd-pill {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 8px 20px;
-    border-radius: 20px;
-    font-size: 14px;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 32px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 600;
     font-family: 'Pretendard', sans-serif;
     cursor: pointer;
     transition: all 0.15s;
     border: 1px solid #e2e8f0;
     background: #ffffff;
     color: #64748b;
+    min-width: 120px;
 }
 
 .rd-pill:hover {
@@ -201,10 +204,10 @@
 }
 
 .rd-nav-btn {
-    padding: 7px 16px;
+    padding: 12px 24px;
     border-radius: 8px;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 600;
     font-family: 'Pretendard', sans-serif;
     cursor: pointer;
     transition: all 0.15s;
@@ -212,6 +215,9 @@
     background: #ffffff;
     color: #64748b;
     text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .rd-nav-btn:hover {
@@ -231,8 +237,8 @@
 
 .rd-nav-del {
     color: #94a3b8;
-    border-color: transparent;
-    background: transparent;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
 }
 
 .rd-nav-del:hover {
@@ -256,4 +262,59 @@
 
 .btn-delete-confirm:hover {
     background: #dc2626;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+}
+
+.modal-box {
+    background: #ffffff;
+    padding: 32px 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    min-width: 320px;
+}
+
+/* 모달 내부 텍스트 */
+.modal-box p {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 24px 0;
+}
+
+/* 모달 내부 버튼 영역 (취소, 삭제 버튼 정렬) */
+.modal-btns {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.modal-btns .btn-cancel {
+    height: 42px;
+    padding: 0 24px;
+    background: #ffffff;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Pretendard', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.modal-btns .btn-cancel:hover {
+    background: #f8fafc;
 }

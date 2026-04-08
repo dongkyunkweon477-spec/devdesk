@@ -152,13 +152,15 @@
     <%-- 삭제 / 목록 / 수정 --%>
     <div class="rd-nav">
         <div class="rd-nav-left">
-            <c:if test="${sessionScope.memberId == r.reviewMemberId || sessionScope.role == 'ADMIN'}">
+            <%-- sessionScope.user.member_id 로 변경 --%>
+            <c:if test="${sessionScope.user != null && (sessionScope.user.member_id == r.reviewMemberId || sessionScope.user.role == 'ADMIN')}">
                 <button class="rd-nav-btn rd-nav-del" onclick="confirmDelete(${r.reviewId})">삭제</button>
             </c:if>
         </div>
         <div class="rd-nav-right">
             <button class="rd-nav-btn" onclick="history.back()">목록으로</button>
-            <c:if test="${sessionScope.memberId == r.reviewMemberId || sessionScope.role == 'ADMIN'}">
+            <%-- sessionScope.user.member_id 로 변경 --%>
+            <c:if test="${sessionScope.user != null && (sessionScope.user.member_id == r.reviewMemberId || sessionScope.user.role == 'ADMIN')}">
                 <a href="${pageContext.request.contextPath}/review/edit?reviewId=${r.reviewId}"
                    class="rd-nav-btn rd-nav-edit">수정</a>
             </c:if>
