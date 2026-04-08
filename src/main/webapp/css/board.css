@@ -1,6 +1,6 @@
 /* 전체 컨테이너 */
 .board-container {
-    width: 800px;
+    width: 1000px;
     margin: 20px auto;
     border-top: 2px solid #7c3aed;
     font-family: 'Pretendard', sans-serif;
@@ -9,7 +9,7 @@
 /* 헤더 */
 .board-header {
     display: flex;
-    padding: 10px 10px;
+    padding: 10px 15px;
     justify-content: space-between;
     background-color: #f5f5f5;
     font-weight: 600;
@@ -128,4 +128,84 @@
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
+}
+
+/* 검색 폼 스타일 */
+.search-form {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* 검색 조건 셀렉트 - 카테고리 셀렉트와 동일한 크기 */
+.search-type {
+    height: 32px;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 13px;
+    min-width: 80px;
+    cursor: pointer;
+}
+
+/* 검색 입력창 */
+.search-input {
+    height: 32px;
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+    border-color: #7c3aed;
+}
+
+/* 검색 버튼 */
+.search-btn {
+    height: 32px;
+    padding: 6px 15px;
+    background-color: #7c3aed;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.search-btn:hover {
+    background-color: #6d28d9;
+}
+
+/* 목록으로 버튼 */
+.reset-btn {
+    height: 32px;
+    padding: 6px 15px;
+    background-color: #6b7280;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.reset-btn:hover {
+    background-color: #4b5563;
+}
+
+/* 기존 셀렉트 박스 스타일 통일 */
+.board-actions select {
+    height: 32px;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 13px;
+    cursor: pointer;
 }

@@ -70,9 +70,10 @@ function showResult(data) {
     var html = '<div class="cs-grid">';
 
     $.each(data, function (i, c) {
+        var rating = c.calcRating || 0;
         var stars = '';
         for (var s = 1; s <= 5; s++) {
-            stars += '<span class="' + (s <= c.companyRating ? 'on' : '') + '">★</span>';
+            stars += '<span class="' + (s <= rating ? 'on' : '') + '">★</span>';
         }
 
         var editLink = '';

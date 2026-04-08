@@ -1,11 +1,9 @@
 package com.devdesk.pj.user;
 
 import com.devdesk.pj.main.DBManager_new;
-import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
-import sun.security.util.Password;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -110,7 +108,6 @@ public class MemberDAO {
                     System.out.println("로그인 성공");
 
                     MemberDTO memberDTO = new MemberDTO();
-
                     memberDTO.setMember_id(rs.getInt("member_id")); // 선민 추가
                     memberDTO.setEmail(rs.getString("email"));
                     memberDTO.setNickname(rs.getString("nickname"));
@@ -142,7 +139,6 @@ public class MemberDAO {
 
     }
 
-    //public boolean updateProfile(HttpServletRequest request) {
     public boolean updateProfile(HttpServletRequest request) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -183,5 +179,36 @@ public class MemberDAO {
     }
 
 
-    //}
+    public boolean passwordUpdate(HttpServletRequest request, HttpServletResponse response) {
+        MemberDTO user = (MemberDTO) request.getSession().getAttribute("user");
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        String sql = "UPDATE MEMBER SET password = ? WHERE member_id = ? AND password = ?";
+
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+            String new_password = request.getParameter("new_password");
+            String old_password = request.getParameter("old_password");
+            pstmt.setString(1, new_password);
+            pstmt.setInt(2, user.getMember_id());
+            pstmt.setString(3, old_password);
+
+            if (pstmt.executeUpdate() == 1) {
+                System.out.println("비밀번호 변경 성공!");
+                return true;
+            } else {
+                System.out.println("비밀번호 변경 실패: 현재 비밀번호 불일치");
+                return false;
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, pstmt, null);
+        }
+        return false;
+    }
 }
