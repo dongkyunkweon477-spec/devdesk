@@ -50,7 +50,8 @@ public class BoardDAO {
         BoardVO bo = null;
         ArrayList<BoardVO> boards = new ArrayList<>();
         String sql = "SELECT b.*, " +
-                "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count " +
+                "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count, " +
+                "COALESCE(b.b_like_count, 0) as like_count " +
                 "FROM board b ORDER BY b.b_board_id DESC";
 
         try {
@@ -67,6 +68,7 @@ public class BoardDAO {
                 bo.setCreated_date(rs.getString("b_created_date"));
                 bo.setView_count(rs.getInt("b_view_count"));
                 bo.setComment_count(rs.getInt("comment_count"));
+                bo.setLike_count(rs.getInt("like_count"));
                 boards.add(bo);
             }
             request.setAttribute("boards", boards);
@@ -78,6 +80,101 @@ public class BoardDAO {
             DBManager_new.close(con, ps, rs);
         }
         return null;
+    }
+
+    public static ArrayList<BoardVO> showPopularBoard(HttpServletRequest request) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        BoardVO bo = null;
+        ArrayList<BoardVO> boards = new ArrayList<>();
+        String sql = "SELECT b.*, " +
+                "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count, " +
+                "COALESCE(b.b_like_count, 0) as like_count " +
+                "FROM board b ORDER BY b.b_like_count DESC, b.b_board_id DESC";
+
+        try {
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                bo = new BoardVO();
+                bo.setBoard_id(rs.getInt("b_board_id"));
+                bo.setCategory(rs.getString("b_category"));
+                bo.setTitle(rs.getString("b_title"));
+                bo.setMember_id(rs.getInt("member_id"));
+                bo.setCreated_date(rs.getString("b_created_date"));
+                bo.setView_count(rs.getInt("b_view_count"));
+                bo.setComment_count(rs.getInt("comment_count"));
+                bo.setLike_count(rs.getInt("like_count"));
+                boards.add(bo);
+            }
+            request.setAttribute("boards", boards);
+            return boards;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, rs);
+        }
+        return null;
+    }
+
+    public static ArrayList<BoardVO> showViewCountBoard(HttpServletRequest request) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        BoardVO bo = null;
+        ArrayList<BoardVO> boards = new ArrayList<>();
+        String sql = "SELECT b.*, " +
+                "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count, " +
+                "COALESCE(b.b_like_count, 0) as like_count " +
+                "FROM board b ORDER BY b.b_view_count DESC, b.b_board_id DESC";
+
+        try {
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                bo = new BoardVO();
+                bo.setBoard_id(rs.getInt("b_board_id"));
+                bo.setCategory(rs.getString("b_category"));
+                bo.setTitle(rs.getString("b_title"));
+                bo.setMember_id(rs.getInt("member_id"));
+                bo.setCreated_date(rs.getString("b_created_date"));
+                bo.setView_count(rs.getInt("b_view_count"));
+                bo.setComment_count(rs.getInt("comment_count"));
+                bo.setLike_count(rs.getInt("like_count"));
+                boards.add(bo);
+            }
+            request.setAttribute("boards", boards);
+            return boards;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, rs);
+        }
+        return null;
+    }
+
+    public static void increaseViewCount(int boardId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        String sql = "UPDATE board SET b_view_count = b_view_count + 1 WHERE b_board_id = ?";
+
+        try {
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, boardId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, null);
+        }
     }
 
     public static int delBoard(HttpServletRequest request) {

@@ -1,5 +1,5 @@
 package com.devdesk.pj.calendar;
-
+import com.devdesk.pj.user.MemberDTO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,22 +13,25 @@ public class Calendar_newC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        Object sessionMemberId = request.getSession().getAttribute("memberId");
-        int memberId = 6; // 테스트용 6번 유저!
+        MemberDTO user = (MemberDTO) request.getSession().getAttribute("user");
 
-        if (sessionMemberId != null) {
-            memberId = (int) sessionMemberId;
+        if (user == null) {
+            request.getSession().setAttribute("dest", request.getRequestURI());
+
+            // 로그인 페이지로 쫓아내기
+            response.sendRedirect("login");
+            return;
         }
 
-        // 달력일정
+        int memberId = user.getMember_id();
+
         ArrayList<Schedule_newDTO> schList = Schedule_newDAO.SCAO.getCalendarEvents(memberId);
         request.setAttribute("list", schList);
 
-        // company list
         ArrayList<String> companyList = Schedule_newDAO.SCAO.getAllCompanyNames();
         request.setAttribute("companyList", companyList);
 
-        // 되돌아가기(달력화면)
-        request.getRequestDispatcher("calendar/index_cal.jsp").forward(request, response);
+        request.setAttribute("content", "calendar/index_cal.jsp");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 }
