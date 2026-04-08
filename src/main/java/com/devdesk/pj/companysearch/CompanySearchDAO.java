@@ -248,4 +248,93 @@ public class CompanySearchDAO {
         }
         return 0;
     }
+
+    public Map<String, Object> companySearchPaged(Map<String, String> conditions, int page, int pageSize) {
+        Set<String> allowedText = Set.of("company_name", "company_industry", "company_location");
+        Set<String> allowedRange = Set.of("company_rating", "company_size");
+
+        StringBuilder baseSql = new StringBuilder(
+                "SELECT c.*, "
+                        + "NVL(ROUND(AVG(r.r_rating), 1), 0) AS calc_rating, "
+                        + "COUNT(r.r_id) AS review_count "
+                        + "FROM company c "
+                        + "LEFT JOIN review r ON c.company_id = r.r_company_id "
+                        + "WHERE 1=1"
+        );
+
+        List<Object> params = new ArrayList<>();
+
+        for (String col : allowedText) {
+            if (conditions.containsKey(col)) {
+                baseSql.append(" AND c.").append(col).append(" LIKE ?");
+                params.add("%" + conditions.get(col) + "%");
+            }
+        }
+        for (String col : allowedRange) {
+            String minVal = conditions.get("min_" + col);
+            String maxVal = conditions.get("max_" + col);
+            if (minVal != null && !minVal.isBlank()) {
+                baseSql.append(" AND c.").append(col).append(" >= ?");
+                params.add(Double.parseDouble(minVal));
+            }
+            if (maxVal != null && !maxVal.isBlank()) {
+                baseSql.append(" AND c.").append(col).append(" <= ?");
+                params.add(Double.parseDouble(maxVal));
+            }
+        }
+        baseSql.append(" GROUP BY c.company_id, c.company_name, c.company_industry, "
+                + "c.company_location, c.company_rating, c.company_size, "
+                + "c.company_created_date, c.company_application_date");
+
+
+        String countSql = "SELECT COUNT(*) FROM (" + baseSql + ")";
+        // 페이징
+        String pagedSql = "SELECT * FROM ("
+                + "  SELECT ROWNUM rn, t.* FROM (" + baseSql + ") t"
+                + ") WHERE rn BETWEEN ? AND ?";
+
+        int start = (page - 1) * pageSize + 1;
+        int end = page * pageSize;
+
+        Map<String, Object> result = new HashMap<>();
+
+        try (Connection con = DBManager_new.connect()) {
+            // 전체 건수
+            try (PreparedStatement pstmt = con.prepareStatement(countSql)) {
+                for (int i = 0; i < params.size(); i++) {
+                    pstmt.setObject(i + 1, params.get(i));
+                }
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) result.put("totalCount", rs.getInt(1));
+                }
+            }
+
+            // 페이징 데이터
+            try (PreparedStatement pstmt = con.prepareStatement(pagedSql)) {
+                for (int i = 0; i < params.size(); i++) {
+                    pstmt.setObject(i + 1, params.get(i));
+                }
+                pstmt.setInt(params.size() + 1, start);
+                pstmt.setInt(params.size() + 2, end);
+
+                List<String> companies = new ArrayList<>();
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    while (rs.next()) {
+                        companies.add(CompanySearchVO.fromRS(rs).toJson());
+                    }
+                }
+                result.put("companies", companies);
+            }
+
+            int totalCount = (int) result.get("totalCount");
+            result.put("totalPages", (int) Math.ceil((double) totalCount / pageSize));
+            result.put("currentPage", page);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
 }

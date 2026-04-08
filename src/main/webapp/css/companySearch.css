@@ -374,3 +374,33 @@
         gap: 12px;
     }
 }
+
+.cs-paging {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 20px;
+}
+
+.cs-page {
+    padding: 7px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Pretendard', sans-serif;
+    color: #475569;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cs-page:hover {
+    border-color: #a78bfa;
+    color: #7c3aed;
+}
+
+.cs-page.active {
+    background: #7c3aed;
+    color: #ffffff;
+    border-color: #7c3aed;
+}

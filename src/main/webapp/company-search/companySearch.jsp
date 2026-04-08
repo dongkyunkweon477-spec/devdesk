@@ -90,6 +90,7 @@
 
     <%-- ===== 검색 결과 (카드) ===== --%>
     <div id="resultArea"></div>
+    <div id="companyPaging" class="cs-paging"></div>
 </div>
 
 <script src="${pageContext.request.contextPath}/js/companySearch.js"></script>

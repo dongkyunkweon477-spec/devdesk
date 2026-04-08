@@ -17,27 +17,19 @@ function initToggleBtns() {
 }
 
 /* ===== 검색 ===== */
-function initSearch() {
-    $('#searchBtn').on('click', function () {
-        doSearch();
-    });
 
-    // 엔터키
-    $('#companyName').on('keypress', function (e) {
-        if (e.which === 13) doSearch();
-    });
-}
+let currentPage = 1;
 
-function doSearch() {
-    var activeIndustry = $('#industryBtns .cs-opt-btn.active');
-    var activeLocation = $('#locationBtns .cs-opt-btn.active');
+function doSearch(page) {
+    if (!page) page = 1;
+    currentPage = page;
 
     var industry = $('#industryBtns .cs-opt-btn.active').attr('data-value') || '';
     var location = $('#locationBtns .cs-opt-btn.active').attr('data-value') || '';
 
-    var contextPath = $('#contextPath').val();
     $.ajax({
-        url: contextPath + '/company-search/ajax',
+        url: '/company-search/ajax',
+        type: 'get',
         dataType: 'json',
         data: {
             companyName: $('#companyName').val(),
@@ -46,13 +38,47 @@ function doSearch() {
             minRating: $('#minRating').val(),
             maxRating: $('#maxRating').val(),
             minSize: $('#minSize').val(),
-            maxSize: $('#maxSize').val()
+            maxSize: $('#maxSize').val(),
+            page: page
         }
     }).done(function (data) {
-        $('#resultCount').text(data.length);
-        showResult(data);
-    }).fail(function (xhr, status, error) {
-        console.error('Search failed: ' + error);
+        $('#resultCount').text(data.totalCount);
+        showResult(data.companies);
+        renderPagination(data.totalPages);
+    });
+}
+
+function renderPagination(totalPages) {
+    if (totalPages <= 1) {
+        $('#companyPaging').empty();
+        return;
+    }
+
+    let html = '';
+    if (currentPage > 1) {
+        html += '<button class="cs-page" onclick="doSearch(' + (currentPage - 1) + ')">이전</button>';
+    }
+
+    for (let i = 1; i <= totalPages; i++) {
+        html += '<button class="cs-page ' + (i === currentPage ? 'active' : '')
+            + '" onclick="doSearch(' + i + ')">' + i + '</button>';
+    }
+
+    if (currentPage < totalPages) {
+        html += '<button class="cs-page" onclick="doSearch(' + (currentPage + 1) + ')">다음</button>';
+    }
+
+    $('#companyPaging').html(html);
+}
+
+// 검색 버튼은 항상 1페이지부터
+function initSearch() {
+    $('#searchBtn').on('click', function () {
+        doSearch(1);
+    });
+
+    $('#companyName').on('keypress', function (e) {
+        if (e.which === 13) doSearch(1);
     });
 }
 
