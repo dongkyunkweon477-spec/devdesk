@@ -69,17 +69,17 @@
                     </select>
                 </div>
             </div>
+            <div class="field-group">
+                <label class="field-label required">전형 결과</label>
+                <select name="result" id="result">
+                    <option value="">선택하세요</option>
+                    <option value="PASS">합격</option>
+                    <option value="FAIL">불합격</option>
+                    <option value="PENDING">대기중</option>
+                </select>
+            </div>
 
             <div class="field-row two-col">
-                <div class="field-group">
-                    <label class="field-label required">전형 결과</label>
-                    <select name="result" id="result">
-                        <option value="">선택하세요</option>
-                        <option value="PASS">합격</option>
-                        <option value="FAIL">불합격</option>
-                        <option value="PENDING">대기중</option>
-                    </select>
-                </div>
                 <div class="field-group">
                     <label class="field-label required">난이도</label>
                     <div class="difficulty-stars" id="difficultyStars">
@@ -92,9 +92,20 @@
                         <span class="difficulty-label" id="difficultyLabel"></span>
                     </div>
                 </div>
+                <div class="field-group">
+                    <label class="field-label required">기업 평점</label>
+                    <div class="difficulty-stars" id="ratingStars">
+                        <input type="hidden" name="rating" id="rating" value=""/>
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                        <span class="difficulty-label" id="ratingLabel"></span>
+                    </div>
+                </div>
             </div>
         </div>
-
         <%-- ===== 섹션 2: 면접 상세 ===== --%>
         <div class="form-section">
             <div class="section-title">

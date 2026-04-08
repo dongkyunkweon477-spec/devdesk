@@ -113,11 +113,11 @@ public class ReviewDAO {
     }
 
     public void insertReview(ReviewVO vo) {
-        String sql = "insert into review(r_id , r_company_id , r_member_id , r_title " +
-                ", r_job_position , r_interview_type , r_difficulty , r_result , r_content , " +
-                "r_interviewer_count,r_student_count,r_atmosphere," +
-                "r_contact_method,r_contact_days)"
-                + "values(review_seq.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO review (r_id, r_company_id, r_member_id, r_title,"
+                + " r_job_position, r_interview_type, r_difficulty, r_rating,"
+                + " r_result, r_content, r_interviewer_count, r_student_count,"
+                + " r_atmosphere, r_contact_method, r_contact_days)"
+                + " VALUES (review_seq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (
                 Connection con = DBManager_new.connect();
                 PreparedStatement pstmt = con.prepareStatement(sql);
@@ -128,13 +128,14 @@ public class ReviewDAO {
             pstmt.setString(4, vo.getReviewJobPosition());
             pstmt.setString(5, vo.getReviewInterviewType());
             pstmt.setInt(6, vo.getReviewDifficulty());
-            pstmt.setString(7, vo.getReviewResult());
-            pstmt.setString(8, vo.getReviewContent());
-            pstmt.setInt(9, vo.getReviewInterviewerCount());
-            pstmt.setInt(10, vo.getReviewStudentCount());
-            pstmt.setString(11, vo.getReviewAtmosphere());
-            pstmt.setString(12, vo.getReviewContactMethod());
-            pstmt.setInt(13, vo.getReviewContactDays());
+            pstmt.setInt(7, vo.getReviewRating());
+            pstmt.setString(8, vo.getReviewResult());
+            pstmt.setString(9, vo.getReviewContent());
+            pstmt.setInt(10, vo.getReviewInterviewerCount());
+            pstmt.setInt(11, vo.getReviewStudentCount());
+            pstmt.setString(12, vo.getReviewAtmosphere());
+            pstmt.setString(13, vo.getReviewContactMethod());
+            pstmt.setInt(14, vo.getReviewContactDays());
             if (pstmt.executeUpdate() > 0) {
                 System.out.println("insert success");
             } else {

@@ -19,12 +19,17 @@ public class CompanySearchDAO {
     public List<String> companySearch(Map<String, String> conditions) {
         Set<String> allowedText = Set.of("company_name", "company_industry", "company_location");
         Set<String> allowedRange = Set.of("company_rating", "company_size");
-        StringBuilder sql = new StringBuilder("select * from company where 1=1");
+        StringBuilder sql = new StringBuilder("SELECT c.*, "
+                + "NVL(ROUND(AVG(r.r_rating), 1), 0) AS calc_rating, "
+                + "COUNT(r.r_id) AS review_count "
+                + "FROM company c "
+                + "LEFT JOIN review r ON c.company_id = r.r_company_id "
+                + "WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
         for (String col : allowedText) {
             if (conditions.containsKey(col)) {
-                sql.append(" and ").append(col).append(" like ?");
+                sql.append(" and c.").append(col).append(" like ?");
                 params.add("%" + conditions.get(col) + "%");
             }
 
@@ -33,14 +38,18 @@ public class CompanySearchDAO {
             String minVal = conditions.get("min_" + col);
             String maxVal = conditions.get("max_" + col);
             if (minVal != null && !minVal.isBlank()) {
-                sql.append(" and ").append(col).append(">= ?");
+                sql.append(" and c. ").append(col).append(">= ?");
                 params.add(Double.parseDouble(minVal));
             }
             if (maxVal != null && !maxVal.isBlank()) {
-                sql.append(" and ").append(col).append("<= ?");
+                sql.append(" and c.").append(col).append("<= ?");
                 params.add(Double.parseDouble(maxVal));
             }
         }
+        sql.append(" GROUP BY c.company_id, c.company_name, c.company_industry, "
+                + "c.company_location, c.company_rating, c.company_size, "
+                + "c.company_created_date, c.company_application_date");
+
 
         List<String> companies = new ArrayList<>();
         try (Connection con = DBManager_new.connect();
@@ -193,10 +202,11 @@ public class CompanySearchDAO {
     }
 
     public Map<String, Object> getCompanyStats(int companyId) {
-        String sql = "select count(*) as total_count," +
-                " round(avg(r_difficulty),1) as avg_difficulty," +
-                " round(count(case when r_result = 'PASS' then 1 end) * 100.0 / count(*), 1) as pass_rate" +
-                " from review where r_company_id = ?";
+        String sql = "SELECT COUNT(*) AS total_count,"
+                + " ROUND(AVG(r_difficulty), 1) AS avg_difficulty,"
+                + " ROUND(AVG(r_rating), 1) AS avg_rating,"
+                + " ROUND(COUNT(CASE WHEN r_result='PASS' THEN 1 END) * 100.0 / COUNT(*), 1) AS pass_rate"
+                + " FROM review WHERE r_company_id = ?";
         Map<String, Object> stats = new HashMap<>();
         try (Connection con = DBManager_new.connect();
              PreparedStatement pstmt = con.prepareStatement(sql)) {
@@ -205,6 +215,7 @@ public class CompanySearchDAO {
                 if (rs.next()) {
                     stats.put("totalCount", rs.getInt("total_count"));
                     stats.put("avgDifficulty", rs.getDouble("avg_difficulty"));
+                    stats.put("avgRating", rs.getDouble("avg_rating"));
                     stats.put("passRate", rs.getDouble("pass_rate"));
                 }
 
