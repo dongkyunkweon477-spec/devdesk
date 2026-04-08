@@ -128,9 +128,10 @@ public class BoardDAO {
                 String category = rs.getString("b_category");
                 String created_date = rs.getString("b_created_date");
                 String updated_date = rs.getString("b_updated_date");
-                int view_count = rs.getInt("b_view_count");
+                // rs에서 꺼낼 때 DB 테이블 컬럼명과 토씨 하나 안 틀리게 맞추세요!
+                int view_count = rs.getInt("b_view_count"); // b_가 없다면 제거
                 int like_count = rs.getInt("b_like_count");
-                char hidden_yn = rs.getString("b_hidden_yn").charAt(0);
+                char hidden_yn = rs.getString("b_hidden_yn").charAt(0); // b_가 없다면 제거
                 String nickname = rs.getString("nickname");
 
                 boardVO = new BoardVO();

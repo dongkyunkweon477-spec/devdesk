@@ -12,6 +12,13 @@ import java.io.IOException;
 @WebFilter(urlPatterns = {
         "/mypage",
         "/profile-update",
+        "/board",
+        "/board_add",
+        "/BoardDetailC",
+        "/board_update",
+        "/board_del",
+        "/comment_add",
+        "/comment_del",
         "/review/write",
         "/review/edit",
         "/review/delete",

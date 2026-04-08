@@ -100,9 +100,9 @@ public class CompanySearchDAO {
     }
 
     public List<String> getAllLocation() {
-        String sql = "select distinct SUBSTR(company_location, 1, INSTR(company_location, ' ') - 1) AS region " +
-                "from company where company_location is not null " +
-                "order by region";
+        String sql = "SELECT DISTINCT company_location FROM company"
+                + " WHERE company_location IS NOT NULL"
+                + " ORDER BY company_location";
         List<String> list = new ArrayList<>();
         try (
                 Connection con = DBManager_new.connect();
@@ -110,7 +110,7 @@ public class CompanySearchDAO {
                 ResultSet rs = pstmt.executeQuery();
         ) {
             while (rs.next()) {
-                String region = rs.getString("region");
+                String region = rs.getString("company_location");
                 if (region != null && !region.isBlank()) {
                     list.add(region);
                 }
@@ -215,5 +215,25 @@ public class CompanySearchDAO {
 
         return stats;
 
+    }
+
+    public int getTotalCompanyCount() {
+        String sql = "select count(*) from company";
+        try (
+                Connection con = DBManager_new.connect();
+                PreparedStatement pstmt = con.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery();
+        ) {
+
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                System.out.println(count); // 값을 변수에 담아 출력
+                return count;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }
