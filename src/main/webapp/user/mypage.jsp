@@ -47,5 +47,33 @@
     </div>
 </div>
 
+<c:if test="${sessionScope.pwSuccess == 'true'}">
+    <div id="successModalOverlay" class="pw-modal-overlay">
+        <div class="pw-modal-box">
+            <div class="pw-modal-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <h3 class="pw-modal-title">변경 완료!</h3>
+            <p class="pw-modal-desc">비밀번호가 성공적으로 변경되었습니다.</p>
+            <button type="button" class="pw-modal-btn" onclick="closeSuccessModal()">확인</button>
+        </div>
+    </div>
+
+    <script>
+        function closeSuccessModal() {
+            // 확인 버튼을 누르면 모달을 화면에서 숨깁니다.
+            document.getElementById('successModalOverlay').style.display = 'none';
+        }
+    </script>
+
+    <%-- 🌟 새로고침 시 다시 뜨지 않도록 세션에서 도장 지우기 (핵심!) --%>
+    <c:remove var="pwSuccess" scope="session"/>
+</c:if>
+
+
 </body>
 </html>
