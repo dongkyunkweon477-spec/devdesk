@@ -11,6 +11,7 @@ import java.io.IOException;
 public class ApplicationListC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
         ApplicationDAO.selectAllApplications(request);
         ApplicationDAO.selectAllCompanies(request);
         request.setAttribute("content", "/application/application_list.jsp");

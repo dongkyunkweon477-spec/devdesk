@@ -19,7 +19,15 @@ CREATE TABLE application (
                              CONSTRAINT chk_stage
                                  CHECK (stage IN ('APPLIED', 'DOCUMENT', 'FIRST_INTERVIEW', 'SECOND_INTERVIEW','THIRD_INTERVIEW','PASS', 'FAIL')));
 
+-------------   체크 조건 수정  -------------------
 
+ALTER TABLE APPLICATION
+                             DROP CONSTRAINT chk_stage;
+
+-- 2. 새 값을 포함한 체크 제약조건 추가
+ALTER TABLE APPLICATION
+    ADD CONSTRAINT chk_stage
+        CHECK (stage IN ('APPLIED', 'DOCUMENT', 'FIRST_INTERVIEW', 'SECOND_INTERVIEW', 'THIRD_INTERVIEW', 'PASS', 'FAIL', '추가할값'));
 
 
 
@@ -42,6 +50,8 @@ CREATE TABLE til (
                          FOREIGN KEY (member_id)
                              REFERENCES member(member_id)
 );
+ALTER TABLE til ADD tag VARCHAR2(50) DEFAULT '기타';
+ALTER TABLE til ADD study_time NUMBER(4,1) DEFAULT  0;
 CREATE TABLE resume (
                         resume_id NUMBER PRIMARY KEY,
                         member_id NUMBER NOT NULL,

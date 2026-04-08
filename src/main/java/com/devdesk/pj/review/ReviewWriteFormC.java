@@ -2,6 +2,7 @@ package com.devdesk.pj.review;
 
 import com.devdesk.pj.companysearch.CompanySearchDAO;
 import com.devdesk.pj.companysearch.CompanySearchVO;
+import com.devdesk.pj.user.MemberDTO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,7 +39,8 @@ public class ReviewWriteFormC extends HttpServlet {
 
         ReviewVO vo = new ReviewVO();
         vo.setReviewCompanyId(Integer.parseInt(companyId));
-        vo.setReviewMemberId((int) request.getSession().getAttribute("memberId"));
+        MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
+        vo.setReviewMemberId(loginUser.getMember_id());
         vo.setReviewTitle(request.getParameter("title"));
         vo.setReviewJobPosition(request.getParameter("jobPosition"));
         vo.setReviewInterviewType(request.getParameter("interviewType"));

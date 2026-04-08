@@ -1,12 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>DevDesk</title>
     <%--    <link rel="stylesheet" href="css/index.css">--%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
-
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 
@@ -19,16 +20,16 @@
     <div class="header">
         <!-- 로고 -->
         <div class="title">
-            <img onclick="" src="images/Devlogo.png" alt="">
-            <a href="main">DevDesk</a>
+            <img onclick="" src="${pageContext.request.contextPath}/images/Devlogo.png" alt="">
+            <a href="${pageContext.request.contextPath}/main">DevDesk</a>
         </div>
         <!-- 메뉴 -->
         <div class="menu-left">
-            <a href="ws">워크 스페이스</a>
-            <a href="report">이력서 관리</a>
-            <a href="calender">면접 일정</a>
-            <a href="review">면접 후기</a>
-            <a href="board">커뮤니티</a>
+            <a href="${pageContext.request.contextPath}/ws">워크 스페이스</a>
+            <a href="${pageContext.request.contextPath}/report">이력서 관리</a>
+            <a href="${pageContext.request.contextPath}/calender">면접 일정</a>
+            <a href="${pageContext.request.contextPath}/review">면접 후기</a>
+            <a href="${pageContext.request.contextPath}/board">커뮤니티</a>
         </div>
         <!-- 로그인 -->
         <div class="menu-right">
@@ -36,17 +37,17 @@
             <c:choose>
                 <%-- 1. 로그인 전 --%>
                 <c:when test="${empty sessionScope.user}">
-                    <a href="login" class="btn-text">로그인</a>
+                    <a href="${pageContext.request.contextPath}/login" class="btn-text">로그인</a>
                     <span class="divider">|</span>
-                    <a href="account" class="btn-primary">회원가입</a>
+                    <a href="${pageContext.request.contextPath}/account" class="btn-primary">회원가입</a>
                 </c:when>
 
                 <%-- 2. 로그인 후 --%>
                 <c:otherwise>
                     <span class="welcome-msg">${sessionScope.user.nickname}님 환영합니다!</span>
 
-                    <a href="mypage" class="btn-text">마이페이지</a>
-                    <a href="logout" class="btn-secondary">로그아웃</a>
+                    <a href="${pageContext.request.contextPath}/mypage" class="btn-text">마이페이지</a>
+                    <a href="${pageContext.request.contextPath}/logout" class="btn-secondary">로그아웃</a>
                 </c:otherwise>
             </c:choose>
 

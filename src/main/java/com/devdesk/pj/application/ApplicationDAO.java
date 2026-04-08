@@ -33,9 +33,6 @@ public class ApplicationDAO {
             String stage = request.getParameter("stage");
             String applyDate = request.getParameter("apply_date");
             String memo = request.getParameter("memo");
-            String interviewDate = request.getParameter("interview_date");
-            String interviewTime = request.getParameter("interview_time");
-            String interviewType = request.getParameter("interview_type");
 
             // 디버깅 출력
             System.out.println(memberId);
@@ -273,6 +270,8 @@ public class ApplicationDAO {
         switch (status) {
             case "APPLIED":
                 return "지원완료";
+            case "DOCUMENT":
+                return "서류 합격";
             case "FIRST_INTERVIEW":
                 return "1차 면접";
             case "SECOND_INTERVIEW":
@@ -312,7 +311,7 @@ public class ApplicationDAO {
                     case "APPLIED":
                         vo.setApplied(cnt);
                         break;
-                    case "DOCUMENT_PASS":
+                    case "DOCUMENT":
                         vo.setDocumentPass(cnt);
                         break;
                     case "FIRST_INTERVIEW":
@@ -324,12 +323,13 @@ public class ApplicationDAO {
                     case "THIRD_INTERVIEW":
                         vo.setThirdInterview(cnt);
                         break;
-                    case "CODING_TEST":
-                        vo.setCodingTest(cnt);
-                        break;
-                    case "PASSED":
+                    case "PASS":
                         vo.setPassed(cnt);
                         break;
+                    case "FAIL":
+                        vo.setPassed(cnt);
+                        break;
+
                 }
             }
         } catch (Exception e) {
