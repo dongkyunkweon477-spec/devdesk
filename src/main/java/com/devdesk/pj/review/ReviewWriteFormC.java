@@ -56,7 +56,8 @@ public class ReviewWriteFormC extends HttpServlet {
         vo.setReviewContactMethod(request.getParameter("contactMethod"));
         String cd = request.getParameter("contactDays");
         if (cd != null && !cd.isBlank()) vo.setReviewContactDays(Integer.parseInt(cd));
-
+        String rating = request.getParameter("rating");
+        if (rating != null && !rating.isBlank()) vo.setReviewRating(Integer.parseInt(rating));
         ReviewDAO.REVIEW_DAO.insertReview(vo);
         response.sendRedirect(request.getContextPath() + "/review");
 
