@@ -20,7 +20,12 @@
                 <option>전체</option>
                 <option>자유토크</option>
                 <option>이력서</option>
-                <option>자기만의 TIP</option>
+                <option>TIP</option>
+            </select>
+            <select onchange="location.href='board?sort=' + this.value">
+                <option value="" ${param.sort == null or param.sort == '' ? 'selected' : ''}>최신순</option>
+                <option value="popular" ${param.sort == 'popular' ? 'selected' : ''}>인기순</option>
+                <option value="viewcount" ${param.sort == 'viewcount' ? 'selected' : ''}>조회순</option>
             </select>
 
             <button class="write-btn"><a href="board_add">글쓰기</a></button>
@@ -36,8 +41,12 @@
                     <%--            <div class="board-row" onclick="location.href='BoardDetailC?id=${b.b_board_id}'">--%>
                 <div class="col-category">${b.category}</div>
                 <div class="col-title">
-                    ${b.title}
+                        ${b.title}
                     <span class="comment-count">[${b.comment_count}]</span>
+                    <span class="like-count">❤️ ${b.like_count}</span>
+                    <c:if test="${b.like_count > 2}"> <%-- 2개 이상이여야 인기글 배지 --%>
+                        <span class="popular-badge">🔥 인기글</span>
+                    </c:if>
                 </div>
                 <div class="col-date">
                     <div class="col-date">
