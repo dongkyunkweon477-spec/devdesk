@@ -39,7 +39,6 @@ public class CompanySearchVO {
         company.setCompanySize(rs.getInt("company_size"));
         company.setCompanyCreatedDate(rs.getDate("company_created_date"));
         company.setCompanyApplicationDate(rs.getDate("company_application_date"));
-        company.setCalcRating(rs.getDouble("calc_rating"));
         try {
             company.setCalcRating(rs.getDouble("calc_rating"));
             company.setReviewCount(rs.getInt("review_count"));

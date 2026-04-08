@@ -2,7 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review-detail.css">
-
+<script>var contextPath = '${pageContext.request.contextPath}';</script>
+<script src="${pageContext.request.contextPath}/js/review.js"></script>
 <div class="detail-wrap">
 
     <div class="detail-header">
@@ -138,16 +139,22 @@
 
     <%-- 하단 버튼 --%>
     <div class="detail-actions">
-        <c:if test="${sessionScope.memberId == r.reviewMemberId}">
+        <c:if test="${sessionScope.user.member_id == r.reviewMemberId}">
             <button class="btn-delete" onclick="confirmDelete(${r.reviewId})">삭제</button>
         </c:if>
         <div style="flex:1"></div>
+        <button class="like-btn ${isLiked ? 'liked' : ''}"
+                id="likeBtn" data-id="${r.reviewId}">
+            ♥ 추천 <span id="likeCount">${r.reviewLikeCount}</span>
+        </button>
         <button class="btn-cancel" onclick="history.back()">목록으로</button>
-        <c:if test="${sessionScope.memberId == r.reviewMemberId}">
+        <c:if test="${sessionScope.user.member_id == r.reviewMemberId}">
             <a href="${pageContext.request.contextPath}/review/edit?reviewId=${r.reviewId}"
                class="btn-submit" style="text-decoration:none; display:flex; align-items:center;">수정</a>
         </c:if>
+
     </div>
+
 </div>
 
 

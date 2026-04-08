@@ -146,3 +146,25 @@
     font-size: 12px;
     font-weight: 600;
 }
+
+.like-btn {
+    padding: 6px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #64748b;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.like-btn:hover {
+    border-color: #f87171;
+    color: #ef4444;
+}
+
+.like-btn.liked {
+    background: #fef2f2;
+    border-color: #ef4444;
+    color: #ef4444;
+}

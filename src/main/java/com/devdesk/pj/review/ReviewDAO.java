@@ -213,5 +213,83 @@ public class ReviewDAO {
         return review;
     }
 
+    public void increaseViewCount(int reviewId) {
+        String sql = "update review set r_view_count = r_view_count + 1 where r_id = ?";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, reviewId);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean toggleLike(int memberId, int reviewId) {
+        String checkSql = "SELECT COUNT(*) FROM review_like WHERE member_id = ? AND review_id = ?";
+        String insertSql = "INSERT INTO review_like (member_id, review_id) VALUES (?, ?)";
+        String deleteSql = "DELETE FROM review_like WHERE member_id = ? AND review_id = ?";
+        String plusSql = "UPDATE review SET r_like_count = r_like_count + 1 WHERE r_id = ?";
+        String minusSql = "UPDATE review SET r_like_count = r_like_count - 1 WHERE r_id = ?";
+        try (Connection con = DBManager_new.connect()) {
+            try (PreparedStatement pstmt = con.prepareStatement(checkSql)) {
+                pstmt.setInt(1, memberId);
+                pstmt.setInt(2, reviewId);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    rs.next();
+                    boolean exists = rs.getInt(1) > 0;
+
+                    if (exists) {
+                        try (PreparedStatement del = con.prepareStatement(deleteSql)) {
+                            del.setInt(1, memberId);
+                            del.setInt(2, reviewId);
+                            del.executeUpdate();
+                        }
+                        try (PreparedStatement minus = con.prepareStatement(minusSql)) {
+                            minus.setInt(1, reviewId);
+                            minus.executeUpdate();
+                        }
+                        return false;
+                    } else {
+                        try (PreparedStatement ins = con.prepareStatement(insertSql)) {
+
+                            ins.setInt(1, memberId);
+                            ins.setInt(2, reviewId);
+                            ins.executeUpdate();
+                        }
+                        try (PreparedStatement plus = con.prepareStatement(plusSql)) {
+                            plus.setInt(1, reviewId);
+                            plus.executeUpdate();
+
+                        }
+                        return true;
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean isLiked(int memberId, int reviewId) {
+        String sql = "SELECT COUNT(*) FROM review_like WHERE member_id = ? AND review_id = ?";
+        try (
+                Connection con = DBManager_new.connect();
+                PreparedStatement pstmt = con.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, memberId);
+            pstmt.setInt(2, reviewId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
 }
