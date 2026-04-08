@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet(name = "loginC", value = "/login")
@@ -22,8 +23,19 @@ public class loginC extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         MemberDAO.MBAO.login(request);
 
-        if (request.getSession().getAttribute("user") != null) {
-            response.sendRedirect(request.getContextPath() + "/");
+        HttpSession session = request.getSession();
+
+        if (session.getAttribute("user") != null) {
+
+            String dest = (String) session.getAttribute("dest");
+
+            if (dest != null) {
+                session.removeAttribute("dest");
+                response.sendRedirect(dest);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/");
+            }
+
         } else {
             request.setAttribute("content", "user/login.jsp");
             request.getRequestDispatcher("/index.jsp").forward(request, response);

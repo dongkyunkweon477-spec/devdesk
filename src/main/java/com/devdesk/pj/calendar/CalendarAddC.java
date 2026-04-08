@@ -13,12 +13,20 @@ import java.util.ArrayList;
 @WebServlet(name = "CalendarAddC", value = "/add-calendar")
 public class CalendarAddC extends HttpServlet {
 
-        public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
 
-
+        try {
             Schedule_newDAO.SCAO.addSchedule(request);
-            response.sendRedirect("application_list");
 
+            response.setContentType("text/plain; charset=UTF-8");
+            response.getWriter().write("success");
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("fail");
         }
+    }
 }

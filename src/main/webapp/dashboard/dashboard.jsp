@@ -261,6 +261,7 @@
             gap: 8px;
         }
 
+
         .card-title::before {
             content: '';
             width: 3px;
@@ -487,7 +488,12 @@
             /* 실제 너비는 JSP에서 style="width:
 
 
-        ${pct}   %" 로 주입 */
+
+
+
+
+
+        ${pct}        %" 로 주입 */
         }
 
         /* ════════════════════════
@@ -923,42 +929,33 @@
                         전체 보기 →
                     </a>
                 </div>
+                <div class="card dash-card" style="animation-delay:.1s">
+                    <div class="card-title">
+                        예정 일정
+                        <a href="schedule-list" style="margin-left:auto; font-size:11px; color:var(--accent);
+        letter-spacing:0; text-transform:none; font-weight:400">
+                            전체 보기 →
+                        </a>
+                    </div>
 
-                <c:choose>
-                    <c:when test="${empty upcomingSchedules}">
-                        <div class="empty-state">
-                            <div class="icon">📅</div>
-                            <p>예정된 일정이 없어요</p>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <c:forEach var="s" items="${upcomingSchedules}">
-                            <div class="sch-row ${s.isToday ? 'sch-today' : ''}">
-
-                                    <%-- 날짜 박스 --%>
-                                <div class="sch-date">
-                                    <div class="sch-mon">${s.month}</div>
-                                    <div class="sch-day">${s.day}</div>
-                                </div>
-
-                                <div class="sch-vline"></div>
-
-                                    <%-- 회사명 + 시간 --%>
-                                <div class="sch-info">
-                                    <div class="sch-company">${s.company}</div>
-                                    <div class="sch-time">⏰ ${empty s.time ? '시간 미정' : s.time}</div>
-                                </div>
-
-                                    <%-- 유형 배지: 색상은 Java에서 badgeBg, badgeColor 로 계산해서 전달 --%>
-                                <span class="badge"
-                                      style="background:${s.badgeBg}; color:${s.badgeColor}">
-                                        ${s.type}
-                                </span>
-
+                    <c:forEach var="s" items="${upcomingSchedules}">
+                        <div class="sch-row">
+                            <div class="sch-date">
+                                <div class="sch-mon">${s.month}</div>
+                                <div class="sch-day">${s.day}</div>
                             </div>
-                        </c:forEach>
-                    </c:otherwise>
-                </c:choose>
+                            <div class="sch-vline"></div>
+                            <div class="sch-info">
+                                <div class="sch-company">${s.company}</div>
+                                <div class="sch-time">⏰ ${empty s.time ? '시간 미정' : s.time}</div>
+                            </div>
+                            <span class="badge" style="background:${s.badgeBg}; color:${s.badgeColor}">
+                                    ${s.type}
+                            </span>
+                        </div>
+                    </c:forEach>
+
+                </div>
             </div>
 
             <!-- ③ 최근 TIL ──────────────────────────────── -->
