@@ -50,7 +50,8 @@ public class BoardDAO {
         BoardVO bo = null;
         ArrayList<BoardVO> boards = new ArrayList<>();
         String sql = "SELECT b.*, " +
-                "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count " +
+                "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count, " +
+                "COALESCE(b.b_like_count, 0) as like_count " +
                 "FROM board b ORDER BY b.b_board_id DESC";
 
         try {
@@ -67,6 +68,7 @@ public class BoardDAO {
                 bo.setCreated_date(rs.getString("b_created_date"));
                 bo.setView_count(rs.getInt("b_view_count"));
                 bo.setComment_count(rs.getInt("comment_count"));
+                bo.setLike_count(rs.getInt("like_count"));
                 boards.add(bo);
             }
             request.setAttribute("boards", boards);
@@ -78,6 +80,101 @@ public class BoardDAO {
             DBManager_new.close(con, ps, rs);
         }
         return null;
+    }
+
+    public static ArrayList<BoardVO> showPopularBoard(HttpServletRequest request) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        BoardVO bo = null;
+        ArrayList<BoardVO> boards = new ArrayList<>();
+        String sql = "SELECT b.*, " +
+                "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count, " +
+                "COALESCE(b.b_like_count, 0) as like_count " +
+                "FROM board b ORDER BY b.b_like_count DESC, b.b_board_id DESC";
+
+        try {
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                bo = new BoardVO();
+                bo.setBoard_id(rs.getInt("b_board_id"));
+                bo.setCategory(rs.getString("b_category"));
+                bo.setTitle(rs.getString("b_title"));
+                bo.setMember_id(rs.getInt("member_id"));
+                bo.setCreated_date(rs.getString("b_created_date"));
+                bo.setView_count(rs.getInt("b_view_count"));
+                bo.setComment_count(rs.getInt("comment_count"));
+                bo.setLike_count(rs.getInt("like_count"));
+                boards.add(bo);
+            }
+            request.setAttribute("boards", boards);
+            return boards;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, rs);
+        }
+        return null;
+    }
+
+    public static ArrayList<BoardVO> showViewCountBoard(HttpServletRequest request) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        BoardVO bo = null;
+        ArrayList<BoardVO> boards = new ArrayList<>();
+        String sql = "SELECT b.*, " +
+                "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count, " +
+                "COALESCE(b.b_like_count, 0) as like_count " +
+                "FROM board b ORDER BY b.b_view_count DESC, b.b_board_id DESC";
+
+        try {
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                bo = new BoardVO();
+                bo.setBoard_id(rs.getInt("b_board_id"));
+                bo.setCategory(rs.getString("b_category"));
+                bo.setTitle(rs.getString("b_title"));
+                bo.setMember_id(rs.getInt("member_id"));
+                bo.setCreated_date(rs.getString("b_created_date"));
+                bo.setView_count(rs.getInt("b_view_count"));
+                bo.setComment_count(rs.getInt("comment_count"));
+                bo.setLike_count(rs.getInt("like_count"));
+                boards.add(bo);
+            }
+            request.setAttribute("boards", boards);
+            return boards;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, rs);
+        }
+        return null;
+    }
+
+    public static void increaseViewCount(int boardId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        String sql = "UPDATE board SET b_view_count = b_view_count + 1 WHERE b_board_id = ?";
+
+        try {
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, boardId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, null);
+        }
     }
 
     public static int delBoard(HttpServletRequest request) {
@@ -128,9 +225,10 @@ public class BoardDAO {
                 String category = rs.getString("b_category");
                 String created_date = rs.getString("b_created_date");
                 String updated_date = rs.getString("b_updated_date");
-                int view_count = rs.getInt("b_view_count");
+                // rs에서 꺼낼 때 DB 테이블 컬럼명과 토씨 하나 안 틀리게 맞추세요!
+                int view_count = rs.getInt("b_view_count"); // b_가 없다면 제거
                 int like_count = rs.getInt("b_like_count");
-                char hidden_yn = rs.getString("b_hidden_yn").charAt(0);
+                char hidden_yn = rs.getString("b_hidden_yn").charAt(0); // b_가 없다면 제거
                 String nickname = rs.getString("nickname");
 
                 boardVO = new BoardVO();
@@ -158,6 +256,130 @@ public class BoardDAO {
         }
 
 
+    }
+
+    // [검색 기능] 게시글 검색 메서드
+    public static ArrayList<BoardVO> searchBoards(HttpServletRequest request) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        BoardVO bo = null;
+        ArrayList<BoardVO> boards = new ArrayList<>();
+
+        String searchType = request.getParameter("searchType");
+        String keyword = request.getParameter("keyword");
+
+        // 검색어가 없으면 전체 목록 반환
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return showAllBoard(request); // 검색어 없으면 전체 목록 반환
+        }
+
+        String sql = "SELECT b.*, " +
+                "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count, " +
+                "COALESCE(b.b_like_count, 0) as like_count, " + // 좋아요 수 null 방지, 서브쿼리로 댓글 수 계산
+                "m.nickname " +
+                "FROM board b " +
+                "JOIN member m ON b.member_id = m.member_id "; // 작성자 닉네임 가져오기
+
+        // 검색 타입에 따른 WHERE 절 추가
+        switch (searchType) {
+            case "title":
+                sql += "WHERE b.b_title LIKE ? ";
+                break;
+            case "content":
+                sql += "WHERE b.b_content LIKE ? ";
+                break;
+            case "author":
+                sql += "WHERE m.nickname LIKE ? ";
+                break;
+            default:
+                return showAllBoard(request);
+        }
+
+        sql += "ORDER BY b.b_board_id DESC";
+
+        try {
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, "%" + keyword + "%"); // like 검색을 위한 와일드 카드 추가
+            rs = ps.executeQuery();         // %keyboard% 는 부분 일치 검색
+
+            while (rs.next()) {
+                bo = new BoardVO();
+                bo.setBoard_id(rs.getInt("b_board_id"));
+                bo.setCategory(rs.getString("b_category"));
+                bo.setTitle(rs.getString("b_title"));
+                bo.setMember_id(rs.getInt("member_id"));
+                bo.setCreated_date(rs.getString("b_created_date"));
+                bo.setView_count(rs.getInt("b_view_count"));
+                bo.setComment_count(rs.getInt("comment_count"));
+                bo.setLike_count(rs.getInt("like_count"));
+                bo.setNickname(rs.getString("nickname"));
+                boards.add(bo);
+            }
+            request.setAttribute("boards", boards);
+            return boards;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, rs);
+        }
+        return null;
+    }
+
+    // [카테고리별 검색 기능] 카테고리별 게시글 검색 메서드
+    public static ArrayList<BoardVO> searchBoardsByCategory(HttpServletRequest request) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        BoardVO bo = null;
+        ArrayList<BoardVO> boards = new ArrayList<>();
+        
+        String category = request.getParameter("category");
+        
+        // 카테고리가 없거나 "전체"이면 전체 목록 반환
+        if (category == null || category.trim().isEmpty() || category.equals("전체")) {
+            return showAllBoard(request);
+        }
+        
+        String sql = "SELECT b.*, " +
+                "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count, " +
+                "COALESCE(b.b_like_count, 0) as like_count, " +
+                "m.nickname " +
+                "FROM board b " +
+                "JOIN member m ON b.member_id = m.member_id " +
+                "WHERE b.b_category = ? " +
+                "ORDER BY b.b_board_id DESC";
+
+        try {
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, category);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                bo = new BoardVO();
+                bo.setBoard_id(rs.getInt("b_board_id"));
+                bo.setCategory(rs.getString("b_category"));
+                bo.setTitle(rs.getString("b_title"));
+                bo.setMember_id(rs.getInt("member_id"));
+                bo.setCreated_date(rs.getString("b_created_date"));
+                bo.setView_count(rs.getInt("b_view_count"));
+                bo.setComment_count(rs.getInt("comment_count"));
+                bo.setLike_count(rs.getInt("like_count"));
+                bo.setNickname(rs.getString("nickname"));
+                boards.add(bo);
+            }
+            request.setAttribute("boards", boards);
+            return boards;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, rs);
+        }
+        return null;
     }
 
     public static int updateBoard(HttpServletRequest request) {

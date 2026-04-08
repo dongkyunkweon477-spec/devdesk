@@ -24,6 +24,10 @@
     margin-bottom: 20px;
 }
 
+.comment-input-wrapper {
+    text-align: left;
+}
+
 .comment-form textarea {
     width: 100%;
     height: 60px;
@@ -32,6 +36,7 @@
     border-radius: 6px;
     resize: none;
     font-size: 0.95rem;
+    text-align: left !important;
     transition: border-color 0.2s;
 }
 
@@ -97,7 +102,9 @@
     font-size: 1rem;
     line-height: 1.6;
     color: #555;
-    white-space: pre-wrap; /* 줄바꿈 허용 */
+    white-space: normal; /* 줄바꿈 허용 */
+    text-align: left !important;
+    text-indent: 0;
     margin-bottom: 12px;
 }
 
@@ -177,6 +184,7 @@
     resize: none;
     font-size: 0.9rem;
     font-family: inherit;
+    text-align: left;
     transition: border-color 0.2s;
 }
 
@@ -269,6 +277,7 @@
     line-height: 1.6;
     color: #555;
     white-space: pre-wrap;
+    text-align: left !important;
     margin-bottom: 1px;
 }
 
@@ -289,4 +298,71 @@
 
 .reply-actions button:hover {
     color: #e74c3c;
+}
+
+/* 댓글 수정 폼 스타일 */
+.edit-form {
+    margin: 10px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    border-left: 4px solid #7c3aed;
+}
+
+.edit-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edit-input-wrapper textarea {
+    width: 100%;
+    height: 80px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    resize: none;
+    font-size: 0.9rem;
+    font-family: inherit;
+    text-align: left;
+    transition: border-color 0.2s;
+}
+
+.edit-input-wrapper textarea:focus {
+    outline: none;
+    border-color: #7c3aed;
+}
+
+.edit-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.edit-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.edit-buttons button[type="submit"] {
+    background-color: #7c3aed;
+    color: white;
+}
+
+.edit-buttons button[type="submit"]:hover {
+    background-color: #6d28d9;
+}
+
+.edit-buttons button[type="button"] {
+    background-color: #6c757d;
+    color: white;
+}
+
+.edit-buttons button[type="button"]:hover {
+    background-color: #545b62;
 }

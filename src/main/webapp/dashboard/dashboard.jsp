@@ -261,6 +261,7 @@
             gap: 8px;
         }
 
+
         .card-title::before {
             content: '';
             width: 3px;
@@ -485,7 +486,14 @@
             height: 100%;
             border-radius: 4px;
             /* 실제 너비는 JSP에서 style="width:
-        ${pct} %" 로 주입 */
+
+
+
+
+
+
+
+        ${pct}        %" 로 주입 */
         }
 
         /* ════════════════════════
@@ -921,42 +929,33 @@
                         전체 보기 →
                     </a>
                 </div>
+                <div class="card dash-card" style="animation-delay:.1s">
+                    <div class="card-title">
+                        예정 일정
+                        <a href="schedule-list" style="margin-left:auto; font-size:11px; color:var(--accent);
+        letter-spacing:0; text-transform:none; font-weight:400">
+                            전체 보기 →
+                        </a>
+                    </div>
 
-                <c:choose>
-                    <c:when test="${empty upcomingSchedules}">
-                        <div class="empty-state">
-                            <div class="icon">📅</div>
-                            <p>예정된 일정이 없어요</p>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <c:forEach var="s" items="${upcomingSchedules}">
-                            <div class="sch-row ${s.isToday ? 'sch-today' : ''}">
-
-                                    <%-- 날짜 박스 --%>
-                                <div class="sch-date">
-                                    <div class="sch-mon">${s.month}</div>
-                                    <div class="sch-day">${s.day}</div>
-                                </div>
-
-                                <div class="sch-vline"></div>
-
-                                    <%-- 회사명 + 시간 --%>
-                                <div class="sch-info">
-                                    <div class="sch-company">${s.company}</div>
-                                    <div class="sch-time">⏰ ${empty s.time ? '시간 미정' : s.time}</div>
-                                </div>
-
-                                    <%-- 유형 배지: 색상은 Java에서 badgeBg, badgeColor 로 계산해서 전달 --%>
-                                <span class="badge"
-                                      style="background:${s.badgeBg}; color:${s.badgeColor}">
-                                        ${s.type}
-                                </span>
-
+                    <c:forEach var="s" items="${upcomingSchedules}">
+                        <div class="sch-row">
+                            <div class="sch-date">
+                                <div class="sch-mon">${s.month}</div>
+                                <div class="sch-day">${s.day}</div>
                             </div>
-                        </c:forEach>
-                    </c:otherwise>
-                </c:choose>
+                            <div class="sch-vline"></div>
+                            <div class="sch-info">
+                                <div class="sch-company">${s.company}</div>
+                                <div class="sch-time">⏰ ${empty s.time ? '시간 미정' : s.time}</div>
+                            </div>
+                            <span class="badge" style="background:${s.badgeBg}; color:${s.badgeColor}">
+                                    ${s.type}
+                            </span>
+                        </div>
+                    </c:forEach>
+
+                </div>
             </div>
 
             <!-- ③ 최근 TIL ──────────────────────────────── -->
@@ -1016,9 +1015,11 @@
 
                 <div class="chart-wrap">
 
-                    <%-- 도넛 차트 자리 (나중에 canvas 로 교체) --%>
-                    <div class="donut-placeholder">
-                        <div class="donut-center-text">
+                    <%-- 기존 donut-placeholder 제거하고 아래로 교체 --%>
+                    <div class="donut-wrap" style="position:relative; width:140px; height:140px; flex-shrink:0;">
+                        <canvas id="donutCanvas" width="140" height="140"></canvas>
+                        <div class="donut-center-text"
+                             style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;">
                             <div class="donut-num">${tilTagStats.size()}</div>
                             <div class="donut-label">총 항목</div>
                         </div>
@@ -1050,6 +1051,39 @@
     </main>
 
 </div>
+<script>
+    (function () {
+        var stats = [
+            <c:forEach var="stat" items="${tilTagStats}" varStatus="loop">
+            {tag: "${stat.tag}", color: "${stat.color}", pct: ${stat.pct}}<c:if test="${!loop.last}">, </c:if>
+            </c:forEach>
+        ];
+
+        if (!stats.length) return;
+
+        var canvas = document.getElementById("donutCanvas");
+        var ctx = canvas.getContext("2d");
+        var cx = 70, cy = 70, outerR = 62, innerR = 38, gap = 0.03;
+        var total = stats.reduce(function (a, s) {
+            return a + s.pct;
+        }, 0);
+        var startAngle = -Math.PI / 2;
+
+        stats.forEach(function (s) {
+            var slice = (s.pct / total) * (Math.PI * 2);
+            var endAngle = startAngle + slice - gap;
+            ctx.beginPath();
+            ctx.moveTo(cx + outerR * Math.cos(startAngle + gap / 2),
+                cy + outerR * Math.sin(startAngle + gap / 2));
+            ctx.arc(cx, cy, outerR, startAngle + gap / 2, endAngle);
+            ctx.arc(cx, cy, innerR, endAngle, startAngle + gap / 2, true);
+            ctx.closePath();
+            ctx.fillStyle = s.color;
+            ctx.fill();
+            startAngle += slice;
+        });
+    })();
+</script>
 <%-- /.page-wrap --%>
 </body>
 </html>

@@ -329,7 +329,7 @@
         /* ── 단계 요약 바 ── */
         .stage-bar {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(7, 1fr);
             gap: 10px;
             margin-bottom: 28px;
         }
@@ -695,6 +695,13 @@
             <div class="stage-chip-cnt" id="cnt-APPLIED">0</div>
             <div class="stage-chip-name">지원완료</div>
         </div>
+        <%-- ← 여기서 닫기 --%>
+
+        <div class="stage-chip" style="--chip-c:#ffd166">  <%-- ← 형제 요소로 --%>
+            <span class="stage-chip-icon">📋</span>
+            <div class="stage-chip-cnt" id="cnt-DOCUMENT">0</div>
+            <div class="stage-chip-name">서류통과</div>
+        </div>
         <div class="stage-chip" style="--chip-c:#4ecdc4">
             <span class="stage-chip-icon">🗣</span>
             <div class="stage-chip-cnt" id="cnt-FIRST_INTERVIEW">0</div>
@@ -755,6 +762,7 @@
                             <span class="status-text" id="status_text_${app.appId}"></span>
                             <select class="status-select" id="status_select_${app.appId}">
                                 <option value="APPLIED">지원완료</option>
+                                <option value="DOCUMENT">서류 통과</option>
                                 <option value="FIRST_INTERVIEW">1차 면접</option>
                                 <option value="SECOND_INTERVIEW">2차 면접</option>
                                 <option value="THIRD_INTERVIEW">3차 면접</option>
@@ -824,7 +832,9 @@
                     <select class="form-select" name="stage" id="modalStage">
                         <option value="APPLIED">지원완료</option>
                         <option value="DOCUMENT">서류통과</option>
-                        <option value="INTERVIEW">면접</option>
+                        <option value="FIRST_INTERVIEW">1차 면접</option>
+                        <option value="SECOND_INTERVIEW">2차 면접</option>
+                        <option value="THIRD_INTERVIEW">3차 면접</option>
                         <option value="PASS">합격</option>
                         <option value="FAIL">불합격</option>
                     </select>
@@ -945,6 +955,13 @@
 
     const STAGE_MAP = {
         APPLIED: {label: '지원완료', icon: '📄', color: '#9da3b8', bg: 'rgba(157,163,184,0.12)', lineColor: '#9da3b8'},
+        DOCUMENT: {
+            label: '서류통과',
+            icon: '📋',
+            color: '#ffd166',
+            bg: 'rgba(255,209,102,0.12)',
+            lineColor: '#ffd166'
+        },
         FIRST_INTERVIEW: {
             label: '1차 면접',
             icon: '🗣',

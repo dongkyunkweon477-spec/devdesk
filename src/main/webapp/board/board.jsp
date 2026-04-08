@@ -16,11 +16,33 @@
         <h2>자유게시판</h2>
 
         <div class="board-actions">
-            <select>
-                <option>전체</option>
-                <option>자유토크</option>
-                <option>이력서</option>
-                <option>자기만의 TIP</option>
+            <!-- 검색 폼 -->
+            <form action="board" method="get" class="search-form">
+                <select name="searchType" class="search-type">
+                    <option value="title" ${param.searchType == 'title' ? 'selected' : ''}>제목</option>
+                    <option value="content" ${param.searchType == 'content' ? 'selected' : ''}>내용</option>
+                    <option value="author" ${param.searchType == 'author' ? 'selected' : ''}>작성자</option>
+                </select>
+                <input type="text" name="keyword" class="search-input" placeholder="검색어를 입력하세요"
+                       value="${param.keyword}">
+                <button type="submit" class="search-btn">검색</button>
+                <c:if test="${not empty param.keyword}">
+                    <button type="button" class="reset-btn" onclick="location.href='board'">목록으로</button>
+                </c:if>
+            </form>
+            <%--  onchange 선택 시 즉시 필터링 적용 --%>
+            <select name="category"
+                    onchange="location.href='board?category=' + this.value + '&sort=${param.sort != null ? param.sort : ""}&searchType=${param.searchType != null ? param.searchType : ""}&keyword=${param.keyword != null ? param.keyword : ""}'">
+                <option value="전체" ${param.category == '전체' or param.category == null ? 'selected' : ''}>전체</option>
+                <option value="자유토크" ${param.category == '자유토크' ? 'selected' : ''}>자유토크</option>
+                <option value="이력서" ${param.category == '이력서' ? 'selected' : ''}>이력서</option>
+                <option value="TIP" ${param.category == 'TIP' ? 'selected' : ''}>TIP</option>
+            </select>
+
+            <select onchange="location.href='board?sort=' + this.value">
+                <option value="" ${param.sort == null or param.sort == '' ? 'selected' : ''}>최신순</option>
+                <option value="popular" ${param.sort == 'popular' ? 'selected' : ''}>인기순</option>
+                <option value="viewcount" ${param.sort == 'viewcount' ? 'selected' : ''}>조회순</option>
             </select>
 
             <button class="write-btn"><a href="board_add">글쓰기</a></button>
@@ -36,8 +58,12 @@
                     <%--            <div class="board-row" onclick="location.href='BoardDetailC?id=${b.b_board_id}'">--%>
                 <div class="col-category">${b.category}</div>
                 <div class="col-title">
-                    ${b.title}
+                        ${b.title}
                     <span class="comment-count">[${b.comment_count}]</span>
+                    <span class="like-count">❤️ ${b.like_count}</span>
+                    <c:if test="${b.like_count > 2}"> <%-- 2개 이상이여야 인기글 배지 --%>
+                        <span class="popular-badge">🔥 인기글</span>
+                    </c:if>
                 </div>
                 <div class="col-date">
                     <div class="col-date">

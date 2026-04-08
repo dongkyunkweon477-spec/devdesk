@@ -1,0 +1,414 @@
+/* ═══════════════════════════════
+   RESUME BLOCK LIBRARY
+═══════════════════════════════ */
+
+/* ── Tab navigation ── */
+.rb-tabs {
+    display: flex;
+    gap: 2px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+}
+
+.rb-tab {
+    padding: 12px 22px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--text3);
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+}
+
+.rb-tab:hover { color: var(--text2); }
+
+.rb-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+/* ── Stats strip ── */
+.rb-stats {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.rb-stat-chip {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    text-align: center;
+}
+
+.rb-stat-val {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.rb-stat-key {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+}
+
+/* ── Section header ── */
+.rb-section-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.rb-section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+/* ── Filter chips ── */
+.rb-filters {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.rb-filter-chip {
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.12s;
+    text-decoration: none;
+}
+
+.rb-filter-chip:hover {
+    background: var(--surface2);
+    border-color: var(--border2);
+    color: var(--text);
+}
+
+.rb-filter-chip.active {
+    background: rgba(91, 124, 248, 0.12);
+    color: var(--accent);
+    border-color: rgba(91, 124, 248, 0.3);
+}
+
+/* ── Block card ── */
+.rb-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin-bottom: 10px;
+    transition: border-color 0.15s;
+}
+
+.rb-card:hover {
+    border-color: var(--border2);
+}
+
+.rb-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.rb-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ── Category badge ── */
+.rb-cat-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.rb-cat-badge.cat-shimei {
+    background: rgba(91, 124, 248, 0.12);
+    color: var(--accent);
+}
+.rb-cat-badge.cat-jikopr {
+    background: rgba(139, 110, 245, 0.12);
+    color: var(--accent2);
+}
+.rb-cat-badge.cat-chosho {
+    background: rgba(78, 205, 196, 0.12);
+    color: var(--accent3);
+}
+.rb-cat-badge.cat-keireki {
+    background: rgba(255, 209, 102, 0.12);
+    color: var(--accent4);
+}
+.rb-cat-badge.cat-other {
+    background: rgba(157, 163, 184, 0.12);
+    color: var(--text2);
+}
+
+/* ── Version badge ── */
+.rb-ver-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 5px;
+    background: var(--surface2);
+    color: var(--text2);
+    border: 1px solid var(--border);
+}
+
+/* ── Star button ── */
+.rb-star-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+    transition: transform 0.12s;
+    color: var(--text3);
+    line-height: 1;
+}
+
+.rb-star-btn:hover { transform: scale(1.2); }
+.rb-star-btn.starred { color: var(--accent4); }
+
+/* ── Block content ── */
+.rb-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+
+.rb-card-preview {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.7;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ── Block footer ── */
+.rb-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+}
+
+.rb-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.rb-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 5px;
+    background: var(--surface2);
+    color: var(--text3);
+    border: 1px solid var(--border);
+}
+
+.rb-char-count {
+    font-size: 11px;
+    color: var(--text3);
+    margin-left: 8px;
+}
+
+.rb-card-actions {
+    display: flex;
+    gap: 5px;
+}
+
+/* ── Compose tab ── */
+.rb-compose-desc {
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 20px;
+    line-height: 1.7;
+}
+
+.rb-compose-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 10px;
+}
+
+.rb-compose-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.rb-compose-select {
+    max-width: 240px;
+    padding: 7px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+}
+
+.rb-compose-select:focus { border-color: var(--accent); }
+.rb-compose-select option { background: var(--surface2); }
+
+.rb-compose-content {
+    font-size: 13px;
+    color: var(--text3);
+    line-height: 1.7;
+    min-height: 50px;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.rb-compose-content.filled {
+    color: var(--text);
+}
+
+.rb-compose-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.rb-compose-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+/* ── Version modal content ── */
+.rb-version-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-bottom: 8px;
+}
+
+.rb-version-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.rb-version-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text2);
+}
+
+.rb-version-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+/* ── Compare view ── */
+.rb-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.rb-compare-col {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+}
+
+.rb-compare-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text2);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.rb-compare-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+/* ── Toast ── */
+.rb-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    font-size: 13px;
+    color: var(--text);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+    transform: translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s ease;
+}
+
+.rb-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.rb-toast.success {
+    border-color: rgba(86, 227, 159, 0.3);
+}
+
+/* ── Tab panel show/hide ── */
+.rb-panel { display: none; }
+.rb-panel.active { display: block; }
+
+/* ── Char count warning ── */
+.rb-char-warn { color: var(--accent5); }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+    .rb-stats { flex-direction: column; }
+    .rb-compare { grid-template-columns: 1fr; }
+    .rb-compose-header { flex-direction: column; gap: 8px; align-items: flex-start; }
+    .rb-compose-select { max-width: 100%; width: 100%; }
+}

@@ -12,12 +12,24 @@ import java.io.IOException;
 @WebFilter(urlPatterns = {
         "/mypage",
         "/profile-update",
+        "/password-update",
+        "/board",
+        "/board_add",
+        "/BoardDetailC",
+        "/board_update",
+        "/board_del",
+        "/comment_add",
+        "/comment_del",
         "/review/write",
         "/review/edit",
         "/review/delete",
         "/company/insert",
         "/company/edit",
-        "/company/delete"
+        "/company/delete",
+      //  "/calendar",
+        "/add-calendar",
+        "/update-calendar",
+        "/delete-calendar"
 
         //⬇️ 이런 식으로 본인이 맡은 주소를 계속 추가하면 됩니다!
         //"/board-write",      게시글 쓰기 (예시)

@@ -1,11 +1,14 @@
 package com.devdesk.pj.calendar;
 
 import com.devdesk.pj.main.DBManager_new;
+import com.devdesk.pj.user.MemberDTO;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Schedule_newDAO {
@@ -19,19 +22,17 @@ public class Schedule_newDAO {
         ResultSet rs = null;
         ArrayList<Schedule_newDTO> list = new ArrayList<>();
 
-        // 💡 3개의 테이블을 APP_ID와 COMPANY_ID로 엮는 마법의 쿼리
         String sql = "SELECT s.SCHEDULE_ID, s.SCHEDULE_DATE, s.SCHEDULE_TIME, s.INTERVIEW_TYPE, s.MEMO, " +
-                "c.COMPANY_NAME, a.POSITION, a.STAGE " +
+                "s.COMPANY_NAME, a.POSITION, a.STAGE " +
                 "FROM SCHEDULE s " +
                 "JOIN APPLICATION a ON s.APP_ID = a.APP_ID " +
-                "JOIN COMPANY c ON a.COMPANY_ID = c.COMPANY_ID " +
                 "WHERE a.MEMBER_ID = ? " +
                 "ORDER BY s.SCHEDULE_DATE ASC";
 
         try {
             con = DBManager_new.connect();
             pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, memberId); // 현재 로그인한 유저 번호
+            pstmt.setInt(1, memberId);
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -55,88 +56,215 @@ public class Schedule_newDAO {
         return list;
     }
 
-    public void addSchedule(HttpServletRequest request) {
+    private String mapTypeToStage(String type) {
+        if (type == null) return "APPLIED";
+        switch (type) {
+            case "코딩테스트": return "TECH_INTERVIEW";
+            case "1차면접": return "FIRST_INTERVIEW";
+            case "2차면접": return "SECOND_INTERVIEW";
+            case "임원면접": return "THIRD_INTERVIEW";
+            default: return "ETC";
+        }
+    }
+    public void addSchedule(HttpServletRequest request) throws Exception {
         Connection con = null;
         PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
-        // 1. 택배 상자(request)에서 AJAX가 보낸 데이터 하나씩 꺼내기
-        // (이름은 JSP의 AJAX data에서 보낸 키값과 100% 똑같아야 합니다!)
-        int memberId = 6;
-        int appId = Integer.parseInt(request.getParameter("app_id"));
+        try {
+        MemberDTO user = (MemberDTO) request.getSession().getAttribute("user");
+        int memberId = user.getMember_id();
+
+        //기업명 양 옆 공백 제거
         String companyName = request.getParameter("company_name");
+        if(companyName != null) companyName = companyName.trim();
+
+        String position = request.getParameter("position");
+        String applyDate = request.getParameter("apply_date");
         String date = request.getParameter("date");
         String time = request.getParameter("time");
         String type = request.getParameter("type");
         String memo = request.getParameter("memo");
+        String stage = mapTypeToStage(type);
 
-        // 2. 어떤 컬럼에 넣을지 명시적으로 적어주는 가장 안전한 SQL!
-        // (CREATED_DATE는 DEFAULT SYSDATE가 있으니 생략하면 알아서 들어갑니다)
-        String sql = "INSERT INTO SCHEDULE " +
-                "(SCHEDULE_ID, MEMBER_ID, COMPANY_NAME, SCHEDULE_DATE, SCHEDULE_TIME, INTERVIEW_TYPE, MEMO, APP_ID) " +
-                "VALUES (SEQ_SCHEDULE.nextval, ?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ?)";
+            System.out.println("✅ [일정 추가] 화면에서 넘어온 회사명: [" + companyName + "]");
 
-        try {
             con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
+            con.setAutoCommit(false);
 
-            // 3. 물음표(?) 순서와 타입(Int, String)에 맞게 데이터 장전!
-            pstmt.setInt(1, memberId);        // 첫 번째 ? : MEMBER_ID
-            pstmt.setString(2, companyName);  // 두 번째 ? : COMPANY_NAME
-            pstmt.setString(3, date);         // 세 번째 ? : SCHEDULE_DATE
-            pstmt.setString(4, time);         // 네 번째 ? : SCHEDULE_TIME
-            pstmt.setString(5, type);         // 다섯 번째 ? : INTERVIEW_TYPE
-            pstmt.setString(6, memo);         // 여섯 번째 ? : MEMO
-            pstmt.setInt(7, appId);           // 일곱 번째 ? : APP_ID
+            int companyId = 0;
+            String findCompanySql = "SELECT COMPANY_ID FROM COMPANY WHERE COMPANY_NAME = ?";
+            pstmt = con.prepareStatement(findCompanySql);
+            pstmt.setString(1, companyName);
+            rs = pstmt.executeQuery();
 
-            // 4. 발사!
+
+            if(rs.next()) {
+                companyId = rs.getInt("COMPANY_ID");
+                System.out.println("✅ [DB 검색 성공] 찾은 회사 번호: " + companyId);
+            } else {
+                System.out.println("❌ [DB 검색 실패] DB 명단에 일치하는 글자가 없습니다!");
+                throw new Exception("등록하려는 회사가 존재하지 않습니다: " + companyName);
+            }
+            pstmt.close();
+            rs.close();
+
+            int newAppId = 0;
+            pstmt = con.prepareStatement("SELECT APPLICATION_SEQ.NEXTVAL FROM DUAL");
+            rs = pstmt.executeQuery();
+            if(rs.next()) newAppId = rs.getInt(1);
+            pstmt.close();
+            rs.close();
+
+            String appSql = "INSERT INTO APPLICATION (APP_ID, MEMBER_ID, COMPANY_ID, POSITION, STAGE, APPLY_DATE, CREATED_DATE) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, SYSDATE)";
+            pstmt = con.prepareStatement(appSql);
+            pstmt.setInt(1, newAppId);
+            pstmt.setInt(2, memberId);
+            pstmt.setInt(3, companyId);
+            pstmt.setString(4, (position == null || position.isEmpty()) ? "미정" : position);
+            pstmt.setString(5, stage);
+
+            if (applyDate != null && !applyDate.isEmpty()) {
+                pstmt.setDate(6, java.sql.Date.valueOf(applyDate));
+            } else {
+                pstmt.setTimestamp(6, new java.sql.Timestamp(System.currentTimeMillis()));
+            }
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // SCHEDULE 인서트
+            String schSql = "INSERT INTO SCHEDULE (SCHEDULE_ID, MEMBER_ID, COMPANY_NAME, SCHEDULE_DATE, SCHEDULE_TIME, INTERVIEW_TYPE, MEMO, APP_ID) " +
+                    "VALUES (SEQ_SCHEDULE.nextval, ?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ?)";
+            pstmt = con.prepareStatement(schSql);
+            pstmt.setInt(1, memberId);
+            pstmt.setString(2, companyName);
+            pstmt.setString(3, date);
+            pstmt.setString(4, time);
+            pstmt.setString(5, type);
+            pstmt.setString(6, memo);
+            pstmt.setInt(7, newAppId);
             pstmt.executeUpdate();
 
+            con.commit();
         } catch (Exception e) {
-            e.printStackTrace();
+            try { if(con != null) con.rollback(); } catch (Exception ex) {}
+            throw e;
         } finally {
-            DBManager_new.close(con, pstmt, null);
+            try { if(con != null) con.setAutoCommit(true); } catch (Exception ex) {}
+            DBManager_new.close(con, pstmt, rs);
         }
     }
 
-    // --- 2. 일정 수정 (Update) ---
-    public void updateSchedule(int scheduleId, String date, String time, String type, String memo) {
+    // --- Update로직 ---
+    public void updateSchedule(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Connection con = null;
         PreparedStatement pstmt = null;
-        String sql = "UPDATE SCHEDULE SET SCHEDULE_DATE = TO_DATE(?, 'YYYY-MM-DD'), SCHEDULE_TIME = ?, INTERVIEW_TYPE = ?, MEMO = ? " +
-                "WHERE SCHEDULE_ID = ?";
+        ResultSet rs = null;
+
         try {
+            MemberDTO user = (MemberDTO) request.getSession().getAttribute("user");
+            int memberId = user.getMember_id();
+
+            int scheduleId = Integer.parseInt(request.getParameter("schedule_id"));
+            String companyName = request.getParameter("company_name");
+            String position = request.getParameter("position");
+            String date = request.getParameter("date");
+            String time = request.getParameter("time");
+            String type = request.getParameter("type");
+            String memo = request.getParameter("memo");
+
             con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, date);
-            pstmt.setString(2, time);
-            pstmt.setString(3, type);
-            pstmt.setString(4, memo);
-            pstmt.setInt(5, scheduleId);
+            con.setAutoCommit(false);
+
+            int companyId = 0;
+            pstmt = con.prepareStatement("SELECT COMPANY_ID FROM COMPANY WHERE COMPANY_NAME = ?");
+            pstmt.setString(1, companyName);
+            rs = pstmt.executeQuery();
+            if(rs.next()) {
+                companyId = rs.getInt("COMPANY_ID");
+            } else {
+                throw new Exception("존재하지 않는 회사입니다: " + companyName);
+            }
+            pstmt.close();
+
+            int appId = 0;
+            pstmt = con.prepareStatement("SELECT APP_ID FROM SCHEDULE WHERE SCHEDULE_ID = ?");
+            pstmt.setInt(1, scheduleId);
+            rs = pstmt.executeQuery();
+            if(rs.next()) appId = rs.getInt("APP_ID");
+            pstmt.close();
+
+            String updateAppSql = "UPDATE APPLICATION SET COMPANY_ID = ?, POSITION = ?, STAGE = ? WHERE APP_ID = ?";
+            pstmt = con.prepareStatement(updateAppSql);
+            pstmt.setInt(1, companyId);
+            pstmt.setString(2, (position == null || position.isEmpty()) ? "미정" : position);
+            pstmt.setString(3, mapTypeToStage(type));
+            pstmt.setInt(4, appId);
             pstmt.executeUpdate();
+            pstmt.close();
+
+            String updateSchSql = "UPDATE SCHEDULE SET COMPANY_NAME = ?, SCHEDULE_DATE = TO_DATE(?, 'YYYY-MM-DD'), " +
+                    "SCHEDULE_TIME = ?, INTERVIEW_TYPE = ?, MEMO = ? WHERE SCHEDULE_ID = ?";
+            pstmt = con.prepareStatement(updateSchSql);
+            pstmt.setString(1, companyName);
+            pstmt.setString(2, date);
+            pstmt.setString(3, time);
+            pstmt.setString(4, type);
+            pstmt.setString(5, memo);
+            pstmt.setInt(6, scheduleId);
+            pstmt.executeUpdate();
+
+            con.commit();
         } catch (Exception e) {
-            e.printStackTrace();
+            try { if(con!=null) con.rollback(); } catch (Exception ex) {}
+            throw e;
         } finally {
-            DBManager_new.close(con, pstmt, null);
+            try { if(con!=null) con.setAutoCommit(true); } catch (Exception ex) {}
+            DBManager_new.close(con, pstmt, rs);
         }
     }
-
-    // --- 3. 일정 삭제 (Delete) ---
+    // --- Delete ---
     public void deleteSchedule(int scheduleId) {
         Connection con = null;
         PreparedStatement pstmt = null;
-        String sql = "DELETE FROM SCHEDULE WHERE SCHEDULE_ID = ?";
+        ResultSet rs = null;
+
         try {
             con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
+            con.setAutoCommit(false);
+
+            int appId = 0;
+            String findAppSql = "SELECT APP_ID FROM SCHEDULE WHERE SCHEDULE_ID = ?";
+            pstmt = con.prepareStatement(findAppSql);
+            pstmt.setInt(1, scheduleId);
+            rs = pstmt.executeQuery();
+            if(rs.next()) appId = rs.getInt("APP_ID");
+            pstmt.close();
+
+            String delSchSql = "DELETE FROM SCHEDULE WHERE SCHEDULE_ID = ?";
+            pstmt = con.prepareStatement(delSchSql);
             pstmt.setInt(1, scheduleId);
             pstmt.executeUpdate();
+            pstmt.close();
+
+            if (appId > 0) {
+                String delAppSql = "DELETE FROM APPLICATION WHERE APP_ID = ?";
+                pstmt = con.prepareStatement(delAppSql);
+                pstmt.setInt(1, appId);
+                pstmt.executeUpdate();
+            }
+
+            con.commit();
         } catch (Exception e) {
+            try { if(con != null) con.rollback(); } catch (Exception ex) {}
             e.printStackTrace();
         } finally {
-            DBManager_new.close(con, pstmt, null);
+            try { if(con != null) con.setAutoCommit(true); } catch (Exception ex) {}
+            DBManager_new.close(con, pstmt, rs);
         }
     }
-    // --- 캘린더 모달의 회사 드롭다운을 채우기 위해 이름만 가져오는 메서드 ---
+
     public ArrayList<String> getAllCompanyNames() {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -158,10 +286,9 @@ public class Schedule_newDAO {
         } finally {
             DBManager_new.close(con, pstmt, rs);
         }
-
         return names;
     }
 
 
-    }
+}
 

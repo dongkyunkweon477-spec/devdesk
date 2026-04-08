@@ -1,0 +1,48 @@
+.board-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.like-section {
+    display: flex;
+    align-items: center;
+}
+
+.like-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 2px solid #ff6b6b;
+    background: white;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.like-btn:hover {
+    background: #ff6b6b;
+    transform: scale(1.05);
+}
+
+.like-icon {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+.like-btn:hover .like-icon {
+    transform: scale(1.2);
+}
+
+.like-count {
+    font-weight: bold;
+    color: #333;
+    min-width: 20px;
+    text-align: center;
+}
+
+.like-btn:hover .like-count {
+    color: white;
+}
