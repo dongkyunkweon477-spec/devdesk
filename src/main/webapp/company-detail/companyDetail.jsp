@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company-detail.css">
@@ -17,16 +17,16 @@
                 <div class="cd-rating-row">
                     <span class="cd-stars-hero">
                         <c:forEach begin="1" end="5" var="i">
-                            <span class="star-h ${i <= company.companyRating ? 'on' : ''}">★</span>
+                            <span class="star-h ${stats.avgRating}">★</span>
                         </c:forEach>
                     </span>
-                    <span class="cd-rating-num">${company.companyRating}</span>
+                    <span class="cd-rating-num">${stats.avgRating}</span>
                     <span class="cd-review-count">면접 후기(${stats.totalCount}건)</span>
                 </div>
                 <div class="cd-company-meta">
                     <span>업종 : ${company.companyIndustry}</span>
                     <span>위치 : ${company.companyLocation}</span>
-                    <span>규모 : <fmt:formatNumber value="${company.companySize}" />명</span>
+                    <span>규모 : <fmt:formatNumber value="${company.companySize}"/>명</span>
                 </div>
             </div>
         </div>
@@ -145,7 +145,7 @@
             </div>
             <div class="cd-card-bottom">
                 <span>[추천] ${r.reviewLikeCount}</span>
-                <span><fmt:formatDate value="${r.reviewCreatedDate}" pattern="yyyy년 M월 d일" /></span>
+                <span><fmt:formatDate value="${r.reviewCreatedDate}" pattern="yyyy년 M월 d일"/></span>
             </div>
         </div>
     </c:forEach>
