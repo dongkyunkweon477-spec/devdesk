@@ -13,21 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Arrays;
 
 @WebServlet("/dashboard")
 public class DashboardC extends HttpServlet {
 
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-        List<TilTagStatVO> tilTagStats = new ArrayList<>();
-        TilTagStatVO s = new TilTagStatVO();
-        s.setTag("SQL");
-        s.setColor("#4ecdc4");
-        s.setPct(40);
-        tilTagStats.add(s);
-
-        request.setAttribute("tilTagStats", tilTagStats);
 
         // TAG_CONFIG와 동일한 색상 매핑
         Map<String, String> tagColorMap = new HashMap<>();
@@ -56,6 +48,18 @@ public class DashboardC extends HttpServlet {
         TilDAO tilDao = new TilDAO();
         MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
         int memberId = loginUser.getMember_id();
+
+// ↓ 여기에 추가
+        List<String> colors = new ArrayList<>(Arrays.asList(
+                "#ff9f69", "#56e39f", "#ffd166", "#5b7cf8",
+                "#ff6b6b", "#8b6ef5", "#4ecdc4", "#9da3b8"
+        ));
+        List<TilTagStatVO> tilTagStats = tilDao.getTilTagStats(memberId);
+        for (int i = 0; i < tilTagStats.size(); i++) {
+            tilTagStats.get(i).setColor(colors.get(i % colors.size()));
+        }
+        request.setAttribute("tilTagStats", tilTagStats);
+
         List<TilV0> rawTils = tilDao.getRecentTils(memberId, 5);
 
 // TilVO에 tagColor, tagBg, timeAgo 필드 추가 필요

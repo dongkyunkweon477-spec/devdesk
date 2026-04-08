@@ -208,5 +208,42 @@ public class TilDAO {
     }
 
 
+    public List<TilTagStatVO> getTilTagStats(int memberId) {
+        List<TilTagStatVO> list = new ArrayList<>();
+
+        // Oracle 윈도우 함수로 태그별 비율 계산 (이번 달)
+        String sql = "SELECT tag, ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 0) AS pct "
+                + "FROM til "
+                + "WHERE member_id = ? "
+                + "AND EXTRACT(YEAR FROM created_date) = EXTRACT(YEAR FROM SYSDATE) "
+                + "AND EXTRACT(MONTH FROM created_date) = EXTRACT(MONTH FROM SYSDATE) "
+                + "GROUP BY tag "
+                + "ORDER BY pct DESC";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, memberId);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                TilTagStatVO vo = new TilTagStatVO();
+                vo.setTag(rs.getString("tag"));
+                vo.setPct(rs.getInt("pct"));
+                list.add(vo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, pstmt, rs);
+        }
+        return list;
+    }
+
+
 }
 
