@@ -147,103 +147,99 @@
     font-weight: 600;
 }
 
-.like-btn {
-    padding: 6px 16px;
-    border: 1px solid #e2e8f0;
-    border-radius: 20px;
-    font-size: 13px;
-    color: #64748b;
-    background: #ffffff;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.like-btn:hover {
-    border-color: #f87171;
-    color: #ef4444;
-}
-
-.like-btn.liked {
-    background: #fef2f2;
-    border-color: #ef4444;
-    color: #ef4444;
-}
-
-.bookmark-btn {
-    padding: 10px 20px;
-    border: 1px solid #ddd;
-    background-color: #fff;
-    color: #666;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+.rd-social-center {
     display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px 0;
+    border-top: 1px solid #f1f5f9;
+}
+
+.rd-pill {
+    display: inline-flex;
     align-items: center;
     gap: 5px;
-}
-
-/* 마우스 호버 시 */
-.bookmark-btn:hover {
-    background-color: #f8f9fa;
-    border-color: #bbb;
-}
-
-/* 북마크 활성화 상태 (Active) */
-.bookmark-btn.bookmarked {
-    background-color: #e7f3ff;
-    border-color: #007bff;
-    color: #007bff;
-    font-weight: bold;
-}
-
-.bookmark-btn.bookmarked .icon {
-    /* 활성화 시 아이콘에 변화를 주고 싶을 때 */
-}
-
-.detail-actions .btn-submit {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 42px;
-    padding: 0 24px;
-    background: #1e293b;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
+    padding: 8px 20px;
+    border-radius: 20px;
     font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #64748b;
+}
+
+.rd-pill:hover {
+    background: #f8fafc;
+}
+
+.rd-pill-like:hover,
+.rd-pill-like.active {
+    border-color: #ef4444;
+    color: #ef4444;
+    background: #fef2f2;
+}
+
+.rd-pill-bookmark:hover,
+.rd-pill-bookmark.active {
+    border-color: #f59e0b;
+    color: #f59e0b;
+    background: #fffbeb;
+}
+
+.rd-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+}
+
+.rd-nav-right {
+    display: flex;
+    gap: 8px;
+}
+
+.rd-nav-btn {
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 13px;
     font-weight: 500;
     font-family: 'Pretendard', sans-serif;
     cursor: pointer;
-    transition: all 0.2s ease;
-    margin-left: 8px;
+    transition: all 0.15s;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #64748b;
     text-decoration: none;
 }
 
-.detail-actions .btn-submit:hover {
-    background: #334155;
+.rd-nav-btn:hover {
+    background: #f8fafc;
 }
 
-/* 삭제 버튼 (상세 페이지 하단) */
-.detail-actions .btn-delete {
-    height: 42px;
-    padding: 0 24px;
-    background: #ffffff;
+.rd-nav-edit {
+    background: #7c3aed;
+    color: #ffffff;
+    border-color: #7c3aed;
+}
+
+.rd-nav-edit:hover {
+    background: #6d28d9;
+    color: #ffffff;
+}
+
+.rd-nav-del {
+    color: #94a3b8;
+    border-color: transparent;
+    background: transparent;
+}
+
+.rd-nav-del:hover {
     color: #ef4444;
-    border: 1px solid #fee2e2;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    font-family: 'Pretendard', sans-serif;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.detail-actions .btn-delete:hover {
     background: #fef2f2;
-    border-color: #f87171;
 }
 
-/* 모달 내부 최종 삭제 확인 버튼 */
 .btn-delete-confirm {
     height: 42px;
     padding: 0 24px;
