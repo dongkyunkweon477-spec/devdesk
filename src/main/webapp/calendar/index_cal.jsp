@@ -246,7 +246,6 @@
             $('#modal-backdrop, #schedule-modal').fadeIn(200);
         });
 
-<<<<<<< HEAD
         $('#btn-do-delete').click(function() {
             $('#event-popup').fadeOut(150);
             $('#customConfirmModal').css('display', 'flex').hide().fadeIn(200);
@@ -265,19 +264,6 @@
                         showCustomAlert("DELETE ERROR");
                     }
                 });
-=======
-        $('#btn-do-delete').click(function () {
-            if (!confirm("정말 이 일정을 삭제하시겠습니까?")) return;
-
-            $.ajax({
-                url: '/delete-calendar',
-                type: 'POST',
-                data: {schedule_id: currentEvent.id},
-                success: function () {
-                    alert("삭제되었습니다.");
-                    location.reload();
-                }
->>>>>>> d33f4abbdef823dc17cc6d4e40562c0a97b951cb
             });
         });
 
@@ -309,20 +295,11 @@
                 url: targetUrl,
                 type: 'POST',
                 data: requestData,
-<<<<<<< HEAD
                 success: function() {
                     showCustomAlert("츄가완료!! ><", true);
                 },
                 error: function() {
                     showCustomAlert("저장 중 오류가 발생했습니다. (회사 이름을 확인해주세요)");
-=======
-                success: function () {
-                    alert("정상적으로 처리되었습니다.");
-                    location.reload();
-                },
-                error: function () {
-                    alert("처리 중 에러가 발생했습니다.");
->>>>>>> d33f4abbdef823dc17cc6d4e40562c0a97b951cb
                 }
             });
         });
@@ -330,8 +307,7 @@
         $('#btn-modal-close, #modal-backdrop').click(function () {
             $('#modal-backdrop, #schedule-modal').fadeOut(200);
         });
-        });
-
+    });
 </script>
 
 <div class="modal-overlay" id="customAlertModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10001; align-items:center; justify-content:center;">
