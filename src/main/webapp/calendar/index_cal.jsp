@@ -19,6 +19,7 @@
 <div id="event-popup">
     <span class="pop-close" id="close-popup">✕</span>
     <h3 id="pop-title">회사 이름</h3>
+    <div class="pop-info"><strong>직무:</strong> <span id="pop-position"></span></div>
     <div class="pop-info"><strong>날짜:</strong> <span id="pop-date"></span></div>
     <div class="pop-info"><strong>시간:</strong> <span id="pop-time"></span></div>
     <div class="pop-info"><strong>면접:</strong> <span id="pop-type"></span></div>
@@ -30,15 +31,14 @@
     </div>
 </div>
 
-<div id="modal-backdrop"></div>
 <div id="schedule-modal">
     <h3 id="modal-title">새 일정 추가</h3>
     <input type="hidden" id="form-id">
-    <input type="hidden" id="form-appId" value="87">
+    <input type="hidden" id="form-appId" value="1">
 
     <div class="form-group">
         <label>회사 이름</label>
-        <input type="text" id="form-company" list="company-options" placeholder="회사명 검색 또는 직접 입력">
+        <input type="text" id="form-company" list="company-options" placeholder="회사명 검색">
         <datalist id="company-options">
             <c:forEach var="company" items="${companyList}">
                 <option value="${company}"></option>
@@ -47,7 +47,17 @@
     </div>
 
     <div class="form-group">
-        <label>날짜</label>
+        <label>지원 직무</label>
+        <input type="text" id="form-position" placeholder="ex) 백엔드 개발자, 서비스 기획">
+    </div>
+
+    <div class="form-group">
+        <label>서류 지원 일자 (선택)</label>
+        <input type="date" id="form-apply-date">
+    </div>
+
+    <div class="form-group">
+        <label>면접 날짜</label>
         <input type="date" id="form-date">
     </div>
 
@@ -105,7 +115,30 @@
 
 <script>
     $(document).ready(function () {
+        $('#customAlertModal, #customConfirmModal').hide();
         var currentEvent = null;
+
+        $('#form-company').on('click', function() {
+            var currentVal = $(this).val();
+            if (currentVal !== "") {
+                $(this).data('saved-company', currentVal);
+                $(this).val('');
+            }
+        }).on('blur', function() {
+            if ($(this).val() === "" && $(this).data('saved-company')) {
+                $(this).val($(this).data('saved-company'));
+            }
+        });
+
+        function showCustomAlert(message, reloadAfter = false) {
+            $('#alertMessage').text(message);
+            $('#customAlertModal').css('display', 'flex').hide().fadeIn(200);
+
+            $('#btn-alert-ok').off('click').on('click', function() {
+                $('#customAlertModal').fadeOut(200);
+                if(reloadAfter) location.reload(); // 확인 누르면 새로고침
+            });
+        }
 
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -123,6 +156,7 @@
                     start: '${sch.schedule_date}',
                     extendedProps: {
                         company: '${sch.company_name}',
+                        position: '${sch.position}', // ✨ 여기에 position이 꼭 있어야 합니다!
                         time: '${sch.schedule_time}',
                         type: '${sch.interview_type}',
                         memo: '${sch.schedule_memo}'
@@ -137,6 +171,7 @@
                 var y = info.jsEvent.pageY;
 
                 $('#pop-title').text(currentEvent.title);
+                $('#pop-position').text(currentEvent.extendedProps.position || "미정");
                 $('#pop-date').text(currentEvent.startStr);
                 $('#pop-time').text(currentEvent.extendedProps.time || "미정");
                 $('#pop-type').text(currentEvent.extendedProps.type || "-");
@@ -152,8 +187,8 @@
                 $('#form-id').val("");
                 $('#form-date').val(info.startStr);
 
-                // 모달 띄울 때 회사 입력창 초기화
                 $('#form-company').val("");
+                $('#form-apply-date').val(""); // ✨ 지원일자 초기화 추가
 
                 $('#form-type').val("코딩테스트");
                 $('#form-type-direct').hide().val("");
@@ -181,6 +216,7 @@
 
             $('#form-id').val(currentEvent.id);
             $('#form-company').val(currentEvent.extendedProps.company);
+            $('#form-position').val(currentEvent.extendedProps.position);
             $('#form-date').val(currentEvent.startStr);
             var existingTime = currentEvent.extendedProps.time;
             if (existingTime) {
@@ -191,6 +227,7 @@
                 $('#form-hour').val("14");
                 $('#form-minute').val("00");
             }
+            $('#modal-backdrop, #schedule-modal').fadeIn(200);
             $('#form-memo').val(currentEvent.extendedProps.memo);
 
             var existingType = currentEvent.extendedProps.type;
@@ -209,6 +246,26 @@
             $('#modal-backdrop, #schedule-modal').fadeIn(200);
         });
 
+<<<<<<< HEAD
+        $('#btn-do-delete').click(function() {
+            $('#event-popup').fadeOut(150);
+            $('#customConfirmModal').css('display', 'flex').hide().fadeIn(200);
+
+            $('#btn-real-delete').off('click').on('click', function() {
+                $('#customConfirmModal').fadeOut(200);
+
+                $.ajax({
+                    url: '/delete-calendar',
+                    type: 'POST',
+                    data: { schedule_id: currentEvent.id },
+                    success: function() {
+                        showCustomAlert("일정이 삭제되었습니다.", true);
+                    },
+                    error: function() {
+                        showCustomAlert("DELETE ERROR");
+                    }
+                });
+=======
         $('#btn-do-delete').click(function () {
             if (!confirm("정말 이 일정을 삭제하시겠습니까?")) return;
 
@@ -220,6 +277,7 @@
                     alert("삭제되었습니다.");
                     location.reload();
                 }
+>>>>>>> d33f4abbdef823dc17cc6d4e40562c0a97b951cb
             });
         });
 
@@ -230,9 +288,8 @@
             var selectedType = $('#form-type').val();
             var finalType = (selectedType === 'direct') ? $('#form-type-direct').val() : selectedType;
 
-            // 회사 이름이나 면접 전형이 비어있으면 경고
             if (!$('#form-company').val().trim() || (selectedType === 'direct' && finalType.trim() === '')) {
-                alert("회사 이름과 면접 전형을 정확히 입력해 주세요.");
+                showCustomAlert("회사 이름과 면접 전형을 확인해 주세요.");
                 return;
             }
 
@@ -240,11 +297,10 @@
                 schedule_id: id,
                 app_id: $('#form-appId').val(),
                 company_name: $('#form-company').val(),
+                position: $('#form-position').val(),
+                apply_date: $('#form-apply-date').val(),
                 date: $('#form-date').val(),
-
-                // ✨ 바꾼 코드: 선택한 시간과 분을 "14:30" 형태로 다시 합쳐서 서버로 보냄!
                 time: $('#form-hour').val() + ":" + $('#form-minute').val(),
-
                 type: finalType,
                 memo: $('#form-memo').val()
             };
@@ -253,12 +309,20 @@
                 url: targetUrl,
                 type: 'POST',
                 data: requestData,
+<<<<<<< HEAD
+                success: function() {
+                    showCustomAlert("츄가완료!! ><", true);
+                },
+                error: function() {
+                    showCustomAlert("저장 중 오류가 발생했습니다. (회사 이름을 확인해주세요)");
+=======
                 success: function () {
                     alert("정상적으로 처리되었습니다.");
                     location.reload();
                 },
                 error: function () {
                     alert("처리 중 에러가 발생했습니다.");
+>>>>>>> d33f4abbdef823dc17cc6d4e40562c0a97b951cb
                 }
             });
         });
@@ -266,7 +330,29 @@
         $('#btn-modal-close, #modal-backdrop').click(function () {
             $('#modal-backdrop, #schedule-modal').fadeOut(200);
         });
-    });
+        });
+
 </script>
+
+<div class="modal-overlay" id="customAlertModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10001; align-items:center; justify-content:center;">
+    <div class="modal-box" style="background:#fff; padding:25px; border-radius:8px; width:300px; text-align:center; box-shadow:0 10px 15px rgba(0,0,0,0.1);">
+        <p id="alertMessage" style="font-size:16px; font-weight:bold; color:#2d3748; margin-bottom:20px;">메시지 내용</p>
+        <div class="modal-btns">
+            <button class="btn-save" id="btn-alert-ok" style="width:100%; padding:10px; background:#2b6cb0; color:white; border:none; border-radius:4px; cursor:pointer;">확인</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="customConfirmModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10001; align-items:center; justify-content:center;">
+    <div class="modal-box" style="background:#fff; padding:25px; border-radius:8px; width:300px; text-align:center; box-shadow:0 10px 15px rgba(0,0,0,0.1);">
+        <p style="font-size:16px; font-weight:bold; color:#e53e3e; margin-bottom:10px;">정말 삭제하시겠습니까?</p>
+        <p class="modal-sub" style="font-size:13px; color:#718096; margin-bottom:20px;">삭제된 일정은 복구할 수 없습니다.</p>
+        <div class="modal-btns" style="display:flex; gap:10px;">
+            <button class="btn-cancel" onclick="$('#customConfirmModal').fadeOut(200);" style="flex:1; padding:10px; background:#e2e8f0; border:none; border-radius:4px; cursor:pointer;">취소</button>
+            <button class="btn-delete" id="btn-real-delete" style="flex:1; padding:10px; background:#e53e3e; color:white; border:none; border-radius:4px; cursor:pointer;">삭제</button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

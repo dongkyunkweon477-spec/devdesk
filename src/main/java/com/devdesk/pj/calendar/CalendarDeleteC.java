@@ -1,6 +1,6 @@
 package com.devdesk.pj.calendar;
 
-import com.devdesk.pj.application.ApplicationDAO;
+import com.devdesk.pj.user.MemberDTO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,23 +10,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@WebServlet(name = "CalendarAddC", value = "/add-calendar")
-public class CalendarAddC extends HttpServlet {
+@WebServlet(name = "CalendarDeleteC", value = "/delete-calendar")
+public class CalendarDeleteC extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
         try {
-            Schedule_newDAO.SCAO.addSchedule(request);
+            int scheduleId = Integer.parseInt(request.getParameter("schedule_id"));
+
+            Schedule_newDAO.SCAO.deleteSchedule(scheduleId);
 
             response.setContentType("text/plain; charset=UTF-8");
             response.getWriter().write("success");
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("fail");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }
