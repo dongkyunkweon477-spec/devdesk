@@ -168,3 +168,156 @@
   .sidebar.open { transform: translateX(0); }
   .sidebar-overlay.open { display: block; }
 }
+
+#sidebar-mini-calendar {
+  margin: 20px 15px;
+  padding: 15px 10px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  cursor: pointer;
+  color: #a0aec0;
+  transition: all 0.2s ease;
+}
+#sidebar-mini-calendar:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+.s-cal-header {
+  text-align: center;
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.s-cal-weekdays, .s-cal-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 11px;
+}
+.s-cal-weekdays div {
+  color: #718096;
+  padding-bottom: 5px;
+}
+.s-cal-days div {
+  padding: 4px 0;
+  position: relative;
+  border-radius: 4px;
+  margin: 1px;
+}
+.s-cal-days div.today {
+  background-color: #8b5cf6;
+  color: white;
+  font-weight: bold;
+}
+.event-dot {
+  width: 4px;
+  height: 4px;
+  background-color: #f6ad55;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#sidebar-mini-calendar {
+  margin: 20px 15px;
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0.02); /* 사이드바에 자연스럽게 녹아드는 배경 */
+  border-radius: 12px;
+  color: #e2e8f0;
+  font-family: 'Pretendard', sans-serif;
+}
+.g-cal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+.g-cal-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+.g-cal-nav {
+  display: flex;
+  gap: 4px;
+}
+.g-nav-btn {
+  background: none;
+  border: none;
+  color: #a0aec0;
+  font-size: 18px;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+.g-nav-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+.g-cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 11px;
+  color: #718096;
+  margin-bottom: 8px;
+}
+.g-cal-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px 0;
+}
+.day-cell {
+  height: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 8px;
+}
+.day-cell:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+/* 저번달, 다음달 날짜는 흐리게 */
+.other-month {
+  color: #4a5568;
+}
+.day-num {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+/* 오늘 날짜 파란색 동그라미 */
+.day-cell.today .day-num {
+  background-color: #3b82f6;
+  color: #ffffff;
+  font-weight: bold;
+}
+/* 점들을 담는 그릇 */
+.dots-wrap {
+  display: flex;
+  gap: 2px;
+  margin-top: 2px;
+  height: 4px;
+}
+/* 일정 개수만큼 찍히는 점 */
+.cal-dot {
+  width: 4px;
+  height: 4px;
+  background-color: #f6ad55; /* 눈에 띄는 주황색 점 */
+  border-radius: 50%;
+}

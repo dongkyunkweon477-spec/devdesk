@@ -30,6 +30,22 @@
             <div class="nav-section-label">학습</div>
             <a href="til" class="nav-item active"><span class="nav-icon">📚</span>TIL</a>
         </nav>
+
+        <div id="sidebar-mini-calendar">
+            <div class="g-cal-header">
+                <div class="g-cal-title" id="g-cal-title">2026년 4월</div>
+                <div class="g-cal-nav">
+                    <button class="g-nav-btn" id="g-prev-month">‹</button>
+                    <button class="g-nav-btn" id="g-next-month">›</button>
+                </div>
+            </div>
+            <div class="g-cal-weekdays">
+                <div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div><div>일</div>
+            </div>
+            <div class="g-cal-days" id="g-cal-days">
+            </div>
+        </div>
+
         <div class="sidebar-footer">
             <div class="user-card">
                 <div class="user-avatar">나</div>
@@ -495,6 +511,97 @@
     document.getElementById('confirmOverlay').addEventListener('click', function(e) {
         if (e.target === e.currentTarget) closeConfirm();
     });
+
+    // ... 기존 오버레이 닫기 로직 생략 ...
+    document.getElementById('confirmOverlay').addEventListener('click', function(e) {
+        if (e.target === e.currentTarget) closeConfirm();
+    });
+
+    // 🌟 여기서부터 미니 캘린더 자바스크립트 통째로 추가! 🌟
+    document.addEventListener('DOMContentLoaded', function() {
+        const rawEvents = [
+            <c:forEach var="sch" items="${schList}">
+            '${sch.schedule_date}',
+            </c:forEach>
+        ];
+
+        const eventCounts = {};
+        rawEvents.forEach(date => {
+            const pureDate = date.split(' ')[0];
+            eventCounts[pureDate] = (eventCounts[pureDate] || 0) + 1;
+        });
+
+        let currentDispDate = new Date();
+
+        function renderMiniCalendar(dateToRender) {
+            const year = dateToRender.getFullYear();
+            const month = dateToRender.getMonth();
+            const today = new Date();
+            const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+            document.getElementById('g-cal-title').textContent = year + '년 ' + (month + 1) + '월';
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+            let firstDayIndex = firstDay.getDay() - 1;
+            if (firstDayIndex === -1) firstDayIndex = 6;
+
+            let daysHTML = '';
+
+            // 1. 이전 달 날짜 흐리게 채우기
+            for (let i = firstDayIndex; i > 0; i--) {
+                daysHTML += `<div class="day-cell other-month" onclick="location.href='${pageContext.request.contextPath}/calendar'"><span class="day-num">\${prevMonthLastDay - i + 1}</span></div>`;
+            }
+
+            // 2. 이번 달 1일부터 말일까지 꽉꽉 채우기!!
+            for (let i = 1; i <= lastDay.getDate(); i++) {
+                const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(i).padStart(2, '0');
+                let classes = 'day-cell';
+                if (dateStr === todayStr) classes += ' today';
+
+                let dotsHTML = '<div class="dots-wrap">';
+                if (eventCounts[dateStr]) {
+                    let dotCount = Math.min(eventCounts[dateStr], 3);
+                    for(let k = 0; k < dotCount; k++) {
+                        dotsHTML += '<span class="cal-dot"></span>';
+                    }
+                }
+                dotsHTML += '</div>';
+
+                daysHTML += `<div class="\${classes}" onclick="location.href='${pageContext.request.contextPath}/calendar'">
+                                <span class="day-num">\${i}</span>
+                                \${dotsHTML}
+                             </div>`;
+            }
+
+            // 3. 달력 모양 유지를 위해 남은 빈칸은 다음 달 날짜로 채우기
+            const totalCells = firstDayIndex + lastDay.getDate();
+            let nextMonthDay = 1;
+            while(totalCells + nextMonthDay - 1 < 42) {
+                daysHTML += `<div class="day-cell other-month" onclick="location.href='${pageContext.request.contextPath}/calendar'"><span class="day-num">\${nextMonthDay}</span></div>`;
+                nextMonthDay++;
+            }
+
+            document.getElementById('g-cal-days').innerHTML = daysHTML;
+        }
+
+        document.getElementById('g-prev-month').addEventListener('click', () => {
+            currentDispDate.setMonth(currentDispDate.getMonth() - 1);
+            renderMiniCalendar(currentDispDate);
+        });
+        document.getElementById('g-next-month').addEventListener('click', () => {
+            currentDispDate.setMonth(currentDispDate.getMonth() + 1);
+            renderMiniCalendar(currentDispDate);
+        });
+
+        renderMiniCalendar(currentDispDate);
+    });
+</script>
+</body>
+</html>
+
 </script>
 </body>
 </html>
