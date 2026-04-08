@@ -1,0 +1,50 @@
+package com.devdesk.pj.board;
+
+import com.devdesk.pj.Comment.CommentDAO;
+import com.devdesk.pj.Like.LikeDAO;
+import com.devdesk.pj.user.MemberDTO;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
+@WebServlet(name = "BoardDetailC", value = "/BoardDetailC")
+public class BoardDetailC extends HttpServlet {
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.setCharacterEncoding("UTF-8");
+
+        // 0. 게시글 번호 받기
+        int boardId = Integer.parseInt(request.getParameter("id"));
+
+// 1. 게시물 정보 가져오기 (이때 boardVO.like_count는 DB의 b_like_count를 가져옴)
+        BoardDAO.getBoard(request);
+
+// 2. ★ 핵심: 로그인한 유저별로 '좋아요 여부' 체크 ★
+        HttpSession session = request.getSession();
+        MemberDTO user = (MemberDTO) session.getAttribute("user");
+        boolean isLiked = false;
+
+        if (user != null) {
+            // LikeDAO를 통해 이 유저(member_id)가 이 글(board_id)을 눌렀는지 조회
+            LikeDAO likeDAO = new LikeDAO();
+            isLiked = likeDAO.isLiked(boardId, user.getMember_id());
+        }
+
+// 3. 결과값을 JSP로 전달
+        request.setAttribute("isLiked", isLiked);
+
+        // 3. 댓글 리스트 조회
+        CommentDAO.getComment(request, boardId);
+
+        request.setAttribute("content", "board/boardDetail.jsp");
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
+    }
+
+    public void destroy() {
+    }
+}
