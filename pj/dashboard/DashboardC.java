@@ -81,7 +81,6 @@ public class DashboardC extends HttpServlet {
         Schedule_newDAO scheduleDao = Schedule_newDAO.SCAO;
         ArrayList<Schedule_newDTO> rawSchedules = scheduleDao.getCalendarEvents(memberId);
 
-
 // 오늘 날짜
         java.util.Calendar today = java.util.Calendar.getInstance();
 
@@ -103,21 +102,15 @@ public class DashboardC extends HttpServlet {
         String[] MONTHS = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
 
         List<DashboardScheduleVO> upcomingSchedules = new ArrayList<>();
-        // 오늘 자정 기준
-        java.util.Calendar todayMidnight = java.util.Calendar.getInstance();
-        todayMidnight.set(java.util.Calendar.HOUR_OF_DAY, 0);
-        todayMidnight.set(java.util.Calendar.MINUTE, 0);
-        todayMidnight.set(java.util.Calendar.SECOND, 0);
-        todayMidnight.set(java.util.Calendar.MILLISECOND, 0);
-
         for (Schedule_newDTO raw : rawSchedules) {
             if (raw.getSchedule_date() == null) continue;
 
-            // 오늘 자정보다 이전 날짜만 제외
-            if (raw.getSchedule_date().before(todayMidnight.getTime())) continue;
-
             java.util.Calendar c = java.util.Calendar.getInstance();
             c.setTime(raw.getSchedule_date());
+
+            // 오늘 이후 일정만 표시
+            if (raw.getSchedule_date().before(new java.util.Date()) &&
+                    !isSameDay(c, today)) continue;
 
             DashboardScheduleVO vo = new DashboardScheduleVO();
             vo.setMonth(MONTHS[c.get(java.util.Calendar.MONTH)]);
@@ -131,17 +124,7 @@ public class DashboardC extends HttpServlet {
             vo.setToday(isSameDay(c, today));
             upcomingSchedules.add(vo);
         }
-
-        System.out.println("=== upcomingSchedules 크기: " + upcomingSchedules.size());
-
         request.setAttribute("upcomingSchedules", upcomingSchedules);
-
-
-        for (Schedule_newDTO r : rawSchedules) {
-            System.out.println("  날짜: " + r.getSchedule_date()
-                    + " / 회사: " + r.getCompany_name()
-                    + " / 타입: [" + r.getInterview_type() + "]");
-        }
 
 
         DashboardDAO.countGroupbystage(request);
