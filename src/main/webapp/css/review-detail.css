@@ -199,3 +199,65 @@
 .bookmark-btn.bookmarked .icon {
     /* 활성화 시 아이콘에 변화를 주고 싶을 때 */
 }
+
+.detail-actions .btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    padding: 0 24px;
+    background: #1e293b;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Pretendard', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 8px;
+    text-decoration: none;
+}
+
+.detail-actions .btn-submit:hover {
+    background: #334155;
+}
+
+/* 삭제 버튼 (상세 페이지 하단) */
+.detail-actions .btn-delete {
+    height: 42px;
+    padding: 0 24px;
+    background: #ffffff;
+    color: #ef4444;
+    border: 1px solid #fee2e2;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Pretendard', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.detail-actions .btn-delete:hover {
+    background: #fef2f2;
+    border-color: #f87171;
+}
+
+/* 모달 내부 최종 삭제 확인 버튼 */
+.btn-delete-confirm {
+    height: 42px;
+    padding: 0 24px;
+    background: #ef4444;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Pretendard', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-delete-confirm:hover {
+    background: #dc2626;
+}
