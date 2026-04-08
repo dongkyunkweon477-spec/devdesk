@@ -236,6 +236,36 @@
             color: var(--text3);
         }
 
+        #sidebar-mini-calendar {
+            margin: 20px 15px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            color: #e2e8f0;
+            font-family: 'Pretendard', sans-serif;
+        }
+        .g-cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 0 4px; }
+        .g-cal-title { font-size: 14px; font-weight: 600; color: #ffffff; }
+        .g-cal-nav { display: flex; gap: 4px; }
+        .g-nav-btn {
+            background: none; border: none; color: #a0aec0; font-size: 18px; cursor: pointer;
+            width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; transition: background 0.2s;
+        }
+        .g-nav-btn:hover { background-color: rgba(255, 255, 255, 0.1); color: #ffffff; }
+        .g-cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 11px; color: #718096; margin-bottom: 8px; }
+        .g-cal-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px 0; }
+        .day-cell {
+            height: 36px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+            padding-top: 4px; cursor: pointer; font-size: 12px; border-radius: 8px;
+        }
+        .day-cell:hover { background-color: rgba(255, 255, 255, 0.05); }
+        .other-month { color: #4a5568; } /* 저번달/다음달 날짜는 흐리게! */
+        .day-num { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+        .day-cell.today .day-num { background-color: #3b82f6; color: #ffffff; font-weight: bold; }
+        .dots-wrap { display: flex; gap: 2px; margin-top: 2px; height: 4px; }
+        .cal-dot { width: 4px; height: 4px; background-color: #f6ad55; border-radius: 50%; }
+
         /* ════════════════════════
            5. 공통 컴포넌트
         ════════════════════════ */
@@ -770,6 +800,21 @@
             </a>
         </nav>
 
+        <div id="sidebar-mini-calendar">
+            <div class="g-cal-header">
+                <div class="g-cal-title" id="g-cal-title">2026년 4월</div>
+                <div class="g-cal-nav">
+                    <button class="g-nav-btn" id="g-prev-month">‹</button>
+                    <button class="g-nav-btn" id="g-next-month">›</button>
+                </div>
+            </div>
+            <div class="g-cal-weekdays">
+                <div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div><div>일</div>
+            </div>
+            <div class="g-cal-days" id="g-cal-days">
+            </div>
+        </div>
+
         <div class="sidebar-footer">
             <div class="user-card">
                 <div class="user-avatar">
@@ -1083,6 +1128,88 @@
             startAngle += slice;
         });
     })();
+
+    // 🌟 여기서부터 미니 캘린더 자바스크립트 통째로 추가! 🌟
+    document.addEventListener('DOMContentLoaded', function() {
+        const rawEvents = [
+            <c:forEach var="sch" items="${schList}">
+            '${sch.schedule_date}',
+            </c:forEach>
+        ];
+
+        const eventCounts = {};
+        rawEvents.forEach(date => {
+            const pureDate = date.split(' ')[0];
+            eventCounts[pureDate] = (eventCounts[pureDate] || 0) + 1;
+        });
+
+        let currentDispDate = new Date();
+
+        function renderMiniCalendar(dateToRender) {
+            const year = dateToRender.getFullYear();
+            const month = dateToRender.getMonth();
+            const today = new Date();
+            const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+            document.getElementById('g-cal-title').textContent = year + '년 ' + (month + 1) + '월';
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+            let firstDayIndex = firstDay.getDay() - 1;
+            if (firstDayIndex === -1) firstDayIndex = 6;
+
+            let daysHTML = '';
+
+            // 1. 이전 달 날짜 흐리게 채우기
+            for (let i = firstDayIndex; i > 0; i--) {
+                daysHTML += `<div class="day-cell other-month" onclick="location.href='${pageContext.request.contextPath}/calendar'"><span class="day-num">\${prevMonthLastDay - i + 1}</span></div>`;
+            }
+
+            // 2. 이번 달 1일부터 말일까지 꽉꽉 채우기
+            for (let i = 1; i <= lastDay.getDate(); i++) {
+                const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(i).padStart(2, '0');
+                let classes = 'day-cell';
+                if (dateStr === todayStr) classes += ' today';
+
+                let dotsHTML = '<div class="dots-wrap">';
+                if (eventCounts[dateStr]) {
+                    let dotCount = Math.min(eventCounts[dateStr], 3);
+                    for(let k = 0; k < dotCount; k++) {
+                        dotsHTML += '<span class="cal-dot"></span>';
+                    }
+                }
+                dotsHTML += '</div>';
+
+                daysHTML += `<div class="\${classes}" onclick="location.href='${pageContext.request.contextPath}/calendar'">
+                                <span class="day-num">\${i}</span>
+                                \${dotsHTML}
+                             </div>`;
+            }
+
+            // 3. 남은 빈칸 채우기
+            const totalCells = firstDayIndex + lastDay.getDate();
+            let nextMonthDay = 1;
+            while(totalCells + nextMonthDay - 1 < 42) {
+                daysHTML += `<div class="day-cell other-month" onclick="location.href='${pageContext.request.contextPath}/calendar'"><span class="day-num">\${nextMonthDay}</span></div>`;
+                nextMonthDay++;
+            }
+
+            document.getElementById('g-cal-days').innerHTML = daysHTML;
+        }
+
+        document.getElementById('g-prev-month').addEventListener('click', () => {
+            currentDispDate.setMonth(currentDispDate.getMonth() - 1);
+            renderMiniCalendar(currentDispDate);
+        });
+        document.getElementById('g-next-month').addEventListener('click', () => {
+            currentDispDate.setMonth(currentDispDate.getMonth() + 1);
+            renderMiniCalendar(currentDispDate);
+        });
+
+        renderMiniCalendar(currentDispDate);
+    });
 </script>
 <%-- /.page-wrap --%>
 </body>
