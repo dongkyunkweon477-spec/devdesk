@@ -16,6 +16,20 @@
         <h2>자유게시판</h2>
 
         <div class="board-actions">
+            <!-- 검색 폼 -->
+            <form action="board" method="get" class="search-form">
+                <select name="searchType" class="search-type">
+                    <option value="title" ${param.searchType == 'title' ? 'selected' : ''}>제목</option>
+                    <option value="content" ${param.searchType == 'content' ? 'selected' : ''}>내용</option>
+                    <option value="author" ${param.searchType == 'author' ? 'selected' : ''}>작성자</option>
+                </select>
+                <input type="text" name="keyword" class="search-input" placeholder="검색어를 입력하세요" value="${param.keyword}">
+                <button type="submit" class="search-btn">검색</button>
+                <c:if test="${not empty param.keyword}">
+                    <button type="button" class="reset-btn" onclick="location.href='board'">목록으로</button>
+                </c:if>
+            </form>
+            
             <select>
                 <option>전체</option>
                 <option>자유토크</option>
