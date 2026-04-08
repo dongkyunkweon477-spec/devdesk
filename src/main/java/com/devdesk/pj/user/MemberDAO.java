@@ -1,5 +1,6 @@
 package com.devdesk.pj.user;
 
+import com.devdesk.pj.board.BoardVO;
 import com.devdesk.pj.main.DBManager_new;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class MemberDAO {
 
@@ -108,13 +110,8 @@ public class MemberDAO {
                     System.out.println("로그인 성공");
 
                     MemberDTO memberDTO = new MemberDTO();
-                    memberDTO.setMember_id(rs.getInt("member_id")); // 선민 추가
-<<<<<<< HEAD
-                    memberDTO.setMember_id(rs.getInt("member_id")); // 추가
 
                     memberDTO.setMember_id(rs.getInt("member_id")); // 선민 추가
-=======
->>>>>>> ca459b474a58230672ae370c27de8dd121550217
                     memberDTO.setEmail(rs.getString("email"));
                     memberDTO.setNickname(rs.getString("nickname"));
                     memberDTO.setJob_category(rs.getString("job_category"));
@@ -217,4 +214,46 @@ public class MemberDAO {
         }
         return false;
     }
+
+    public ArrayList<BoardVO> getMyBoardList(int member_id) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        BoardVO bo = null;
+        ArrayList<BoardVO> boards = new ArrayList<>();
+
+        String sql = "SELECT b.*, " +
+                "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count, " +
+                "COALESCE(b.b_like_count, 0) as like_count " +
+                "FROM board b " +
+                "WHERE member_id = ? " +
+                "ORDER BY b.b_board_id DESC";
+
+        try {
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, member_id);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                bo = new BoardVO();
+                bo.setBoard_id(rs.getInt("b_board_id"));
+                bo.setCategory(rs.getString("b_category"));
+                bo.setTitle(rs.getString("b_title"));
+                bo.setMember_id(rs.getInt("member_id"));
+                bo.setCreated_date(rs.getString("b_created_date"));
+                bo.setView_count(rs.getInt("b_view_count"));
+                bo.setComment_count(rs.getInt("comment_count"));
+                bo.setLike_count(rs.getInt("like_count"));
+                boards.add(bo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, rs);
+        }
+        return boards;
+    }
+
+
 }
