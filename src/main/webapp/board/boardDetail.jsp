@@ -317,24 +317,25 @@
             '</form>' +
             '</div>';
 
-        console.log('Generated HTML:', replyFormHtml);
-
         // 해당 댓글 아래에 대댓글 폼 추가
-        const replyButton = document.querySelector('button[onclick*="showReplyForm(' + commentId + '"]');
-        console.log('Reply button found:', replyButton);
+        const commentItem = document.querySelector('[data-comment-id="' + commentId + '"]');
 
-        if (replyButton) {
-            replyButton.insertAdjacentHTML('afterend', replyFormHtml);
-        } else {
-            console.error('Reply button not found for commentId:', commentId);
+        if (commentItem) {
+            commentItem.insertAdjacentHTML('beforeend', replyFormHtml);
         }
     }
 
     // 대댓글 폼 숨기기 함수
     function hideReplyForm(commentId) {
-        const replyForm = document.getElementById(`reply-form-${commentId}`);
-        if (replyForm) {
-            replyForm.remove();
+        // 해당 댓글 아이템 내에서 reply-form 찾기
+        const commentItem = document.querySelector('[data-comment-id="' + commentId + '"]');
+        
+        if (commentItem) {
+            const replyForm = commentItem.querySelector('.reply-form');
+            
+            if (replyForm) {
+                replyForm.remove();
+            }
         }
     }
 
