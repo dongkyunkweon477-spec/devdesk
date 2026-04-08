@@ -19,6 +19,15 @@ public class TilupdateC extends HttpServlet {
 
     }
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+
+        TilDAO.updateTil(request);
+        request.setAttribute("content", "/dashboard/dashboard.jsp");
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
+    }
+
 
     public void destroy() {
     }

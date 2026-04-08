@@ -26,8 +26,8 @@
         <!-- 메뉴 -->
         <div class="menu-left">
             <a href="${pageContext.request.contextPath}/ws">워크 스페이스</a>
-            <a href="${pageContext.request.contextPath}/report">이력서 관리</a>
-            <a href="${pageContext.request.contextPath}/calender">면접 일정</a>
+            <a href="${pageContext.request.contextPath}/resume-block">이력서 관리</a>
+            <a href="${pageContext.request.contextPath}/calendar">면접 일정</a>
             <a href="${pageContext.request.contextPath}/review">면접 후기</a>
             <a href="${pageContext.request.contextPath}/board">커뮤니티</a>
         </div>
@@ -76,6 +76,7 @@
         </div>
     </div>
 </div>
+
 
 </body>
 </html>
