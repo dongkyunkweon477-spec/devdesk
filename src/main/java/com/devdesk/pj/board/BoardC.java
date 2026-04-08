@@ -15,6 +15,8 @@ public class BoardC extends HttpServlet {
         
         if ("popular".equals(sort)) {
             BoardDAO.showPopularBoard(request);
+        } else if ("viewcount".equals(sort)) {
+            BoardDAO.showViewCountBoard(request);
         } else {
             BoardDAO.showAllBoard(request);
         }

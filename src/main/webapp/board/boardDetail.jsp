@@ -41,6 +41,10 @@
                 <div class="detail-label">작성일</div>
                 <div class="detail-content">${board.created_date}</div>
             </div>
+            <div class="detail-row">
+                <div class="detail-label">조회수</div>
+                <div class="detail-content">${board.view_count}</div>
+            </div>
             <c:if test="${not empty board.updated_date}">
                 <div class="detail-row">
                     <div class="detail-label">최종 수정일</div>

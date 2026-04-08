@@ -25,6 +25,7 @@
             <select onchange="location.href='board?sort=' + this.value">
                 <option value="" ${param.sort == null or param.sort == '' ? 'selected' : ''}>최신순</option>
                 <option value="popular" ${param.sort == 'popular' ? 'selected' : ''}>인기순</option>
+                <option value="viewcount" ${param.sort == 'viewcount' ? 'selected' : ''}>조회순</option>
             </select>
 
             <button class="write-btn"><a href="board_add">글쓰기</a></button>
