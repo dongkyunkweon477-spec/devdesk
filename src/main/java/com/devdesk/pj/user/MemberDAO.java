@@ -109,9 +109,12 @@ public class MemberDAO {
 
                     MemberDTO memberDTO = new MemberDTO();
                     memberDTO.setMember_id(rs.getInt("member_id")); // 선민 추가
+<<<<<<< HEAD
                     memberDTO.setMember_id(rs.getInt("member_id")); // 추가
 
                     memberDTO.setMember_id(rs.getInt("member_id")); // 선민 추가
+=======
+>>>>>>> ca459b474a58230672ae370c27de8dd121550217
                     memberDTO.setEmail(rs.getString("email"));
                     memberDTO.setNickname(rs.getString("nickname"));
                     memberDTO.setJob_category(rs.getString("job_category"));
