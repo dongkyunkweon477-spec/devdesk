@@ -108,13 +108,10 @@ public class MemberDAO {
                     System.out.println("로그인 성공");
 
                     MemberDTO memberDTO = new MemberDTO();
-<<<<<<< HEAD
                     memberDTO.setMember_id(rs.getInt("member_id")); // 선민 추가
                     memberDTO.setMember_id(rs.getInt("member_id")); // 추가
-=======
 
                     memberDTO.setMember_id(rs.getInt("member_id")); // 선민 추가
->>>>>>> 204c201b02a10ae839e2731974f40287544f0acd
                     memberDTO.setEmail(rs.getString("email"));
                     memberDTO.setNickname(rs.getString("nickname"));
                     memberDTO.setJob_category(rs.getString("job_category"));
