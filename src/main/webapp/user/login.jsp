@@ -40,7 +40,8 @@
             </div>
 
             <div class="form-actions">
-                <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=여기에_발급받은_클라이언트ID를_넣으세요&redirect_uri=http://localhost:8080/pj/GoogleLoginController&response_type=code&scope=email profile"
+                <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=235100421101-uhksrc5bk2rc9ltmgpjanv2db0dva9dt.apps.googleusercontent.com
+&redirect_uri=http://localhost/google-login&response_type=code&scope=email profile"
                    class="btn-google">
                     <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"

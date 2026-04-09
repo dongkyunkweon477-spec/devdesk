@@ -17,7 +17,7 @@ public class MemberDAO {
 
     public static final MemberDAO MBAO = new MemberDAO();
 
-    private MemberDAO() {
+    MemberDAO() {
     }
 
     // 로그인 상태를 확인하는 전용 문지기 메서드
@@ -386,5 +386,60 @@ public class MemberDAO {
         }
     }
 
+    public MemberDTO getMemberByEmail(String email) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
+        String sql = "SELECT * FROM member WHERE email = ?";
+
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, email);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                MemberDTO dto = new MemberDTO();
+                dto.setMember_id(rs.getInt("member_id"));
+                dto.setEmail(rs.getString("email"));
+                dto.setNickname(rs.getString("nickname"));
+                dto.setJob_category(rs.getString("job_category"));
+                dto.setLogin_type(rs.getString("login_type"));
+                dto.setSocial_id(rs.getString("social_id"));
+                dto.setRole(rs.getString("role"));
+                dto.setStatus(rs.getString("status"));
+                dto.setProfile_img(rs.getString("profile_img"));
+                return dto;
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            DBManager_new.close(con, pstmt, rs);
+        }
+        return null;
+    }
+
+    public void insertGoogleMember(String email, String nickname, String socialId) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        String sql = "INSERT INTO MEMBER (MEMBER_ID, EMAIL, NICKNAME, LOGIN_TYPE, SOCIAL_ID) "
+                + "VALUES (member_id_seq.NEXTVAL, ?, ?, 'GOOGLE', ?)";
+
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, email);
+            pstmt.setString(2, nickname);
+            pstmt.setString(3, socialId);
+            pstmt.executeUpdate();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            DBManager_new.close(con, pstmt, null);
+        }
+    }
 }
