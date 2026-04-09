@@ -1,6 +1,6 @@
 /* ===== 내 게시글/댓글 관리 전용 CSS (myboard.css) ===== */
 
-/* 🔥 1. 메인 랩퍼: 커다란 감성 박스 */
+/* 🔥 1. 메인 랩퍼 */
 .myboard-wrap {
     max-width: 900px;
     margin: 50px auto 100px;
@@ -31,7 +31,7 @@
     font-weight: 400;
 }
 
-/* 🔥 3. 탭 메뉴: 아이폰 스타일의 알약 탭 */
+/* 🔥 3. 탭 메뉴 */
 .tab-menu {
     display: flex;
     justify-content: center;
@@ -65,12 +65,12 @@
 }
 
 /* ───────────────────────────────────────────
-   🔥 4. 리스트(테이블): 평소엔 플랫 화이트 -> 호버 시 그림자
+   🔥 4. [공통 리스트] 그림자 쪼개짐 제거!
 ─────────────────────────────────────────── */
 .list-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0; /* 틈새를 완전히 없애서 깔끔한 리스트로 만듦 */
+    border-spacing: 0;
     text-align: center;
 }
 
@@ -79,21 +79,21 @@
     color: #94a3b8;
     font-weight: 600;
     font-size: 14px;
-    border-bottom: 2px solid #f1f5f9; /* 헤더 굵은 구분선 */
+    border-bottom: 2px solid #f1f5f9;
 }
 
-/* 🤍 기본 행 디자인 (디폴트: 하얀색 배경 + 얇은 바닥선) */
+/* 🤍 기본 행 디자인 */
 .list-table td {
-    background: #ffffff; /* 완벽한 하얀색 */
+    background: #ffffff;
     padding: 22px 12px;
     color: #475569;
     font-size: 15px;
-    border-bottom: 1px solid #f1f5f9; /* 깔끔한 리스트용 바닥선 */
-    /* 부드러운 그림자 전환 효과만 남김 */
-    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    border-bottom: 1px solid #f1f5f9;
+    /* 그림자 애니메이션 삭제, 배경색 부드럽게 변하는 효과만 남김 */
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-/* 양끝 모서리를 둥글게 (그림자가 생길 때 예쁜 카드 모양이 되도록) */
+/* 양끝 모서리 둥글게 */
 .list-table td:first-child {
     border-radius: 12px 0 0 12px;
 }
@@ -102,25 +102,18 @@
     border-radius: 0 12px 12px 0;
 }
 
-/* 마지막 줄은 원래 바닥선 제거 */
+/* 마지막 줄 바닥선 제거 */
 .list-table tbody tr:last-child td {
     border-bottom: none;
 }
 
-/* 🌟 마우스 올렸을 때 효과 (위로 안 뜸, 아주 옅은 그림자만 샥- 깔림!) */
-.list-table tbody tr {
-    position: relative; /* 그림자가 다른 요소에 안 가려지게 함 */
-}
-
+/* 🌟 [게시글 탭] 호버 시 쪼개지는 그림자 대신 '통짜 연회색 배경' 적용! */
 .list-table tbody tr:hover td {
-    border-bottom-color: transparent; /* 마우스 올린 행의 바닥선 숨김 */
-    box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06); /* 아주 옅고 부드러운 그림자 */
-    z-index: 10; /* 호버된 행이 가장 위로 오게 함 */
+    background-color: #f8fafc; /* 한 줄 전체가 깔끔한 연회색으로 칠해짐 */
+    border-bottom-color: transparent;
 }
 
-/* ───────────────────────────────────────────
-   🔥 5. 글 제목 & 뱃지 디테일
-─────────────────────────────────────────── */
+/* 🔥 5. 글 제목 & 뱃지 디테일 */
 .list-table .td-title {
     text-align: left;
     font-weight: 500;
@@ -133,12 +126,12 @@
     transition: color 0.2s;
 }
 
-/* 마우스 올리면 제목이 은은한 보라색으로만 변함 */
+/* 호버 시 제목 보라색 (게시글 탭) */
 .list-table tbody tr:hover .td-title a {
     color: #7c3aed;
 }
 
-/* 카테고리 기본 하얀색 뱃지 */
+/* 뱃지 */
 .category-badge {
     display: inline-block;
     padding: 6px 14px;
@@ -151,14 +144,13 @@
     transition: all 0.3s ease;
 }
 
-/* 행에 마우스 올리면 뱃지만 예쁘게 포인트 컬러로 변함 */
 .list-table tbody tr:hover .category-badge {
     background: #f3e8ff;
     color: #7c3aed;
     border-color: #e9d5ff;
 }
 
-/* 🔥 6. 댓글 숫자 감성 스타일 (JSP 수정 없이 적용!) */
+/* 🔥 6. 댓글 숫자 감성 스타일 */
 .list-table .td-title span {
     color: #8b5cf6 !important;
     background: #f5f3ff;
@@ -170,10 +162,29 @@
     display: inline-block;
 }
 
-/* 빈 화면 텍스트 */
 .empty-msg {
     text-align: center;
     padding: 80px 0;
     color: #94a3b8;
     font-size: 15px;
+}
+
+/* ───────────────────────────────────────────
+   🔥 7. [NEW] 내가 쓴 댓글 탭 "전용" 통짜 배경 효과!
+─────────────────────────────────────────── */
+
+/* 1) 댓글 탭은 마우스 올릴 시 한 줄 전체가 감성적인 '연보라색'으로 변함 */
+#tab-comments .list-table tbody tr:hover td {
+    background-color: #f5f3ff !important;
+    border-bottom-color: transparent;
+}
+
+/* 2) 댓글 텍스트 색상: 차분하고 세련된 딥 퍼플(다크 보라) */
+#tab-comments .list-table tbody tr:hover .td-title a {
+    color: #4c1d95;
+}
+
+/* 3) 원본 글 제목(회색 텍스트): 살짝 또렷하게 */
+#tab-comments .list-table tbody tr:hover td:first-child {
+    color: #64748b !important;
 }
