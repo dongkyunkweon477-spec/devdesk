@@ -1,5 +1,6 @@
 package com.devdesk.pj.user;
 
+import com.devdesk.pj.Comment.CommentVO;
 import com.devdesk.pj.board.BoardVO;
 import com.devdesk.pj.main.DBManager_new;
 
@@ -10,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+
 
 public class MemberDAO {
 
@@ -253,6 +255,43 @@ public class MemberDAO {
             DBManager_new.close(con, ps, rs);
         }
         return boards;
+    }
+
+    public ArrayList<CommentVO> getMyCommentList(int member_id) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<CommentVO> comments = new ArrayList<>();
+
+        String sql = "SELECT c.c_comments_id, c.b_board_id, c.c_content, c.c_created_date, b.b_title " +
+                "FROM comments c " +
+                "JOIN board b ON c.b_board_id = b.b_board_id " +
+                "WHERE c.member_id = ? " +
+                "ORDER BY c.c_comments_id DESC";
+
+        try {
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, member_id);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CommentVO c = new CommentVO();
+                c.setComments_id(rs.getInt("c_comments_id"));
+                c.setBoard_id(rs.getInt("b_board_id"));
+                c.setContent(rs.getString("c_content"));
+
+                c.setCreated_date(String.valueOf(rs.getDate("c_created_date")));
+                c.setBoard_title(rs.getString("b_title"));
+
+                comments.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, rs);
+        }
+        return comments;
     }
 
 
