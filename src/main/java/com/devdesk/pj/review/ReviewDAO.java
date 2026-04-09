@@ -433,4 +433,8 @@ public class ReviewDAO {
     }
 
 
+//    public Map<String, Object> getFilteredReviews(int companyId, String interviewType, String result, String sort, int page, int pageSize) {
+//
+//
+//    }
 }
