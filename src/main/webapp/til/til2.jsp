@@ -6,10 +6,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
     <title>TIL — 취뽀 워크스페이스</title>
     <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/til.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/sidebar.css">
 </head>
 <body>
 <div class="page-wrap">
@@ -25,20 +27,11 @@
             <div class="nav-section-label">메인</div>
             <a href="dashboard" class="nav-item"><span class="nav-icon">🏠</span>대시보드</a>
             <div class="nav-section-label">취업 관리</div>
-            <a href="applications" class="nav-item"><span class="nav-icon">📋</span>지원 현황</a>
-            <a href="schedule" class="nav-item"><span class="nav-icon">📅</span>면접 일정</a>
+            <a href="application-list" class="nav-item"><span class="nav-icon">📋</span>지원 현황</a>
+            <a href="calendar" class="nav-item"><span class="nav-icon">📅</span>면접 일정</a>
             <div class="nav-section-label">학습</div>
             <a href="til" class="nav-item active"><span class="nav-icon">📚</span>TIL</a>
         </nav>
-        <div class="sidebar-footer">
-            <div class="user-card">
-                <div class="user-avatar">나</div>
-                <div>
-                    <div class="user-name">${sessionScope.loginUser.name}</div>
-                    <div class="user-role">${sessionScope.loginUser.role}</div>
-                </div>
-            </div>
-        </div>
     </aside>
 
     <main class="content-area">
@@ -84,7 +77,7 @@
                     <c:forEach var="entry" items="${tagStats}">
                         <a href="til?tag=${entry.key}"
                            class="tag-btn ${param.tag == entry.key ? 'active' : ''}">
-                            ${entry.key} <span class="tag-cnt">${entry.value}</span>
+                                ${entry.key} <span class="tag-cnt">${entry.value}</span>
                         </a>
                     </c:forEach>
                 </div>
@@ -110,7 +103,7 @@
                                 <div class="til-card-title">${t.title}</div>
                                 <c:if test="${not empty t.content}">
                                     <div class="til-card-preview">
-                                        ${fn:substring(t.content, 0, 100)}${fn:length(t.content) > 100 ? '...' : ''}
+                                            ${fn:substring(t.content, 0, 100)}${fn:length(t.content) > 100 ? '...' : ''}
                                     </div>
                                 </c:if>
                                 <div class="til-card-footer">
@@ -300,27 +293,29 @@
     ];
 
     const TAG_CONFIG = {
-        'Java':       {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
-        'Spring':     {color: '#56e39f', bg: 'rgba(86,227,159,0.12)'},
-        'SQL':        {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
+        'Java': {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
+        'Spring': {color: '#56e39f', bg: 'rgba(86,227,159,0.12)'},
+        'SQL': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
         'JavaScript': {color: '#ffd166', bg: 'rgba(255,209,102,0.12)'},
-        'Git':        {color: '#ff6b6b', bg: 'rgba(255,107,107,0.12)'},
-        'Python':     {color: '#5b7cf8', bg: 'rgba(91,124,248,0.12)'},
-        'CSS':        {color: '#8b6ef5', bg: 'rgba(139,110,245,0.12)'},
-        'React':      {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
-        '기타':        {color: '#9da3b8', bg: 'rgba(157,163,184,0.12)'}
+        'Git': {color: '#ff6b6b', bg: 'rgba(255,107,107,0.12)'},
+        'Python': {color: '#5b7cf8', bg: 'rgba(91,124,248,0.12)'},
+        'CSS': {color: '#8b6ef5', bg: 'rgba(139,110,245,0.12)'},
+        'React': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
+        '기타': {color: '#9da3b8', bg: 'rgba(157,163,184,0.12)'}
     };
 
     /* ── 도넛 차트 ── */
     function drawDonut() {
         if (!TAG_STATS.length) return;
-        var total = TAG_STATS.reduce(function(a, d) { return a + d.count; }, 0);
+        var total = TAG_STATS.reduce(function (a, d) {
+            return a + d.count;
+        }, 0);
         var canvas = document.getElementById('donutCanvas');
         var ctx = canvas.getContext('2d');
         var cx = 65, cy = 65, r = 50, ir = 30, gap = 0.04;
         var angle = -Math.PI / 2;
 
-        TAG_STATS.forEach(function(d) {
+        TAG_STATS.forEach(function (d) {
             var cfg = TAG_CONFIG[d.tag] || TAG_CONFIG['기타'];
             var sweep = (d.count / total) * Math.PI * 2 - gap;
             ctx.beginPath();
@@ -337,7 +332,7 @@
         ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--surface') || '#141720';
         ctx.fill();
 
-        document.getElementById('chartLegend').innerHTML = TAG_STATS.map(function(d) {
+        document.getElementById('chartLegend').innerHTML = TAG_STATS.map(function (d) {
             var cfg = TAG_CONFIG[d.tag] || TAG_CONFIG['기타'];
             var pct = Math.round(d.count / total * 100);
             return '<div class="legend-row">' +
@@ -362,16 +357,16 @@
 
         if (id) {
             var el = document.getElementById('til_data_' + id);
-            document.getElementById('formTilId').value  = id;
-            document.getElementById('tilTitle').value   = el.dataset.title;
-            document.getElementById('tilTag').value     = el.dataset.tag;
-            document.getElementById('tilTime').value    = el.dataset.time;
+            document.getElementById('formTilId').value = id;
+            document.getElementById('tilTitle').value = el.dataset.title;
+            document.getElementById('tilTag').value = el.dataset.tag;
+            document.getElementById('tilTime').value = el.dataset.time;
             document.getElementById('tilContent').value = el.dataset.content;
         } else {
-            document.getElementById('formTilId').value  = '';
-            document.getElementById('tilTitle').value   = '';
-            document.getElementById('tilTag').value     = 'Java';
-            document.getElementById('tilTime').value    = '';
+            document.getElementById('formTilId').value = '';
+            document.getElementById('tilTitle').value = '';
+            document.getElementById('tilTag').value = 'Java';
+            document.getElementById('tilTime').value = '';
             document.getElementById('tilContent').value = '';
         }
 
@@ -398,11 +393,11 @@
                 : '');
 
         document.getElementById('detailContent').innerHTML = renderMarkdown(el.dataset.content);
-        document.getElementById('detailEditBtn').onclick = function() {
+        document.getElementById('detailEditBtn').onclick = function () {
             closeDetail();
             openTilEditor(id);
         };
-        document.getElementById('detailDeleteBtn').onclick = function() {
+        document.getElementById('detailDeleteBtn').onclick = function () {
             closeDetail();
             openDeleteConfirm(id, el.dataset.title);
         };
@@ -430,32 +425,32 @@
         if (!text) return '<p style="color:var(--text3)">내용이 없어요.</p>';
         return text
             .replace(/```([\s\S]*?)```/g, '<pre class="md-code">$1</pre>')
-            .replace(/`([^`]+)`/g,         '<code class="md-inline">$1</code>')
-            .replace(/^### (.+)$/gm,        '<h3 class="md-h3">$1</h3>')
-            .replace(/^## (.+)$/gm,         '<h2 class="md-h2">$1</h2>')
-            .replace(/^# (.+)$/gm,          '<h1 class="md-h1">$1</h1>')
-            .replace(/\*\*([^*]+)\*\*/g,    '<strong>$1</strong>')
-            .replace(/^- (.+)$/gm,          '<li class="md-li">$1</li>')
-            .replace(/\n\n/g,               '</p><p class="md-p">')
-            .replace(/\n/g,                 '<br>');
+            .replace(/`([^`]+)`/g, '<code class="md-inline">$1</code>')
+            .replace(/^### (.+)$/gm, '<h3 class="md-h3">$1</h3>')
+            .replace(/^## (.+)$/gm, '<h2 class="md-h2">$1</h2>')
+            .replace(/^# (.+)$/gm, '<h1 class="md-h1">$1</h1>')
+            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+            .replace(/^- (.+)$/gm, '<li class="md-li">$1</li>')
+            .replace(/\n\n/g, '</p><p class="md-p">')
+            .replace(/\n/g, '<br>');
     }
 
     /* ── 에디터 툴바 ── */
     function insertMd(prefix) {
         var ta = document.getElementById('tilContent');
-        var s  = ta.selectionStart;
+        var s = ta.selectionStart;
         ta.value = ta.value.slice(0, s) + prefix + ta.value.slice(ta.selectionEnd);
         ta.selectionStart = ta.selectionEnd = s + prefix.length;
         ta.focus();
     }
 
     function wrapMd(open, close) {
-        var ta  = document.getElementById('tilContent');
-        var s   = ta.selectionStart, e = ta.selectionEnd;
+        var ta = document.getElementById('tilContent');
+        var s = ta.selectionStart, e = ta.selectionEnd;
         var sel = ta.value.slice(s, e) || 'text';
         ta.value = ta.value.slice(0, s) + open + sel + close + ta.value.slice(e);
         ta.selectionStart = s + open.length;
-        ta.selectionEnd   = s + open.length + sel.length;
+        ta.selectionEnd = s + open.length + sel.length;
         ta.focus();
     }
 
@@ -463,38 +458,129 @@
 
     function togglePreview() {
         showPreview = !showPreview;
-        var ta  = document.getElementById('tilContent');
+        var ta = document.getElementById('tilContent');
         var pre = document.getElementById('editorPreview');
         var btn = document.getElementById('previewBtn');
         if (showPreview) {
-            pre.innerHTML    = renderMarkdown(ta.value);
+            pre.innerHTML = renderMarkdown(ta.value);
             pre.style.display = 'block';
-            ta.style.display  = 'none';
-            btn.textContent   = '✏️ 편집';
+            ta.style.display = 'none';
+            btn.textContent = '✏️ 편집';
         } else {
             pre.style.display = 'none';
-            ta.style.display  = 'block';
-            btn.textContent   = '👁 미리보기';
+            ta.style.display = 'block';
+            btn.textContent = '👁 미리보기';
         }
     }
 
     /* ── 키보드 / 오버레이 닫기 ── */
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
             closeEditor();
             closeDetail();
             closeConfirm();
         }
     });
-    document.getElementById('tilEditorModal').addEventListener('click', function(e) {
+    document.getElementById('tilEditorModal').addEventListener('click', function (e) {
         if (e.target === e.currentTarget) closeEditor();
     });
-    document.getElementById('tilDetailModal').addEventListener('click', function(e) {
+    document.getElementById('tilDetailModal').addEventListener('click', function (e) {
         if (e.target === e.currentTarget) closeDetail();
     });
+    document.getElementById('confirmOverlay').addEventListener('click', function (e) {
+        if (e.target === e.currentTarget) closeConfirm();
+    });
+
+    // ... 기존 오버레이 닫기 로직 생략 ...
     document.getElementById('confirmOverlay').addEventListener('click', function(e) {
         if (e.target === e.currentTarget) closeConfirm();
     });
+
+    // 🌟 여기서부터 미니 캘린더 자바스크립트 통째로 추가! 🌟
+    document.addEventListener('DOMContentLoaded', function() {
+        const rawEvents = [
+            <c:forEach var="sch" items="${schList}">
+            '${sch.schedule_date}',
+            </c:forEach>
+        ];
+
+        const eventCounts = {};
+        rawEvents.forEach(date => {
+            const pureDate = date.split(' ')[0];
+            eventCounts[pureDate] = (eventCounts[pureDate] || 0) + 1;
+        });
+
+        let currentDispDate = new Date();
+
+        function renderMiniCalendar(dateToRender) {
+            const year = dateToRender.getFullYear();
+            const month = dateToRender.getMonth();
+            const today = new Date();
+            const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+            document.getElementById('g-cal-title').textContent = year + '년 ' + (month + 1) + '월';
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+            let firstDayIndex = firstDay.getDay() - 1;
+            if (firstDayIndex === -1) firstDayIndex = 6;
+
+            let daysHTML = '';
+
+            // 1. 이전 달 날짜 흐리게 채우기
+            for (let i = firstDayIndex; i > 0; i--) {
+                daysHTML += `<div class="day-cell other-month" onclick="location.href='${pageContext.request.contextPath}/calendar'"><span class="day-num">\${prevMonthLastDay - i + 1}</span></div>`;
+            }
+
+            // 2. 이번 달 1일부터 말일까지 꽉꽉 채우기!!
+            for (let i = 1; i <= lastDay.getDate(); i++) {
+                const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(i).padStart(2, '0');
+                let classes = 'day-cell';
+                if (dateStr === todayStr) classes += ' today';
+
+                let dotsHTML = '<div class="dots-wrap">';
+                if (eventCounts[dateStr]) {
+                    let dotCount = Math.min(eventCounts[dateStr], 3);
+                    for(let k = 0; k < dotCount; k++) {
+                        dotsHTML += '<span class="cal-dot"></span>';
+                    }
+                }
+                dotsHTML += '</div>';
+
+                daysHTML += `<div class="\${classes}" onclick="location.href='${pageContext.request.contextPath}/calendar'">
+                                <span class="day-num">\${i}</span>
+                                \${dotsHTML}
+                             </div>`;
+            }
+
+            // 3. 달력 모양 유지를 위해 남은 빈칸은 다음 달 날짜로 채우기
+            const totalCells = firstDayIndex + lastDay.getDate();
+            let nextMonthDay = 1;
+            while(totalCells + nextMonthDay - 1 < 42) {
+                daysHTML += `<div class="day-cell other-month" onclick="location.href='${pageContext.request.contextPath}/calendar'"><span class="day-num">\${nextMonthDay}</span></div>`;
+                nextMonthDay++;
+            }
+
+            document.getElementById('g-cal-days').innerHTML = daysHTML;
+        }
+
+        document.getElementById('g-prev-month').addEventListener('click', () => {
+            currentDispDate.setMonth(currentDispDate.getMonth() - 1);
+            renderMiniCalendar(currentDispDate);
+        });
+        document.getElementById('g-next-month').addEventListener('click', () => {
+            currentDispDate.setMonth(currentDispDate.getMonth() + 1);
+            renderMiniCalendar(currentDispDate);
+        });
+
+        renderMiniCalendar(currentDispDate);
+    });
+</script>
+</body>
+</html>
+
 </script>
 </body>
 </html>

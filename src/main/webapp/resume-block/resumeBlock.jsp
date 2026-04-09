@@ -29,10 +29,10 @@
                 <span class="nav-icon">🏠</span>대시보드
             </a>
             <div class="nav-section-label">취업 관리</div>
-            <a href="${pageContext.request.contextPath}/applications" class="nav-item">
+            <a href="${pageContext.request.contextPath}/application-list" class="nav-item">
                 <span class="nav-icon">📋</span>지원 현황
             </a>
-            <a href="${pageContext.request.contextPath}/calender" class="nav-item">
+            <a href="${pageContext.request.contextPath}/calendar" class="nav-item">
                 <span class="nav-icon">📅</span>면접 일정
             </a>
             <div class="nav-section-label">이력서</div>
@@ -51,22 +51,13 @@
                 <span class="nav-icon">📢</span>게시판
             </a>
         </nav>
-        <div class="sidebar-footer">
-            <div class="user-card">
-                <div class="user-avatar">
-                    ${fn:substring(sessionScope.user.nickname, 0, 1)}
-                </div>
-                <div>
-                    <div class="user-name">${sessionScope.user.nickname}</div>
-                    <div class="user-role">취업 준비생</div>
-                </div>
-            </div>
-        </div>
+
     </aside>
 
     <%-- ── Main content ── --%>
     <main class="content-area">
-        <div class="page-header-row" style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px">
+        <div class="page-header-row"
+             style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px">
             <div>
                 <h1 style="font-size:22px;font-weight:700;color:var(--text);margin-bottom:4px">
                     이력서 블록 라이브러리
@@ -155,7 +146,7 @@
                                     <button class="rb-star-btn ${block.isStar == 1 ? 'starred' : ''}"
                                             onclick="toggleStar(${block.blockId})"
                                             title="즐겨찾기">
-                                        ${block.isStar == 1 ? '★' : '☆'}
+                                            ${block.isStar == 1 ? '★' : '☆'}
                                     </button>
                                 </div>
                             </div>
@@ -174,7 +165,7 @@
                                         </c:forEach>
                                     </c:if>
                                     <span class="rb-char-count">
-                                        <c:set var="contentLen" value="${fn:length(block.content)}" />
+                                        <c:set var="contentLen" value="${fn:length(block.content)}"/>
                                         ${contentLen}자
                                         <c:if test="${block.charLimit > 0 && contentLen > block.charLimit}">
                                             <span class="rb-char-warn">(제한 ${block.charLimit}자 초과)</span>
@@ -183,18 +174,21 @@
                                 </div>
                                 <div class="rb-card-actions">
                                     <button class="btn btn-ghost btn-sm"
-                                            onclick="copyBlock(${block.blockId})">복사</button>
+                                            onclick="copyBlock(${block.blockId})">복사
+                                    </button>
                                     <button class="btn btn-ghost btn-sm"
-                                            onclick="openVersionModal(${block.blockId})">버전</button>
+                                            onclick="openVersionModal(${block.blockId})">버전
+                                    </button>
                                     <button class="btn btn-ghost btn-sm"
                                             onclick="openEditModal(
                                                 ${block.blockId},
-                                                '${block.categoryId}',
-                                                '${fn:escapeXml(block.title)}',
-                                                document.querySelector('[data-block-id=&quot;${block.blockId}&quot;] .rb-card-preview').getAttribute('data-full-content'),
-                                                '${fn:escapeXml(block.tags)}',
+                                                    '${block.categoryId}',
+                                                    '${fn:escapeXml(block.title)}',
+                                                    document.querySelector('[data-block-id=&quot;${block.blockId}&quot;] .rb-card-preview').getAttribute('data-full-content'),
+                                                    '${fn:escapeXml(block.tags)}',
                                                 ${block.charLimit}
-                                            )">편집</button>
+                                                    )">편집
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -318,7 +312,7 @@
             categoryId: '${b.categoryId}',
             title: '${fn:escapeXml(b.title)}',
             content: `${fn:escapeXml(b.content)}`
-        }<c:if test="${!s.last}">,</c:if>
+        }<c:if test="${!s.last}">, </c:if>
         </c:forEach>
     ];
 </script>
