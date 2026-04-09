@@ -55,6 +55,8 @@ a:hover {
 
     background: #ffffff;
     border-bottom: 1px solid #e2e8f0;
+    
+    min-width: 0; /* Prevent flex items from overflowing */
 }
 
 .title {
@@ -86,11 +88,9 @@ a:hover {
     display: flex;
     align-items: center;
     gap: 30px;
-
-    /*로그인 시에도 중앙정렬 유지하는 부분 추가*/
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    flex: 1;
+    justify-content: center;
+    min-width: 0; /* Prevent flex items from overflowing */
 }
 
 .menu-left a {
@@ -132,6 +132,8 @@ a:hover {
     display: flex;
     align-items: center;
     gap: 6px;
+    flex-shrink: 0; /* Prevent shrinking */
+    min-width: 0; /* Prevent overflow */
 }
 
 /* 기본 a 태그 뼈대 */
@@ -153,6 +155,8 @@ a:hover {
     color: #7c3aed;
     font-weight: 600;
     margin-right: 15px;
+    white-space: nowrap; /* Prevent text wrapping */
+    flex-shrink: 0; /* Prevent shrinking */
 }
 
 /* [버튼 1] 로그인, 마이페이지 (텍스트 버튼) */
@@ -183,6 +187,7 @@ a:hover {
 
 /* ===== 콘텐츠 ===== */
 .content {
+    background-color: #f8fafc;
     margin-top: 30px;
     padding: 30px;
     min-height: 800px;
@@ -210,7 +215,7 @@ a:hover {
     width: 100%;
     border-top: 1px solid #e2e8f0;
     background-color: #ffffff;
-    margin-top: 60px;
+    margin-top: 30px;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
 }
 
@@ -240,5 +245,72 @@ a:hover {
     margin-top: 5px;
     font-size: 12px;
     color: #94a3b8;
+}
+
+/* ===== 반응형 디자인 ===== */
+@media (max-width: 1200px) {
+    .header {
+        padding: 0 20px;
+    }
+    
+    .menu-left {
+        gap: 20px;
+    }
+    
+    .menu-left a {
+        font-size: 14px;
+    }
+    
+    .menu-right .welcome-msg {
+        font-size: 13px;
+        margin-right: 10px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .menu-left {
+        gap: 15px;
+    }
+    
+    .menu-left a {
+        font-size: 13px;
+    }
+    
+    .menu-right .welcome-msg {
+        font-size: 12px;
+        margin-right: 8px;
+    }
+    
+    .menu-right a {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+}
+
+@media (max-width: 850px) {
+    .header {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px 20px;
+    }
+    
+    .title {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    
+    .menu-left {
+        position: static;
+        transform: none;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    
+    .menu-right {
+        width: 100%;
+        justify-content: center;
+    }
 }
 

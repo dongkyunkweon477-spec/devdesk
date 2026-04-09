@@ -12,5 +12,6 @@ public class CommentVO {
     private String created_date;
 
     private String nickname;
+    private String board_title; // 영은 추가
 
 }
