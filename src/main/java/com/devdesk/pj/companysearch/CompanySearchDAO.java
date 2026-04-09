@@ -24,7 +24,7 @@ public class CompanySearchDAO {
                 + "COUNT(r.r_id) AS review_count "
                 + "FROM company c "
                 + "LEFT JOIN review r ON c.company_id = r.r_company_id "
-                + "WHERE 1=1");
+                + "WHERE c.is_verified = 'Y'");
         List<Object> params = new ArrayList<>();
 
         for (String col : allowedText) {
@@ -48,7 +48,7 @@ public class CompanySearchDAO {
         }
         sql.append(" GROUP BY c.company_id, c.company_name, c.company_industry, "
                 + "c.company_location, c.company_rating, c.company_size, "
-                + "c.company_created_date, c.company_application_date");
+                + "c.company_created_date, c.company_application_date, c.is_verified");
 
 
         List<String> companies = new ArrayList<>();
@@ -132,8 +132,8 @@ public class CompanySearchDAO {
 
     public int insertCompany(CompanySearchVO vo) {
         String sql = "insert into company(company_id, company_name, company_industry, " +
-                "company_location, company_rating, company_size, company_created_date, company_application_date) " +
-                "values(company_seq.nextval, ?, ?, ?, ?, ?, ?, ?)";
+                "company_location, company_rating, company_size, company_created_date, company_application_date, is_verified) " +
+                "values(company_seq.nextval, ?, ?, ?, ?, ?, ?, ?, 'Y')";
         try (
                 Connection con = DBManager_new.connect();
                 PreparedStatement pstmt = con.prepareStatement(sql);
@@ -183,7 +183,7 @@ public class CompanySearchDAO {
     public void updateCompany(CompanySearchVO vo) {
         String sql = "update company set company_name=?, company_industry=?, " +
                 "company_location=?, company_rating=?, company_size=? , company_application_date=? " +
-                "where company_id=?";
+                " where company_id=?";
         try (
                 Connection con = DBManager_new.connect();
                 PreparedStatement pstmt = con.prepareStatement(sql);
@@ -230,7 +230,7 @@ public class CompanySearchDAO {
     }
 
     public int getTotalCompanyCount() {
-        String sql = "select count(*) from company";
+        String sql = "select count(*) from company where is_verified = 'Y'";
         try (
                 Connection con = DBManager_new.connect();
                 PreparedStatement pstmt = con.prepareStatement(sql);
@@ -259,7 +259,7 @@ public class CompanySearchDAO {
                         + "COUNT(r.r_id) AS review_count "
                         + "FROM company c "
                         + "LEFT JOIN review r ON c.company_id = r.r_company_id "
-                        + "WHERE 1=1"
+                        + "where c.is_verified = 'Y' "
         );
 
         List<Object> params = new ArrayList<>();
@@ -284,7 +284,8 @@ public class CompanySearchDAO {
         }
         baseSql.append(" GROUP BY c.company_id, c.company_name, c.company_industry, "
                 + "c.company_location, c.company_rating, c.company_size, "
-                + "c.company_created_date, c.company_application_date");
+                + "c.company_created_date, c.company_application_date" +
+                ", c.is_verified");
 
 
         String countSql = "SELECT COUNT(*) FROM (" + baseSql + ")";
@@ -337,4 +338,30 @@ public class CompanySearchDAO {
     }
 
 
+    public int directInsertCompany(String companyName) {
+        int newCompanyId = 0;
+        String sql = "insert into company(" +
+                "company_id , company_name , company_industry , company_location , company_rating , company_size , company_created_date, company_application_date, is_verified" +
+                " ) values (" +
+                "company_seq.nextval, ? , '미정', '미정', 0, 0, sysdate, sysdate, 'N')";
+        try (
+                Connection con = DBManager_new.connect();
+                PreparedStatement pstmt = con.prepareStatement(sql, new String[]{"company_id"});
+        ) {
+            pstmt.setString(1, companyName);
+            pstmt.executeUpdate();
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    newCompanyId = rs.getInt(1);
+
+                }
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return newCompanyId;
+    }
 }

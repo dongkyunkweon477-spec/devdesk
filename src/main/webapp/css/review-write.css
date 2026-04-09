@@ -336,6 +336,46 @@
     }
 }
 
+/* ===== 기업 선택 버튼 ===== */
+.btn-search {
+    height: 38px;
+    padding: 0 16px;
+    background: #7c3aed;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Pretendard', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.btn-search:hover {
+    background: #6d28d9;
+}
+
+/* ===== 선택된 기업명 표시 input ===== */
+#selectedCompanyName {
+    flex: 1;
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
+    color: #1e293b;
+    background: #f1f5f9;
+    cursor: pointer;
+}
+
+#selectedCompanyName::placeholder {
+    color: #94a3b8;
+}
+
+/* ===== 모달 오버레이 ===== */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -352,29 +392,127 @@
 .modal-box {
     background: #ffffff;
     border-radius: 12px;
-    padding: 40px 50px;
+    padding: 28px 28px 24px;
+    width: 420px;
+    max-width: calc(100vw - 40px);
+}
+
+.modal-box h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 16px 0;
+}
+
+/* 검색 input + 버튼 가로 배치 */
+.modal-box > input[type="text"] {
+    width: 100%;
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px 0 0 8px;
+    font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
+    color: #1e293b;
+    background: #f8fafc;
+    box-sizing: border-box;
+    border-right: none;
+}
+
+.modal-box > input[type="text"]:focus {
+    outline: none;
+    border-color: #a78bfa;
+    background: #ffffff;
+}
+
+.modal-search-row {
+    display: flex;
+    margin-bottom: 12px;
+}
+
+/* 검색 결과 리스트 */
+#miniResultList {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+    max-height: 220px;
+    overflow-y: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+#miniResultList:empty {
+    display: none;
+}
+
+#miniResultList li {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+#miniResultList li:last-child {
+    border-bottom: none;
+}
+
+#miniResultList li a {
+    display: block;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #334155;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+#miniResultList li a:hover {
+    background: #f5f3ff;
+    color: #7c3aed;
+}
+
+/* 검색 결과 없음 텍스트 */
+#miniResultList p {
+    padding: 12px 14px;
+    font-size: 14px;
+    color: #94a3b8;
+    margin: 0;
     text-align: center;
 }
 
-.modal-box p {
-    font-size: 18px;
+/* 직접 등록 버튼 */
+#miniResultList button {
+    display: block;
+    width: calc(100% - 28px);
+    margin: 0 14px 12px;
+    padding: 8px 16px;
+    background: #f5f3ff;
+    color: #7c3aed;
+    border: 1px dashed #a78bfa;
+    border-radius: 8px;
+    font-size: 13px;
     font-weight: 600;
-    color: #1e293b;
-    margin: 0 0 20px 0;
+    font-family: 'Pretendard', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s;
 }
 
-.modal-box button {
-    padding: 8px 32px;
-    background: #7c3aed;
-    color: #ffffff;
-    border: none;
+#miniResultList button:hover {
+    background: #ede9fe;
+}
+
+/* 닫기 버튼 */
+.modal-box > button {
+    display: block;
+    margin-left: auto;
+    padding: 7px 20px;
+    background: #ffffff;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     font-family: 'Pretendard', sans-serif;
     cursor: pointer;
+    transition: background 0.2s;
 }
 
-.modal-box button:hover {
-    background: #6d28d9;
+.modal-box > button:hover {
+    background: #f8fafc;
 }

@@ -155,6 +155,8 @@ function initClear(totalCompanyCount) {
 
         // 개수 표시를 초기 전체 개수로 복구
         $('#resultCount').text(totalCompanyCount);
+        $('#companyPaging').empty();
+        
     });
 
 }
