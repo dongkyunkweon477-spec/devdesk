@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/board-detail.css">
     <link rel="stylesheet" href="css/comment.css">
     <link rel="stylesheet" href="css/board_like.css">
+    <link rel="stylesheet" href="js/boardDetail.js">
 </head>
 <body>
 <div class="board-container">
@@ -167,7 +168,7 @@
     // 초기 좋아요 상태 설정 (JSP 로딩 시 서버 데이터를 자바스크립트 변수에 저장)
     let currentIsLiked = ${isLiked} // 기본값
 
-        // 1. 페이지 로드 시 서버가 보낸 초기 상태 (BoardDetailC에서 request.setAttribute한 값)
+// 1. 페이지 로드 시 서버가 보낸 초기 상태 (BoardDetailC에서 request.setAttribute한 값)
         let
     isLiked = ${isLiked};
 
@@ -333,10 +334,10 @@
     function hideReplyForm(commentId) {
         // 해당 댓글 아이템 내에서 reply-form 찾기
         const commentItem = document.querySelector('[data-comment-id="' + commentId + '"]');
-        
+
         if (commentItem) {
             const replyForm = commentItem.querySelector('.reply-form');
-            
+
             if (replyForm) {
                 replyForm.remove();
             }
@@ -349,5 +350,6 @@
         replyForms.forEach(form => form.remove());
     }
 </script>
+
 </body>
 </html>
