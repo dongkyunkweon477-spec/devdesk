@@ -4,7 +4,6 @@
 <html>
 <head>
     <title>review</title>
-    <%--    <link rel="stylesheet" href="css/board.css">--%>
     <link rel="stylesheet" href="css/board.css">
 
 </head>
