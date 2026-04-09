@@ -6,10 +6,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
     <title>TIL — 취뽀 워크스페이스</title>
     <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/til.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/sidebar.css">
 </head>
 <body>
 <div class="page-wrap">
@@ -30,15 +32,6 @@
             <div class="nav-section-label">학습</div>
             <a href="til" class="nav-item active"><span class="nav-icon">📚</span>TIL</a>
         </nav>
-        <div class="sidebar-footer">
-            <div class="user-card">
-                <div class="user-avatar">나</div>
-                <div>
-                    <div class="user-name">${sessionScope.loginUser.name}</div>
-                    <div class="user-role">${sessionScope.loginUser.role}</div>
-                </div>
-            </div>
-        </div>
     </aside>
 
     <main class="content-area">

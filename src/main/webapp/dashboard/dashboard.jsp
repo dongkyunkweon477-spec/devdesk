@@ -7,13 +7,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
     <title>대시보드 — 취뽀 워크스페이스</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
+    <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/dashboard.css">
     <link rel="stylesheet" href="/css/til.css">
-    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
 <div class="page-wrap">
@@ -46,19 +49,7 @@
                 <span class="nav-icon">📚</span> TIL
             </a>
         </nav>
-
-        <div class="sidebar-footer">
-            <div class="user-card">
-                <div class="user-avatar">
-                    <%-- 로그인 유저 이니셜 --%>
-                    ${sessionScope.loginUser.nickname.substring(0,1)}
-                </div>
-                <div>
-                    <div class="user-name">${sessionScope.loginUser.nickname}</div>
-                    <div class="user-role">${sessionScope.loginUser.jobCategory}</div>
-                </div>
-            </div>
-        </div>
+        
 
     </aside>
 

@@ -1,3 +1,6 @@
+/* sidebar.css — til2.jsp에서 별도로 import하는 경우를 위한 파일
+   실제 사이드바 스타일은 til.css에 포함되어 있습니다.
+   이 파일은 빈 파일로 두어도 무방합니다. */
 /* ═══════════════════════════════
    SIDEBAR NAVIGATION
 ═══════════════════════════════ */
@@ -8,7 +11,7 @@
     top: 0;
     bottom: 0;
     width: 240px;
-    background: #f8fafc;
+    background: hotpink;
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
