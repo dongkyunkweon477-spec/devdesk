@@ -52,7 +52,7 @@ function copyBlock(blockId) {
 
 /* ── 즐겨찾기 토글 (AJAX) ── */
 function toggleStar(blockId) {
-    $.post(ctx + '/resume-block-star', { blockId: blockId }, function (data) {
+    $.post(ctx + '/resume-block-star', {blockId: blockId}, function (data) {
         if (data.success) {
             location.reload();
         }
@@ -191,7 +191,9 @@ function openEditModal(blockId, categoryId, title, content, tags, charLimit) {
     form.querySelector('input[name="blockId"]').value = blockId;
 
     // 삭제 버튼 재바인딩 (blockId 문자열 이스케이프 문제 방지)
-    form.querySelector('.btn-danger').onclick = function () { deleteBlock(blockId); };
+    form.querySelector('.btn-danger').onclick = function () {
+        deleteBlock(blockId);
+    };
 
     // 값 채우기
     document.getElementById('editCat').value = categoryId;
@@ -200,6 +202,7 @@ function openEditModal(blockId, categoryId, title, content, tags, charLimit) {
     document.getElementById('editTags').value = tags || '';
     document.getElementById('editCharLimit').value = charLimit;
     document.getElementById('modalCharCount').textContent = content.length + '자';
+    openModal();
 }
 
 /* ── 블록 삭제 ── */
@@ -233,7 +236,7 @@ function openVersionModal(blockId) {
         '<div style="text-align:center;padding:40px;color:var(--text3)">로딩 중...</div>';
     openModal();
 
-    $.get(ctx + '/resume-block-versions', { blockId: blockId }, function (data) {
+    $.get(ctx + '/resume-block-versions', {blockId: blockId}, function (data) {
         const block = data.block;
         const versions = data.versions;
 
@@ -274,7 +277,7 @@ function openVersionModal(blockId) {
 
 /* ── 버전 비교 ── */
 function openCompareView(blockId) {
-    $.get(ctx + '/resume-block-versions', { blockId: blockId }, function (data) {
+    $.get(ctx + '/resume-block-versions', {blockId: blockId}, function (data) {
         const block = data.block;
         const versions = data.versions;
 
@@ -341,10 +344,10 @@ function copyCompose(catId) {
 /* ── 이력서 조합: 전체 복사 ── */
 function copyAllCompose() {
     const categories = [
-        { id: 'shimei', label: '志望動機' },
-        { id: 'jikopr', label: '自己PR' },
-        { id: 'chosho', label: '長所・短所' },
-        { id: 'keireki', label: '職務経歴' }
+        {id: 'shimei', label: '志望動機'},
+        {id: 'jikopr', label: '自己PR'},
+        {id: 'chosho', label: '長所・短所'},
+        {id: 'keireki', label: '職務経歴'}
     ];
 
     let texts = [];

@@ -5,10 +5,16 @@
 <html>
 <head>
     <title>DevDesk</title>
+    <%--    <link rel="stylesheet" href="css/index.css">--%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
+
+<div class="login-area">
+    <%--  <span style="color: red">${msg}</span>--%>
+    <%--  <jsp:include page="${loginPage}"></jsp:include>--%>
+</div>
 
 <div class="container">
     <div class="header">
@@ -20,7 +26,7 @@
         <!-- 메뉴 -->
         <div class="menu-left">
             <a href="${pageContext.request.contextPath}/ws">워크 스페이스</a>
-            <a href="${pageContext.request.contextPath}/resume-block">이력서 관리</a>
+            <a href="${pageContext.request.contextPath}/report">이력서 관리</a>
             <a href="${pageContext.request.contextPath}/calendar">면접 일정</a>
             <a href="${pageContext.request.contextPath}/review">면접 후기</a>
             <a href="${pageContext.request.contextPath}/board">커뮤니티</a>
@@ -70,7 +76,6 @@
         </div>
     </div>
 </div>
-
 
 </body>
 </html>

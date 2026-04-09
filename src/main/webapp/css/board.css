@@ -18,7 +18,7 @@
 }
 
 .board-header h2 {
-    margin: 0;          /* 🔥 이거 꼭 추가 */
+    margin: 0; /* 🔥 이거 꼭 추가 */
 }
 
 .board-actions {
@@ -35,26 +35,28 @@
     transition: background-color 0.2s ease;
     align-items: center;
 }
+
 /* hover 효과 */
 .board-row:hover {
     background-color: #fafafa;
 }
+
 /* 1. 카테고리 (새로 추가) */
 .col-category {
-    width: 90px;          /* 고정 폭으로 정렬 유지 */
+    width: 90px; /* 고정 폭으로 정렬 유지 */
     font-weight: 600;
-    color: #7c3aed;       /* 연한 보라색으로 통일 */
+    color: #7c3aed; /* 연한 보라색으로 통일 */
     font-size: 13px;
     background-color: #f5f3ff; /* 연한 보라색 배경으로 구분감 */
     padding: 3px 8px;
     border-radius: 4px;
     text-align: center;
-    margin-right: 15px;   /* 제목과의 간격 */
+    margin-right: 15px; /* 제목과의 간격 */
 }
 
 /* 2. 제목 (기존 스타일 활용) */
 .col-title {
-    flex: 1;              /* 남은 공간 전체 차지 */
+    flex: 1; /* 남은 공간 전체 차지 */
     font-weight: 500;
     color: #333;
     /* 제목이 너무 길 때를 대비한 말줄임 처리 */
@@ -62,14 +64,29 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 /* 3. 날짜 (기존 .col-date 유지 및 미세 조정) */
 .col-date {
     width: 120px;
     text-align: right;
     color: #888;
     font-size: 14px;
-    margin-left: 10px;    /* 제목과의 최소 간격 */
+    margin-left: 10px; /* 제목과의 최소 간격 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
+.col-date .meta-info {
+    order: -1;
+    margin-right: 10px;
+}
+
+.col-date .date-info {
+    flex: 1;
+    text-align: right;
+}
+
 .write-btn {
     padding: 8px 15px;
     background-color: #7c3aed;
@@ -125,9 +142,15 @@
 
 /* 인기글 배지 애니메이션 */
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 /* 검색 폼 스타일 */
@@ -135,6 +158,7 @@
     display: flex;
     gap: 8px;
     align-items: center;
+    margin-right: 50px;
 }
 
 /* 검색 조건 셀렉트 - 카테고리 셀렉트와 동일한 크기 */
@@ -208,4 +232,53 @@
     background-color: white;
     font-size: 13px;
     cursor: pointer;
+}
+
+/* Pagination styling */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0;
+    padding: 15px 0;
+}
+
+.page-btn, .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 6px 12px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #7c3aed;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.page-btn:hover, .page-link:hover {
+    background-color: #7c3aed;
+    color: white;
+    border-color: #7c3aed;
+}
+
+.current-page {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 6px 12px;
+    background-color: #7c3aed;
+    color: white;
+    border: 1px solid #7c3aed;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
 }

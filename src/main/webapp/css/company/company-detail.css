@@ -1,0 +1,384 @@
+/* ===== 기업 상세 페이지 — 就活会議 스타일 ===== */
+
+/* ===== 다크 히어로 헤더 ===== */
+.cd-hero {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    margin: -30px -30px 0;
+    padding: 40px 30px 36px;
+}
+
+.cd-hero-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.cd-hero-left {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.cd-logo-box {
+    width: 64px;
+    height: 64px;
+    background: #ffffff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.cd-logo-text {
+    font-size: 24px;
+    font-weight: 600;
+    color: #7c3aed;
+}
+
+.cd-hero-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cd-company-name {
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+}
+
+.cd-rating-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cd-stars-hero .star-h {
+    font-size: 16px;
+    color: #475569;
+}
+
+.cd-stars-hero .star-h.on {
+    color: #f59e0b;
+}
+
+.cd-rating-num {
+    font-size: 15px;
+    font-weight: 600;
+    color: #f59e0b;
+}
+
+.cd-review-count {
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.cd-company-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+/* 후기 작성 버튼 */
+.cd-hero-right {
+    flex-shrink: 0;
+}
+
+.cd-write-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 24px;
+    background: #7c3aed;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Pretendard', sans-serif;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.cd-write-btn:hover {
+    background: #6d28d9;
+    color: #ffffff;
+}
+
+/* ===== 콘텐츠 영역 ===== */
+.cd-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
+/* ===== 통계 카드 ===== */
+.cd-stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.cd-stat-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cd-stat-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #94a3b8;
+}
+
+.cd-stat-value {
+    font-size: 28px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.cd-stat-unit {
+    font-size: 14px;
+    font-weight: 400;
+    color: #94a3b8;
+    margin-left: 2px;
+}
+
+/* ===== 필터 바 ===== */
+.cd-filter-bar {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.cd-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cd-filter-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.cd-filter-bar select {
+    height: 34px;
+    padding: 0 28px 0 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Pretendard', sans-serif;
+    color: #1e293b;
+    background: #f8fafc;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%2364748b' d='M5 7L1 3h8L5 7z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    cursor: pointer;
+}
+
+.cd-filter-bar select:focus {
+    outline: none;
+    border-color: #a78bfa;
+}
+
+/* ===== 툴바 ===== */
+.cd-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.cd-count {
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* ===== 후기 카드 ===== */
+.cd-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    transition: box-shadow 0.2s;
+}
+
+.cd-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.cd-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.cd-card-position {
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.cd-card-stars .star-sm {
+    font-size: 14px;
+    color: #e2e8f0;
+}
+
+.cd-card-stars .star-sm.on {
+    color: #f59e0b;
+}
+
+.cd-card-title {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 12px;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.cd-card-title:hover {
+    color: #7c3aed;
+}
+
+/* 태그 */
+.cd-card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.cd-tag {
+    display: inline-block;
+    background: #f1f5f9;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #475569;
+}
+
+.cd-tag.result-PASS {
+    background: #f0fdf4;
+    color: #16a34a;
+    font-weight: 500;
+}
+
+.cd-tag.result-FAIL {
+    background: #fef2f2;
+    color: #ef4444;
+    font-weight: 500;
+}
+
+.cd-tag.result-PENDING {
+    background: #fffbeb;
+    color: #f59e0b;
+    font-weight: 500;
+}
+
+/* 카드 하단 */
+.cd-card-bottom {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #94a3b8;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 12px;
+}
+
+/* 결과 없음 */
+.cd-no-result {
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+    font-size: 15px;
+    line-height: 1.8;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+/* ===== 페이징 ===== */
+.cd-paging {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 24px;
+}
+
+.cd-page {
+    padding: 7px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #475569;
+    background: #ffffff;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.cd-page:hover {
+    border-color: #a78bfa;
+    color: #7c3aed;
+}
+
+.cd-page.active {
+    background: #7c3aed;
+    color: #ffffff;
+    border-color: #7c3aed;
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 640px) {
+    .cd-hero-inner {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .cd-hero-right {
+        width: 100%;
+    }
+
+    .cd-write-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .cd-stats-row {
+        grid-template-columns: 1fr;
+    }
+
+    .cd-filter-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cd-company-meta {
+        flex-direction: column;
+        gap: 4px;
+    }
+}
