@@ -58,6 +58,7 @@ public class LoginCheckFilter implements Filter {
             System.out.println("필터 작동: 비로그인 사용자 접근 차단");
 
             // Store the original requested URL for redirect after login
+            // 이게 있어야 비로그인에서 탭하고 로그인창 후 바로 메뉴탭으로 이동
             String originalUrl = req.getRequestURI();
             String queryString = req.getQueryString();
             if (queryString != null) {

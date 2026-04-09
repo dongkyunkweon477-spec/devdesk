@@ -68,6 +68,7 @@ a:hover {
     display: flex;
     position: relative;
     flex-direction: column;
+    
 }
 
 /* ===== 타이틀 ===== */
@@ -78,9 +79,12 @@ a:hover {
     position: static; /* 🔥 fixed 제거 */
 }
 
-/* ===== 헤더 ===== */
+/* ───────────────────────────────────────────
+   🔥 [수정됨] 헤더: Grid 레이아웃으로 겹침 완벽 방지
+─────────────────────────────────────────── */
 .header {
-    display: flex;
+    display: grid; /* flex 대신 grid 사용! */
+    grid-template-columns: 1fr auto 1fr; /* 왼쪽(1):가운데(내용만큼):오른쪽(1) 비율 고정 */
     align-items: center;
     justify-content: space-between;
 
@@ -137,6 +141,7 @@ a:hover {
     position: relative;
     color: var(--text-tertiary);
     padding-bottom: 4px;
+    white-space: nowrap; /* 🔥 창 줄어들 때 글씨 줄바꿈 방지 */
 }
 
 /* 밑줄 효과 유지 */
@@ -170,6 +175,7 @@ a:hover {
 .menu-right {
     display: flex;
     align-items: center;
+    justify-content: flex-end; /* 오른쪽 정렬 */
     gap: 6px;
     flex-shrink: 0; /* Prevent shrinking */
     min-width: 0; /* Prevent overflow */
