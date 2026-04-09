@@ -325,11 +325,20 @@ public class MemberDAO {
 
             // [하드 딜리트] 개인 워크스페이스 삭제
             String[] deleteQueries = {
+                    // 1. 지원서 및 일정
                     "DELETE FROM schedule WHERE member_id = ?",
                     "DELETE FROM application WHERE member_id = ?",
+
+                    // 2. TIL (오늘의 학습)
                     "DELETE FROM til WHERE member_id = ?",
-                    "DELETE FROM resume WHERE member_id = ?",
-                    "DELETE FROM review WHERE member_id = ?",
+
+                    // 3. 🌟 이력서 블록 (자식인 '버전' 먼저 -> 부모인 '블록' 나중)
+                    "DELETE FROM resume_block_version WHERE block_id IN (SELECT block_id FROM resume_block WHERE member_id = ?)",
+                    "DELETE FROM resume_block WHERE member_id = ?",
+
+                    // 4. 🌟 기본 이력서 (자식인 '필드' 먼저 -> 부모인 '이력서' 나중)
+                    "DELETE FROM resume_field WHERE resume_id IN (SELECT resume_id FROM resume WHERE member_id = ?)",
+                    "DELETE FROM resume WHERE member_id = ?"
             };
 
             for (String sql : deleteQueries) {
@@ -343,7 +352,7 @@ public class MemberDAO {
             String updateQuery = "UPDATE member SET " +
                     "email = 'del_' || member_id || '_' || TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'), " +
                     "password = NULL, " +
-                    "nickname = '(탈퇴한 회원)', " +
+                    "nickname = '탈퇴한 회원', " +
                     "job_category = NULL, " +
                     "social_id = NULL, " +
                     "profile_img = NULL, " +
