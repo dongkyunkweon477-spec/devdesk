@@ -9,8 +9,9 @@
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet'/>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
+    <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/companySearchModal.css">
 </head>
 <body>
 
@@ -36,14 +37,20 @@
     <input type="hidden" id="form-id">
     <input type="hidden" id="form-appId" value="1">
 
-    <div class="form-group">
-        <label>회사 이름</label>
-        <input type="text" id="form-company" list="company-options" placeholder="회사명 검색">
-        <datalist id="company-options">
-            <c:forEach var="company" items="${companyList}">
-                <option value="${company}"></option>
-            </c:forEach>
-        </datalist>
+    <div class="company-header">
+        <div class="company-badge">일정 등록</div>
+        <div class="field-group">
+
+            <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}"/>
+
+            <div style="display:flex; align-items:center; gap:8px;">
+                <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요" style="cursor:pointer;"
+                       onclick="openCompanyModal()"/>
+                <button type="button" onclick="openCompanyModal()" class="modal-btn-search">기업 선택</button>
+            </div>
+            <jsp:include page="/company-search/companySearchModal.jsp"/>
+            <input type="hidden" name="companyId" id="selectedCompanyId"/>
+        </div>
     </div>
 
     <div class="form-group">
@@ -118,17 +125,6 @@
         $('#customAlertModal, #customConfirmModal').hide();
         var currentEvent = null;
 
-        $('#form-company').on('click', function () {
-            var currentVal = $(this).val();
-            if (currentVal !== "") {
-                $(this).data('saved-company', currentVal);
-                $(this).val('');
-            }
-        }).on('blur', function () {
-            if ($(this).val() === "" && $(this).data('saved-company')) {
-                $(this).val($(this).data('saved-company'));
-            }
-        });
 
         function showCustomAlert(message, reloadAfter = false) {
             $('#alertMessage').text(message);
@@ -187,7 +183,7 @@
                 $('#form-id').val("");
                 $('#form-date').val(info.startStr);
 
-                $('#form-company').val("");
+                $('#selectedCompanyName').val("");
                 $('#form-apply-date').val(""); // ✨ 지원일자 초기화 추가
 
                 $('#form-type').val("코딩테스트");
@@ -215,7 +211,7 @@
             $('#modal-title').text("일정 수정");
 
             $('#form-id').val(currentEvent.id);
-            $('#form-company').val(currentEvent.extendedProps.company);
+            $('#selectedCompanyName').val(currentEvent.extendedProps.company);
             $('#form-position').val(currentEvent.extendedProps.position);
             $('#form-date').val(currentEvent.startStr);
             var existingTime = currentEvent.extendedProps.time;
@@ -275,7 +271,7 @@
             var selectedType = $('#form-type').val();
             var finalType = (selectedType === 'direct') ? $('#form-type-direct').val() : selectedType;
 
-            if (!$('#form-company').val().trim() || (selectedType === 'direct' && finalType.trim() === '')) {
+            if (!$('#selectedCompanyName').val().trim() || (selectedType === 'direct' && finalType.trim() === '')) {
                 showCustomAlert("회사 이름과 면접 전형을 확인해 주세요.");
                 return;
             }
@@ -283,7 +279,7 @@
             var requestData = {
                 schedule_id: id,
                 app_id: $('#form-appId').val(),
-                company_name: $('#form-company').val(),
+                company_name: $('#selectedCompanyName').val(),
                 position: $('#form-position').val(),
                 apply_date: $('#form-apply-date').val(),
                 date: $('#form-date').val(),

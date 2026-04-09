@@ -26,10 +26,11 @@ import java.io.IOException;
         "/company/insert",
         "/company/edit",
         "/company/delete",
-      //  "/calendar",
+        //  "/calendar",
         "/add-calendar",
         "/update-calendar",
-        "/delete-calendar"
+        "/delete-calendar",
+        "/my-board"
 
         //⬇️ 이런 식으로 본인이 맡은 주소를 계속 추가하면 됩니다!
         //"/board-write",      게시글 쓰기 (예시)

@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/companySearchModal.css">
+    <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
     <style>
         :root {
             --bg: #0d0f14;
@@ -810,12 +812,14 @@
             <!-- 회사 선택 -->
             <div class="form-group">
                 <label class="form-label">회사 <span class="required">*</span></label>
-                <select class="form-select" name="company_id" required>
-                    <option value="">-- 선택하세요 --</option>
-                    <c:forEach var="company" items="${companyList}">
-                        <option value="${company.companyId}">${company.companyName}</option>
-                    </c:forEach>
-                </select>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <input type="text" id="selectedCompanyName" class="form-input" readonly placeholder="기업을 선택해주세요"
+                           style="cursor:pointer;"
+                           onclick="openCompanyModal()"/>
+                    <button type="button" onclick="openCompanyModal()" class="modal-btn-search">기업 선택</button>
+                </div>
+                <jsp:include page="/company-search/companySearchModal.jsp"/>
+                <input type="hidden" name="companyId" id="selectedCompanyId"/>
             </div>
 
             <!-- 지원 직무 -->
@@ -1019,7 +1023,15 @@
 
     /* ── 단계별 카운트 업데이트 ── */
     function updateCounts() {
-        const counts = {APPLIED: 0, FIRST_INTERVIEW: 0, SECOND_INTERVIEW: 0, THIRD_INTERVIEW: 0, PASS: 0, FAIL: 0};
+        const counts = {
+            APPLIED: 0,
+            DOCUMENT: 0,
+            FIRST_INTERVIEW: 0,
+            SECOND_INTERVIEW: 0,
+            THIRD_INTERVIEW: 0,
+            PASS: 0,
+            FAIL: 0
+        };
         document.querySelectorAll('[id^="init_status_"]').forEach(function (el) {
             const st = el.value;
             if (counts[st] !== undefined) counts[st]++;
