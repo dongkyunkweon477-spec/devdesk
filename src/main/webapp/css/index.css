@@ -187,6 +187,8 @@ a:hover {
 
 /* ===== 콘텐츠 ===== */
 .content {
+    background-color: #f8fafc;
+    margin-top: 30px;
     padding: 30px;
     min-height: 800px;
 }

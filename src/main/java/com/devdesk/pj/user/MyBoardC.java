@@ -1,5 +1,6 @@
 package com.devdesk.pj.user;
 
+import com.devdesk.pj.Comment.CommentVO;
 import com.devdesk.pj.board.BoardVO;
 
 import javax.servlet.ServletException;
@@ -21,9 +22,12 @@ public class MyBoardC extends HttpServlet {
 
         if (user != null) {
             ArrayList<BoardVO> myBoardList = MemberDAO.MBAO.getMyBoardList(user.getMember_id());
-
             request.setAttribute("myBoardList", myBoardList);
+
+            ArrayList<CommentVO> myCommentList = MemberDAO.MBAO.getMyCommentList(user.getMember_id());
+            request.setAttribute("myCommentList", myCommentList);
         }
+
 
         request.setAttribute("content", "user/myboard.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);

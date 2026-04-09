@@ -56,8 +56,14 @@ public class DashboardDAO {
                     case "APPLIED":
                         vo.setApplied(cnt);
                         break;
-                    case "DOCUMENT_PASS":
+                    case "DOCUMENT":       // DOCUMENT_PASS → DOCUMENT
                         vo.setDocumentPass(cnt);
+                        break;
+                    case "PASS":           // PASSED → PASS
+                        vo.setPassed(cnt);
+                        break;
+                    case "FAIL":           // 새로 추가
+                        vo.setFailed(cnt);
                         break;
                     case "FIRST_INTERVIEW":
                         vo.setFirstInterview(cnt);
