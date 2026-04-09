@@ -10,7 +10,676 @@
           rel="stylesheet">
     <link rel="stylesheet" href="/css/application_list.css">
     <link rel="stylesheet" href="/css/resume-block.css"> <!-- filter chip용 -->
+=======
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/companySearchModal.css">
+    <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
+    <style>
+        :root {
+            --bg: #0d0f14;
+            --surface: #141720;
+            --surface2: #1a1e2a;
+            --surface3: #1f2435;
+            --border: #252a3a;
+            --border2: #2e3450;
+            --accent: #5b7cf8;
+            --accent2: #8b6ef5;
+            --text: #e8eaf0;
+            --text2: #9da3b8;
+            --text3: #5a6080;
+            --green: #56e39f;
+            --yellow: #ffd166;
+            --teal: #4ecdc4;
+            --orange: #ff9f69;
+            --red: #ff6b6b;
+        }
+>>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #f8fafc;
+            color: var(--text);
+            min-height: 100vh;
+            padding: 40px 24px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(91, 124, 248, 0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(91, 124, 248, 0.025) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .wrap {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* ── 헤더 ── */
+        .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: black;
+            letter-spacing: -0.5px;
+        }
+
+        .page-sub {
+            font-size: 13px;
+            color: var(--text3);
+            margin-top: 4px;
+        }
+
+        .btn-add {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s, transform 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-add:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        /* ── 등록 모달 ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(10px);
+            z-index: 800;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            border-radius: 20px;
+            width: 92%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 32px;
+            animation: modalIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            scrollbar-width: thin;
+            scrollbar-color: var(--border2) transparent;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 26px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.3px;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--surface3);
+            border: 1px solid var(--border);
+            color: var(--text2);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.14s;
+            font-family: inherit;
+        }
+
+        .modal-close:hover {
+            background: var(--red);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        /* ── 폼 스타일 ── */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text2);
+            margin-bottom: 6px;
+            letter-spacing: 0.2px;
+        }
+
+        .form-label .required {
+            color: var(--red);
+            margin-left: 2px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--surface3);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            color: var(--text);
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(91, 124, 248, 0.12);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--text3);
+        }
+
+        .form-select option {
+            background: var(--surface3);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 88px;
+            line-height: 1.7;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* 면접 일정 토글 영역 */
+        .interview-section {
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.35s ease, opacity 0.25s ease;
+        }
+
+        .interview-section.visible {
+            max-height: 400px;
+            opacity: 1;
+        }
+
+        .interview-divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 18px 0 14px;
+        }
+
+        .interview-divider span {
+            font-size: 11px;
+            color: var(--text3);
+            white-space: nowrap;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .interview-divider::before,
+        .interview-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* 모달 푸터 */
+        .modal-footer {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-modal-cancel {
+            padding: 10px 18px;
+            background: var(--surface3);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            color: var(--text2);
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.13s;
+        }
+
+        .btn-modal-cancel:hover {
+            color: var(--text);
+            border-color: var(--border2);
+        }
+
+        .btn-modal-submit {
+            padding: 10px 22px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border: none;
+            border-radius: 9px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: opacity 0.15s, transform 0.15s;
+        }
+
+        .btn-modal-submit:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        /* ── 단계 요약 바 ── */
+        .stage-bar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .stage-chip {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+
+        .stage-chip:hover,
+        .stage-chip.active {
+            border-color: var(--chip-c, var(--accent));
+            background: rgba(91, 124, 248, 0.05);
+        }
+
+        .stage-chip-icon {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .stage-chip-cnt {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--chip-c, var(--text));
+        }
+
+        .stage-chip-name {
+            font-size: 10px;
+            color: var(--text3);
+            margin-top: 2px;
+        }
+
+        /* ── 카드 그리드 ── */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 14px;
+        }
+
+        /* ── 개별 카드 ── */
+        .app-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.18s;
+            animation: fadeUp 0.35s ease both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--stage-color, var(--border2));
+            border-radius: 3px 0 0 3px;
+            transition: background 0.2s;
+        }
+
+        .app-card:hover {
+            border-color: var(--border2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 상단: 회사명 + 배지 */
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .card-company {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+        }
+
+        .stage-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* 직무 */
+        .card-position {
+            font-size: 13px;
+            color: var(--text2);
+        }
+
+        /* 메모 */
+        .card-memo {
+            font-size: 12px;
+            color: var(--text3);
+            background: var(--surface2);
+            border-left: 2px solid var(--border2);
+            border-radius: 0 6px 6px 0;
+            padding: 7px 10px;
+            line-height: 1.6;
+        }
+
+        /* 하단: 날짜 + 액션 */
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+            margin-top: 2px;
+        }
+
+        .card-date {
+            font-size: 11px;
+            color: var(--text3);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .card-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+
+        .app-card:hover .card-actions {
+            opacity: 1;
+        }
+
+        /* 상태 변경 영역 */
+        .status-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .status-text {
+            /* 표시용 span — JS로 숨김/표시 */
+        }
+
+        .status-select {
+            display: none;
+            padding: 5px 8px;
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            border-radius: 7px;
+            color: var(--text);
+            font-size: 12px;
+            font-family: inherit;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .status-select:focus {
+            border-color: var(--accent);
+        }
+
+        .status-select option {
+            background: var(--surface2);
+        }
+
+        .btn-status {
+            padding: 5px 11px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            color: var(--text2);
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.13s;
+        }
+
+        .btn-status:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-delete {
+            padding: 5px 11px;
+            background: rgba(255, 107, 107, 0.08);
+            border: 1px solid rgba(255, 107, 107, 0.18);
+            border-radius: 7px;
+            color: var(--red);
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.13s;
+        }
+
+        .btn-delete:hover {
+            background: rgba(255, 107, 107, 0.18);
+        }
+
+        /* ── 빈 상태 ── */
+        .empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 64px 20px;
+            color: var(--text3);
+        }
+
+        .empty-icon {
+            font-size: 44px;
+            margin-bottom: 14px;
+            opacity: 0.5;
+        }
+
+        .empty p {
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        /* ── 확인 다이얼로그 ── */
+        .confirm-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confirm-overlay.open {
+            display: flex;
+        }
+
+        .confirm-box {
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            border-radius: 18px;
+            padding: 28px;
+            width: 340px;
+            animation: fadeUp 0.2s ease;
+        }
+
+        .confirm-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .confirm-msg {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.7;
+            margin-bottom: 22px;
+        }
+
+        .confirm-btns {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .btn-cancel {
+            padding: 8px 16px;
+            background: var(--surface3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text2);
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.13s;
+        }
+
+        .btn-cancel:hover {
+            color: var(--text);
+        }
+
+        .btn-confirm-del {
+            padding: 8px 16px;
+            background: rgba(255, 107, 107, 0.12);
+            border: 1px solid rgba(255, 107, 107, 0.25);
+            border-radius: 8px;
+            color: var(--red);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.13s;
+        }
+
+        .btn-confirm-del:hover {
+            background: rgba(255, 107, 107, 0.22);
+        }
+
+        /* ── 반응형 ── */
+        @media (max-width: 700px) {
+            .stage-bar {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-actions {
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -162,12 +831,14 @@
             <!-- 회사 선택 -->
             <div class="form-group">
                 <label class="form-label">회사 <span class="required">*</span></label>
-                <select class="form-select" name="company_id" required>
-                    <option value="">-- 선택하세요 --</option>
-                    <c:forEach var="company" items="${companyList}">
-                        <option value="${company.companyId}">${company.companyName}</option>
-                    </c:forEach>
-                </select>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <input type="text" id="selectedCompanyName" class="form-input" readonly placeholder="기업을 선택해주세요"
+                           style="cursor:pointer;"
+                           onclick="openCompanyModal()"/>
+                    <button type="button" onclick="openCompanyModal()" class="modal-btn-search">기업 선택</button>
+                </div>
+                <jsp:include page="/company-search/companySearchModal.jsp"/>
+                <input type="hidden" name="companyId" id="selectedCompanyId"/>
             </div>
 
             <!-- 지원 직무 -->

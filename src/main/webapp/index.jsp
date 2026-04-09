@@ -5,16 +5,12 @@
 <html>
 <head>
     <title>DevDesk</title>
-    <%--    <link rel="stylesheet" href="css/index.css">--%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/index.js"></script>
+
 </head>
 <body>
-
-<div class="login-area">
-    <%--  <span style="color: red">${msg}</span>--%>
-    <%--  <jsp:include page="${loginPage}"></jsp:include>--%>
-</div>
 
 <div class="container">
     <div class="header">
@@ -50,6 +46,7 @@
                     <a href="${pageContext.request.contextPath}/logout" class="btn-secondary">로그아웃</a>
                 </c:otherwise>
             </c:choose>
+            <button class="test">night mode</button>
 
         </div>
     </div>
@@ -76,7 +73,6 @@
         </div>
     </div>
 </div>
-
 
 </body>
 </html>

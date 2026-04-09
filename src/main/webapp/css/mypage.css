@@ -188,3 +188,71 @@
         opacity: 1;
     }
 }
+
+/* ===== 모달창 전용 추가 디자인 ===== */
+
+/* 가독성 높은 경고 박스 디자인 (가운데 정렬 & 예쁜 줄바꿈 완성!) */
+.modal-warning-box {
+    background: #fef2f2;
+    color: #b91c1c;
+    padding: 16px 14px; /* 위아래 여백을 살짝 늘려서 숨통 트이게 함 */
+    border-radius: 8px;
+    text-align: center; /* 영은님 픽! 가운데 정렬 */
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    border: 1px solid #fee2e2;
+    word-break: keep-all; /* 🌟 핵심: 단어가 어색하게 쪼개지는 걸 막아줍니다! */
+}
+
+.modal-warning-box span {
+    color: #ef4444;
+    font-size: 12px; /* 괄호 설명은 폰트를 살짝 줄여서 메인 텍스트를 돋보이게 */
+    display: block;
+    margin-top: 8px; /* 위 텍스트랑 살짝 띄워주기 */
+}
+
+/* 비밀번호 입력칸 디자인 */
+.modal-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 15px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.modal-input:focus {
+    outline: none;
+    border-color: #ef4444;
+}
+
+/* 버튼들을 나란히 배치 */
+.modal-btn-group {
+    display: flex;
+    gap: 10px;
+}
+
+/* 버튼 1: 취소 버튼 (회색) */
+.pw-modal-btn.btn-cancel {
+    background: #f1f5f9;
+    color: #475569;
+    flex: 1; /* 크기를 반반으로 동일하게 */
+}
+
+.pw-modal-btn.btn-cancel:hover {
+    background: #e2e8f0;
+}
+
+/* 버튼 2: 위험 버튼 (빨간색) */
+.pw-modal-btn.btn-danger {
+    background: #ef4444;
+    color: white;
+    flex: 1; /* 크기를 반반으로 동일하게 */
+}
+
+.pw-modal-btn.btn-danger:hover {
+    background: #dc2626;
+}

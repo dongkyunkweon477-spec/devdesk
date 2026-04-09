@@ -335,14 +335,14 @@ public class BoardDAO {
         ResultSet rs = null;
         BoardVO bo = null;
         ArrayList<BoardVO> boards = new ArrayList<>();
-        
+
         String category = request.getParameter("category");
-        
+
         // 카테고리가 없거나 "전체"이면 전체 목록 반환
         if (category == null || category.trim().isEmpty() || category.equals("전체")) {
             return showAllBoard(request);
         }
-        
+
         String sql = "SELECT b.*, " +
                 "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count, " +
                 "COALESCE(b.b_like_count, 0) as like_count, " +
@@ -412,26 +412,35 @@ public class BoardDAO {
     }
 
 
-//    public void paging(HttpServletRequest request, int pageNum) {
-//        request.setAttribute("currentPage", pageNum);
-//        ArrayList<BoardVO> reviews = showAllReview(request);
-//        int total = reviews.size();
-//        int cnt = 5;
-//
-//        // 페이지수
-//        int totalPage = (int) Math.ceil((double) total / cnt);
-//        request.setAttribute("totalPage", totalPage);
-//
-//        int start = total - (cnt * (pageNum - 1));
-//        int end = (pageNum == totalPage) ? -1 : start - (cnt + 1);
-//
-//        ArrayList<BoardVO> items = new ArrayList<>();
-//        for (int i = start - 1; i > end; i--) {
-//            items.add(reviews.get(i));
-//        }
-//
-//        request.setAttribute("reviews", items);
-//
-//    }
+    public static void paging(HttpServletRequest request, int pageNum) {
+        request.setAttribute("currentPage", pageNum);
+        // Get the already filtered boards from request attribute
+        @SuppressWarnings("unchecked")
+        ArrayList<BoardVO> boards = (ArrayList<BoardVO>) request.getAttribute("boards");
+        
+        // If no boards exist, get all boards as fallback
+        if (boards == null) {
+            boards = showAllBoard(request);
+        }
+        int total = boards.size();
+        int cnt = 8;
+
+        // 페이지수
+        int totalPage = (int) Math.ceil((double) total / cnt);
+        request.setAttribute("totalPage", totalPage);
+
+        int start = (pageNum - 1) * cnt;
+        int end = Math.min(start + cnt, total);
+
+        ArrayList<BoardVO> items = new ArrayList<>();
+        for (int i = start; i < end; i++) {
+            if (i >= 0 && i < boards.size()) {
+                items.add(boards.get(i));
+            }
+        }
+
+        request.setAttribute("boards", items);
+
+    }
 
 }

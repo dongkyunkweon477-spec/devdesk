@@ -40,9 +40,9 @@
                     <th>작성일</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="posts-tbody">
                 <c:if test="${empty myBoardList}">
-                    <tr>
+                    <tr class="empty-msg-row">
                         <td colspan="5" class="empty-msg">아직 작성한 게시글이 없습니다. 첫 글을 남겨보세요! 📝</td>
                     </tr>
                 </c:if>
@@ -61,6 +61,7 @@
                 </c:forEach>
                 </tbody>
             </table>
+            <div id="posts-pagination" class="pagination"></div>
         </div>
 
         <div id="tab-comments" style="display: none;">
@@ -77,9 +78,9 @@
                     <th>작성일</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="comments-tbody">
                 <c:if test="${empty myCommentList}">
-                    <tr>
+                    <tr class="empty-msg-row">
                         <td colspan="3" class="empty-msg">아직 작성한 댓글이 없습니다. 💬</td>
                     </tr>
                 </c:if>
@@ -106,41 +107,12 @@
                 </c:forEach>
                 </tbody>
             </table>
+            <div id="comments-pagination" class="pagination"></div>
         </div>
 
     </div>
 </main>
 
-<script>
-    /* 탭 클릭 시 화면 전환해주는 자바스크립트 함수 */
-    function showTab(tabName) {
-        document.getElementById('tab-posts').style.display = 'none';
-        document.getElementById('tab-comments').style.display = 'none';
-        document.getElementById('btn-posts').classList.remove('active');
-        document.getElementById('btn-comments').classList.remove('active');
-
-        if (tabName === 'posts') {
-            document.getElementById('tab-posts').style.display = 'block';
-            document.getElementById('btn-posts').classList.add('active');
-        } else {
-            document.getElementById('tab-comments').style.display = 'block';
-            document.getElementById('btn-comments').classList.add('active');
-        }
-    }
-
-    /* 🌟 추가된 똑똑한 이동 함수! */
-    function goToDetail(url) {
-        // 유저가 마우스로 텍스트를 드래그해서 선택한 내용이 있는지 검사합니다.
-        var selectedText = window.getSelection().toString();
-
-        if (selectedText.length > 0) {
-            // 선택한 텍스트가 있다면? (복사하려는 의도이므로 이동을 취소합니다!)
-            return;
-        }
-
-        // 텍스트를 선택한 게 아니라 단순 클릭이라면 정상적으로 페이지를 이동합니다.
-        location.href = url;
-    }
-</script>
+<script src="js/myboard.js"></script>
 </body>
 </html>
