@@ -1,6 +1,43 @@
 /* ===== 폰트 ===== */
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Pretendard:wght@400;500;600&display=swap');
 
+/* ===== CSS 변수 (테마 시스템) ===== */
+:root {
+    /* 라이트 모드 기본값 */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --text-primary: #1e293b;
+    --text-secondary: #334155;
+    --text-tertiary: #64748b;
+    --border-primary: #e2e8f0;
+    --border-secondary: #cbd5e1;
+    --accent-primary: #7c3aed;
+    --accent-secondary: #a78bfa;
+    --accent-light: #ede9fe;
+    --accent-hover: #6d28d9;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+/* 다크 모드 테마 */
+[data-theme="dark"] {
+    --bg-primary: #1e293b;
+    --bg-secondary: #0f172a;
+    --bg-tertiary: #334155;
+    --text-primary: #f8fafc;
+    --text-secondary: #e2e8f0;
+    --text-tertiary: #cbd5e1;
+    --border-primary: #334155;
+    --border-secondary: #475569;
+    --accent-primary: #a78bfa;
+    --accent-secondary: #c4b5fd;
+    --accent-light: #4c1d95;
+    --accent-hover: #8b5cf6;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --transition: all 0.3s ease;
+}
+
 /* ===== 기본 ===== */
 * {
     box-sizing: border-box;
@@ -30,7 +67,7 @@ a:hover {
     display: flex;
     position: relative;
     flex-direction: column;
-    
+
 }
 
 /* ===== 타이틀 ===== */
@@ -57,23 +94,11 @@ a:hover {
     top: 0;
     z-index: 1000;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     background: var(--bg-primary);
     border-bottom: 1px solid var(--border-primary);
     transition: var(--transition);
 
     min-width: 0; /* Prevent flex items from overflowing */
-=======
-    background: #ffffff;
-    border-bottom: 1px solid #e2e8f0;
->>>>>>> d6335377bf9583a09708b79f8c5b7432f38b453f
-=======
-    background: #ffffff;
-    border-bottom: 1px solid #e2e8f0;
-
-    min-width: 0; /* Prevent flex items from overflowing */
->>>>>>> 4e80e875374203aee90421deb041b37645ecb661
 }
 
 .title {
@@ -180,18 +205,8 @@ a:hover {
 
 /* [버튼 1] 로그인, 마이페이지 (텍스트 버튼) */
 .menu-right a.btn-text:hover {
-<<<<<<< HEAD
-<<<<<<< HEAD
     color: var(--accent-primary);
     background-color: var(--bg-tertiary); /* 마우스 올렸을 때 아주 연한 배경 */
-=======
-    color: #7c3aed;
-    background-color: #f8fafc;
->>>>>>> d6335377bf9583a09708b79f8c5b7432f38b453f
-=======
-    color: #7c3aed;
-    background-color: #f8fafc; /* 마우스 올렸을 때 아주 연한 배경 */
->>>>>>> 4e80e875374203aee90421deb041b37645ecb661
 }
 
 /* [버튼 2] 회원가입 (보라색 강조 버튼) */
@@ -214,10 +229,6 @@ a:hover {
     background-color: #e2e8f0;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 4e80e875374203aee90421deb041b37645ecb661
 /* ===== 콘텐츠 ===== */
 .content {
     background-color: #f8fafc;
@@ -227,12 +238,7 @@ a:hover {
 }
 
 /* 로그인 버튼 스타일 유지 */
-<<<<<<< HEAD
-=======
 /* 로그인/로그아웃 버튼 스타일 유지 */
->>>>>>> d6335377bf9583a09708b79f8c5b7432f38b453f
-=======
->>>>>>> 4e80e875374203aee90421deb041b37645ecb661
 .menu-right a:first-child {
     padding: 6px 12px;
     border-radius: 6px;
