@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/review-write.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/review/review-write.css">
 <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
 
 <div class="write-wrap">
@@ -27,7 +27,8 @@
                     <div class="field-group">
                         <label class="field-label required">기업 검색</label>
                         <div style="display:flex; align-items:center; gap:8px;">
-                            <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요" style="cursor:pointer;" onclick="openCompanyModal()"/>
+                            <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요"
+                                   style="cursor:pointer;" onclick="openCompanyModal()"/>
                             <button type="button" onclick="openCompanyModal()" class="btn-search">기업 선택</button>
                         </div>
                         <jsp:include page="/company-search/companySearchModal.jsp"/>
