@@ -5,10 +5,7 @@ import com.devdesk.pj.main.DBManager_new;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class ReviewDAO {
     public static final ReviewDAO REVIEW_DAO = new ReviewDAO();
@@ -433,8 +430,81 @@ public class ReviewDAO {
     }
 
 
-//    public Map<String, Object> getFilteredReviews(int companyId, String interviewType, String result, String sort, int page, int pageSize) {
-//
-//
-//    }
+    public Map<String, Object> getFilteredReviews(Integer companyId, String interviewType, String result, String sort, int page, int pageSize) {
+        StringBuilder baseSql = new StringBuilder(
+                "select r.*, c.company_name from review r " +
+                        "join company c on r.r_company_id = c.company_id " +
+                        "where 1=1"
+        );
+        List<Object> params = new ArrayList<>();
+
+        if (companyId != null) {
+            baseSql.append(" and r.r_company_id = ?");
+            params.add(companyId);
+        }
+        if (interviewType != null && !interviewType.isEmpty()) {
+            baseSql.append(" and r.r_interview_type = ?");
+            params.add(interviewType);
+        }
+        if (result != null && !result.isBlank()) {
+            baseSql.append(" and r.r_result = ?");
+            params.add(result);
+        }
+
+        // 2. ORDER BY 추가 전에 COUNT 쿼리 생성 (성능 향상)
+        String countSql = "SELECT COUNT(*) FROM (" + baseSql.toString() + ")";
+
+        // 3. 정렬 문자열 앞 공백 추가 및 baseSql에 병합
+        String orderBy = " order by r.r_created_date desc"; // 컬럼명 확인 요망
+        if ("difficulty_desc".equals(sort)) {
+            orderBy = " order by r.r_difficulty desc";
+        } else if ("difficulty_asc".equals(sort)) {
+            orderBy = " order by r.r_difficulty asc";
+        }
+        baseSql.append(orderBy);
+
+        // 페이징 쿼리 조립
+        String pagedSql = "SELECT * FROM ("
+                + "  SELECT ROWNUM rn, t.* FROM (" + baseSql.toString() + ") t"
+                + ") WHERE rn BETWEEN ? AND ?";
+        int start = (page - 1) * pageSize + 1;
+        int end = page * pageSize;
+
+        Map<String, Object> data = new HashMap<>();
+        try (Connection con = DBManager_new.connect()) {
+            // 전체 건수 조회
+            try (PreparedStatement pstmt = con.prepareStatement(countSql)) {
+                for (int i = 0; i < params.size(); i++) {
+                    pstmt.setObject(i + 1, params.get(i));
+                }
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) data.put("totalCount", rs.getInt(1));
+                }
+            }
+
+            // 페이징 데이터 조회
+            try (PreparedStatement pstmt = con.prepareStatement(pagedSql)) {
+                for (int i = 0; i < params.size(); i++) {
+                    pstmt.setObject(i + 1, params.get(i));
+                }
+                pstmt.setInt(params.size() + 1, start);
+                pstmt.setInt(params.size() + 2, end);
+
+                List<ReviewVO> reviews = new ArrayList<>();
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    while (rs.next()) {
+                        reviews.add(ReviewVO.fromResultSet(rs));
+                    }
+                }
+                data.put("reviews", reviews);
+            }
+
+            int totalCount = (int) data.getOrDefault("totalCount", 0);
+            data.put("totalPages", (int) Math.ceil((double) totalCount / pageSize));
+            data.put("currentPage", page);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
 }
