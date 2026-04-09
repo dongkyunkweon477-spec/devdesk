@@ -108,7 +108,6 @@ function setupPagination(tbodyId, paginationId, rowsPerPage) {
     render();
 }
 
-// 문서가 모두 로드되면 두 탭 모두 10개씩 페이징을 시작합니다!
 document.addEventListener("DOMContentLoaded", function () {
     setupPagination('posts-tbody', 'posts-pagination', 7);
     setupPagination('comments-tbody', 'comments-pagination', 7);
