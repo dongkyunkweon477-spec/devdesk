@@ -328,12 +328,8 @@ public class MemberDAO {
                     "DELETE FROM schedule WHERE member_id = ?",
                     "DELETE FROM application WHERE member_id = ?",
                     "DELETE FROM til WHERE member_id = ?",
-                    "DELETE FROM resume_block_version WHERE member_id = ?",
-                    "DELETE FROM resume_block WHERE member_id = ?",
                     "DELETE FROM resume WHERE member_id = ?",
-                    "DELETE FROM board_like WHERE member_id = ?",
-                    "DELETE FROM review_like WHERE member_id = ?",
-                    "DELETE FROM review_bookmark WHERE member_id = ?"
+                    "DELETE FROM review WHERE member_id = ?",
             };
 
             for (String sql : deleteQueries) {
