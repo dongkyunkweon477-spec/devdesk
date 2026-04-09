@@ -47,7 +47,7 @@ a:hover {
     justify-content: space-between;
 
     height: 70px;
-    padding: 0 40px;
+    padding: 0 20px;
 
     position: sticky;
     top: 0;
@@ -55,7 +55,7 @@ a:hover {
 
     background: #ffffff;
     border-bottom: 1px solid #e2e8f0;
-    
+
     min-width: 0; /* Prevent flex items from overflowing */
 }
 
@@ -252,15 +252,15 @@ a:hover {
     .header {
         padding: 0 20px;
     }
-    
+
     .menu-left {
         gap: 20px;
     }
-    
+
     .menu-left a {
         font-size: 14px;
     }
-    
+
     .menu-right .welcome-msg {
         font-size: 13px;
         margin-right: 10px;
@@ -271,16 +271,16 @@ a:hover {
     .menu-left {
         gap: 15px;
     }
-    
+
     .menu-left a {
         font-size: 13px;
     }
-    
+
     .menu-right .welcome-msg {
         font-size: 12px;
         margin-right: 8px;
     }
-    
+
     .menu-right a {
         font-size: 12px;
         padding: 4px 8px;
@@ -293,13 +293,13 @@ a:hover {
         height: auto;
         padding: 10px 20px;
     }
-    
+
     .title {
         width: 100%;
         justify-content: center;
         margin-bottom: 10px;
     }
-    
+
     .menu-left {
         position: static;
         transform: none;
@@ -307,7 +307,7 @@ a:hover {
         justify-content: center;
         margin-bottom: 10px;
     }
-    
+
     .menu-right {
         width: 100%;
         justify-content: center;
