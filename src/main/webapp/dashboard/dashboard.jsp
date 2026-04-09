@@ -64,7 +64,6 @@
             <div class="g-cal-days" id="g-cal-days">
             </div>
         </div>
-
         <div class="sidebar-footer">
             <div class="user-card">
                 <div class="user-avatar">
@@ -421,19 +420,12 @@
         document.getElementById('detailContent').innerHTML = renderMarkdown(el.dataset.content);
         document.getElementById('detailEditBtn').href = 'til?id=' + id; // 수정 페이지 경로에 맞게 조정
 
-        document.getElementById('tilDetailModal').classList.add('open');
     }
 
-    function closeDetail() {
-        document.getElementById('tilDetailModal').classList.remove('open');
-    }
-
+ 
     // ESC 키 & 오버레이 클릭으로 닫기
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closeDetail();
-    });
-    document.getElementById('tilDetailModal').addEventListener('click', function (e) {
-        if (e.target === e.currentTarget) closeDetail();
     });
 
     document.addEventListener('DOMContentLoaded', function() {
