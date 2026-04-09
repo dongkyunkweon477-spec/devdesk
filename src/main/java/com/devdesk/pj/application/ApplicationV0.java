@@ -18,4 +18,5 @@ public class ApplicationV0 {
     private Date interviewDate;
     private String interviewTime;
     private String interviewType;
+    private int isStar;
 }
