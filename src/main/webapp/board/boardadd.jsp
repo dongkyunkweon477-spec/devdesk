@@ -2,8 +2,7 @@
 <html>
 <head>
     <title>Title</title>
-    <%--    <link rel="stylesheet" href="css/board_add.css"--%>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/board-add.css">
+    <link rel="stylesheet" href="../css/board-all.css">
 </head>
 <body>
 <div class="write-container">

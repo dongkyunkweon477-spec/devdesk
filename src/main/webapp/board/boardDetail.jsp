@@ -4,10 +4,9 @@
 <html>
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="css/board-detail.css">
-    <link rel="stylesheet" href="css/comment.css">
-    <link rel="stylesheet" href="css/board_like.css">
-    <link rel="stylesheet" href="js/boardDetail.js">
+    <link rel="stylesheet" href="../css/board-all.css">
+    <link rel="stylesheet" href="../css/comment.css">
+    <script src="../js/boardDetail.js"></script>
 </head>
 <body>
 <div class="board-container">

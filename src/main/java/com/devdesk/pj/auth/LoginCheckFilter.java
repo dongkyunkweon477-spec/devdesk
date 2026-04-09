@@ -56,6 +56,17 @@ public class LoginCheckFilter implements Filter {
             chain.doFilter(request, response);
         } else {
             System.out.println("필터 작동: 비로그인 사용자 접근 차단");
+
+            // Store the original requested URL for redirect after login
+            String originalUrl = req.getRequestURI();
+            String queryString = req.getQueryString();
+            if (queryString != null) {
+                originalUrl += "?" + queryString;
+            }
+
+            // Store in session
+            session.setAttribute("dest", originalUrl);
+
             res.sendRedirect(req.getContextPath() + "/login");
         }
     }
