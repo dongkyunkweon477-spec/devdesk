@@ -62,7 +62,7 @@ create sequence resume_filed_seq;
 create sequence tag_seq;
 
 SELECT *
-FROM
+FROM APPLICATION
 WHERE member_id = ?
 
 

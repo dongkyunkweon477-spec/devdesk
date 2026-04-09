@@ -10,6 +10,7 @@ public class StageCountVO {
     private int thirdInterview;
     private int codingTest;
     private int passed;
+    private int failed;
     private String tagColor;
     private String tagBg;
     private String timeAgo;
@@ -45,6 +46,10 @@ public class StageCountVO {
         return passed;
     }
 
+    public int getFailed() {
+        return failed;
+    }
+
     public void setApplied(int applied) {
         this.applied = applied;
     }
@@ -71,6 +76,10 @@ public class StageCountVO {
 
     public void setPassed(int passed) {
         this.passed = passed;
+    }
+
+    public void setFailed(int failed) {
+        this.failed = failed;
     }
 
 

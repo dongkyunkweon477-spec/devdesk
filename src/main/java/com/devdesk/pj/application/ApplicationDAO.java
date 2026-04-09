@@ -2,6 +2,7 @@ package com.devdesk.pj.application;
 
 import com.devdesk.pj.dashboard.StageCountVO;
 import com.devdesk.pj.main.DBManager_new;
+import com.devdesk.pj.user.MemberDTO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
@@ -87,16 +88,20 @@ public class ApplicationDAO {
                 "a.position,\n" +
                 "a.stage,\n" +
                 "a.apply_date,\n" +
-                "a.memo FROM application a JOIN company c ON a.company_id = c.company_id ORDER BY a.created_date DESC";
+                "a.memo FROM application a JOIN company c ON a.company_id = c.company_id where member_id = ? ORDER BY a.created_date DESC";
         ;
 
 
         try {
             con = DBManager_new.connect();
             pstmt = con.prepareStatement(sql);
-            rs = pstmt.executeQuery();
             ApplicationV0 dto = null;
             ArrayList<ApplicationV0> dtos = new ArrayList<>();
+            MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
+            int memberId = loginUser.getMember_id();
+            pstmt.setInt(1, memberId);
+            rs = pstmt.executeQuery();
+
 
             while (rs.next()) {
                 dto = new ApplicationV0();
@@ -109,6 +114,7 @@ public class ApplicationDAO {
                 dto.setAppDate(rs.getDate("apply_date"));
                 dto.setMemo(rs.getString("memo"));
                 dtos.add(dto);
+
             }
             System.out.println(dtos);
 
