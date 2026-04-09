@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>DevDesk</title>
+    <title>DevDesk - 마이페이지</title>
     <link rel="stylesheet" href="css/mypage.css">
 </head>
 <body>
@@ -12,7 +12,6 @@
     <h2 class="mypage-title">마이페이지</h2>
 
     <div class="profile-info-box">
-        <%-- 프로필 사진 (닉네임 첫 글자로 고정) --%>
         <div class="profile-avatar">
             ${sessionScope.user.nickname.substring(0,1)}
         </div>
@@ -40,15 +39,62 @@
             <p>내가 커뮤니티에 남긴 기록을 확인합니다.</p>
         </button>
 
-        <button class="menu-card danger" onclick="location.href='account-delete'">
+        <button class="menu-card danger" onclick="openDeleteModal()">
             <h4>❌ 회원 탈퇴</h4>
             <p>더 이상 DevDesk를 이용하지 않으실 경우 진행합니다.</p>
         </button>
     </div>
 </div>
 
+<div id="deleteModalOverlay" class="pw-modal-overlay" style="display: none;">
+    <div class="pw-modal-box">
+        <div class="pw-modal-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+        </div>
+        <h3 class="pw-modal-title" style="color: #ef4444;">회원 탈퇴</h3>
+
+        <div class="modal-warning-box">
+            안전한 처리를 위해<br> <strong>현재 비밀번호</strong>를 입력해주세요.
+            <span>(게시글/댓글은 유지되며 개인 데이터는 영구 삭제됩니다)</span>
+        </div>
+
+        <form action="delete-account" method="post">
+            <input type="password" name="confirm_password" class="modal-input" placeholder="비밀번호 입력" required>
+
+            <div class="modal-btn-group">
+                <button type="button" class="pw-modal-btn btn-cancel" onclick="closeDeleteModal()">취소</button>
+                <button type="submit" class="pw-modal-btn btn-danger">탈퇴하기</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<c:if test="${not empty errorMsg}">
+    <div id="errorModalOverlay" class="pw-modal-overlay" style="display: flex;">
+        <div class="pw-modal-box">
+            <div class="pw-modal-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <h3 class="pw-modal-title" style="color: #ef4444;">오류 발생</h3>
+            <p class="pw-modal-desc">${errorMsg}</p>
+            <button type="button" class="pw-modal-btn btn-danger" onclick="closeErrorModal()">확인</button>
+        </div>
+    </div>
+    </div>
+</c:if>
+
 <c:if test="${sessionScope.pwSuccess == 'true'}">
-    <div id="successModalOverlay" class="pw-modal-overlay">
+    <div id="successModalOverlay" class="pw-modal-overlay" style="display: flex;">
         <div class="pw-modal-box">
             <div class="pw-modal-icon">
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"
@@ -62,18 +108,9 @@
             <button type="button" class="pw-modal-btn" onclick="closeSuccessModal()">확인</button>
         </div>
     </div>
-
-    <script>
-        function closeSuccessModal() {
-            // 확인 버튼을 누르면 모달을 화면에서 숨깁니다.
-            document.getElementById('successModalOverlay').style.display = 'none';
-        }
-    </script>
-
-    <%-- 🌟 새로고침 시 다시 뜨지 않도록 세션에서 도장 지우기 (핵심!) --%>
     <c:remove var="pwSuccess" scope="session"/>
 </c:if>
 
-
+<script src="js/mypage.js"></script>
 </body>
 </html>

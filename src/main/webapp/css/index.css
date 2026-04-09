@@ -1,43 +1,6 @@
 /* ===== 폰트 ===== */
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Pretendard:wght@400;500;600&display=swap');
 
-/* ===== CSS 변수 (테마 시스템) ===== */
-:root {
-    /* 라이트 모드 기본값 */
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-tertiary: #f1f5f9;
-    --text-primary: #1e293b;
-    --text-secondary: #334155;
-    --text-tertiary: #64748b;
-    --border-primary: #e2e8f0;
-    --border-secondary: #cbd5e1;
-    --accent-primary: #7c3aed;
-    --accent-secondary: #a78bfa;
-    --accent-light: #ede9fe;
-    --accent-hover: #6d28d9;
-    --shadow: rgba(0, 0, 0, 0.1);
-    --transition: all 0.3s ease;
-}
-
-/* 다크 모드 테마 */
-[data-theme="dark"] {
-    --bg-primary: #1e293b;
-    --bg-secondary: #0f172a;
-    --bg-tertiary: #334155;
-    --text-primary: #f8fafc;
-    --text-secondary: #e2e8f0;
-    --text-tertiary: #cbd5e1;
-    --border-primary: #334155;
-    --border-secondary: #475569;
-    --accent-primary: #a78bfa;
-    --accent-secondary: #c4b5fd;
-    --accent-light: #4c1d95;
-    --accent-hover: #8b5cf6;
-    --shadow: rgba(0, 0, 0, 0.3);
-    --transition: all 0.3s ease;
-}
-
 /* ===== 기본 ===== */
 * {
     box-sizing: border-box;
@@ -47,20 +10,19 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Pretendard', sans-serif;
-    background-color: var(--bg-secondary);
-    color: var(--text-primary);
-    transition: var(--transition);
+    background-color: #f8fafc;
+    color: #1e293b;
 }
 
 /* 링크 */
 a {
     text-decoration: none;
-    color: var(--text-secondary);
-    transition: var(--transition);
+    color: #334155;
+    transition: 0.3s;
 }
 
 a:hover {
-    color: var(--accent-secondary); /* 연보라 포인트 */
+    color: #a78bfa; /* 연보라 포인트 */
 }
 
 /* 헤더처럼 묶기 위해 container 기준 */
@@ -95,11 +57,23 @@ a:hover {
     top: 0;
     z-index: 1000;
 
+<<<<<<< HEAD
+<<<<<<< HEAD
     background: var(--bg-primary);
     border-bottom: 1px solid var(--border-primary);
     transition: var(--transition);
 
     min-width: 0; /* Prevent flex items from overflowing */
+=======
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+>>>>>>> d6335377bf9583a09708b79f8c5b7432f38b453f
+=======
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+
+    min-width: 0; /* Prevent flex items from overflowing */
+>>>>>>> 4e80e875374203aee90421deb041b37645ecb661
 }
 
 .title {
@@ -116,7 +90,7 @@ a:hover {
 .title a {
     font-size: 24px;
     font-family: 'JetBrains Mono', monospace;
-    color: var(--accent-primary);
+    color: #7c3aed;
     letter-spacing: 1px;
     gap: 10px;
 }
@@ -139,7 +113,7 @@ a:hover {
 .menu-left a {
     font-size: 15px;
     position: relative;
-    color: var(--text-tertiary);
+    color: #475569;
     padding-bottom: 4px;
     white-space: nowrap; /* 🔥 창 줄어들 때 글씨 줄바꿈 방지 */
 }
@@ -152,13 +126,13 @@ a:hover {
     bottom: 0;
     width: 0;
     height: 2px;
-    background: var(--accent-secondary);
+    background: #a78bfa;
     transition: width 0.3s ease;
 }
 
 
 .menu-left a:hover {
-    color: var(--accent-primary);
+    color: #7c3aed;
 }
 
 .menu-left a:hover::after {
@@ -184,21 +158,20 @@ a:hover {
 /* 기본 a 태그 뼈대 */
 .menu-right a {
     font-size: 14px;
-    color: var(--text-tertiary);
+    color: #64748b;
     padding: 6px 12px;
     border-radius: 6px;
-    transition: var(--transition);
 }
 
 /* 구분선 ( | ) */
 .menu-right .divider {
     margin: 0 4px;
-    color: var(--border-secondary);
+    color: #cbd5f5;
 }
 
 /* 환영 메시지 (ㅇㅇㅇ님 환영합니다!) */
 .menu-right .welcome-msg {
-    color: var(--accent-primary);
+    color: #7c3aed;
     font-weight: 600;
     margin-right: 15px;
     white-space: nowrap; /* Prevent text wrapping */
@@ -207,40 +180,59 @@ a:hover {
 
 /* [버튼 1] 로그인, 마이페이지 (텍스트 버튼) */
 .menu-right a.btn-text:hover {
+<<<<<<< HEAD
+<<<<<<< HEAD
     color: var(--accent-primary);
     background-color: var(--bg-tertiary); /* 마우스 올렸을 때 아주 연한 배경 */
+=======
+    color: #7c3aed;
+    background-color: #f8fafc;
+>>>>>>> d6335377bf9583a09708b79f8c5b7432f38b453f
+=======
+    color: #7c3aed;
+    background-color: #f8fafc; /* 마우스 올렸을 때 아주 연한 배경 */
+>>>>>>> 4e80e875374203aee90421deb041b37645ecb661
 }
 
 /* [버튼 2] 회원가입 (보라색 강조 버튼) */
 .menu-right a.btn-primary {
-    background-color: var(--accent-light);
-    color: var(--accent-hover);
+    background-color: #ede9fe;
+    color: #6d28d9;
 }
 
 .menu-right a.btn-primary:hover {
-    background-color: var(--accent-secondary);
+    background-color: #ddd6fe;
 }
 
 /* [버튼 3] 로그아웃 (회색 차분한 버튼) */
 .menu-right a.btn-secondary {
-    background-color: var(--bg-tertiary);
-    color: var(--text-secondary);
+    background-color: #f1f5f9;
+    color: #475569;
 }
 
 .menu-right a.btn-secondary:hover {
-    background-color: var(--border-primary);
+    background-color: #e2e8f0;
 }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 4e80e875374203aee90421deb041b37645ecb661
 /* ===== 콘텐츠 ===== */
 .content {
-    background-color: var(--bg-secondary);
+    background-color: #f8fafc;
     margin-top: 30px;
     padding: 30px;
     min-height: 800px;
-    transition: var(--transition);
 }
 
 /* 로그인 버튼 스타일 유지 */
+<<<<<<< HEAD
+=======
+/* 로그인/로그아웃 버튼 스타일 유지 */
+>>>>>>> d6335377bf9583a09708b79f8c5b7432f38b453f
+=======
+>>>>>>> 4e80e875374203aee90421deb041b37645ecb661
 .menu-right a:first-child {
     padding: 6px 12px;
     border-radius: 6px;
@@ -249,22 +241,21 @@ a:hover {
 .menu-right a:last-child {
     padding: 6px 12px;
     border-radius: 6px;
-    background-color: var(--accent-light);
-    color: var(--accent-hover);
+    background-color: #ede9fe;
+    color: #6d28d9;
 }
 
 .menu-right a:last-child:hover {
-    background-color: var(--accent-secondary);
+    background-color: #ddd6fe;
 }
 
 /* ===== 푸터 ===== */
 .footer {
     width: 100%;
-    border-top: 1px solid var(--border-primary);
-    background-color: var(--bg-primary);
+    border-top: 1px solid #e2e8f0;
+    background-color: #ffffff;
     margin-top: 30px;
-    box-shadow: 0 -2px 10px var(--shadow);
-    transition: var(--transition);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
 }
 
 .footer-inner {
@@ -275,24 +266,24 @@ a:hover {
     justify-content: space-between;
     align-items: center;
     font-size: 13px;
-    color: var(--text-tertiary);
+    color: #94a3b8;
 }
 
 /* 오른쪽 메뉴 */
 .footer-right a {
     margin-left: 20px;
-    color: var(--text-tertiary);
-    transition: var(--transition);
+    color: #64748b;
+    transition: 0.3s;
 }
 
 .footer-right a:hover {
-    color: var(--accent-primary);
+    color: #7c3aed;
 }
 
 .footer-message {
     margin-top: 5px;
     font-size: 12px;
-    color: var(--text-tertiary);
+    color: #94a3b8;
 }
 
 /* ===== 반응형 디자인 ===== */

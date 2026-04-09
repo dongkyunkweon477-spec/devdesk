@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/companySearch.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/companySearch.css">
 <input type="hidden" id="userRole" value="${sessionScope.user.nickname == '관리자' ? 'ADMIN' : 'USER'}"/>
 <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}"/>
 
@@ -90,6 +90,7 @@
 
     <%-- ===== 검색 결과 (카드) ===== --%>
     <div id="resultArea"></div>
+    <div id="companyPaging" class="cs-paging"></div>
 </div>
 
 <script src="${pageContext.request.contextPath}/js/companySearch.js"></script>
