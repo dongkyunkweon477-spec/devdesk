@@ -1,0 +1,45 @@
+/* 미니 캘린더 컨테이너 */
+#mini-calendar-container {
+    width: 100%;
+    max-width: 300px; /* 워크스페이스 크기에 맞게 조절 */
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    padding: 10px;
+    border: 1px solid #edf2f7;
+}
+
+/* 캘린더 내부 텍스트 크기 축소 */
+#mini-calendar {
+    font-size: 11px;
+}
+
+/* 헤더 타이틀 및 버튼 크기 조절 */
+.fc .fc-toolbar-title {
+    font-size: 14px !important;
+    font-weight: bold;
+    color: #2d3748;
+}
+
+.fc .fc-button {
+    padding: 2px 5px !important;
+    font-size: 10px !important;
+}
+
+/* 날짜 칸 높이 조절 */
+.fc .fc-daygrid-day-frame {
+    min-height: 40px !important;
+}
+
+/* 이벤트 막대 스타일 (글자 생략 처리) */
+.fc-event {
+    border: none !important;
+    background-color: #ebf4ff !important;
+    color: #3182ce !important;
+    font-weight: 500;
+    padding: 1px 3px;
+    border-radius: 3px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

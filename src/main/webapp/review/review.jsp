@@ -22,7 +22,10 @@
         <div class="card">
             <div class="card-header">
                 <div>
-                    <span class="badge-new">NEW</span>
+                    <c:set var="viewedReviews" value="${sessionScope.viewedReviews}"/>
+                    <c:if test="${empty viewedReviews || !viewedReviews.contains(r.reviewId)}">
+                        <span class="badge-new">NEW</span>
+                    </c:if>
                     <a href="${pageContext.request.contextPath}/review?companyId=${r.reviewCompanyId}">
                             ${r.companyName}
                     </a>

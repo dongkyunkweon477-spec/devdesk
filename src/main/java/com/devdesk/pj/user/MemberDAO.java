@@ -1,15 +1,17 @@
 package com.devdesk.pj.user;
 
+import com.devdesk.pj.Comment.CommentVO;
+import com.devdesk.pj.board.BoardVO;
 import com.devdesk.pj.main.DBManager_new;
-import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
-import sun.security.util.Password;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+
 
 public class MemberDAO {
 
@@ -110,7 +112,8 @@ public class MemberDAO {
                     System.out.println("로그인 성공");
 
                     MemberDTO memberDTO = new MemberDTO();
-                    memberDTO.setMember_id(rs.getInt("member_id")); // 추가
+
+                    memberDTO.setMember_id(rs.getInt("member_id")); // 선민 추가
                     memberDTO.setEmail(rs.getString("email"));
                     memberDTO.setNickname(rs.getString("nickname"));
                     memberDTO.setJob_category(rs.getString("job_category"));
@@ -141,7 +144,6 @@ public class MemberDAO {
 
     }
 
-    //public boolean updateProfile(HttpServletRequest request) {
     public boolean updateProfile(HttpServletRequest request) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -182,5 +184,115 @@ public class MemberDAO {
     }
 
 
-    //}
+    public boolean passwordUpdate(HttpServletRequest request, HttpServletResponse response) {
+        MemberDTO user = (MemberDTO) request.getSession().getAttribute("user");
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        String sql = "UPDATE MEMBER SET password = ? WHERE member_id = ? AND password = ?";
+
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+            String new_password = request.getParameter("new_password");
+            String old_password = request.getParameter("old_password");
+            pstmt.setString(1, new_password);
+            pstmt.setInt(2, user.getMember_id());
+            pstmt.setString(3, old_password);
+
+            if (pstmt.executeUpdate() == 1) {
+                System.out.println("비밀번호 변경 성공!");
+                return true;
+            } else {
+                System.out.println("비밀번호 변경 실패: 현재 비밀번호 불일치");
+                return false;
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, pstmt, null);
+        }
+        return false;
+    }
+
+    public ArrayList<BoardVO> getMyBoardList(int member_id) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        BoardVO bo = null;
+        ArrayList<BoardVO> boards = new ArrayList<>();
+
+        String sql = "SELECT b.*, " +
+                "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count, " +
+                "COALESCE(b.b_like_count, 0) as like_count " +
+                "FROM board b " +
+                "WHERE member_id = ? " +
+                "ORDER BY b.b_board_id DESC";
+
+        try {
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, member_id);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                bo = new BoardVO();
+                bo.setBoard_id(rs.getInt("b_board_id"));
+                bo.setCategory(rs.getString("b_category"));
+                bo.setTitle(rs.getString("b_title"));
+                bo.setMember_id(rs.getInt("member_id"));
+                bo.setCreated_date(rs.getString("b_created_date"));
+                bo.setView_count(rs.getInt("b_view_count"));
+                bo.setComment_count(rs.getInt("comment_count"));
+                bo.setLike_count(rs.getInt("like_count"));
+                boards.add(bo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, rs);
+        }
+        return boards;
+    }
+
+    public ArrayList<CommentVO> getMyCommentList(int member_id) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<CommentVO> comments = new ArrayList<>();
+
+        String sql = "SELECT c.c_comments_id, c.b_board_id, c.c_content, c.c_created_date, b.b_title " +
+                "FROM comments c " +
+                "JOIN board b ON c.b_board_id = b.b_board_id " +
+                "WHERE c.member_id = ? " +
+                "ORDER BY c.c_comments_id DESC";
+
+        try {
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, member_id);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CommentVO c = new CommentVO();
+                c.setComments_id(rs.getInt("c_comments_id"));
+                c.setBoard_id(rs.getInt("b_board_id"));
+                c.setContent(rs.getString("c_content"));
+
+                c.setCreated_date(String.valueOf(rs.getDate("c_created_date")));
+                c.setBoard_title(rs.getString("b_title"));
+
+                comments.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, rs);
+        }
+        return comments;
+    }
+
+
 }

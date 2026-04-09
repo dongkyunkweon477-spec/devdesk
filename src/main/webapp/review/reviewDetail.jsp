@@ -2,7 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review-detail.css">
-
+<script>var contextPath = '${pageContext.request.contextPath}';</script>
+<script src="${pageContext.request.contextPath}/js/review.js"></script>
 <div class="detail-wrap">
 
     <div class="detail-header">
@@ -137,16 +138,33 @@
     </div>
 
     <%-- 하단 버튼 --%>
-    <div class="detail-actions">
-        <c:if test="${sessionScope.memberId == r.reviewMemberId}">
-            <button class="btn-delete" onclick="confirmDelete(${r.reviewId})">삭제</button>
-        </c:if>
-        <div style="flex:1"></div>
-        <button class="btn-cancel" onclick="history.back()">목록으로</button>
-        <c:if test="${sessionScope.memberId == r.reviewMemberId}">
-            <a href="${pageContext.request.contextPath}/review/edit?reviewId=${r.reviewId}"
-               class="btn-submit" style="text-decoration:none; display:flex; align-items:center;">수정</a>
-        </c:if>
+    <div class="rd-social-center">
+        <button class="rd-pill rd-pill-like ${isLiked ? 'active' : ''}"
+                id="likeBtn" data-id="${r.reviewId}">
+            ♥ 추천 <span id="likeCount">${r.reviewLikeCount}</span>
+        </button>
+        <button class="rd-pill rd-pill-bookmark ${isBookmarked ? 'active' : ''}"
+                id="bookmarkBtn" data-id="${r.reviewId}">
+            ★ 북마크 <span id="bookmarkCount">${r.reviewBookmarkCount}</span>
+        </button>
+    </div>
+
+    <%-- 삭제 / 목록 / 수정 --%>
+    <div class="rd-nav">
+        <div class="rd-nav-left">
+            <%-- sessionScope.user.member_id 로 변경 --%>
+            <c:if test="${sessionScope.user != null && (sessionScope.user.member_id == r.reviewMemberId || sessionScope.user.role == 'ADMIN')}">
+                <button class="rd-nav-btn rd-nav-del" onclick="confirmDelete(${r.reviewId})">삭제</button>
+            </c:if>
+        </div>
+        <div class="rd-nav-right">
+            <button class="rd-nav-btn" onclick="history.back()">목록으로</button>
+            <%-- sessionScope.user.member_id 로 변경 --%>
+            <c:if test="${sessionScope.user != null && (sessionScope.user.member_id == r.reviewMemberId || sessionScope.user.role == 'ADMIN')}">
+                <a href="${pageContext.request.contextPath}/review/edit?reviewId=${r.reviewId}"
+                   class="rd-nav-btn rd-nav-edit">수정</a>
+            </c:if>
+        </div>
     </div>
 </div>
 

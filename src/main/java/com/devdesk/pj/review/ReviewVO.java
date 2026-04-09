@@ -33,6 +33,7 @@ public class ReviewVO {
     private int reviewLikeCount;
     private Date reviewCreatedDate;
     private Date reviewUpdatedDate;
+    private int reviewRating;
 
     private String companyName;    // JOIN용
     private String memberNickname; // JOIN용
@@ -61,11 +62,14 @@ public class ReviewVO {
         r.setReviewViewCount(rs.getInt("r_view_count"));
         r.setReviewBookmarkCount(rs.getInt("r_bookmark_count"));
         r.setReviewLikeCount(rs.getInt("r_like_count"));
+        r.setReviewRating(rs.getInt("r_rating"));
         r.setReviewCreatedDate(rs.getDate("r_created_date"));
         r.setReviewUpdatedDate(rs.getDate("r_updated_date"));
         try {
             r.setCompanyName(rs.getString("company_name"));
             r.setMemberNickname(rs.getString("member_nickname"));
+
+
         } catch (Exception e) {
 
         }

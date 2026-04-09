@@ -1,37 +1,43 @@
 $(function () {
-    initStarRating();
+    initStarRating('difficultyStars', 'difficulty', 'difficultyLabel',
+        ['', '매우 쉬움', '쉬움', '보통', '어려움', '매우 어려움']);
+    initStarRating('ratingStars', 'rating', 'ratingLabel',
+        ['', '매우 불만', '불만', '보통', '만족', '매우 만족']);
     initCharCount();
     initFormSubmit();
+
 });
 
 /* ===== 별점 클릭 ===== */
-function initStarRating() {
-    const labels = ['', '매우 쉬움', '쉬움', '보통', '어려움', '매우 어려움'];
+function initStarRating(containerId, inputId, labelId, labels) {
+    let selected = 0;
 
-    $('.difficulty-stars .star').on('click', function () {
-        const val = $(this).data('value');
-        $('#difficulty').val(val);
-
-        $('.difficulty-stars .star').each(function () {
-            $(this).toggleClass('active', $(this).data('value') <= val);
-        });
-
-        $('#difficultyLabel').text(labels[val]);
+    $('#' + containerId + ' .star').on('click', function () {
+        selected = $(this).data('value');
+        $('#' + inputId).val(selected);
+        updateStars(containerId, selected);
+        $('#' + labelId).text(labels[selected]);
     });
-
-    // 호버 미리보기
-    $('.difficulty-stars .star').on('mouseenter', function () {
-        const val = $(this).data('value');
-        $('.difficulty-stars .star').each(function () {
-            $(this).toggleClass('active', $(this).data('value') <= val);
-        });
+    $('#' + containerId + ' .star').on('mouseenter', function () {
+        updateStars(containerId, $(this).data('value'));
     });
+    $('#' + containerId).on('mouseleave', function () {
+        updateStars(containerId, selected);
 
-    $('.difficulty-stars').on('mouseleave', function () {
-        const selected = parseInt($('#difficulty').val()) || 0;
-        $('.difficulty-stars .star').each(function () {
-            $(this).toggleClass('active', $(this).data('value') <= selected);
-        });
+    });
+    let initVal = parseInt($('#' + inputId).val()) || 0;
+    if (initVal) {
+        selected = initVal;
+        updateStars(containerId, selected);
+        $('#' + labelId).text(labels[selected]);
+    }
+}
+
+function updateStars(containerId, val) {
+    $('#' + containerId + ' .star').each(function () {
+        $(this).toggleClass('active', $(this).data('value') <= val);
+
+
     });
 }
 

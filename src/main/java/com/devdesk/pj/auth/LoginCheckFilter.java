@@ -12,6 +12,7 @@ import java.io.IOException;
 @WebFilter(urlPatterns = {
         "/mypage",
         "/profile-update",
+        "/password-update",
         "/board",
         "/board_add",
         "/BoardDetailC",
@@ -24,7 +25,12 @@ import java.io.IOException;
         "/review/delete",
         "/company/insert",
         "/company/edit",
-        "/company/delete"
+        "/company/delete",
+        //  "/calendar",
+        "/add-calendar",
+        "/update-calendar",
+        "/delete-calendar",
+        "/my-board"
 
         //⬇️ 이런 식으로 본인이 맡은 주소를 계속 추가하면 됩니다!
         //"/board-write",      게시글 쓰기 (예시)
@@ -50,7 +56,7 @@ public class LoginCheckFilter implements Filter {
             chain.doFilter(request, response);
         } else {
             System.out.println("필터 작동: 비로그인 사용자 접근 차단");
-            res.sendRedirect("login");
+            res.sendRedirect(req.getContextPath() + "/login");
         }
     }
 
