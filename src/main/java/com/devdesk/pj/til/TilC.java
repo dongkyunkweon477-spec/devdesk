@@ -2,6 +2,9 @@ package com.devdesk.pj.til;
 
 import com.devdesk.pj.application.ApplicationDAO;
 import com.devdesk.pj.user.MemberDTO;
+// 🌟 1. 달력 데이터를 가져오기 위해 필요한 import 추가!
+import com.devdesk.pj.calendar.Schedule_newDAO;
+import com.devdesk.pj.calendar.Schedule_newDTO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList; // 🌟 ArrayList import 추가
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +35,11 @@ public class TilC extends HttpServlet {
         }
 
         int memberId = loginUser.getMember_id();
-        // ... 이하 동일
+
+        // 🌟 2. [미니 캘린더용] 내 면접 일정 DB에서 싹 다 가져와서 세팅하기!
+        ArrayList<Schedule_newDTO> schList = Schedule_newDAO.SCAO.getCalendarEvents(memberId);
+        request.setAttribute("schList", schList);
+        // 🌟 (이제 사이드바 JSP가 이 schList를 받아서 점을 톡톡톡 찍어줄 겁니다!)
 
 
         // 2. 태그 필터 파라미터
@@ -41,6 +49,7 @@ public class TilC extends HttpServlet {
         TilDAO dao = new TilDAO();
         List<TilV0> allList = dao.selectAllTils(memberId);
         System.out.println(allList);
+
         // ── 여기서부터 각 변수 계산 ──
 
         // totalCount
@@ -96,7 +105,6 @@ public class TilC extends HttpServlet {
         request.setAttribute("content", "/til/til2.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
-
 
     public void destroy() {
     }

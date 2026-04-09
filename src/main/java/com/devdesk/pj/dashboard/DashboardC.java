@@ -13,16 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Arrays;
 
 import com.devdesk.pj.calendar.Schedule_newDAO;
 import com.devdesk.pj.calendar.Schedule_newDTO;
 
-import java.util.ArrayList;
-
 @WebServlet("/dashboard")
 public class DashboardC extends HttpServlet {
-
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
@@ -49,12 +45,11 @@ public class DashboardC extends HttpServlet {
         tagBgMap.put("React", "rgba(78,205,196,0.12)");
         tagBgMap.put("기타", "rgba(157,163,184,0.12)");
 
-// recentTils 가공
+        // recentTils 가공
         TilDAO tilDao = new TilDAO();
         MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
         int memberId = loginUser.getMember_id();
 
-// ↓ 여기에 추가
         List<String> colors = new ArrayList<>(Arrays.asList(
                 "#ff9f69", "#56e39f", "#ffd166", "#5b7cf8",
                 "#ff6b6b", "#8b6ef5", "#4ecdc4", "#9da3b8"
@@ -67,13 +62,11 @@ public class DashboardC extends HttpServlet {
 
         List<TilV0> rawTils = tilDao.getRecentTils(memberId, 5);
 
-// TilVO에 tagColor, tagBg, timeAgo 필드 추가 필요
         for (TilV0 t : rawTils) {
             t.setTagColor(tagColorMap.getOrDefault(t.getTag(), "#9da3b8"));
             t.setTagBg(tagBgMap.getOrDefault(t.getTag(), "rgba(157,163,184,0.12)"));
-            t.setTimeAgo(calcTimeAgo(t.getCreatedAt())); // 아래 메서드 참고
+            t.setTimeAgo(calcTimeAgo(t.getCreatedAt()));
         }
-
 
         request.setAttribute("recentTils", rawTils);
 
@@ -81,11 +74,15 @@ public class DashboardC extends HttpServlet {
         Schedule_newDAO scheduleDao = Schedule_newDAO.SCAO;
         ArrayList<Schedule_newDTO> rawSchedules = scheduleDao.getCalendarEvents(memberId);
 
+        // 🌟🌟🌟 미니 캘린더용 데이터 전송 (이 한 줄이 핵심입니다!) 🌟🌟🌟
+        // 위에서 가져온 rawSchedules를 미니 캘린더가 냠냠 먹을 수 있게 "schList"라는 이름으로 보냅니다!
+        request.setAttribute("schList", rawSchedules);
+        // 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
 
-// 오늘 날짜
+        // 오늘 날짜
         java.util.Calendar today = java.util.Calendar.getInstance();
 
-// 타입별 배지 색상
+        // 타입별 배지 색상
         Map<String, String> typeBgMap = new HashMap<>();
         typeBgMap.put("1차 면접", "rgba(78,205,196,0.15)");
         typeBgMap.put("2차 면접", "rgba(91,124,248,0.15)");
@@ -136,13 +133,11 @@ public class DashboardC extends HttpServlet {
 
         request.setAttribute("upcomingSchedules", upcomingSchedules);
 
-
         for (Schedule_newDTO r : rawSchedules) {
             System.out.println("  날짜: " + r.getSchedule_date()
                     + " / 회사: " + r.getCompany_name()
                     + " / 타입: [" + r.getInterview_type() + "]");
         }
-
 
         DashboardDAO.countGroupbystage(request);
         DashboardDAO.getFunnelData(DashboardDAO.countGroupbystage(request));
@@ -174,7 +169,6 @@ public class DashboardC extends HttpServlet {
         return a.get(java.util.Calendar.YEAR) == b.get(java.util.Calendar.YEAR)
                 && a.get(java.util.Calendar.DAY_OF_YEAR) == b.get(java.util.Calendar.DAY_OF_YEAR);
     }
-
 
     public void destroy() {
     }
