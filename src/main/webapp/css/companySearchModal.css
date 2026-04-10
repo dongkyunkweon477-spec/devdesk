@@ -1,5 +1,5 @@
 /* 모달 뒷배경 */
-.modal-overlay {
+#companySearchModal { /* .modal-overlay → #companySearchModal */
     position: fixed;
     top: 0;
     left: 0;
@@ -13,7 +13,7 @@
 }
 
 /* 모달 창 본체 */
-.modal-box {
+#companySearchModal .modal-box {
     background: white;
     padding: 25px;
     border-radius: 8px;
@@ -22,12 +22,12 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.modal-box h3 {
+#companySearchModal .modal-box h3 {
     margin-top: 0;
     margin-bottom: 15px;
 }
 
-.modal-box input[type="text"] {
+#companySearchModal .modal-box input[type="text"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -36,7 +36,7 @@
     box-sizing: border-box;
 }
 
-.modal-box button {
+#companySearchModal .modal-box button {
     padding: 8px 15px;
     cursor: pointer;
     background: #007bff;
@@ -45,7 +45,7 @@
     border-radius: 4px;
 }
 
-.modal-box ul {
+#companySearchModal .modal-box ul {
     list-style: none;
     padding: 0;
     margin: 15px 0;
@@ -54,18 +54,18 @@
     border-top: 1px solid #eee;
 }
 
-.modal-box ul li {
+#companySearchModal .modal-box ul li {
     border-bottom: 1px solid #eee;
     padding: 8px 0;
 }
 
-.modal-box ul li a {
+#companySearchModal .modal-box ul li a {
     text-decoration: none;
     color: #333;
     display: block;
 }
 
-.modal-box ul li a:hover {
+#companySearchModal .modal-box ul li a:hover {
     color: #7c3aed;
     background: #f8fafc;
 }
@@ -120,7 +120,7 @@
 }
 
 /* 모달 닫기 버튼 */
-.modal-box > button[onclick^="close"] {
+#companySearchModal .modal-box > button[onclick^="close"] {
     width: 100%;
     background: #94a3b8;
     margin-top: 10px;
