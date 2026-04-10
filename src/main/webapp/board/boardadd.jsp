@@ -6,6 +6,10 @@
 </head>
 <body>
 <div class="write-container">
+    <form action="supa-upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file"/>
+        <button type="submit">supabase upload</button>
+    </form>
 
     <h2>✍ 글 작성하기</h2>
 
