@@ -2,6 +2,7 @@ package com.devdesk.pj.application;
 
 import com.devdesk.pj.dashboard.StageCountVO;
 import com.devdesk.pj.main.DBManager_new;
+import com.devdesk.pj.resumeblock.ResumeBlockVO;
 import com.devdesk.pj.user.MemberDTO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicationDAO {
 
@@ -346,6 +348,45 @@ public class ApplicationDAO {
 
         return vo;
     }
+
+    public static void filterApplication(HttpServletRequest request) {
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        String sql = "UPDATE application "
+                + "SET is_star = ? "
+                + "WHERE app_id = ?";
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+
+            int isStar = Integer.parseInt(request.getParameter("is_star"));
+
+
+            if (isStar == 1) {
+                pstmt.setInt(1, 0);
+                pstmt.setInt(2, Integer.parseInt(request.getParameter("app_id")));
+
+                int result = pstmt.executeUpdate();
+                System.out.println("상태 변경 결과: " + result);
+            } else {
+
+                pstmt.setInt(1, 1);
+                pstmt.setInt(2, Integer.parseInt(request.getParameter("app_id")));
+
+                int result = pstmt.executeUpdate();
+                System.out.println("상태 변경 결과: " + result);
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, pstmt, null);
+        }
+    }
+
 
 }
 

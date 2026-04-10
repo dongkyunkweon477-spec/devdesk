@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
+    <link rel="stylesheet" href="/css/application_list.css">
+    <link rel="stylesheet" href="/css/resume-block.css"> <!-- filter chip용 -->
+=======
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/companySearchModal.css">
     <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
     <style>
@@ -29,6 +32,7 @@
             --orange: #ff9f69;
             --red: #ff6b6b;
         }
+>>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
 
         * {
             margin: 0;
@@ -679,120 +683,135 @@
 </head>
 <body>
 
-<div class="wrap">
-
-    <!-- 페이지 헤더 -->
-    <div class="page-header">
+<!-- 페이지 헤더 -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">지원한 회사 목록</h1>
+        <p class="page-sub">지원 현황을 한눈에 확인하고 단계를 관리하세요</p>
+    </div>
+    <div class="two-btn">
         <div>
-            <h1 class="page-title">지원한 회사 목록</h1>
-            <p class="page-sub">지원 현황을 한눈에 확인하고 단계를 관리하세요</p>
+            <button class="btn-add" onclick="openInsertModal()">+ 지원 추가</button>
+            <br></div>
+        <%-- Filter chips --%>
+        <div class="rb-filters">
+            <form class="rb-filter" action="application-star" method="post">
+                <button>즐겨찾기⭐</button>
+            </form>
         </div>
-        <button class="btn-add" onclick="openInsertModal()">+ 지원 추가</button>
-    </div>
-
-    <!-- 단계별 요약 카운트 -->
-    <div class="stage-bar" id="stageBar">
-        <div class="stage-chip" style="--chip-c:#9da3b8">
-            <span class="stage-chip-icon">📄</span>
-            <div class="stage-chip-cnt" id="cnt-APPLIED">0</div>
-            <div class="stage-chip-name">지원완료</div>
-        </div>
-        <%-- ← 여기서 닫기 --%>
-
-        <div class="stage-chip" style="--chip-c:#ffd166">  <%-- ← 형제 요소로 --%>
-            <span class="stage-chip-icon">📋</span>
-            <div class="stage-chip-cnt" id="cnt-DOCUMENT">0</div>
-            <div class="stage-chip-name">서류통과</div>
-        </div>
-        <div class="stage-chip" style="--chip-c:#4ecdc4">
-            <span class="stage-chip-icon">🗣</span>
-            <div class="stage-chip-cnt" id="cnt-FIRST_INTERVIEW">0</div>
-            <div class="stage-chip-name">1차 면접</div>
-        </div>
-        <div class="stage-chip" style="--chip-c:#5b7cf8">
-            <span class="stage-chip-icon">💬</span>
-            <div class="stage-chip-cnt" id="cnt-SECOND_INTERVIEW">0</div>
-            <div class="stage-chip-name">2차 면접</div>
-        </div>
-        <div class="stage-chip" style="--chip-c:#8b6ef5">
-            <span class="stage-chip-icon">🔮</span>
-            <div class="stage-chip-cnt" id="cnt-THIRD_INTERVIEW">0</div>
-            <div class="stage-chip-name">3차 면접</div>
-        </div>
-        <div class="stage-chip" style="--chip-c:#56e39f">
-            <span class="stage-chip-icon">🎉</span>
-            <div class="stage-chip-cnt" id="cnt-PASS">0</div>
-            <div class="stage-chip-name">합격</div>
-        </div>
-        <div class="stage-chip" style="--chip-c:#ff6b6b">
-            <span class="stage-chip-icon">💔</span>
-            <div class="stage-chip-cnt" id="cnt-FAIL">0</div>
-            <div class="stage-chip-name">불합격</div>
+        <div class="wrap">
         </div>
     </div>
+</div>
 
-    <!-- 카드 그리드 -->
-    <div class="card-grid" id="cardGrid">
+<!-- 단계별 요약 카운트 -->
+<div class="stage-bar" id="stageBar">
+    <div class="stage-chip" style="--chip-c:#9da3b8">
+        <span class="stage-chip-icon">📄</span>
+        <div class="stage-chip-cnt" id="cnt-APPLIED">0</div>
+        <div class="stage-chip-name">지원완료</div>
+    </div>
+    <%-- ← 여기서 닫기 --%>
 
-        <c:choose>
-            <c:when test="${empty applicationList}">
-                <div class="empty">
-                    <div class="empty-icon">📭</div>
-                    <p>아직 지원한 곳이 없어요.<br>+ 지원 추가 버튼을 눌러 첫 지원을 등록해 보세요!</p>
-                </div>
-            </c:when>
-            <c:otherwise>
-                <c:forEach var="app" items="${applicationList}" varStatus="vs">
-                    <div class="app-card" id="card_${app.appId}" style="animation-delay:${vs.index * 40}ms">
+    <div class="stage-chip" style="--chip-c:#ffd166">  <%-- ← 형제 요소로 --%>
+        <span class="stage-chip-icon">📋</span>
+        <div class="stage-chip-cnt" id="cnt-DOCUMENT">0</div>
+        <div class="stage-chip-name">서류통과</div>
+    </div>
+    <div class="stage-chip" style="--chip-c:#4ecdc4">
+        <span class="stage-chip-icon">🗣</span>
+        <div class="stage-chip-cnt" id="cnt-FIRST_INTERVIEW">0</div>
+        <div class="stage-chip-name">1차 면접</div>
+    </div>
+    <div class="stage-chip" style="--chip-c:#5b7cf8">
+        <span class="stage-chip-icon">💬</span>
+        <div class="stage-chip-cnt" id="cnt-SECOND_INTERVIEW">0</div>
+        <div class="stage-chip-name">2차 면접</div>
+    </div>
+    <div class="stage-chip" style="--chip-c:#8b6ef5">
+        <span class="stage-chip-icon">🔮</span>
+        <div class="stage-chip-cnt" id="cnt-THIRD_INTERVIEW">0</div>
+        <div class="stage-chip-name">3차 면접</div>
+    </div>
+    <div class="stage-chip" style="--chip-c:#56e39f">
+        <span class="stage-chip-icon">🎉</span>
+        <div class="stage-chip-cnt" id="cnt-PASS">0</div>
+        <div class="stage-chip-name">합격</div>
+    </div>
+    <div class="stage-chip" style="--chip-c:#ff6b6b">
+        <span class="stage-chip-icon">💔</span>
+        <div class="stage-chip-cnt" id="cnt-FAIL">0</div>
+        <div class="stage-chip-name">불합격</div>
+    </div>
+</div>
 
-                        <!-- 상단 -->
-                        <div class="card-top">
-                            <div class="card-company">${app.companyName}</div>
-                            <span class="stage-badge" id="badge_${app.appId}"></span>
-                        </div>
+<!-- 카드 그리드 -->
+<div class="card-grid" id="cardGrid">
 
-                        <!-- 직무 -->
-                        <div class="card-position">💼 ${app.position}</div>
+    <c:choose>
+        <c:when test="${empty applicationList}">
+            <div class="empty">
+                <div class="empty-icon">📭</div>
+                <p>아직 지원한 곳이 없어요.<br>+ 지원 추가 버튼을 눌러 첫 지원을 등록해 보세요!</p>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <c:forEach var="app" items="${applicationList}" varStatus="vs">
+                <div class="app-card" id="card_${app.appId}" style="animation-delay:${vs.index * 40}ms">
 
-                        <!-- 메모 (있을 때만) -->
-                        <c:if test="${not empty app.memo}">
-                            <div class="card-memo">${app.memo}</div>
-                        </c:if>
-
-                        <!-- 상태 변경 영역 -->
-                        <div class="status-wrap">
-                            <span class="status-text" id="status_text_${app.appId}"></span>
-                            <select class="status-select" id="status_select_${app.appId}">
-                                <option value="APPLIED">지원완료</option>
-                                <option value="DOCUMENT">서류 통과</option>
-                                <option value="FIRST_INTERVIEW">1차 면접</option>
-                                <option value="SECOND_INTERVIEW">2차 면접</option>
-                                <option value="THIRD_INTERVIEW">3차 면접</option>
-                                <option value="PASS">합격</option>
-                                <option value="FAIL">불합격</option>
-                            </select>
-                            <button class="btn-status" onclick="editStatus('${app.appId}', '${app.status}')">단계 변경
-                            </button>
-                        </div>
-
-                        <!-- 하단 -->
-                        <div class="card-footer">
-                            <span class="card-date">📅 ${app.appDate}</span>
-                            <div class="card-actions">
-                                <button class="btn-delete"
-                                        onclick="openConfirm('${app.appId}', '${app.companyName}')">삭제
-                                </button>
-                            </div>
-                        </div>
-
+                    <!-- 상단 -->
+                    <div class="card-top">
+                        <div class="card-company">${app.companyName}</div>
+                        <span class="stage-badge" id="badge_${app.appId}"></span>
                     </div>
-                    <%-- JS에서 쓸 상태값 초기화용 hidden input --%>
-                    <input type="hidden" id="init_status_${app.appId}" value="${app.status}">
-                </c:forEach>
-            </c:otherwise>
-        </c:choose>
 
-    </div><!-- /.card-grid -->
+                    <!-- 직무 -->
+                    <div class="card-position">💼 ${app.position}</div>
+
+                    <!-- 메모 (있을 때만) -->
+                    <c:if test="${not empty app.memo}">
+                        <div class="card-memo">${app.memo}</div>
+                    </c:if>
+
+                    <!-- 상태 변경 영역 -->
+                    <div class="status-wrap">
+                        <span class="status-text" id="status_text_${app.appId}"></span>
+                        <select class="status-select" id="status_select_${app.appId}">
+                            <option value="APPLIED">지원완료</option>
+                            <option value="DOCUMENT">서류 통과</option>
+                            <option value="FIRST_INTERVIEW">1차 면접</option>
+                            <option value="SECOND_INTERVIEW">2차 면접</option>
+                            <option value="THIRD_INTERVIEW">3차 면접</option>
+                            <option value="PASS">합격</option>
+                            <option value="FAIL">불합격</option>
+                        </select>
+                        <button class="btn-status" onclick="editStatus('${app.appId}', '${app.status}')">단계 변경
+                        </button>
+                    </div>
+
+                    <!-- 하단 -->
+                    <div class="card-footer">
+                        <span class="card-date">📅 ${app.appDate}</span>
+                        <div class="card-actions">
+                            <button class="btn-delete"
+                                    onclick="openConfirm('${app.appId}', '${app.companyName}')">삭제
+                            </button>
+                            <form action="application-star" method="post">
+                                <input type="hidden" name="is_star" value=1>
+                                <input type="hidden" name="is_star" value=1>
+                                <button>⭐</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+                <%-- JS에서 쓸 상태값 초기화용 hidden input --%>
+                <input type="hidden" id="init_status_${app.appId}" value="${app.status}">
+            </c:forEach>
+        </c:otherwise>
+    </c:choose>
+
+</div><!-- /.card-grid -->
 </div><!-- /.wrap -->
 
 

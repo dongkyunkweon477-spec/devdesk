@@ -187,6 +187,8 @@
 /* 3) 원본 글 제목(회색 텍스트): 살짝 또렷하게 */
 #tab-comments .list-table tbody tr:hover td:first-child {
     color: #64748b !important;
+<<<<<<< HEAD
+=======
 }
 
 /* ───────────────────────────────────────────
@@ -265,4 +267,5 @@
     color: #ffffff;
     border-color: #7c3aed;
     box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
+>>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
 }
