@@ -147,28 +147,44 @@ public class Schedule_newDAO {
 
             // 🌟🌟🌟 여기서부터 추가된 구글 캘린더 연동 로직 🌟🌟🌟
             try {
-                com.google.api.services.calendar.Calendar service = GoogleCalendarHelper.getCalendarService();
+                // 1. 방금 로그인한 유저의 Refresh Token을 DB에서 조회해 옵니다.
+                String refreshToken = null;
+                String tokenSql = "SELECT GOOGLE_REFRESH_TOKEN FROM MEMBER WHERE MEMBER_ID = ?";
+                // 위에서 썼던 pstmt가 닫혔을 테니 새로 열어서 씁니다.
+                pstmt = con.prepareStatement(tokenSql);
+                pstmt.setInt(1, memberId);
+                rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    refreshToken = rs.getString("GOOGLE_REFRESH_TOKEN");
+                }
+                pstmt.close();
+                rs.close();
 
-                // 구글 달력에 띄울 제목과 내용 세팅
-                com.google.api.services.calendar.model.Event event = new com.google.api.services.calendar.model.Event()
-                        .setSummary("[" + companyName + "] " + type + " 일정")
-                        .setDescription("직무: " + (position == null ? "미정" : position) + "\n메모: " + (memo == null ? "" : memo));
+                // 2. 토큰이 없으면 연동 안 한 사람이니 구글 저장은 패스!
+                if (refreshToken == null || refreshToken.isEmpty()) {
+                    System.out.println("⚠️ [구글 캘린더] 연동 토큰이 없어 DB에만 저장됩니다.");
+                } else {
+                    // 3. 토큰이 있다면! 헬퍼에 토큰을 찔러넣고 진짜 권한이 있는 서비스 객체를 받아옵니다.
+                    com.google.api.services.calendar.Calendar service = GoogleCalendarHelper.getCalendarService(refreshToken);
 
-                // 시간 세팅 (한국 시간 기준)
-                // 시간 세팅 (한국 시간 기준)
-                String startDateTimeStr = date + "T" + time + ":00+09:00";
+                    // 구글 달력에 띄울 제목과 내용 세팅
+                    com.google.api.services.calendar.model.Event event = new com.google.api.services.calendar.model.Event()
+                            .setSummary("[" + companyName + "] " + type + " 일정")
+                            .setDescription("직무: " + (position == null ? "미정" : position) + "\n메모: " + (memo == null ? "" : memo));
 
-                // 🚨 여기서 주소가 client.util.DateTime 으로 바뀌었습니다! (빨간줄 해결)
-                com.google.api.client.util.DateTime startDateTime = new com.google.api.client.util.DateTime(startDateTimeStr);
+                    // 시간 세팅 (한국 시간 기준)
+                    String startDateTimeStr = date + "T" + time + ":00+09:00";
+                    com.google.api.client.util.DateTime startDateTime = new com.google.api.client.util.DateTime(startDateTimeStr);
 
-                event.setStart(new com.google.api.services.calendar.model.EventDateTime().setDateTime(startDateTime));
-                event.setEnd(new com.google.api.services.calendar.model.EventDateTime().setDateTime(startDateTime));
-                // 구글 서버로 발사!
-                service.events().insert("primary", event).execute();
-                System.out.println("✅ [구글 캘린더] 동기화 성공!");
+                    event.setStart(new com.google.api.services.calendar.model.EventDateTime().setDateTime(startDateTime));
+                    event.setEnd(new com.google.api.services.calendar.model.EventDateTime().setDateTime(startDateTime));
+
+                    // 구글 서버로 발사!
+                    service.events().insert("primary", event).execute();
+                    System.out.println("✅ [구글 캘린더] 진짜 내 캘린더에 일정 등록 완료!");
+                }
 
             } catch (Exception googleEx) {
-                // 구글 연동이 실패해도 (권한 에러 등) 멈추지 않고 아래 DB 커밋으로 넘어가도록 처리!
                 System.out.println("⚠️ [구글 캘린더] 연동 실패! (오라클 DB에는 정상 저장됩니다.) 원인: " + googleEx.getMessage());
             }
             // 🌟🌟🌟 구글 연동 로직 끝 🌟🌟🌟
