@@ -7,16 +7,37 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
 import java.net.*;
+import java.util.Properties;
 
 @WebServlet("/google-login")
 public class GoogleLoginC extends HttpServlet {
 
-    private static final String CLIENT_ID = "235100421101-uhksrc5bk2rc9ltmgpjanv2db0dva9dt.apps.googleusercontent.com";
-    private static final String CLIENT_SECRET = "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";
-    private static final String REDIRECT_URI = "http://localhost/google-login";
+    private String CLIENT_ID;
+    private String CLIENT_SECRET;
+    private String REDIRECT_URI;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        try {
+            Properties prop = new Properties();
+
+            InputStream input = getClass()
+                    .getClassLoader()
+                    .getResourceAsStream("conf.properties");
+
+            prop.load(input);
+
+            CLIENT_ID = prop.getProperty("google.client.id");
+            CLIENT_SECRET = prop.getProperty("google.client.secret");
+            REDIRECT_URI = prop.getProperty("google.redirect.uri");
+
+            System.out.println(CLIENT_ID);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         String code = request.getParameter("code");
 
