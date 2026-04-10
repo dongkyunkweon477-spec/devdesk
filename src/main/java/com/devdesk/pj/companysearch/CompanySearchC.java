@@ -19,7 +19,7 @@ public class CompanySearchC extends HttpServlet {
         request.setAttribute("totalCompanyCount", totalCompanyCount);
         request.setAttribute("locations", locations);
         request.setAttribute("industries", industries);
-        request.setAttribute("content", "/company-search/companySearch.jsp");
+        request.setAttribute("content", "/company/company-search/companySearch.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 

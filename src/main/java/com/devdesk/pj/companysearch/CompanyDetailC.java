@@ -35,7 +35,7 @@ public class CompanyDetailC extends HttpServlet {
         request.setAttribute("stats", stats);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
-        request.setAttribute("content", "/company-detail/companyDetail.jsp");
+        request.setAttribute("content", "/company/company-detail/companyDetail.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 

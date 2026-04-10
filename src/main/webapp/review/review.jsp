@@ -8,7 +8,7 @@
 <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
 <script src="${pageContext.request.contextPath}/js/review-board.js"></script>
 
-<jsp:include page="/company-search/companySearch.jsp"/>
+<jsp:include page="/company/company-search/companySearch.jsp"/>
 
 
 <div class="board-container">
@@ -128,4 +128,4 @@
 </div>
 
 
-<jsp:include page="/company-search/companySearchModal.jsp"/>
+<jsp:include page="/company/company-search/companySearchModal.jsp"/>

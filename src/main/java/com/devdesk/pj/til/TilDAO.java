@@ -14,47 +14,40 @@ public class TilDAO {
     // ✅ 1. static 제거 (인스턴스 메서드로)
     public List<TilV0> selectAllTils(int memberId) {
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
         // ✅ 2. WHERE 절로 해당 유저 것만 조회
         String sql = "SELECT * FROM til WHERE member_id = ?";
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
             pstmt.setInt(1, memberId); // ✅ 파라미터 바인딩
-            rs = pstmt.executeQuery();
 
-            ArrayList<TilV0> dtos = new ArrayList<>();
+            try (ResultSet rs = pstmt.executeQuery()) {
+                ArrayList<TilV0> dtos = new ArrayList<>();
 
-            while (rs.next()) {
-                TilV0 dto = new TilV0();
-                dto.setTilId(rs.getString("til_id"));
-                dto.setTitle(rs.getString("title"));
-                dto.setTag(rs.getString("tag"));
-                dto.setStudyTime(rs.getDouble("study_time"));
-                dto.setContent(rs.getString("content"));
-                dto.setCreatedAt(rs.getString("created_date"));
-                dtos.add(dto);
+                while (rs.next()) {
+                    TilV0 dto = new TilV0();
+                    dto.setTilId(rs.getString("til_id"));
+                    dto.setTitle(rs.getString("title"));
+                    dto.setTag(rs.getString("tag"));
+                    dto.setStudyTime(rs.getDouble("study_time"));
+                    dto.setContent(rs.getString("content"));
+                    dto.setCreatedAt(rs.getString("created_date"));
+                    dtos.add(dto);
+                }
+
+                // ✅ 3. request.setAttribute 제거하고 dtos 반환
+                return dtos;
             }
-
-            // ✅ 3. request.setAttribute 제거하고 dtos 반환
-            return dtos;
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
 
         return new ArrayList<>(); // ✅ null 대신 빈 리스트 반환
     }
 
     public static void addTil(HttpServletRequest request) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
         MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
         int memberId = loginUser.getMember_id();
 
@@ -62,18 +55,14 @@ public class TilDAO {
                 + "(til_id, member_id, title, content, CREATED_DATE, tag, STUDY_TIME) "
                 + "VALUES (APPLICATION_SEQ.NEXTVAL, ?, ?, ?, SYSDATE, ?, ?)";
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
-
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             // 파라미터 받기
-
             String title = request.getParameter("title");
             String content = request.getParameter("content");
             String tag = request.getParameter("tag");
             Double studyTime = Double.parseDouble(request.getParameter("study_time"));
-
 
             // 바인딩
             pstmt.setInt(1, memberId);
@@ -81,7 +70,6 @@ public class TilDAO {
             pstmt.setString(3, content);
             pstmt.setString(4, tag);
             pstmt.setDouble(5, studyTime);
-
 
             // 실행
             int result = pstmt.executeUpdate();
@@ -92,9 +80,6 @@ public class TilDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-
-        } finally {
-            DBManager_new.close(con, pstmt, null);
         }
 
     }
@@ -102,15 +87,12 @@ public class TilDAO {
 
     public static void updateTil(HttpServletRequest request) {
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-
         String sql = "UPDATE til "
                 + "SET title = ?, content = ?, tag = ?, study_time = ? "
                 + "WHERE til_id = ?";
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
+
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             String title = request.getParameter("title");
             String content = request.getParameter("content");
@@ -129,21 +111,15 @@ public class TilDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, null);
         }
     }
 
     public static void deleteTil(HttpServletRequest request) {
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-
         String sql = "DELETE FROM til WHERE til_id = ?";
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             // 👉 파라미터 받기
             String tilIdStr = request.getParameter("til_id");
@@ -160,16 +136,8 @@ public class TilDAO {
                 System.out.println("삭제 실패");
             }
 
-            if (pstmt.executeUpdate() == 1) {
-                System.out.println("delete success");
-
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
-
-        } finally {
-            DBManager_new.close(con, pstmt, null);
         }
     }
 
@@ -180,29 +148,24 @@ public class TilDAO {
                 + "  SELECT * FROM til WHERE member_id = ? ORDER BY created_date DESC"
                 + ") WHERE ROWNUM <= ?";
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, memberId);
             pstmt.setInt(2, limit);
-            rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                TilV0 vo = new TilV0();
-                vo.setTilId(rs.getString("til_id"));
-                vo.setTitle(rs.getString("title"));
-                vo.setTag(rs.getString("tag"));
-                vo.setCreatedAt(rs.getString("created_date"));
-                list.add(vo);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    TilV0 vo = new TilV0();
+                    vo.setTilId(rs.getString("til_id"));
+                    vo.setTitle(rs.getString("title"));
+                    vo.setTag(rs.getString("tag"));
+                    vo.setCreatedAt(rs.getString("created_date"));
+                    list.add(vo);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
         return list;
     }
@@ -220,30 +183,24 @@ public class TilDAO {
                 + "GROUP BY tag "
                 + "ORDER BY pct DESC";
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, memberId);
-            rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                TilTagStatVO vo = new TilTagStatVO();
-                vo.setTag(rs.getString("tag"));
-                vo.setPct(rs.getInt("pct"));
-                list.add(vo);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    TilTagStatVO vo = new TilTagStatVO();
+                    vo.setTag(rs.getString("tag"));
+                    vo.setPct(rs.getInt("pct"));
+                    list.add(vo);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
         return list;
     }
 
 
 }
-

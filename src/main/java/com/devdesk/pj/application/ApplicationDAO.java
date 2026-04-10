@@ -14,16 +14,13 @@ public class ApplicationDAO {
 
 
     public static void addApplication(HttpServletRequest request) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
 
         String sql = "INSERT INTO application "
                 + "(app_id, member_id, company_id, position, stage, apply_date, memo, created_date) "
                 + "VALUES (APPLICATION_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, SYSDATE)";
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             // 파라미터 받기
 //            String memberId = request.getParameter("member_id");
@@ -58,7 +55,6 @@ public class ApplicationDAO {
 
             pstmt.setString(6, memo);
 
-
             // 실행
             int result = pstmt.executeUpdate();
 
@@ -68,19 +64,11 @@ public class ApplicationDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-
-        } finally {
-            DBManager_new.close(con, pstmt, null);
         }
 
     }
 
     public static void selectAllApplications(HttpServletRequest request) {
-        //1. 값 or db
-
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
         String sql = "SELECT \n" +
                 "a.app_id,\n" +
                 "a.COMPANY_ID,\n" +
@@ -89,91 +77,69 @@ public class ApplicationDAO {
                 "a.stage,\n" +
                 "a.apply_date,\n" +
                 "a.memo FROM application a JOIN company c ON a.company_id = c.company_id where member_id = ? ORDER BY a.created_date DESC";
-        ;
 
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
-            ApplicationV0 dto = null;
             ArrayList<ApplicationV0> dtos = new ArrayList<>();
             MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
             int memberId = loginUser.getMember_id();
             pstmt.setInt(1, memberId);
-            rs = pstmt.executeQuery();
 
-
-            while (rs.next()) {
-                dto = new ApplicationV0();
-                dto.setAppId(rs.getString("app_id"));
-                dto.setCompanyId(rs.getString("company_id"));
-                dto.setCompanyName(rs.getString("company_name"));
-                dto.setPosition(rs.getString("position"));
-                dto.setStatus(rs.getString("stage"));
-                dto.setStatusName(getStatusName(rs.getString("stage"))); // 한글
-                dto.setAppDate(rs.getDate("apply_date"));
-                dto.setMemo(rs.getString("memo"));
-                dtos.add(dto);
-
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    ApplicationV0 dto = new ApplicationV0();
+                    dto.setAppId(rs.getString("app_id"));
+                    dto.setCompanyId(rs.getString("company_id"));
+                    dto.setCompanyName(rs.getString("company_name"));
+                    dto.setPosition(rs.getString("position"));
+                    dto.setStatus(rs.getString("stage"));
+                    dto.setStatusName(getStatusName(rs.getString("stage"))); // 한글
+                    dto.setAppDate(rs.getDate("apply_date"));
+                    dto.setMemo(rs.getString("memo"));
+                    dtos.add(dto);
+                }
             }
             System.out.println(dtos);
 
             request.setAttribute("applicationList", dtos);
 
-
         } catch (Exception e) {
             e.printStackTrace();
-
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
 
     }
 
     public static void selectAllCompanies(HttpServletRequest request) {
-        //1. 값 or db
-
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
         String sql = "select * from COMPANY";
 
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
-            rs = pstmt.executeQuery();
-            ApplicationV0 dto = null;
             ArrayList<ApplicationV0> dtos = new ArrayList<>();
 
-            while (rs.next()) {
-                dto = new ApplicationV0();
-                dto.setCompanyId(rs.getString("company_id"));
-                dto.setCompanyName(rs.getString("company_name"));
-                dtos.add(dto);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    ApplicationV0 dto = new ApplicationV0();
+                    dto.setCompanyId(rs.getString("company_id"));
+                    dto.setCompanyName(rs.getString("company_name"));
+                    dtos.add(dto);
+                }
             }
             request.setAttribute("companyList", dtos);
 
-
         } catch (Exception e) {
             e.printStackTrace();
-
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
 
     }
 
     public static void deleteApplication(HttpServletRequest request) {
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-
         String sql = "DELETE FROM application WHERE app_id = ?";
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             // 👉 파라미터 받기
             String appIdStr = request.getParameter("app_id");
@@ -190,24 +156,12 @@ public class ApplicationDAO {
                 System.out.println("삭제 실패");
             }
 
-            if (pstmt.executeUpdate() == 1) {
-                System.out.println("delete success");
-
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
-
-        } finally {
-            DBManager_new.close(con, pstmt, null);
         }
     }
 
     public static ApplicationV0 selectApplication(HttpServletRequest request) {
-
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
 
         ApplicationV0 dto = null;
 
@@ -216,31 +170,27 @@ public class ApplicationDAO {
                 + "JOIN company c ON a.company_id = c.company_id "
                 + "WHERE a.app_id = ?";
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             int appId = Integer.parseInt(request.getParameter("app_id"));
             pstmt.setInt(1, appId);
 
-            rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                dto = new ApplicationV0();
-                dto.setAppId(rs.getString("app_id"));
-                dto.setCompanyName(rs.getString("company_name"));
-                dto.setPosition(rs.getString("position"));
-                dto.setStatus(rs.getString("stage")); // DB값
-                dto.setStatusName(getStatusName(rs.getString("stage"))); // 한글
-                dto.setAppDate(rs.getDate("apply_date"));
-                dto.setMemo(rs.getString("memo"));
-
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    dto = new ApplicationV0();
+                    dto.setAppId(rs.getString("app_id"));
+                    dto.setCompanyName(rs.getString("company_name"));
+                    dto.setPosition(rs.getString("position"));
+                    dto.setStatus(rs.getString("stage")); // DB값
+                    dto.setStatusName(getStatusName(rs.getString("stage"))); // 한글
+                    dto.setAppDate(rs.getDate("apply_date"));
+                    dto.setMemo(rs.getString("memo"));
+                }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
 
         return dto;
@@ -248,15 +198,12 @@ public class ApplicationDAO {
 
     public static void updateApplication(HttpServletRequest request) {
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-
         String sql = "UPDATE application "
                 + "SET stage = ? "
                 + "WHERE app_id = ?";
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
+
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             pstmt.setString(1, request.getParameter("status"));
             pstmt.setInt(2, Integer.parseInt(request.getParameter("app_id")));
@@ -266,8 +213,6 @@ public class ApplicationDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, null);
         }
     }
 
@@ -294,11 +239,6 @@ public class ApplicationDAO {
     }
 
     public static StageCountVO countGroupByStage(int memberId) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
-
         String sql = "SELECT STAGE, COUNT(*) AS CNT " +
                 "FROM APPLICATION " +
                 "WHERE MEMBER_ID = ? " +
@@ -306,46 +246,45 @@ public class ApplicationDAO {
 
         StageCountVO vo = new StageCountVO();
 
-        // pstmt, rs 생략
-        try {
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-            while (rs.next()) {
-                String stage = rs.getString("STAGE");
-                int cnt = rs.getInt("CNT");
+            pstmt.setInt(1, memberId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String stage = rs.getString("STAGE");
+                    int cnt = rs.getInt("CNT");
 
-                switch (stage) {
-                    case "APPLIED":
-                        vo.setApplied(cnt);
-                        break;
-                    case "DOCUMENT":
-                        vo.setDocumentPass(cnt);
-                        break;
-                    case "FIRST_INTERVIEW":
-                        vo.setFirstInterview(cnt);
-                        break;
-                    case "SECOND_INTERVIEW":
-                        vo.setSecondInterview(cnt);
-                        break;
-                    case "THIRD_INTERVIEW":
-                        vo.setThirdInterview(cnt);
-                        break;
-                    case "PASS":
-                        vo.setPassed(cnt);
-                        break;
-                    case "FAIL":
-                        vo.setPassed(cnt);
-                        break;
-
+                    switch (stage) {
+                        case "APPLIED":
+                            vo.setApplied(cnt);
+                            break;
+                        case "DOCUMENT":
+                            vo.setDocumentPass(cnt);
+                            break;
+                        case "FIRST_INTERVIEW":
+                            vo.setFirstInterview(cnt);
+                            break;
+                        case "SECOND_INTERVIEW":
+                            vo.setSecondInterview(cnt);
+                            break;
+                        case "THIRD_INTERVIEW":
+                            vo.setThirdInterview(cnt);
+                            break;
+                        case "PASS":
+                            vo.setPassed(cnt);
+                            break;
+                        case "FAIL":
+                            vo.setFailed(cnt);
+                            break;
+                    }
                 }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
 
         return vo;
     }
 
 }
-
