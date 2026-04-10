@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BoardDAO {
     public static void addBoard(HttpServletRequest request) {
@@ -392,4 +393,50 @@ public class BoardDAO {
 
     }
 
+    public static List<BoardVO> getPostsByMember(int memberId) {
+        List<BoardVO> list = new ArrayList<>();
+
+        String sql = "SELECT b_board_id, b_title " +
+                "FROM board " +
+                "WHERE member_id = ? " +
+                "ORDER BY b_board_id DESC";
+
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBManager_new.connect();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, memberId);
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BoardVO vo = new BoardVO();
+
+                int boardId = rs.getInt("b_board_id");
+                String title = rs.getString("b_title");
+                
+                System.out.println("getPostsByMember - boardId: " + boardId + ", title: " + title);
+                System.out.println("getPostsByMember - title null?: " + (title == null));
+                System.out.println("getPostsByMember - title empty?: " + (title != null && title.isEmpty()));
+                
+                vo.setBoard_id(boardId);
+                vo.setTitle(title);
+                
+                System.out.println("getPostsByMember - vo.getTitle(): " + vo.getTitle());
+                System.out.println("getPostsByMember - vo.getTitle() null?: " + (vo.getTitle() == null));
+
+                list.add(vo);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, ps, rs);
+        }
+
+        return list;
+    }
 }

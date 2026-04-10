@@ -39,7 +39,11 @@
         <div class="detail-info-group">
             <div class="detail-row">
                 <div class="detail-label">작성자</div>
-                <div class="detail-content">(ID: ${board.nickname})</div>
+                <div class="detail-content">(ID:
+                    <span class="writer" data-id="${board.member_id}">
+                        ${board.nickname}
+                    </span>)
+                </div>
             </div>
             <div class="detail-row">
                 <div class="detail-label">작성일</div>
@@ -148,6 +152,15 @@
             <c:if test="${empty commentList}">
                 <p class="no-comments">아직 작성된 댓글이 없습니다.</p>
             </c:if>
+        </div>
+    </div>
+
+    <!-- 🔥 여기 추가 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>작성자의 게시글</h3>
+            <ul id="postList"></ul>
         </div>
     </div>
 </div>
@@ -352,6 +365,108 @@
         const replyForms = document.querySelectorAll('.reply-form');
         replyForms.forEach(form => form.remove());
     }
+
+    // // 작성자 클릭시 모달 및 해당 작성자 게시글 목록
+    // document.addEventListener("DOMContentLoaded", () => {
+    //     const writer = document.querySelector(".writer");
+    //
+    //     writer.addEventListener("click", async function () {
+    //         const memberId = this.dataset.id;
+    //
+    //         const res = await fetch("member-posts?memberId=" + memberId);
+    //         const posts = await res.json();
+    //
+    //         openModal(posts);
+    //     });
+    // });
+
+    // 작성자 클릭 모달 이벤트 펑션
+    // document.addEventListener("DOMContentLoaded", () => {
+    //     const writer = document.querySelector(".writer");
+    //
+    //     writer.addEventListener("click", async function () {
+    //         const memberId = this.dataset.id;
+    //
+    //         const res = await fetch("member-posts?memberId=" + memberId);
+    //         const posts = await res.json();
+    //
+    //         openModal(posts);
+    //     });
+    // });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const writer = document.querySelector(".writer");
+        const modal = document.getElementById("modal");
+        const closeBtn = document.querySelector(".close-btn");
+
+        // 👉 작성자 클릭
+        writer.addEventListener("click", async function () {
+            console.log("작성자 클릭됨");
+            const memberId = this.dataset.id;
+            console.log("memberId:", memberId);
+
+            try {
+                console.log("fetch 호출 시작");
+                const res = await fetch("/member-posts?memberId=" + memberId);
+                console.log("fetch 응답 상태:", res.status);
+
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+
+                const posts = await res.json();
+                console.log("받은 데이터:", posts);
+
+                const list = document.getElementById("postList");
+                list.innerHTML = "";
+
+                if (posts.length === 0) {
+                    console.log("게시글 없음");
+                    list.innerHTML = "<li>게시글이 없습니다</li>";
+                } else {
+                    console.log("게시글 있음, 개수:", posts.length);
+                    posts.forEach(post => {
+                        console.log("게시글:", post);
+                        const li = document.createElement("li");
+
+                        //  fire style
+                        li.style.color = "black";
+                        li.style.padding = "10px";
+
+                        const a = document.createElement("a");
+                        a.href = "BoardDetailC?id=" + post.board_id;
+                        a.innerText = post.title;
+                        a.style.color = "black";
+
+                        li.appendChild(a);
+                        list.appendChild(li);
+                    });
+                }
+
+                modal.style.display = "block";
+                modal.classList.add("show");
+
+            } catch (e) {
+                console.error("에러:", e);
+            }
+        });
+
+        // 👉 닫기 버튼
+        closeBtn.addEventListener("click", () => {
+            modal.style.display = "none";
+            modal.classList.remove("show");
+        });
+
+        // 👉 바깥 클릭 시 닫기
+        window.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.style.display = "none";
+                modal.classList.remove("show");
+            }
+        });
+    });
+
+
 </script>
 
 </body>

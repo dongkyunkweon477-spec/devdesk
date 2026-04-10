@@ -81,8 +81,8 @@
 
     <div class="pagination">
         <c:if test="${currentPage > 1}">
-            <a href="board?p=${currentPage - 1}&category=${param.category != null ? param.category : ''}&sort=${param.sort != null ? param.sort : ''}&searchType=${param.searchType != null ? param.searchType : ''}&keyword=${param.keyword != null ? param.keyword : ''}"
-               class="page-btn">◀</a>
+            <a href="board?p=${currentPage - 1}&category=${param.category != null ? param.category : ""}&sort=${param.sort != null ? param.sort : ""}&searchType=${param.searchType != null ? param.searchType : ""}&keyword=${param.keyword != null ? param.keyword : ""}"
+               class="page-btn">이전</a>
         </c:if>
 
         <c:forEach begin="1" end="${totalPage}" var="i">
@@ -93,7 +93,7 @@
                 <%-- 중복된 c:otherwise를 제거하고 하나로 합쳤습니다. --%>
                 <c:otherwise>
                     <a href="board?p=${i}&category=${param.category != null ? param.category : ''}&sort=${param.sort != null ? param.sort : ''}&searchType=${param.searchType != null ? param.searchType : ''}&keyword=${param.keyword != null ? param.keyword : ''}"
-                       class="page-link">[${i}]</a>
+                       class="page-link">${i}</a>
                 </c:otherwise>
             </c:choose>
         </c:forEach>
@@ -101,12 +101,11 @@
         <%-- href 안에서 줄바꿈이 일어나면 링크가 깨질 수 있어 한 줄로 합쳤습니다. --%>
         <c:if test="${currentPage < totalPage}">
             <a href="board?p=${currentPage + 1}&category=${param.category != null ? param.category : ''}&sort=${param.sort != null ? param.sort : ''}&searchType=${param.searchType != null ? param.searchType : ''}&keyword=${param.keyword != null ? param.keyword : ''}"
-               class="page-btn">▶</a>
+               class="page-btn">다음</a>
         </c:if>
     </div>
 
 </div>
-
 
 </body>
 </html>
