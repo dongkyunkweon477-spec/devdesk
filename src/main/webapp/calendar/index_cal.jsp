@@ -11,7 +11,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/companySearchModal.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
 </head>
 <body>
 

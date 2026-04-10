@@ -434,7 +434,7 @@ public class ReviewDAO {
         StringBuilder baseSql = new StringBuilder(
                 "select r.*, c.company_name from review r " +
                         "join company c on r.r_company_id = c.company_id " +
-                        "where 1=1"
+                        "where c.is_verified = 'Y'"
         );
         List<Object> params = new ArrayList<>();
 

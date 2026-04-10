@@ -10,9 +10,19 @@ $(function () {
 /* ===== 토글 버튼 (업종, 지역) ===== */
 function initToggleBtns() {
     $(document).on('click', '.cs-opt-btn', function () {
-        console.log('clicked:', $(this).attr('data-value'));
-        $(this).closest('.cs-options').find('.cs-opt-btn').removeClass('active');
-        $(this).addClass('active');
+        let container = $(this).closest('.cs-options');
+
+        if ($(this).attr('data-value') === '') {
+            container.find('.cs-opt-btn').removeClass('active');
+            $(this).addClass('active');
+            return;
+        }
+        container.find('.cs-opt-btn[data-value=""]').removeClass('active');
+        $(this).toggleClass('active');
+
+        if (container.find('.cs-opt-btn.active').length === 0) {
+            container.find('.cs-opt-btn[data-value=""]').addClass('active');
+        }
     });
 }
 
@@ -24,8 +34,16 @@ function doSearch(page) {
     if (!page) page = 1;
     currentPage = page;
 
-    var industry = $('#industryBtns .cs-opt-btn.active').attr('data-value') || '';
-    var location = $('#locationBtns .cs-opt-btn.active').attr('data-value') || '';
+    let industries = [];
+    $('#industryBtns .cs-opt-btn.active').each(function () {
+        let val = $(this).attr('data-value');
+        if (val) industries.push(val);
+    });
+    let locations = [];
+    $('#locationBtns .cs-opt-btn.active').each(function () {
+        let val = $(this).attr('data-value');
+        if (val) locations.push(val);
+    });
 
     $.ajax({
         url: $('#contextPath').val() + '/company-search/ajax',
@@ -33,8 +51,8 @@ function doSearch(page) {
         dataType: 'json',
         data: {
             companyName: $('#companyName').val(),
-            companyIndustry: industry,
-            companyLocation: location,
+            companyIndustry: industries.join(','),
+            companyLocation: locations.join(','),
             minRating: $('#minRating').val(),
             maxRating: $('#maxRating').val(),
             minSize: $('#minSize').val(),
