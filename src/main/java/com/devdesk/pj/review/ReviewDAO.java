@@ -512,4 +512,97 @@ public class ReviewDAO {
         }
         return data;
     }
+
+    public int insertReviewWithReturnId(ReviewVO vo) {
+        int generatedId = 0;
+        String seqSql = "SELECT review_seq.nextval FROM dual";
+        String insertSql = "INSERT INTO review (r_id, r_company_id, r_member_id, r_job_position, r_interview_type, r_difficulty, r_result, r_content, r_rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        Connection con = null;
+        try {
+            con = DBManager_new.connect();
+            con.setAutoCommit(false);
+
+            try (PreparedStatement seqStmt = con.prepareStatement(seqSql);
+                 ResultSet rs = seqStmt.executeQuery()) {
+                if (rs.next()) generatedId = rs.getInt(1);
+            }
+
+            if (generatedId == 0) throw new Exception("시퀀스 조회 실패");
+
+            try (PreparedStatement pstmt = con.prepareStatement(insertSql)) {
+                pstmt.setInt(1, generatedId);
+                pstmt.setInt(2, vo.getReviewCompanyId());
+                pstmt.setInt(3, vo.getReviewMemberId());
+                pstmt.setString(4, vo.getReviewJobPosition());
+                pstmt.setString(5, vo.getReviewInterviewType());
+                pstmt.setInt(6, vo.getReviewDifficulty());
+                pstmt.setString(7, vo.getReviewResult());
+                pstmt.setString(8, vo.getReviewContent());
+                pstmt.setInt(9, vo.getReviewRating());
+                pstmt.executeUpdate();
+            }
+
+            con.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (con != null) {
+                try { con.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
+            }
+            generatedId = 0;
+        } finally {
+            if (con != null) {
+                try { con.setAutoCommit(true); con.close(); } catch (Exception ex) { ex.printStackTrace(); }
+            }
+        }
+        return generatedId;
+    }
+
+    public void insertTags(int reviewId, String tagsString) {
+        if (tagsString == null || tagsString.trim().isEmpty()) return;
+
+        String[] tags = tagsString.split(",");
+        // MERGE: 태그 없으면 INSERT, 있으면 무시 → race condition 없음
+        String mergeSql = "MERGE INTO tag t " +
+                "USING (SELECT ? AS tag_name FROM dual) src " +
+                "ON (t.tag_name = src.tag_name) " +
+                "WHEN NOT MATCHED THEN INSERT (tag_id, tag_name) VALUES (tag_seq.nextval, src.tag_name)";
+        String selectTagSql = "SELECT tag_id FROM tag WHERE tag_name = ?";
+        String insertMappingSql = "INSERT INTO review_tag (review_id, tag_id) VALUES (?, ?)";
+
+        try (Connection con = DBManager_new.connect()) {
+            for (String tag : tags) {
+                String tagName = tag.trim();
+                if (tagName.isEmpty()) continue;
+
+                // MERGE로 태그 upsert (존재하면 그대로, 없으면 신규 삽입)
+                try (PreparedStatement mergePstmt = con.prepareStatement(mergeSql)) {
+                    mergePstmt.setString(1, tagName);
+                    mergePstmt.executeUpdate();
+                }
+
+                // MERGE 후 tag_id 조회 (항상 존재 보장)
+                int tagId = -1;
+                try (PreparedStatement selectPstmt = con.prepareStatement(selectTagSql)) {
+                    selectPstmt.setString(1, tagName);
+                    try (ResultSet rs = selectPstmt.executeQuery()) {
+                        if (rs.next()) tagId = rs.getInt(1);
+                    }
+                }
+
+                if (tagId != -1) {
+                    try (PreparedStatement mapPstmt = con.prepareStatement(insertMappingSql)) {
+                        mapPstmt.setInt(1, reviewId);
+                        mapPstmt.setInt(2, tagId);
+                        mapPstmt.executeUpdate();
+                    } catch (Exception e) {
+                        // 이미 매핑된 경우 무시
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

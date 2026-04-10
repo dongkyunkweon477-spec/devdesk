@@ -27,7 +27,7 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
-
+    implementation 'org.json:json:20231013'
     // Source: https://mvnrepository.com/artifact/com.servlets/cos
     implementation 'com.servlets:cos:09May2002'
     implementation 'org.apache.commons:commons-dbcp2:2.10.0'
