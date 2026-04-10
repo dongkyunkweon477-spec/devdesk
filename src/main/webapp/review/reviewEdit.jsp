@@ -181,7 +181,7 @@
         <%-- ===== 하단 버튼 ===== --%>
         <div class="form-actions">
             <button type="button" class="btn-cancel"
-                    onclick="location.href='${pageContext.request.contextPath}/review?companyId=${company.companyId}'">
+                    onclick="location.href='${pageContext.request.contextPath}/review'">
                 취소
             </button>
             <button type="submit" class="btn-submit">수정하기</button>
