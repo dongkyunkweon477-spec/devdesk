@@ -22,9 +22,9 @@ public class GoogleLoginC extends HttpServlet {
         try {
             Properties prop = new Properties();
 
-            InputStream input = getClass()
-                    .getClassLoader()
-                    .getResourceAsStream("conf.properties");
+            InputStream input = request
+                    .getServletContext()
+                    .getResourceAsStream("/WEB-INF/conf.properties");
 
             prop.load(input);
 
@@ -33,6 +33,9 @@ public class GoogleLoginC extends HttpServlet {
             REDIRECT_URI = prop.getProperty("google.redirect.uri");
 
             System.out.println(CLIENT_ID);
+            System.out.println(CLIENT_SECRET);
+            System.out.println(REDIRECT_URI);
+
 
         } catch (Exception e) {
             e.printStackTrace();

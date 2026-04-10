@@ -40,7 +40,7 @@
             </div>
 
             <div class="form-actions">
-                <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=235100421101-uhksrc5bk2rc9ltmgpjanv2db0dva9dt.apps.googleusercontent.com
+                <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=235100421101-teooogdc8mtjr2d5rksv7vb1anro6k9q.apps.googleusercontent.com
 &redirect_uri=http://localhost/google-login&response_type=code&scope=email profile"
                    class="btn-google">
                     <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
