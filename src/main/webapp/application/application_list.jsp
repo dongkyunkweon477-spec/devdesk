@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/companySearchModal.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
     <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
     <style>
         :root {

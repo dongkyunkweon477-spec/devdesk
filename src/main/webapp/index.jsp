@@ -6,8 +6,17 @@
 <head>
     <title>DevDesk</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review/review-detail.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review/review-write.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review/review-board.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review/review-write.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-detail.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/index.js"></script>
+
 
 </head>
 <body>
