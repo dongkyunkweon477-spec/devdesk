@@ -72,20 +72,20 @@ public class Schedule_newDAO {
         ResultSet rs = null;
 
         try {
-        MemberDTO user = (MemberDTO) request.getSession().getAttribute("user");
-        int memberId = user.getMember_id();
+            MemberDTO user = (MemberDTO) request.getSession().getAttribute("user");
+            int memberId = user.getMember_id();
 
-        //기업명 양 옆 공백 제거
-        String companyName = request.getParameter("company_name");
-        if(companyName != null) companyName = companyName.trim();
+            //기업명 양 옆 공백 제거
+            String companyName = request.getParameter("company_name");
+            if(companyName != null) companyName = companyName.trim();
 
-        String position = request.getParameter("position");
-        String applyDate = request.getParameter("apply_date");
-        String date = request.getParameter("date");
-        String time = request.getParameter("time");
-        String type = request.getParameter("type");
-        String memo = request.getParameter("memo");
-        String stage = mapTypeToStage(type);
+            String position = request.getParameter("position");
+            String applyDate = request.getParameter("apply_date");
+            String date = request.getParameter("date");
+            String time = request.getParameter("time");
+            String type = request.getParameter("type");
+            String memo = request.getParameter("memo");
+            String stage = mapTypeToStage(type);
 
             System.out.println("✅ [일정 추가] 화면에서 넘어온 회사명: [" + companyName + "]");
 
@@ -97,7 +97,6 @@ public class Schedule_newDAO {
             pstmt = con.prepareStatement(findCompanySql);
             pstmt.setString(1, companyName);
             rs = pstmt.executeQuery();
-
 
             if(rs.next()) {
                 companyId = rs.getInt("COMPANY_ID");
@@ -133,7 +132,7 @@ public class Schedule_newDAO {
             pstmt.executeUpdate();
             pstmt.close();
 
-            // SCHEDULE 인서트
+            // SCHEDULE 인서트 (기존 코드 유지)
             String schSql = "INSERT INTO SCHEDULE (SCHEDULE_ID, MEMBER_ID, COMPANY_NAME, SCHEDULE_DATE, SCHEDULE_TIME, INTERVIEW_TYPE, MEMO, APP_ID) " +
                     "VALUES (SEQ_SCHEDULE.nextval, ?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ?)";
             pstmt = con.prepareStatement(schSql);
@@ -146,7 +145,37 @@ public class Schedule_newDAO {
             pstmt.setInt(7, newAppId);
             pstmt.executeUpdate();
 
+            // 🌟🌟🌟 여기서부터 추가된 구글 캘린더 연동 로직 🌟🌟🌟
+            try {
+                com.google.api.services.calendar.Calendar service = GoogleCalendarHelper.getCalendarService();
+
+                // 구글 달력에 띄울 제목과 내용 세팅
+                com.google.api.services.calendar.model.Event event = new com.google.api.services.calendar.model.Event()
+                        .setSummary("[" + companyName + "] " + type + " 일정")
+                        .setDescription("직무: " + (position == null ? "미정" : position) + "\n메모: " + (memo == null ? "" : memo));
+
+                // 시간 세팅 (한국 시간 기준)
+                // 시간 세팅 (한국 시간 기준)
+                String startDateTimeStr = date + "T" + time + ":00+09:00";
+
+                // 🚨 여기서 주소가 client.util.DateTime 으로 바뀌었습니다! (빨간줄 해결)
+                com.google.api.client.util.DateTime startDateTime = new com.google.api.client.util.DateTime(startDateTimeStr);
+
+                event.setStart(new com.google.api.services.calendar.model.EventDateTime().setDateTime(startDateTime));
+                event.setEnd(new com.google.api.services.calendar.model.EventDateTime().setDateTime(startDateTime));
+                // 구글 서버로 발사!
+                service.events().insert("primary", event).execute();
+                System.out.println("✅ [구글 캘린더] 동기화 성공!");
+
+            } catch (Exception googleEx) {
+                // 구글 연동이 실패해도 (권한 에러 등) 멈추지 않고 아래 DB 커밋으로 넘어가도록 처리!
+                System.out.println("⚠️ [구글 캘린더] 연동 실패! (오라클 DB에는 정상 저장됩니다.) 원인: " + googleEx.getMessage());
+            }
+            // 🌟🌟🌟 구글 연동 로직 끝 🌟🌟🌟
+
+            // 오라클 DB 커밋! (구글이 실패해도 여기까지 무사히 도달합니다)
             con.commit();
+
         } catch (Exception e) {
             try { if(con != null) con.rollback(); } catch (Exception ex) {}
             throw e;
@@ -288,6 +317,46 @@ public class Schedule_newDAO {
         }
         return names;
     }
+
+    // 🌟🌟🌟 10분마다 실행될 구글 -> 웹 DB 양방향 동기화 메서드 (뼈대) 🌟🌟🌟
+    public void syncGoogleCalendarToDB() {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBManager_new.connect();
+
+            // 1. 오라클 DB에서 "구글 연동을 한(REFRESH_TOKEN이 있는) 모든 회원"을 조회합니다.
+            // (팀원이 MEMBER 테이블에 REFRESH_TOKEN 컬럼을 만들어줘야 이 쿼리가 완성됩니다!)
+            String sql = "SELECT MEMBER_ID, GOOGLE_REFRESH_TOKEN FROM MEMBER WHERE GOOGLE_REFRESH_TOKEN IS NOT NULL";
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                int memberId = rs.getInt("MEMBER_ID");
+                String refreshToken = rs.getString("GOOGLE_REFRESH_TOKEN");
+
+                System.out.println("▶ 회원번호 [" + memberId + "]의 구글 캘린더 동기화 진행 중...");
+
+                // ==============================================================
+                // 🛠️ [나중에 채울 부분] 🛠️
+                // 1. refreshToken을 사용해서 구글에서 새로운 accessToken을 발급받는다.
+                // 2. 구글 캘린더 API(service.events().list())를 호출해서,
+                //    최근 10분 동안 수정/추가된 일정만 긁어온다.
+                // 3. 긁어온 일정이 우리 오라클 DB(SCHEDULE 테이블)에 없으면 INSERT, 있으면 UPDATE 한다.
+                // ==============================================================
+            }
+
+            System.out.println("✅ [DevDesk 스케줄러] 구글 캘린더 동기화 한 바퀴 완료!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, pstmt, rs);
+        }
+    }
+
 
 
 }

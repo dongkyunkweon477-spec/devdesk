@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>review</title>
+    <link rel="stylesheet" href="css/board.css">
     <link rel="stylesheet" href="../css/board-all.css">
 
 </head>
@@ -75,7 +76,9 @@
                     </div>
                     <div class="meta-info">
                         <span class="like-count">❤️ ${b.like_count}</span>
-                        <c:if test="${b.like_count > 2}"> <%-- 3개 이상이여야 인기글 배지 --%>
+
+                        <c:if test="${b.like_count > 3}"> <%-- 2개 이상이여야 인기글 배지 --%>
+
                             <span class="popular-badge">🔥 인기글</span>
                         </c:if>
                     </div>
@@ -88,34 +91,54 @@
     <div class="pagination">
         <!-- 이전 페이지 -->
         <c:if test="${currentPage > 1}">
+
+            <a href="board?p=${currentPage - 1}&category=${param.category != null ? param.category : ''}&sort=${param.sort != null ? param.sort : ''}&searchType=${param.searchType != null ? param.searchType : ''}&keyword=${param.keyword != null ? param.keyword : ''}"></a>
+
             <a href="board?p=${currentPage - 1}&category=${param.category != null ? param.category : ""}&sort=${param.sort != null ? param.sort : ""}&searchType=${param.searchType != null ? param.searchType : ""}&keyword=${param.keyword != null ? param.keyword : ""}"
-               class="page-btn">이전</a>
+
+               class="page-btn">◀</a>
         </c:if>
 
         <!-- 페이지 번호 -->
         <c:forEach begin="1" end="${totalPage}" var="i">
             <c:choose>
                 <c:when test="${i == currentPage}">
-                    <span class="current-page">${i}</span>
+
+                    <span class="current-page">[${i}]</span>
                 </c:when>
                 <c:otherwise>
-                    <a href="board?p=${i}&category=${param.category != null ? param.category : ''}&sort=${param.sort != null ? param.sort : ''}&searchType=${param.searchType != null ? param.searchType : ''}&keyword=${param.keyword != null ? param.keyword : ''}" class="page-link">${i}</a>
+                    <a href="board?p=${i}&category=${param.category != null ? param.category : ''}&sort=${param.sort != null ? param.sort : ''}&searchType=${param.searchType != null ? param.searchType : ''}&keyword=${param.keyword != null ? param.keyword : ''}"
+                       class="page-link">[${i}]</a>
+
+                    <span class="current-page">${i}</span>
+                </c:otherwise>
+                <c:otherwise>
+                    <a href="board?p=${i}&category=${param.category != null ? param.category : ''}&sort=${param.sort != null ? param.sort : ''}
+                    &searchType=${param.searchType != null ? param.searchType : ''}
+                    &keyword=${param.keyword != null ? param.keyword : ''}"
+                       class="page-link">${i}</a>
+
                 </c:otherwise>
             </c:choose>
         </c:forEach>
 
         <!-- 다음 페이지 -->
         <c:if test="${currentPage < totalPage}">
+
+            <a href="board?p=${currentPage + 1}&category=${param.category != null ? param.category : ''}&sort=${param.sort != null ? param.sort : ''}&searchType=${param.searchType != null ? param.searchType : ''}&keyword=${param.keyword != null ? param.keyword : ''}"></a>
+
             <a href="board?p=${currentPage + 1}
             &category=${param.category != null ? param.category : ''}
             &sort=${param.sort != null ? param.sort : ''}
             &searchType=${param.searchType != null ? param.searchType : ''}
             &keyword=${param.keyword != null ? param.keyword : ''}"
-               class="page-btn">다음</a>
+
+               class="page-btn">▶</a>
         </c:if>
     </div>
 
 </div>
+
 
 </body>
 </html>
