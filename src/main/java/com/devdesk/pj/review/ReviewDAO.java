@@ -430,7 +430,7 @@ public class ReviewDAO {
     }
 
 
-    public Map<String, Object> getFilteredReviews(Integer companyId, String interviewType, String result, String sort, int page, int pageSize) {
+    public Map<String, Object> getFilteredReviews(String companyIds, String interviewType, String result, String sort, int page, int pageSize) {
         StringBuilder baseSql = new StringBuilder(
                 "select r.*, c.company_name from review r " +
                         "join company c on r.r_company_id = c.company_id " +
@@ -438,9 +438,14 @@ public class ReviewDAO {
         );
         List<Object> params = new ArrayList<>();
 
-        if (companyId != null) {
-            baseSql.append(" and r.r_company_id = ?");
-            params.add(companyId);
+        if (companyIds != null && !companyIds.isBlank()) {
+            String[] ids = companyIds.split(",");
+            baseSql.append(" and r.r_company_id IN (");
+            for (int i = 0; i < ids.length; i++) {
+                baseSql.append(i > 0 ? ",?" : "?");
+                params.add(Integer.parseInt(ids[i].trim()));
+            }
+            baseSql.append(")");
         }
         if (interviewType != null && !interviewType.isEmpty()) {
             baseSql.append(" and r.r_interview_type = ?");

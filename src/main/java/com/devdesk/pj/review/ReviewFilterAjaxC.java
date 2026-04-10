@@ -13,9 +13,11 @@ public class ReviewFilterAjaxC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setCharacterEncoding("UTF-8");
-        String companyIdParam = request.getParameter("companyId");
-        Integer companyId = (companyIdParam != null && !companyIdParam.isBlank())
-                ? Integer.parseInt(companyIdParam) : null;
+        String companyIds = request.getParameter("companyIds");   // 복수: 기업검색 연동 (쉼표 구분)
+        if (companyIds == null || companyIds.isBlank()) {
+            String single = request.getParameter("companyId");    // 단수: 기업 상세에서 단건 조회
+            if (single != null && !single.isBlank()) companyIds = single;
+        }
         String interviewType = request.getParameter("interviewType");
         String result = request.getParameter("result");
         String sort = request.getParameter("sort");
@@ -25,7 +27,7 @@ public class ReviewFilterAjaxC extends HttpServlet {
             page = Integer.parseInt(request.getParameter("page"));
         }
         Map<String, Object> data = ReviewDAO.REVIEW_DAO
-                .getFilteredReviews(companyId, interviewType, result, sort, page, pageSize);
+                .getFilteredReviews(companyIds, interviewType, result, sort, page, pageSize);
         com.google.gson.Gson gson = new com.google.gson.Gson();
         String json = gson.toJson(data);
 
