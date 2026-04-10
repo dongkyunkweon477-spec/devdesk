@@ -366,3 +366,124 @@
 .edit-buttons button[type="button"]:hover {
     background-color: #545b62;
 }
+
+/* Dark mode overrides for board detail page */
+[data-theme="dark"] .board-container.detail {
+    background: var(--bg-primary);
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .board-header.detail {
+    background: var(--bg-primary);
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .board-header.detail h2 {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .detail-label {
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .detail-content {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .title-bold {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .detail-info-group {
+    background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .content-area .detail-label {
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .detail-buttons {
+    background: var(--bg-tertiary);
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .comment-section {
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .comment-section h3 {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .comment-form {
+    background: var(--bg-tertiary);
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .comment-form textarea {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .comment-item {
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .comment-item:hover {
+    background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .comment-writer {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .comment-date {
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .comment-content {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .reply-form {
+    background: var(--bg-tertiary);
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .reply-input-wrapper textarea {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .reply-item {
+    background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .reply-writer {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .reply-date {
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .reply-content {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .edit-form {
+    background: var(--bg-tertiary);
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .edit-input-wrapper textarea {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .no-comments {
+    color: var(--text-tertiary);
+}

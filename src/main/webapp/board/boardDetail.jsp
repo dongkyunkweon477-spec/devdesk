@@ -4,9 +4,13 @@
 <html>
 <head>
     <title>Title</title>
+    <link rel="stylesheet" href="../css/index.css">
     <link rel="stylesheet" href="../css/board-all.css">
     <link rel="stylesheet" href="../css/comment.css">
     <script src="../js/boardDetail.js"></script>
+    <style>
+
+    </style>
 </head>
 <body>
 <div class="board-container">

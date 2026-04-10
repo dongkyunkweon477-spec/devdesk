@@ -89,7 +89,7 @@
         <!-- 이전 페이지 -->
         <c:if test="${currentPage > 1}">
             <a href="board?p=${currentPage - 1}&category=${param.category != null ? param.category : ""}&sort=${param.sort != null ? param.sort : ""}&searchType=${param.searchType != null ? param.searchType : ""}&keyword=${param.keyword != null ? param.keyword : ""}"
-               class="page-btn">◀</a>
+               class="page-btn">이전</a>
         </c:if>
 
         <!-- 페이지 번호 -->
@@ -114,7 +114,7 @@
             &sort=${param.sort != null ? param.sort : ''}
             &searchType=${param.searchType != null ? param.searchType : ''}
             &keyword=${param.keyword != null ? param.keyword : ''}"
-               class="page-btn">▶</a>
+               class="page-btn">다음</a>
         </c:if>
     </div>
 
