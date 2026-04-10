@@ -58,7 +58,7 @@
             </div>
 
             <div class="latest-members-section">
-                <h3 style="margin-bottom: 15px; color: #334155;">최근 가입한 회원 (Top 5)</h3>
+                <h3 style="margin-bottom: 15px; color: #334155;">최근 가입한 회원</h3>
                 <table class="admin-table">
                     <thead>
                     <tr>

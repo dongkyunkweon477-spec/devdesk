@@ -40,12 +40,7 @@
             </div>
 
             <div class="form-actions">
-<<<<<<< HEAD
-                <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=235100421101-teooogdc8mtjr2d5rksv7vb1anro6k9q.apps.googleusercontent.com
-&redirect_uri=http://localhost/google-login&response_type=code&scope=email profile"
-=======
                 <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=235100421101-31uq9hf5j5vgon3ugum57k51li5a1vdi.apps.googleusercontent.com&redirect_uri=http://localhost/google-login&response_type=code&scope=email%20profile%20https://www.googleapis.com/auth/calendar&access_type=offline&prompt=consent"
->>>>>>> 6dfa457655735a314753b902b498e35ce6260c83
                    class="btn-google">
                     <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"

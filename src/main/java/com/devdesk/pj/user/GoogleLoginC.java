@@ -23,23 +23,6 @@ public class GoogleLoginC extends HttpServlet {
             Properties prop = new Properties();
             InputStream input = getClass().getClassLoader().getResourceAsStream("conf.properties");
 
-<<<<<<< HEAD
-            InputStream input = request
-                    .getServletContext()
-                    .getResourceAsStream("/WEB-INF/conf.properties");
-
-            prop.load(input);
-
-            CLIENT_ID = prop.getProperty("google.client.id");
-            CLIENT_SECRET = prop.getProperty("google.client.secret");
-            REDIRECT_URI = prop.getProperty("google.redirect.uri");
-
-            System.out.println(CLIENT_ID);
-            System.out.println(CLIENT_SECRET);
-            System.out.println(REDIRECT_URI);
-
-
-=======
             if (input != null) {
                 prop.load(input);
                 CLIENT_ID = prop.getProperty("google.client.id");
@@ -48,7 +31,6 @@ public class GoogleLoginC extends HttpServlet {
             } else {
                 System.out.println("❌ 경고: conf.properties 파일을 찾을 수 없어 읽지 못했습니다!");
             }
->>>>>>> 6dfa457655735a314753b902b498e35ce6260c83
         } catch (Exception e) {
             System.out.println("❌ 경고: conf.properties 파일을 읽는 중 에러 발생!");
             e.printStackTrace();
@@ -96,11 +78,11 @@ public class GoogleLoginC extends HttpServlet {
             // 💡 나중에 팀원과 상의해서 여기에 refreshToken도 DB에 함께 저장하도록 수정해야 합니다!
             dao.insertGoogleMember(email, name, socialId);
             member = dao.getMemberByEmail(email);
-        } else if (refreshToken != null) {
-            // 💡 기존 유저인데 새로운 refreshToken을 받았다면 DB를 업데이트 해줘야 합니다.
-            // dao.updateGoogleRefreshToken(email, refreshToken);
         }
-
+        // 🌟 새로 발급받은 Refresh Token이 있다면 무조건 DB에 저장/업데이트!
+        if (refreshToken != null) {
+            dao.updateGoogleRefreshToken(email, refreshToken);
+        }
         // STEP 4. 세션 저장 → 메인 이동
         HttpSession session = request.getSession();
         session.setAttribute("user", member);  // 기존 코드와 동일한 키 "user"
