@@ -83,42 +83,33 @@ public class ApplicationDAO {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        String sql = "SELECT \n" +
-                "a.app_id,\n" +
-                "a.COMPANY_ID,\n" +
-                "c.company_name,\n" +
-                "a.position,\n" +
-                "a.stage,\n" +
-                "a.apply_date,\n" +
-                "a.memo FROM application a JOIN company c ON a.company_id = c.company_id where member_id = ? ORDER BY a.created_date DESC";
-        ;
-
+        String sql = "SELECT a.app_id, a.company_id, c.company_name, a.position, " +
+                "a.stage, a.apply_date, a.memo, a.is_star " +
+                "FROM application a JOIN company c ON a.company_id = c.company_id " +
+                "WHERE a.member_id = ? ORDER BY a.created_date DESC";
 
         try {
             con = DBManager_new.connect();
             pstmt = con.prepareStatement(sql);
-            ApplicationV0 dto = null;
             ArrayList<ApplicationV0> dtos = new ArrayList<>();
             MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
             int memberId = loginUser.getMember_id();
             pstmt.setInt(1, memberId);
             rs = pstmt.executeQuery();
 
-
             while (rs.next()) {
-                dto = new ApplicationV0();
+                ApplicationV0 dto = new ApplicationV0();
                 dto.setAppId(rs.getString("app_id"));
                 dto.setCompanyId(rs.getString("company_id"));
                 dto.setCompanyName(rs.getString("company_name"));
                 dto.setPosition(rs.getString("position"));
                 dto.setStatus(rs.getString("stage"));
-                dto.setStatusName(getStatusName(rs.getString("stage"))); // 한글
+                dto.setStatusName(getStatusName(rs.getString("stage")));
                 dto.setAppDate(rs.getDate("apply_date"));
                 dto.setMemo(rs.getString("memo"));
+                dto.setIsStar(rs.getInt("is_star"));
                 dtos.add(dto);
-
             }
-            System.out.println(dtos);
 
             request.setAttribute("applicationList", dtos);
 
@@ -150,16 +141,62 @@ public class ApplicationDAO {
 
             while (rs.next()) {
                 dto = new ApplicationV0();
+                dto.setAppId(rs.getString("app_id"));
                 dto.setCompanyId(rs.getString("company_id"));
                 dto.setCompanyName(rs.getString("company_name"));
+                dto.setPosition(rs.getString("position"));
+                dto.setStatus(rs.getString("stage"));
+                dto.setStatusName(getStatusName(rs.getString("stage"))); // 한글
+                dto.setAppDate(rs.getDate("apply_date"));
+                dto.setMemo(rs.getString("memo"));
                 dtos.add(dto);
             }
-            request.setAttribute("companyList", dtos);
-
+            request.setAttribute("applicationStarList", dtos);
 
         } catch (Exception e) {
             e.printStackTrace();
 
+        } finally {
+            DBManager_new.close(con, pstmt, rs);
+        }
+
+    }
+
+    public static void selectStarApplication(HttpServletRequest request) {
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT a.app_id, a.company_id, c.company_name, a.position, " +
+                "a.stage, a.apply_date, a.memo, a.is_star " +
+                "FROM application a JOIN company c ON a.company_id = c.company_id " +
+                "WHERE a.member_id = ? AND a.is_star = 1 ORDER BY a.created_date DESC";
+
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+            MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
+            pstmt.setInt(1, loginUser.getMember_id());
+            rs = pstmt.executeQuery();
+
+            ArrayList<ApplicationV0> dtos = new ArrayList<>();
+            while (rs.next()) {
+                ApplicationV0 dto = new ApplicationV0();
+                dto.setAppId(rs.getString("app_id"));
+                dto.setCompanyId(rs.getString("company_id"));
+                dto.setCompanyName(rs.getString("company_name"));
+                dto.setPosition(rs.getString("position"));
+                dto.setStatus(rs.getString("stage"));
+                dto.setStatusName(getStatusName(rs.getString("stage")));
+                dto.setAppDate(rs.getDate("apply_date"));
+                dto.setMemo(rs.getString("memo"));
+                dto.setIsStar(rs.getInt("is_star"));
+                dtos.add(dto);
+            }
+            request.setAttribute("applicationList", dtos);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             DBManager_new.close(con, pstmt, rs);
         }
@@ -185,17 +222,7 @@ public class ApplicationDAO {
             pstmt.setInt(1, appId);
 
             int result = pstmt.executeUpdate();
-
-            if (result == 1) {
-                System.out.println("삭제 성공");
-            } else {
-                System.out.println("삭제 실패");
-            }
-
-            if (pstmt.executeUpdate() == 1) {
-                System.out.println("delete success");
-
-            }
+            System.out.println(result == 1 ? "삭제 성공" : "삭제 실패");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -349,7 +376,7 @@ public class ApplicationDAO {
         return vo;
     }
 
-    public static void filterApplication(HttpServletRequest request) {
+    public static void starApplication(HttpServletRequest request) {
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -362,23 +389,14 @@ public class ApplicationDAO {
             pstmt = con.prepareStatement(sql);
 
             int isStar = Integer.parseInt(request.getParameter("is_star"));
-
-
+            pstmt.setInt(2, Integer.parseInt(request.getParameter("app_id")));
             if (isStar == 1) {
                 pstmt.setInt(1, 0);
-                pstmt.setInt(2, Integer.parseInt(request.getParameter("app_id")));
-
-                int result = pstmt.executeUpdate();
-                System.out.println("상태 변경 결과: " + result);
             } else {
-
                 pstmt.setInt(1, 1);
-                pstmt.setInt(2, Integer.parseInt(request.getParameter("app_id")));
-
-                int result = pstmt.executeUpdate();
-                System.out.println("상태 변경 결과: " + result);
             }
-
+            int result = pstmt.executeUpdate();
+            System.out.println("상태 변경 결과: " + result);
 
         } catch (Exception e) {
             e.printStackTrace();

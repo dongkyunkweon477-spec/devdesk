@@ -16,9 +16,8 @@ import java.util.List;
 public class ApplicationStarC extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
 
         MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
         if (loginUser == null) {
@@ -26,12 +25,27 @@ public class ApplicationStarC extends HttpServlet {
             return;
         }
 
-        int memberId = loginUser.getMember_id();
-        String filter = request.getParameter("filter"); // all, star, shimei, jikopr, ...
 
-        ApplicationDAO.filterApplication(request);
+        ApplicationDAO.selectStarApplication(request);
         ApplicationDAO.selectAllCompanies(request);
         request.setAttribute("content", "/application/application_list.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
+
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
+        if (loginUser == null) {
+            response.sendRedirect("login");
+            return;
+        }
+
+        ApplicationDAO.selectAllCompanies(request);
+        ApplicationDAO.starApplication(request);
+        response.sendRedirect("application-list");
+    }
+
+
 }
