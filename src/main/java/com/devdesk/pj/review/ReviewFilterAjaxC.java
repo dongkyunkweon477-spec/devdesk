@@ -28,7 +28,9 @@ public class ReviewFilterAjaxC extends HttpServlet {
         }
         Map<String, Object> data = ReviewDAO.REVIEW_DAO
                 .getFilteredReviews(companyIds, interviewType, result, sort, page, pageSize);
-        com.google.gson.Gson gson = new com.google.gson.Gson();
+        com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .create();
         String json = gson.toJson(data);
 
         response.setContentType("application/json;charset=UTF-8");
