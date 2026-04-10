@@ -422,7 +422,7 @@
 
     }
 
- 
+
     // ESC 키 & 오버레이 클릭으로 닫기
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closeDetail();
