@@ -294,5 +294,91 @@ public class MemberDAO {
         return comments;
     }
 
+<<<<<<< HEAD
+=======
+    // [회원 탈퇴] 비밀번호 검증 + 개인 데이터 삭제 + 회원 정보 비식별화
+    public int deleteAccount(int memberId, String inputPassword) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBManager_new.connect();
+
+            // 🌟 1. 비밀번호가 맞는지 검증부터 합니다!
+            String checkSql = "SELECT password FROM member WHERE member_id = ?";
+            ps = con.prepareStatement(checkSql);
+            ps.setInt(1, memberId);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String dbPassword = rs.getString("password");
+                // 입력한 비밀번호와 DB 비밀번호가 다르면? 0 반환하고 즉시 종료!
+                if (!dbPassword.equals(inputPassword)) {
+                    return 0;
+                }
+            } else {
+                return -1; // 유저를 찾을 수 없음
+            }
+            ps.close(); // 검증 끝났으니 닫기
+
+            // 🌟 2. 비밀번호가 맞으면 본격적인 탈퇴 로직 시작 (트랜잭션)
+            con.setAutoCommit(false);
+
+            // [하드 딜리트] 개인 워크스페이스 삭제
+            String[] deleteQueries = {
+                    "DELETE FROM schedule WHERE member_id = ?",
+                    "DELETE FROM application WHERE member_id = ?",
+                    "DELETE FROM til WHERE member_id = ?",
+                    "DELETE FROM resume WHERE member_id = ?",
+                    "DELETE FROM review WHERE member_id = ?",
+            };
+
+            for (String sql : deleteQueries) {
+                ps = con.prepareStatement(sql);
+                ps.setInt(1, memberId);
+                ps.executeUpdate();
+                ps.close();
+            }
+
+            // [소프트 딜리트] 회원 개인정보 파기 (비식별화)
+            String updateQuery = "UPDATE member SET " +
+                    "email = 'del_' || member_id || '_' || TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'), " +
+                    "password = NULL, " +
+                    "nickname = '(탈퇴한 회원)', " +
+                    "job_category = NULL, " +
+                    "social_id = NULL, " +
+                    "profile_img = NULL, " +
+                    "status = 'deleted', " +
+                    "update_date = SYSDATE " +
+                    "WHERE member_id = ?";
+
+            ps = con.prepareStatement(updateQuery);
+            ps.setInt(1, memberId);
+            int updateCount = ps.executeUpdate();
+
+            if (updateCount > 0) {
+                con.commit(); // 모든 과정 성공 시 확정!
+                System.out.println("회원 탈퇴 완료 (ID: " + memberId + ")");
+                return 1;
+            } else {
+                con.rollback();
+                return -1;
+            }
+
+        } catch (Exception e) {
+            System.out.println("회원 탈퇴 중 DB 에러 발생! 롤백합니다.");
+            e.printStackTrace();
+            try {
+                if (con != null) con.rollback();
+            } catch (Exception re) {
+            }
+            return -1;
+        } finally {
+            DBManager_new.close(con, ps, rs);
+        }
+    }
+
+>>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
 
 }

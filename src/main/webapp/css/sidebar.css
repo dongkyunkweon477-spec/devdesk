@@ -167,7 +167,11 @@
     top: 0;
     bottom: 0;
     width: 240px;
+<<<<<<< HEAD
     background: var(--surface); /* ✨ hotpink 등 이상한 배경색 충돌 방지 */
+=======
+    background: hotpink;
+>>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;

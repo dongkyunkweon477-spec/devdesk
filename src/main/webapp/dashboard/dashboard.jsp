@@ -12,12 +12,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
+<<<<<<< HEAD
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/til.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/sidebar.css">
     </head>
+=======
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/til.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+>>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
 <body>
 <div class="page-wrap">
     <!-- ════════════════════════════
@@ -49,6 +58,7 @@
                 <span class="nav-icon">📚</span> TIL
             </a>
         </nav>
+<<<<<<< HEAD
 
         <div id="sidebar-mini-calendar">
             <div class="g-cal-header">
@@ -76,6 +86,10 @@
                 </div>
             </div>
         </div>
+=======
+        
+
+>>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
     </aside>
 
     <!-- ════════════════════════════
@@ -377,6 +391,7 @@
         });
     })();
 
+<<<<<<< HEAD
 
     const TAG_CONFIG = {
         'Java': {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
@@ -443,27 +458,64 @@
                 eventCounts[pureDate] = (eventCounts[pureDate] || 0) + 1;
             }
         });
+=======
 
-        let currentDispDate = new Date();
+    const TAG_CONFIG = {
+        'Java': {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
+        'Spring': {color: '#56e39f', bg: 'rgba(86,227,159,0.12)'},
+        'SQL': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
+        'JavaScript': {color: '#ffd166', bg: 'rgba(255,209,102,0.12)'},
+        'Git': {color: '#ff6b6b', bg: 'rgba(255,107,107,0.12)'},
+        'Python': {color: '#5b7cf8', bg: 'rgba(91,124,248,0.12)'},
+        'CSS': {color: '#8b6ef5', bg: 'rgba(139,110,245,0.12)'},
+        'React': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
+        '기타': {color: '#9da3b8', bg: 'rgba(157,163,184,0.12)'}
+    };
+>>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
 
-        function renderMiniCalendar(dateToRender) {
-            const year = dateToRender.getFullYear();
-            const month = dateToRender.getMonth();
-            const today = new Date();
-            const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+    function renderMarkdown(text) {
+        if (!text) return '<p style="color:var(--text3)">내용이 없어요.</p>';
+        return text
+            .replace(/```([\s\S]*?)```/g, '<pre class="md-code">$1</pre>')
+            .replace(/`([^`]+)`/g, '<code class="md-inline">$1</code>')
+            .replace(/^### (.+)$/gm, '<h3 class="md-h3">$1</h3>')
+            .replace(/^## (.+)$/gm, '<h2 class="md-h2">$1</h2>')
+            .replace(/^# (.+)$/gm, '<h1 class="md-h1">$1</h1>')
+            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+            .replace(/^- (.+)$/gm, '<li class="md-li">$1</li>')
+            .replace(/\n\n/g, '</p><p class="md-p">')
+            .replace(/\n/g, '<br>');
+    }
 
+    function openDetail(id) {
+        var el = document.getElementById('til_data_' + id);
+        if (!el) return;
+        var cfg = TAG_CONFIG[el.dataset.tag] || TAG_CONFIG['기타'];
+
+<<<<<<< HEAD
             // 달력 헤더 업데이트
             document.getElementById('g-cal-title').textContent = year + '년 ' + (month + 1) + '월';
+=======
+        document.getElementById('detailTitle').textContent = el.dataset.title;
+        document.getElementById('detailMeta').innerHTML =
+            '<span class="badge" style="background:' + cfg.bg + ';color:' + cfg.color + '">' + el.dataset.tag + '</span>' +
+            '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + el.dataset.date + '</span>' +
+            (el.dataset.time > 0
+                ? '<span style="font-size:12px;color:var(--text3);margin-left:8px">⏱ ' + el.dataset.time + 'h</span>'
+                : '');
+>>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
 
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const prevMonthLastDay = new Date(year, month, 0).getDate();
+        document.getElementById('detailContent').innerHTML = renderMarkdown(el.dataset.content);
+        document.getElementById('detailEditBtn').href = 'til?id=' + id; // 수정 페이지 경로에 맞게 조정
 
-            let firstDayIndex = firstDay.getDay() - 1;
-            if (firstDayIndex === -1) firstDayIndex = 6;
+        document.getElementById('tilDetailModal').classList.add('open');
+    }
 
-            let daysHTML = '';
+    function closeDetail() {
+        document.getElementById('tilDetailModal').classList.remove('open');
+    }
 
+<<<<<<< HEAD
             // 지난 달 날짜
             for (let i = firstDayIndex; i > 0; i--) {
                 daysHTML += `<div class="g-day other-month" onclick="location.href='${pageContext.request.contextPath}/calendar'">\${prevMonthLastDay - i + 1}</div>`;
@@ -517,6 +569,15 @@
         renderMiniCalendar(currentDispDate);
     });
 
+=======
+    // ESC 키 & 오버레이 클릭으로 닫기
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeDetail();
+    });
+    document.getElementById('tilDetailModal').addEventListener('click', function (e) {
+        if (e.target === e.currentTarget) closeDetail();
+    });
+>>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
 
 </script>
 <%-- /.page-wrap --%>

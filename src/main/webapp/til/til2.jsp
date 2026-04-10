@@ -32,6 +32,7 @@
             <div class="nav-section-label">학습</div>
             <a href="til" class="nav-item active"><span class="nav-icon">📚</span>TIL</a>
         </nav>
+<<<<<<< HEAD
 
         <div id="sidebar-mini-calendar">
             <div class="g-cal-header">
@@ -47,6 +48,8 @@
             <div class="g-cal-days" id="g-cal-days">
             </div>
         </div>
+=======
+>>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
     </aside>
 
     <main class="content-area">
