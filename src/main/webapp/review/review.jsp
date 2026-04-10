@@ -2,7 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review/review-board.css">
+<script>
+    var contextPath = '${pageContext.request.contextPath}';
+    var currentCompanyId = '${not empty companyId ? companyId : ""}';
+</script>
 <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
+<script src="${pageContext.request.contextPath}/js/review-board.js"></script>
 
 <jsp:include page="/company-search/companySearch.jsp"/>
 
@@ -13,12 +18,35 @@
         <div class="no-result">등록된 면접 후기가 없습니다.</div>
     </c:if>
 
-    <%-- 임시로 5개의 항목을 반복 출력하는 부분 --%>
+
     <div class="review-toolbar">
+        <div class="review-filter-bar">
+            <select id="filterType">
+                <option value="">면접 유형 전체</option>
+                <option value="CODING">코딩테스트</option>
+                <option value="TECH">기술면접</option>
+                <option value="PERSONAL">인성면접</option>
+                <option value="EXEC">임원면접</option>
+                <option value="GROUP">그룹면접</option>
+                <option value="PT">PT면접</option>
+            </select>
+            <select id="filterResult">
+                <option value="">결과 전체</option>
+                <option value="PASS">합격</option>
+                <option value="FAIL">불합격</option>
+                <option value="PENDING">대기중</option>
+            </select>
+            <select id="sortOrder">
+                <option value="latest">최신순</option>
+                <option value="difficulty_desc">난이도 높은순</option>
+                <option value="difficulty_asc">난이도 낮은순</option>
+            </select>
+        </div>
         <a href="${pageContext.request.contextPath}/review/write" class="btn-write">
             + 후기 작성
         </a>
     </div>
+    <div id="reviewListArea">
     <c:forEach var="r" items="${reviews}">
         <div class="card">
             <div class="card-header">
@@ -94,25 +122,9 @@
             </div>
         </div>
     </c:forEach>
+    </div><%-- reviewListArea --%>
 
-
-    <%-- 하단 페이징 영역 (디자인용) --%>
-    <div class="pagination">
-        <c:if test="${currentPage > 1}">
-            <a href="${pageContext.request.contextPath}/review?page=${currentPage - 1}${not empty companyId ? '&companyId='.concat(companyId) : ''}"
-               class="page-btn">이전</a>
-        </c:if>
-
-        <c:forEach begin="1" end="${totalPages}" var="p">
-            <a href="${pageContext.request.contextPath}/review?page=${p}${not empty companyId ? '&companyId='.concat(companyId) : ''}"
-               class="page-btn ${p == currentPage ? 'active' : ''}">${p}</a>
-        </c:forEach>
-
-        <c:if test="${currentPage < totalPages}">
-            <a href="${pageContext.request.contextPath}/review?page=${currentPage + 1}${not empty companyId ? '&companyId='.concat(companyId) : ''}"
-               class="page-btn">다음</a>
-        </c:if>
-    </div>
+    <div id="reviewPaging" class="pagination"></div>
 </div>
 
 

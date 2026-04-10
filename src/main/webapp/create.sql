@@ -27,7 +27,7 @@ ALTER TABLE APPLICATION
 -- 2. 새 값을 포함한 체크 제약조건 추가
 ALTER TABLE APPLICATION
     ADD CONSTRAINT chk_stage
-        CHECK (stage IN ('APPLIED', 'DOCUMENT', 'FIRST_INTERVIEW', 'SECOND_INTERVIEW', 'THIRD_INTERVIEW', 'PASS', 'FAIL', '추가할값'));
+        CHECK (stage IN ('APPLIED', 'DOCUMENT', 'FIRST_INTERVIEW', 'SECOND_INTERVIEW', 'THIRD_INTERVIEW', 'PASS', 'FAIL'));
 
 
 
@@ -36,6 +36,15 @@ ALTER TABLE APPLICATION
 
 );
 ALTER TABLE application ADD interview_date DATE;
+ALTER TABLE application ADD is_star NUMBER;
+
+ALTER TABLE application
+ADD CONSTRAINT chk_is_star
+        CHECK (is_star IN (0, 1));
+
+
+
+
 ALTER TABLE application MODIFY interview_time VARCHAR2(20);
 ALTER TABLE application MODIFY interview_type VARCHAR2(50);
 

@@ -2,6 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-detail.css">
+<script>
+    var companyId = '${company.companyId}';
+    var contextPath = '${pageContext.request.contextPath}';
+</script>
+<script src="${pageContext.request.contextPath}/js/companyDetail.js"></script>
 
 <%-- ===== 다크 헤더 영역 ===== --%>
 <div class="cd-hero">
@@ -96,20 +101,20 @@
             첫 번째 후기를 작성해보세요!
         </div>
     </c:if>
-
-    <c:forEach var="r" items="${reviews}">
-        <div class="cd-card">
-            <div class="cd-card-top">
-                <span class="cd-card-position">${r.reviewJobPosition}</span>
-                <span class="cd-card-stars">
+    <div id="reviewListArea">
+        <c:forEach var="r" items="${reviews}">
+            <div class="cd-card">
+                <div class="cd-card-top">
+                    <span class="cd-card-position">${r.reviewJobPosition}</span>
+                    <span class="cd-card-stars">
                     <c:forEach begin="1" end="5" var="i">
                         <span class="star-sm ${i <= r.reviewDifficulty ? 'on' : ''}">★</span>
                     </c:forEach>
                 </span>
-            </div>
-            <a href="${pageContext.request.contextPath}/review/detail?reviewId=${r.reviewId}"
-               class="cd-card-title">${r.reviewTitle}</a>
-            <div class="cd-card-tags">
+                </div>
+                <a href="${pageContext.request.contextPath}/review/detail?reviewId=${r.reviewId}"
+                   class="cd-card-title">${r.reviewTitle}</a>
+                <div class="cd-card-tags">
                 <span class="cd-tag">
                     <c:choose>
                         <c:when test="${r.reviewInterviewType == 'CODING'}">코딩테스트</c:when>
@@ -120,10 +125,10 @@
                         <c:otherwise>${r.reviewInterviewType}</c:otherwise>
                     </c:choose>
                 </span>
-                <c:if test="${r.reviewInterviewerCount > 0}">
-                    <span class="cd-tag">면접관 ${r.reviewInterviewerCount}명</span>
-                </c:if>
-                <c:if test="${not empty r.reviewAtmosphere}">
+                    <c:if test="${r.reviewInterviewerCount > 0}">
+                        <span class="cd-tag">면접관 ${r.reviewInterviewerCount}명</span>
+                    </c:if>
+                    <c:if test="${not empty r.reviewAtmosphere}">
                     <span class="cd-tag">
                         <c:choose>
                             <c:when test="${r.reviewAtmosphere == 'FRIENDLY'}">화기애애</c:when>
@@ -133,8 +138,8 @@
                             <c:otherwise>${r.reviewAtmosphere}</c:otherwise>
                         </c:choose>
                     </span>
-                </c:if>
-                <span class="cd-tag result-${r.reviewResult}">
+                    </c:if>
+                    <span class="cd-tag result-${r.reviewResult}">
                     <c:choose>
                         <c:when test="${r.reviewResult == 'PASS'}">합격</c:when>
                         <c:when test="${r.reviewResult == 'FAIL'}">불합격</c:when>
@@ -142,27 +147,26 @@
                         <c:otherwise>${r.reviewResult}</c:otherwise>
                     </c:choose>
                 </span>
+                </div>
+                <div class="cd-card-bottom">
+                    <span>[추천] ${r.reviewLikeCount}</span>
+                    <span><fmt:formatDate value="${r.reviewCreatedDate}" pattern="yyyy년 M월 d일"/></span>
+                </div>
             </div>
-            <div class="cd-card-bottom">
-                <span>[추천] ${r.reviewLikeCount}</span>
-                <span><fmt:formatDate value="${r.reviewCreatedDate}" pattern="yyyy년 M월 d일"/></span>
-            </div>
-        </div>
-    </c:forEach>
-
+        </c:forEach>
+    </div>
     <%-- 페이징 (추후 동적 처리) --%>
-    <div class="cd-paging">
+    <div id="reviewPaging" class="cd-paging">
         <c:if test="${currentPage > 1}">
-            <a href="${pageContext.request.contextPath}/review/company?companyId=${company.companyId}&page=${currentPage - 1}"
-               class="cd-page">이전</a>
+            <a onclick="loadFilteredReviews(${currentPage - 1})" class="cd-page" style="cursor:pointer;">이전</a>
         </c:if>
         <c:forEach begin="1" end="${totalPages}" var="p">
-            <a href="${pageContext.request.contextPath}/review/company?companyId=${company.companyId}&page=${p}"
-               class="cd-page ${p == currentPage ? 'active' : ''}">${p}</a>
+            <a onclick="loadFilteredReviews(${p})" class="cd-page ${p == currentPage ? 'active' : ''}"
+               style="cursor:pointer;">${p}</a>
         </c:forEach>
         <c:if test="${currentPage < totalPages}">
-            <a href="${pageContext.request.contextPath}/review/company?companyId=${company.companyId}&page=${currentPage + 1}"
-               class="cd-page">다음</a>
+            <a onclick="loadFilteredReviews(${currentPage + 1})" class="cd-page" style="cursor:pointer;">다음</a>
         </c:if>
     </div>
 </div>
+

@@ -28,7 +28,7 @@ function doSearch(page) {
     var location = $('#locationBtns .cs-opt-btn.active').attr('data-value') || '';
 
     $.ajax({
-        url: '/company-search/ajax',
+        url: $('#contextPath').val() + '/company-search/ajax',
         type: 'get',
         dataType: 'json',
         data: {
@@ -156,7 +156,7 @@ function initClear(totalCompanyCount) {
         // 개수 표시를 초기 전체 개수로 복구
         $('#resultCount').text(totalCompanyCount);
         $('#companyPaging').empty();
-        
+
     });
 
 }

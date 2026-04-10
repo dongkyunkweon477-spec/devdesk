@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>DevDesk</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/accountSuccess.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/accountSuccess.css">
 </head>
 <body>
 

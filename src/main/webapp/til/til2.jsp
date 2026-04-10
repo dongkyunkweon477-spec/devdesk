@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -32,6 +33,21 @@
             <div class="nav-section-label">학습</div>
             <a href="til" class="nav-item active"><span class="nav-icon">📚</span>TIL</a>
         </nav>
+
+        <div id="sidebar-mini-calendar">
+            <div class="g-cal-header">
+                <div class="g-cal-title" id="g-cal-title">2026년 4월</div>
+                <div class="g-cal-nav">
+                    <button class="g-nav-btn" id="g-prev-month">‹</button>
+                    <button class="g-nav-btn" id="g-next-month">›</button>
+                </div>
+            </div>
+            <div class="g-cal-weekdays">
+                <div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div><div>일</div>
+            </div>
+            <div class="g-cal-days" id="g-cal-days">
+            </div>
+        </div>
     </aside>
 
     <main class="content-area">
@@ -500,14 +516,16 @@
     document.addEventListener('DOMContentLoaded', function() {
         const rawEvents = [
             <c:forEach var="sch" items="${schList}">
-            '${sch.schedule_date}',
+            '<fmt:formatDate value="${sch.schedule_date}" pattern="yyyy-MM-dd" />',
             </c:forEach>
         ];
 
         const eventCounts = {};
         rawEvents.forEach(date => {
-            const pureDate = date.split(' ')[0];
-            eventCounts[pureDate] = (eventCounts[pureDate] || 0) + 1;
+            if (date && date.trim() !== '') {
+                const pureDate = date.split(' ')[0];
+                eventCounts[pureDate] = (eventCounts[pureDate] || 0) + 1;
+            }
         });
 
         let currentDispDate = new Date();
@@ -531,26 +549,28 @@
 
             // 1. 이전 달 날짜 흐리게 채우기
             for (let i = firstDayIndex; i > 0; i--) {
-                daysHTML += `<div class="day-cell other-month" onclick="location.href='${pageContext.request.contextPath}/calendar'"><span class="day-num">\${prevMonthLastDay - i + 1}</span></div>`;
+                daysHTML += `<div class="g-day-cell" onclick="location.href='${pageContext.request.contextPath}/calendar'">
+                                <div class="g-day-num other-month">\${prevMonthLastDay - i + 1}</div>
+                             </div>`;
             }
 
             // 2. 이번 달 1일부터 말일까지 꽉꽉 채우기!!
             for (let i = 1; i <= lastDay.getDate(); i++) {
                 const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(i).padStart(2, '0');
-                let classes = 'day-cell';
-                if (dateStr === todayStr) classes += ' today';
+                let isToday = (dateStr === todayStr) ? ' today' : '';
 
-                let dotsHTML = '<div class="dots-wrap">';
+                let dotsHTML = '';
                 if (eventCounts[dateStr]) {
+                    dotsHTML = '<div class="g-dots">';
                     let dotCount = Math.min(eventCounts[dateStr], 3);
                     for(let k = 0; k < dotCount; k++) {
-                        dotsHTML += '<span class="cal-dot"></span>';
+                        dotsHTML += '<span class="g-dot"></span>';
                     }
+                    dotsHTML += '</div>';
                 }
-                dotsHTML += '</div>';
 
-                daysHTML += `<div class="\${classes}" onclick="location.href='${pageContext.request.contextPath}/calendar'">
-                                <span class="day-num">\${i}</span>
+                daysHTML += `<div class="g-day-cell" onclick="location.href='${pageContext.request.contextPath}/calendar'">
+                                <div class="g-day-num\${isToday}">\${i}</div>
                                 \${dotsHTML}
                              </div>`;
             }
@@ -559,12 +579,14 @@
             const totalCells = firstDayIndex + lastDay.getDate();
             let nextMonthDay = 1;
             while(totalCells + nextMonthDay - 1 < 42) {
-                daysHTML += `<div class="day-cell other-month" onclick="location.href='${pageContext.request.contextPath}/calendar'"><span class="day-num">\${nextMonthDay}</span></div>`;
+                daysHTML += `<div class="g-day-cell" onclick="location.href='${pageContext.request.contextPath}/calendar'">
+                                <div class="g-day-num other-month">\${nextMonthDay}</div>
+                             </div>`;
                 nextMonthDay++;
             }
 
             document.getElementById('g-cal-days').innerHTML = daysHTML;
-        }
+        } // 👈 이 닫는 괄호(})가 빠져있어서 터졌습니다! 추가 완료!
 
         document.getElementById('g-prev-month').addEventListener('click', () => {
             currentDispDate.setMonth(currentDispDate.getMonth() - 1);
@@ -581,6 +603,3 @@
 </body>
 </html>
 
-</script>
-</body>
-</html>

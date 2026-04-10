@@ -17,7 +17,7 @@ public class MemberDAO {
 
     public static final MemberDAO MBAO = new MemberDAO();
 
-    private MemberDAO() {
+    MemberDAO() {
     }
 
     // 로그인 상태를 확인하는 전용 문지기 메서드
@@ -117,6 +117,7 @@ public class MemberDAO {
                     memberDTO.setEmail(rs.getString("email"));
                     memberDTO.setNickname(rs.getString("nickname"));
                     memberDTO.setJob_category(rs.getString("job_category"));
+                    memberDTO.setRole(rs.getString("role"));
 
 
                     HttpSession hs = request.getSession();
@@ -325,11 +326,20 @@ public class MemberDAO {
 
             // [하드 딜리트] 개인 워크스페이스 삭제
             String[] deleteQueries = {
+                    // 1. 지원서 및 일정
                     "DELETE FROM schedule WHERE member_id = ?",
                     "DELETE FROM application WHERE member_id = ?",
+
+                    // 2. TIL (오늘의 학습)
                     "DELETE FROM til WHERE member_id = ?",
-                    "DELETE FROM resume WHERE member_id = ?",
-                    "DELETE FROM review WHERE member_id = ?",
+
+                    // 3. 🌟 이력서 블록 (자식인 '버전' 먼저 -> 부모인 '블록' 나중)
+                    "DELETE FROM resume_block_version WHERE block_id IN (SELECT block_id FROM resume_block WHERE member_id = ?)",
+                    "DELETE FROM resume_block WHERE member_id = ?",
+
+                    // 4. 🌟 기본 이력서 (자식인 '필드' 먼저 -> 부모인 '이력서' 나중)
+                    "DELETE FROM resume_field WHERE resume_id IN (SELECT resume_id FROM resume WHERE member_id = ?)",
+                    "DELETE FROM resume WHERE member_id = ?"
             };
 
             for (String sql : deleteQueries) {
@@ -343,7 +353,7 @@ public class MemberDAO {
             String updateQuery = "UPDATE member SET " +
                     "email = 'del_' || member_id || '_' || TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'), " +
                     "password = NULL, " +
-                    "nickname = '(탈퇴한 회원)', " +
+                    "nickname = '탈퇴한 회원', " +
                     "job_category = NULL, " +
                     "social_id = NULL, " +
                     "profile_img = NULL, " +
@@ -377,5 +387,84 @@ public class MemberDAO {
         }
     }
 
+    public MemberDTO getMemberByEmail(String email) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
+        String sql = "SELECT * FROM member WHERE email = ?";
+
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, email);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                MemberDTO dto = new MemberDTO();
+                dto.setMember_id(rs.getInt("member_id"));
+                dto.setEmail(rs.getString("email"));
+                dto.setNickname(rs.getString("nickname"));
+                dto.setJob_category(rs.getString("job_category"));
+                dto.setLogin_type(rs.getString("login_type"));
+                dto.setSocial_id(rs.getString("social_id"));
+                dto.setRole(rs.getString("role"));
+                dto.setStatus(rs.getString("status"));
+                dto.setProfile_img(rs.getString("profile_img"));
+                return dto;
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            DBManager_new.close(con, pstmt, rs);
+        }
+        return null;
+    }
+
+    public void insertGoogleMember(String email, String nickname, String socialId) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        String sql = "INSERT INTO MEMBER (MEMBER_ID, EMAIL, NICKNAME, LOGIN_TYPE, SOCIAL_ID) "
+                + "VALUES (member_id_seq.NEXTVAL, ?, ?, 'GOOGLE', ?)";
+
+        try {
+            con = DBManager_new.connect();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, email);
+            pstmt.setString(2, nickname);
+            pstmt.setString(3, socialId);
+            pstmt.executeUpdate();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            DBManager_new.close(con, pstmt, null);
+        }
+    }
+
+    // 🌟 구글 리프레시 토큰을 DB에 저장/업데이트 하는 메서드
+    public void updateGoogleRefreshToken(String email, String refreshToken) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        try {
+            // 프로젝트에서 사용하시는 DB 연결 클래스명(DBManager 등)에 맞게 확인해 주세요.
+            con = DBManager_new.connect();
+            String sql = "UPDATE MEMBER SET GOOGLE_REFRESH_TOKEN = ? WHERE EMAIL = ?";
+
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, refreshToken);
+            pstmt.setString(2, email);
+
+            pstmt.executeUpdate();
+            System.out.println("✅ DB에 Refresh Token 저장 완료 (" + email + ")");
+
+        } catch (Exception e) {
+            System.out.println("❌ Refresh Token DB 저장 실패!");
+            e.printStackTrace();
+        } finally {
+            DBManager_new.close(con, pstmt, null);
+        }
+    }
 }

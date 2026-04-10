@@ -95,9 +95,14 @@ a:hover {
     top: 0;
     z-index: 1000;
 
+<<<<<<< HEAD
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+=======
     background: var(--bg-primary);
     border-bottom: 1px solid var(--border-primary);
     transition: var(--transition);
+>>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
 
     min-width: 0; /* Prevent flex items from overflowing */
 }

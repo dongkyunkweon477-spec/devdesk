@@ -183,11 +183,41 @@
     border-color: #7c3aed;
 }
 
-/* ===== 후기 작성 버튼 (툴바) ===== */
+/* ===== 툴바 (필터 + 후기 작성 버튼) ===== */
 .review-toolbar {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
     margin: 20px 0 16px;
+}
+
+.review-filter-bar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.review-filter-bar select {
+    height: 36px;
+    padding: 0 28px 0 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Pretendard', sans-serif;
+    color: #475569;
+    background: #f8fafc;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8.5L1 3.5h10L6 8.5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    transition: border-color 0.2s;
+}
+
+.review-filter-bar select:focus {
+    outline: none;
+    border-color: #a78bfa;
+    background-color: #ffffff;
 }
 
 .btn-write {
