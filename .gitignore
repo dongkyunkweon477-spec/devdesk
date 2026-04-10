@@ -47,13 +47,5 @@ DBManager_new.java
 CLAUDE.md
 .sql
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-
-=======
 index_
->>>>>>> a0cd0b1c39ead4c8291b21ba5d0e5169cd4b8d5f
-=======
-index_
->>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
+src/main/webapp/WEB-INF/conf.properties

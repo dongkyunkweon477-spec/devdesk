@@ -7,17 +7,17 @@ public class ConfigManager {
 
     private static final Properties properties = new Properties();
 
-    // 🌟 클래스가 로드될 때 딱 한 번만 application.properties 파일을 읽어옵니다.
+    // 🌟 클래스가 로드될 때 딱 한 번만 conf.properties 파일을 읽어옵니다.
     static {
-        try (InputStream in = ConfigManager.class.getClassLoader().getResourceAsStream("application.properties")) {
+        try (InputStream in = ConfigManager.class.getClassLoader().getResourceAsStream("conf.properties")) {
             if (in != null) {
                 properties.load(in);
-                System.out.println("✅ application.properties 로드 성공!");
+                System.out.println("✅ conf.properties 로드 성공!");
             } else {
-                System.out.println("❌ application.properties 파일을 찾을 수 없습니다. (src/main/resources 폴더 안에 있는지 확인하세요)");
+                System.out.println("❌ conf.properties 파일을 찾을 수 없습니다. (src/main/resources 폴더 안에 있는지 확인하세요)");
             }
         } catch (Exception e) {
-            System.out.println("❌ application.properties 읽기 오류 발생!");
+            System.out.println("❌ conf.properties 읽기 오류 발생!");
             e.printStackTrace();
         }
     }

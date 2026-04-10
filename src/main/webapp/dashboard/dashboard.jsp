@@ -12,21 +12,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
-<<<<<<< HEAD
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/til.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/sidebar.css">
     </head>
-=======
-    <link rel="stylesheet" href="/css/base.css">
-    <link rel="stylesheet" href="/css/dashboard.css">
-    <link rel="stylesheet" href="/css/til.css">
-    <link rel="stylesheet" href="/css/sidebar.css">
-    <link rel="stylesheet" href="/css/index.css">
+
 </head>
->>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
 <body>
 <div class="page-wrap">
     <!-- ════════════════════════════
@@ -58,7 +51,6 @@
                 <span class="nav-icon">📚</span> TIL
             </a>
         </nav>
-<<<<<<< HEAD
 
         <div id="sidebar-mini-calendar">
             <div class="g-cal-header">
@@ -86,10 +78,7 @@
                 </div>
             </div>
         </div>
-=======
-        
 
->>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
     </aside>
 
     <!-- ════════════════════════════
@@ -391,7 +380,6 @@
         });
     })();
 
-<<<<<<< HEAD
 
     const TAG_CONFIG = {
         'Java': {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
@@ -458,7 +446,6 @@
                 eventCounts[pureDate] = (eventCounts[pureDate] || 0) + 1;
             }
         });
-=======
 
     const TAG_CONFIG = {
         'Java': {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
@@ -471,7 +458,6 @@
         'React': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
         '기타': {color: '#9da3b8', bg: 'rgba(157,163,184,0.12)'}
     };
->>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
 
     function renderMarkdown(text) {
         if (!text) return '<p style="color:var(--text3)">내용이 없어요.</p>';
@@ -492,10 +478,8 @@
         if (!el) return;
         var cfg = TAG_CONFIG[el.dataset.tag] || TAG_CONFIG['기타'];
 
-<<<<<<< HEAD
             // 달력 헤더 업데이트
             document.getElementById('g-cal-title').textContent = year + '년 ' + (month + 1) + '월';
-=======
         document.getElementById('detailTitle').textContent = el.dataset.title;
         document.getElementById('detailMeta').innerHTML =
             '<span class="badge" style="background:' + cfg.bg + ';color:' + cfg.color + '">' + el.dataset.tag + '</span>' +
@@ -503,7 +487,6 @@
             (el.dataset.time > 0
                 ? '<span style="font-size:12px;color:var(--text3);margin-left:8px">⏱ ' + el.dataset.time + 'h</span>'
                 : '');
->>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
 
         document.getElementById('detailContent').innerHTML = renderMarkdown(el.dataset.content);
         document.getElementById('detailEditBtn').href = 'til?id=' + id; // 수정 페이지 경로에 맞게 조정
@@ -515,7 +498,6 @@
         document.getElementById('tilDetailModal').classList.remove('open');
     }
 
-<<<<<<< HEAD
             // 지난 달 날짜
             for (let i = firstDayIndex; i > 0; i--) {
                 daysHTML += `<div class="g-day other-month" onclick="location.href='${pageContext.request.contextPath}/calendar'">\${prevMonthLastDay - i + 1}</div>`;
@@ -553,7 +535,7 @@
             }
 
             document.getElementById('g-cal-days').innerHTML = daysHTML;
-        }
+
 
         // 이전/다음 달 버튼 이벤트
         document.getElementById('g-prev-month').addEventListener('click', () => {
@@ -569,7 +551,6 @@
         renderMiniCalendar(currentDispDate);
     });
 
-=======
     // ESC 키 & 오버레이 클릭으로 닫기
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closeDetail();
@@ -577,7 +558,6 @@
     document.getElementById('tilDetailModal').addEventListener('click', function (e) {
         if (e.target === e.currentTarget) closeDetail();
     });
->>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
 
 </script>
 <%-- /.page-wrap --%>
