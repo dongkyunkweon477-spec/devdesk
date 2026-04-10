@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DevDesk - 비밀번호 변경</title>
     <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/passwordup.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/passwordup.css">
 </head>
 <body>
 <main class="content">

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>DevDesk</title>
     <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/myboard.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/myboard.css">
 </head>
 <body>
 <main class="content">
