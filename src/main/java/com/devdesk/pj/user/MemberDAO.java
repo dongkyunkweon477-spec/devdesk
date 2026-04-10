@@ -386,6 +386,8 @@ public class MemberDAO {
         }
     }
 
+<<<<<<< HEAD
+=======
     public MemberDTO getMemberByEmail(String email) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -442,4 +444,5 @@ public class MemberDAO {
             DBManager_new.close(con, pstmt, null);
         }
     }
+>>>>>>> bb2d94a83ec638388f78719eb99196d31173841e
 }
