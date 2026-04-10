@@ -294,8 +294,6 @@ public class MemberDAO {
         return comments;
     }
 
-<<<<<<< HEAD
-=======
     // [회원 탈퇴] 비밀번호 검증 + 개인 데이터 삭제 + 회원 정보 비식별화
     public int deleteAccount(int memberId, String inputPassword) {
         Connection con = null;
@@ -378,7 +376,5 @@ public class MemberDAO {
             DBManager_new.close(con, ps, rs);
         }
     }
-
->>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
 
 }

@@ -348,6 +348,7 @@
 <%-- TIL 상세 모달 --%>
 
 <script>
+    // 1. 도넛 차트 그리기
     (function () {
         var stats = [
             <c:forEach var="stat" items="${tilTagStats}" varStatus="loop">
@@ -358,6 +359,8 @@
         if (!stats.length) return;
 
         var canvas = document.getElementById("donutCanvas");
+        if (!canvas) return;
+
         var ctx = canvas.getContext("2d");
         var cx = 70, cy = 70, outerR = 62, innerR = 38, gap = 0.03;
         var total = stats.reduce(function (a, s) {
@@ -380,7 +383,7 @@
         });
     })();
 
-
+    // 2. TIL 모달 및 마크다운 관련 함수 모음 (중복 제거됨)
     const TAG_CONFIG = {
         'Java': {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
         'Spring': {color: '#56e39f', bg: 'rgba(86,227,159,0.12)'},
@@ -421,145 +424,133 @@
                 : '');
 
         document.getElementById('detailContent').innerHTML = renderMarkdown(el.dataset.content);
-        document.getElementById('detailEditBtn').href = 'til?id=' + id; // 수정 페이지 경로에 맞게 조정
 
+        var editBtn = document.getElementById('detailEditBtn');
+        if(editBtn) editBtn.href = 'til?id=' + id;
+
+        var modal = document.getElementById('tilDetailModal');
+        if(modal) modal.classList.add('open');
     }
 
+    function closeDetail() {
+        var modal = document.getElementById('tilDetailModal');
+        if(modal) modal.classList.remove('open');
+    }
 
     // ESC 키 & 오버레이 클릭으로 닫기
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closeDetail();
     });
 
+    var modalOverlay = document.getElementById('tilDetailModal');
+    if(modalOverlay) {
+        modalOverlay.addEventListener('click', function (e) {
+            if (e.target === e.currentTarget) closeDetail();
+        });
+    }
+
+    // 3. 대시보드 미니 캘린더 관련 스크립트 (점 찍는 기능 포함)
     document.addEventListener('DOMContentLoaded', function() {
-        // 대시보드 컨트롤러에서 schList(면접 일정 리스트)를 넘겨주면 일정 점(dot)을 찍습니다.
+
+        // 서버에서 받아온 면접 일정 리스트
         const rawEvents = [
             <c:forEach var="sch" items="${schList}">
             '<fmt:formatDate value="${sch.schedule_date}" pattern="yyyy-MM-dd" />',
             </c:forEach>
         ];
 
+        // 날짜별로 일정이 몇 개인지 카운트 ({'2026-04-10': 2, '2026-04-15': 1 ...})
         const eventCounts = {};
         rawEvents.forEach(date => {
             if (date && date.trim() !== '') {
-                const pureDate = date.split(' ')[0]; // 완벽한 yyyy-MM-dd 가 추출됨
+                const pureDate = date.split(' ')[0];
                 eventCounts[pureDate] = (eventCounts[pureDate] || 0) + 1;
             }
         });
 
-    const TAG_CONFIG = {
-        'Java': {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
-        'Spring': {color: '#56e39f', bg: 'rgba(86,227,159,0.12)'},
-        'SQL': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
-        'JavaScript': {color: '#ffd166', bg: 'rgba(255,209,102,0.12)'},
-        'Git': {color: '#ff6b6b', bg: 'rgba(255,107,107,0.12)'},
-        'Python': {color: '#5b7cf8', bg: 'rgba(91,124,248,0.12)'},
-        'CSS': {color: '#8b6ef5', bg: 'rgba(139,110,245,0.12)'},
-        'React': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
-        '기타': {color: '#9da3b8', bg: 'rgba(157,163,184,0.12)'}
-    };
+        let currentDispDate = new Date();
+        const todayStr = '${todayStr}'; // 컨트롤러에서 내려주는 오늘 날짜 문자열
 
-    function renderMarkdown(text) {
-        if (!text) return '<p style="color:var(--text3)">내용이 없어요.</p>';
-        return text
-            .replace(/```([\s\S]*?)```/g, '<pre class="md-code">$1</pre>')
-            .replace(/`([^`]+)`/g, '<code class="md-inline">$1</code>')
-            .replace(/^### (.+)$/gm, '<h3 class="md-h3">$1</h3>')
-            .replace(/^## (.+)$/gm, '<h2 class="md-h2">$1</h2>')
-            .replace(/^# (.+)$/gm, '<h1 class="md-h1">$1</h1>')
-            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-            .replace(/^- (.+)$/gm, '<li class="md-li">$1</li>')
-            .replace(/\n\n/g, '</p><p class="md-p">')
-            .replace(/\n/g, '<br>');
-    }
+        // 달력을 그리는 핵심 함수
+        function renderMiniCalendar(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
 
-    function openDetail(id) {
-        var el = document.getElementById('til_data_' + id);
-        if (!el) return;
-        var cfg = TAG_CONFIG[el.dataset.tag] || TAG_CONFIG['기타'];
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
 
-            // 달력 헤더 업데이트
-            document.getElementById('g-cal-title').textContent = year + '년 ' + (month + 1) + '월';
-        document.getElementById('detailTitle').textContent = el.dataset.title;
-        document.getElementById('detailMeta').innerHTML =
-            '<span class="badge" style="background:' + cfg.bg + ';color:' + cfg.color + '">' + el.dataset.tag + '</span>' +
-            '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + el.dataset.date + '</span>' +
-            (el.dataset.time > 0
-                ? '<span style="font-size:12px;color:var(--text3);margin-left:8px">⏱ ' + el.dataset.time + 'h</span>'
-                : '');
+            let firstDayIndex = firstDay.getDay() - 1;
+            if (firstDayIndex === -1) firstDayIndex = 6;
 
-        document.getElementById('detailContent').innerHTML = renderMarkdown(el.dataset.content);
-        document.getElementById('detailEditBtn').href = 'til?id=' + id; // 수정 페이지 경로에 맞게 조정
+            const calTitle = document.getElementById('g-cal-title');
+            if (calTitle) calTitle.textContent = year + '년 ' + (month + 1) + '월';
 
-        document.getElementById('tilDetailModal').classList.add('open');
-    }
+            let daysHTML = '';
 
-    function closeDetail() {
-        document.getElementById('tilDetailModal').classList.remove('open');
-    }
-
-            // 지난 달 날짜
+            // 지난 달 날짜 (회색 처리)
+            // 1. 이전 달 날짜 흐리게 채우기
             for (let i = firstDayIndex; i > 0; i--) {
-                daysHTML += `<div class="g-day other-month" onclick="location.href='${pageContext.request.contextPath}/calendar'">\${prevMonthLastDay - i + 1}</div>`;
+                daysHTML += `<div class="g-day-cell" onclick="location.href='${pageContext.request.contextPath}/calendar'">
+                                <div class="g-day-num other-month">\${prevMonthLastDay - i + 1}</div>
+                             </div>`;
             }
 
-            // 이번 달 날짜
+            // 2. 이번 달 1일부터 말일까지 채우기 및 일정 점 찍기
             for (let i = 1; i <= lastDay.getDate(); i++) {
                 const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(i).padStart(2, '0');
-
                 let isToday = (dateStr === todayStr) ? ' today' : '';
 
-                // 일정이 있으면 점(dot) 표시
                 let dotsHTML = '';
                 if (eventCounts[dateStr]) {
                     dotsHTML = '<div class="g-dots">';
-                    let dotCount = Math.min(eventCounts[dateStr], 3);
+                    let dotCount = Math.min(eventCounts[dateStr], 3); // 최대 3개까지만 표시
                     for(let k = 0; k < dotCount; k++) {
                         dotsHTML += '<span class="g-dot"></span>';
                     }
                     dotsHTML += '</div>';
                 }
 
-                daysHTML += `<div class="g-day\${isToday}" onclick="location.href='${pageContext.request.contextPath}/calendar'">
-                                \${i}
+                daysHTML += `<div class="g-day-cell" onclick="location.href='${pageContext.request.contextPath}/calendar'">
+                                <div class="g-day-num\${isToday}">\${i}</div>
                                 \${dotsHTML}
                              </div>`;
             }
 
-            // 다음 달 날짜로 빈칸 채우기
+            // 3. 달력 모양 유지를 위해 남은 빈칸은 다음 달 날짜로 채우기
             const totalCells = firstDayIndex + lastDay.getDate();
             let nextMonthDay = 1;
             while(totalCells + nextMonthDay - 1 < 42) {
-                daysHTML += `<div class="g-day other-month" onclick="location.href='${pageContext.request.contextPath}/calendar'">\${nextMonthDay}</div>`;
+                daysHTML += `<div class="g-day-cell" onclick="location.href='${pageContext.request.contextPath}/calendar'">
+                                <div class="g-day-num other-month">\${nextMonthDay}</div>
+                             </div>`;
                 nextMonthDay++;
             }
-
             document.getElementById('g-cal-days').innerHTML = daysHTML;
+        }
 
+        // 이전 달 버튼 이벤트
+        const prevBtn = document.getElementById('g-prev-month');
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                currentDispDate.setMonth(currentDispDate.getMonth() - 1);
+                renderMiniCalendar(currentDispDate);
+            });
+        }
 
-        // 이전/다음 달 버튼 이벤트
-        document.getElementById('g-prev-month').addEventListener('click', () => {
-            currentDispDate.setMonth(currentDispDate.getMonth() - 1);
-            renderMiniCalendar(currentDispDate);
-        });
-        document.getElementById('g-next-month').addEventListener('click', () => {
-            currentDispDate.setMonth(currentDispDate.getMonth() + 1);
-            renderMiniCalendar(currentDispDate);
-        });
+        // 다음 달 버튼 이벤트
+        const nextBtn = document.getElementById('g-next-month');
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                currentDispDate.setMonth(currentDispDate.getMonth() + 1);
+                renderMiniCalendar(currentDispDate);
+            });
+        }
 
-        // 초기 달력 그리기
+        // 페이지 로드 시 최초 달력 렌더링
         renderMiniCalendar(currentDispDate);
     });
 
-    // ESC 키 & 오버레이 클릭으로 닫기
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closeDetail();
-    });
-    document.getElementById('tilDetailModal').addEventListener('click', function (e) {
-        if (e.target === e.currentTarget) closeDetail();
-    });
-
 </script>
-<%-- /.page-wrap --%>
 </body>
 </html>
