@@ -2,6 +2,7 @@ package com.devdesk.pj.review;
 
 import com.devdesk.pj.companysearch.CompanySearchDAO;
 import com.devdesk.pj.companysearch.CompanySearchVO;
+import com.devdesk.pj.user.MemberDTO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,11 +18,12 @@ public class ReviewEditC extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         int reviewId = Integer.parseInt(request.getParameter("reviewId"));
         ReviewVO review = ReviewDAO.REVIEW_DAO.getReviewById(reviewId);
-        int memberId = (int) request.getSession().getAttribute("memberId");
-        if (review.getReviewMemberId() != memberId) {
-            response.sendRedirect(request.getContextPath() + "/review");
+        MemberDTO user = (MemberDTO) request.getSession().getAttribute("user");
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/user/login.jsp");
             return;
         }
+        int memberId = user.getMember_id();
         CompanySearchVO company = CompanySearchDAO.COMPANY_SEARCH_DAO.getCompanyById(review.getReviewCompanyId());
         request.setAttribute("r", review);
         request.setAttribute("company", company);
