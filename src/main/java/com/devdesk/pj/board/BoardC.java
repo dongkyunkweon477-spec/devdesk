@@ -33,7 +33,7 @@ public class BoardC extends HttpServlet {
         String p = request.getParameter("p");
         int page = 1;
         if (p != null) {
-            page = Integer.parseInt(p);
+            page = Integer.parseInt(p.trim());
         }
         BoardDAO.paging(request, page);
 
