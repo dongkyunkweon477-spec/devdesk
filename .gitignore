@@ -49,3 +49,11 @@ CLAUDE.md
 src/main/webapp/WEB-INF/conf.properties
 index_
 src/main/resources/conf.properties
+.claude
+.gemini
+GEMINI.md
+package-lock.json
+package.json
+process_css.js
+wrap_jsp.py
+node_modules

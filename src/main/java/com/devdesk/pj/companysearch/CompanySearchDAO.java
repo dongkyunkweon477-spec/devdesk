@@ -206,7 +206,7 @@ public class CompanySearchDAO {
         String sql = "SELECT COUNT(*) AS total_count,"
                 + " ROUND(AVG(r_difficulty), 1) AS avg_difficulty,"
                 + " ROUND(AVG(r_rating), 1) AS avg_rating,"
-                + " ROUND(COUNT(CASE WHEN r_result='PASS' THEN 1 END) * 100.0 / COUNT(*), 1) AS pass_rate"
+                + " ROUND(COUNT(CASE WHEN r_result='PASS' THEN 1 END) * 100.0 / NULLIF(COUNT(*), 0), 1) AS pass_rate"
                 + " FROM review WHERE r_company_id = ?";
         Map<String, Object> stats = new HashMap<>();
         try (Connection con = DBManager_new.connect();
