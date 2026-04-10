@@ -1,4 +1,5 @@
 /* ═══════════════════════════════
+/* ═══════════════════════════════
    RESUME BLOCK LIBRARY
 ═══════════════════════════════ */
 
@@ -22,7 +23,9 @@
     transition: all 0.15s;
 }
 
-.rb-tab:hover { color: var(--text2); }
+.rb-tab:hover {
+    color: var(--text2);
+}
 
 .rb-tab.active {
     color: var(--accent);
@@ -146,18 +149,22 @@
     background: rgba(91, 124, 248, 0.12);
     color: var(--accent);
 }
+
 .rb-cat-badge.cat-jikopr {
     background: rgba(139, 110, 245, 0.12);
     color: var(--accent2);
 }
+
 .rb-cat-badge.cat-chosho {
     background: rgba(78, 205, 196, 0.12);
     color: var(--accent3);
 }
+
 .rb-cat-badge.cat-keireki {
     background: rgba(255, 209, 102, 0.12);
     color: var(--accent4);
 }
+
 .rb-cat-badge.cat-other {
     background: rgba(157, 163, 184, 0.12);
     color: var(--text2);
@@ -185,8 +192,13 @@
     line-height: 1;
 }
 
-.rb-star-btn:hover { transform: scale(1.2); }
-.rb-star-btn.starred { color: var(--accent4); }
+.rb-star-btn:hover {
+    transform: scale(1.2);
+}
+
+.rb-star-btn.starred {
+    color: var(--accent4);
+}
 
 /* ── Block content ── */
 .rb-card-title {
@@ -277,8 +289,13 @@
     outline: none;
 }
 
-.rb-compose-select:focus { border-color: var(--accent); }
-.rb-compose-select option { background: var(--surface2); }
+.rb-compose-select:focus {
+    border-color: var(--accent);
+}
+
+.rb-compose-select option {
+    background: var(--surface2);
+}
 
 .rb-compose-content {
     font-size: 13px;
@@ -399,16 +416,37 @@
 }
 
 /* ── Tab panel show/hide ── */
-.rb-panel { display: none; }
-.rb-panel.active { display: block; }
+.rb-panel {
+    display: none;
+}
+
+.rb-panel.active {
+    display: block;
+}
 
 /* ── Char count warning ── */
-.rb-char-warn { color: var(--accent5); }
+.rb-char-warn {
+    color: var(--accent5);
+}
 
 /* ── Responsive ── */
 @media (max-width: 700px) {
-    .rb-stats { flex-direction: column; }
-    .rb-compare { grid-template-columns: 1fr; }
-    .rb-compose-header { flex-direction: column; gap: 8px; align-items: flex-start; }
-    .rb-compose-select { max-width: 100%; width: 100%; }
+    .rb-stats {
+        flex-direction: column;
+    }
+
+    .rb-compare {
+        grid-template-columns: 1fr;
+    }
+
+    .rb-compose-header {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+
+    .rb-compose-select {
+        max-width: 100%;
+        width: 100%;
+    }
 }
