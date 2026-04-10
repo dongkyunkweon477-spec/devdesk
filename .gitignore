@@ -48,3 +48,4 @@ CLAUDE.md
 .sql
 
 index_
+src/main/resources/conf.properties

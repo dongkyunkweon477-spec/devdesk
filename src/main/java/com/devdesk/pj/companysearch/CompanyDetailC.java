@@ -22,13 +22,13 @@ public class CompanyDetailC extends HttpServlet {
         int totalCount = ReviewDAO.REVIEW_DAO.getReviewCount(companyId);
         int totalPages = (int) Math.ceil((double) totalCount / 5);
         int page = 1;
-        int pageSize = 5;
+        int pageSize = 10;
         if (request.getParameter("page") != null) {
             page = Integer.parseInt(request.getParameter("page"));
         }
         CompanySearchVO company = CompanySearchDAO.COMPANY_SEARCH_DAO.getCompanyById(companyId);
         Map<String, Object> stats = CompanySearchDAO.COMPANY_SEARCH_DAO.getCompanyStats(companyId);
-        ArrayList<ReviewVO> reviews = ReviewDAO.REVIEW_DAO.getReviewsByCompany(companyId, 1, 5);
+        ArrayList<ReviewVO> reviews = ReviewDAO.REVIEW_DAO.getReviewsByCompany(companyId, page, pageSize);
 
         request.setAttribute("company", company);
         request.setAttribute("reviews", reviews);
