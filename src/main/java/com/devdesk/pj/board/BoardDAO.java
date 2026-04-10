@@ -401,40 +401,34 @@ public class BoardDAO {
                 "WHERE member_id = ? " +
                 "ORDER BY b_board_id DESC";
 
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
-        try {
-            con = DBManager_new.connect();
-            ps = con.prepareStatement(sql);
             ps.setInt(1, memberId);
 
-            rs = ps.executeQuery();
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    BoardVO vo = new BoardVO();
 
-            while (rs.next()) {
-                BoardVO vo = new BoardVO();
+                    int boardId = rs.getInt("b_board_id");
+                    String title = rs.getString("b_title");
 
-                int boardId = rs.getInt("b_board_id");
-                String title = rs.getString("b_title");
-                
-                System.out.println("getPostsByMember - boardId: " + boardId + ", title: " + title);
-                System.out.println("getPostsByMember - title null?: " + (title == null));
-                System.out.println("getPostsByMember - title empty?: " + (title != null && title.isEmpty()));
-                
-                vo.setBoard_id(boardId);
-                vo.setTitle(title);
-                
-                System.out.println("getPostsByMember - vo.getTitle(): " + vo.getTitle());
-                System.out.println("getPostsByMember - vo.getTitle() null?: " + (vo.getTitle() == null));
+                    System.out.println("getPostsByMember - boardId: " + boardId + ", title: " + title);
+                    System.out.println("getPostsByMember - title null?: " + (title == null));
+                    System.out.println("getPostsByMember - title empty?: " + (title != null && title.isEmpty()));
 
-                list.add(vo);
+                    vo.setBoard_id(boardId);
+                    vo.setTitle(title);
+
+                    System.out.println("getPostsByMember - vo.getTitle(): " + vo.getTitle());
+                    System.out.println("getPostsByMember - vo.getTitle() null?: " + (vo.getTitle() == null));
+
+                    list.add(vo);
+                }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, ps, rs);
         }
 
         return list;

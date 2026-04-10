@@ -181,54 +181,35 @@ public class ReviewDAO {
 
         String deleteLikeSql = "DELETE FROM review_like WHERE review_id = ?";
         String deleteBookmarkSql = "DELETE FROM review_bookmark WHERE review_id = ?";
-
         String deleteReviewSql = "DELETE FROM review WHERE r_id = ?";
 
-        Connection con = null;
-        try {
-            con = DBManager_new.connect();
-            con.setAutoCommit(false); // 트랜잭션 시작
+        try (Connection con = DBManager_new.connect()) {
+            con.setAutoCommit(false);
+            try {
+                try (PreparedStatement pstmt1 = con.prepareStatement(deleteLikeSql)) {
+                    pstmt1.setInt(1, reviewId);
+                    pstmt1.executeUpdate();
+                }
 
+                try (PreparedStatement pstmt2 = con.prepareStatement(deleteBookmarkSql)) {
+                    pstmt2.setInt(1, reviewId);
+                    pstmt2.executeUpdate();
+                }
 
-            try (PreparedStatement pstmt1 = con.prepareStatement(deleteLikeSql)) {
-                pstmt1.setInt(1, reviewId);
-                pstmt1.executeUpdate();
+                int result = 0;
+                try (PreparedStatement pstmt3 = con.prepareStatement(deleteReviewSql)) {
+                    pstmt3.setInt(1, reviewId);
+                    result = pstmt3.executeUpdate();
+                }
+
+                con.commit();
+                return result;
+            } catch (Exception e) {
+                con.rollback();
+                e.printStackTrace();
             }
-
-
-            try (PreparedStatement pstmt2 = con.prepareStatement(deleteBookmarkSql)) {
-                pstmt2.setInt(1, reviewId);
-                pstmt2.executeUpdate();
-            }
-
-
-            int result = 0;
-            try (PreparedStatement pstmt3 = con.prepareStatement(deleteReviewSql)) {
-                pstmt3.setInt(1, reviewId);
-                result = pstmt3.executeUpdate();
-            }
-
-            con.commit(); // 모두 성공 시 커밋
-            return result;
-
         } catch (Exception e) {
             e.printStackTrace();
-            if (con != null) {
-                try {
-                    con.rollback(); // 에러 발생 시 롤백
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        } finally {
-            if (con != null) {
-                try {
-                    con.setAutoCommit(true);
-                    con.close();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
         }
         return 0;
 
@@ -346,68 +327,53 @@ public class ReviewDAO {
         String plusSql = "UPDATE review SET r_bookmark_count = r_bookmark_count + 1 WHERE r_id = ?";
         String minusSql = "UPDATE review SET r_bookmark_count = r_bookmark_count - 1 WHERE r_id = ?";
 
-        Connection con = null;
-        try {
-            con = DBManager_new.connect();
-            // 자동 커밋 해제 (트랜잭션 시작)
+        try (Connection con = DBManager_new.connect()) {
             con.setAutoCommit(false);
-
-            boolean exists = false;
-            try (PreparedStatement pstmt = con.prepareStatement(checkSql)) {
-                pstmt.setInt(1, memberId);
-                pstmt.setInt(2, reviewId);
-                try (ResultSet rs = pstmt.executeQuery()) {
-                    if (rs.next()) {
-                        exists = rs.getInt(1) > 0;
+            try {
+                boolean exists = false;
+                try (PreparedStatement pstmt = con.prepareStatement(checkSql)) {
+                    pstmt.setInt(1, memberId);
+                    pstmt.setInt(2, reviewId);
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        if (rs.next()) {
+                            exists = rs.getInt(1) > 0;
+                        }
                     }
                 }
-            }
 
-            if (exists) {
-                // 이미 북마크가 존재하면 삭제 및 카운트 감소
-                try (PreparedStatement del = con.prepareStatement(deleteSql)) {
-                    del.setInt(1, memberId);
-                    del.setInt(2, reviewId);
-                    del.executeUpdate();
+                if (exists) {
+                    // 이미 북마크가 존재하면 삭제 및 카운트 감소
+                    try (PreparedStatement del = con.prepareStatement(deleteSql)) {
+                        del.setInt(1, memberId);
+                        del.setInt(2, reviewId);
+                        del.executeUpdate();
+                    }
+                    try (PreparedStatement minus = con.prepareStatement(minusSql)) {
+                        minus.setInt(1, reviewId);
+                        minus.executeUpdate();
+                    }
+                    con.commit();
+                    return false;
+                } else {
+                    // 북마크가 없으면 추가 및 카운트 증가
+                    try (PreparedStatement ins = con.prepareStatement(insertSql)) {
+                        ins.setInt(1, memberId);
+                        ins.setInt(2, reviewId);
+                        ins.executeUpdate();
+                    }
+                    try (PreparedStatement plus = con.prepareStatement(plusSql)) {
+                        plus.setInt(1, reviewId);
+                        plus.executeUpdate();
+                    }
+                    con.commit();
+                    return true;
                 }
-                try (PreparedStatement minus = con.prepareStatement(minusSql)) {
-                    minus.setInt(1, reviewId);
-                    minus.executeUpdate();
-                }
-                con.commit(); // 두 작업 모두 성공 시 확정
-                return false;
-            } else {
-                // 북마크가 없으면 추가 및 카운트 증가
-                try (PreparedStatement ins = con.prepareStatement(insertSql)) {
-                    ins.setInt(1, memberId);
-                    ins.setInt(2, reviewId);
-                    ins.executeUpdate();
-                }
-                try (PreparedStatement plus = con.prepareStatement(plusSql)) {
-                    plus.setInt(1, reviewId);
-                    plus.executeUpdate();
-                }
-                con.commit(); // 두 작업 모두 성공 시 확정
-                return true;
+            } catch (Exception e) {
+                con.rollback();
+                e.printStackTrace();
             }
         } catch (Exception e) {
             e.printStackTrace();
-            if (con != null) {
-                try {
-                    con.rollback(); // 중간에 오류 발생 시 모든 작업 취소
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        } finally {
-            if (con != null) {
-                try {
-                    con.setAutoCommit(true); // 커넥션 풀 반환 전 기본값으로 원상 복구
-                    con.close(); // 자원 해제
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
         }
         return false;
     }
@@ -518,42 +484,38 @@ public class ReviewDAO {
         String seqSql = "SELECT review_seq.nextval FROM dual";
         String insertSql = "INSERT INTO review (r_id, r_company_id, r_member_id, r_job_position, r_interview_type, r_difficulty, r_result, r_content, r_rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        Connection con = null;
-        try {
-            con = DBManager_new.connect();
+        try (Connection con = DBManager_new.connect()) {
             con.setAutoCommit(false);
+            try {
+                try (PreparedStatement seqStmt = con.prepareStatement(seqSql);
+                     ResultSet rs = seqStmt.executeQuery()) {
+                    if (rs.next()) generatedId = rs.getInt(1);
+                }
 
-            try (PreparedStatement seqStmt = con.prepareStatement(seqSql);
-                 ResultSet rs = seqStmt.executeQuery()) {
-                if (rs.next()) generatedId = rs.getInt(1);
+                if (generatedId == 0) throw new Exception("시퀀스 조회 실패");
+
+                try (PreparedStatement pstmt = con.prepareStatement(insertSql)) {
+                    pstmt.setInt(1, generatedId);
+                    pstmt.setInt(2, vo.getReviewCompanyId());
+                    pstmt.setInt(3, vo.getReviewMemberId());
+                    pstmt.setString(4, vo.getReviewJobPosition());
+                    pstmt.setString(5, vo.getReviewInterviewType());
+                    pstmt.setInt(6, vo.getReviewDifficulty());
+                    pstmt.setString(7, vo.getReviewResult());
+                    pstmt.setString(8, vo.getReviewContent());
+                    pstmt.setInt(9, vo.getReviewRating());
+                    pstmt.executeUpdate();
+                }
+
+                con.commit();
+            } catch (Exception e) {
+                con.rollback();
+                e.printStackTrace();
+                generatedId = 0;
             }
-
-            if (generatedId == 0) throw new Exception("시퀀스 조회 실패");
-
-            try (PreparedStatement pstmt = con.prepareStatement(insertSql)) {
-                pstmt.setInt(1, generatedId);
-                pstmt.setInt(2, vo.getReviewCompanyId());
-                pstmt.setInt(3, vo.getReviewMemberId());
-                pstmt.setString(4, vo.getReviewJobPosition());
-                pstmt.setString(5, vo.getReviewInterviewType());
-                pstmt.setInt(6, vo.getReviewDifficulty());
-                pstmt.setString(7, vo.getReviewResult());
-                pstmt.setString(8, vo.getReviewContent());
-                pstmt.setInt(9, vo.getReviewRating());
-                pstmt.executeUpdate();
-            }
-
-            con.commit();
         } catch (Exception e) {
             e.printStackTrace();
-            if (con != null) {
-                try { con.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
-            }
             generatedId = 0;
-        } finally {
-            if (con != null) {
-                try { con.setAutoCommit(true); con.close(); } catch (Exception ex) { ex.printStackTrace(); }
-            }
         }
         return generatedId;
     }
