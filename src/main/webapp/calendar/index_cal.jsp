@@ -48,7 +48,7 @@
                        onclick="openCompanyModal()"/>
                 <button type="button" onclick="openCompanyModal()" class="modal-btn-search">기업 선택</button>
             </div>
-            <jsp:include page="/company/company-search/companySearchModal.jsp"/>
+            <jsp:include page="${pageContext.request.contextPath}/company-search/companySearchModal.jsp"/>
             <input type="hidden" name="companyId" id="selectedCompanyId"/>
         </div>
     </div>

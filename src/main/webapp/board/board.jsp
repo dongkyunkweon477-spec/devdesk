@@ -11,12 +11,10 @@
 
 <body>
 <div class="board-container">
-    <!-- 상단 -->
     <div class="board-header">
         <h2>자유게시판</h2>
 
         <div class="board-actions">
-            <!-- 검색 폼 -->
             <form action="board" method="get" class="search-form">
                 <select name="searchType" class="search-type">
                     <option value="title" ${param.searchType == 'title' ? 'selected' : ''}>제목</option>
@@ -48,14 +46,10 @@
             <button class="write-btn"><a href="board_add">글쓰기</a></button>
         </div>
     </div>
-    <%--                <div>--%>
-    <%--                    <span onclick="location.href='review-detail?pk=${r.no}'">${r.title }</span> <br>--%>
-    <%--                </div>--%>
-    <!-- 게시글 리스트 -->
+
     <div>
         <c:forEach var="b" items="${boards}">
             <div class="board-row" onclick="location.href='BoardDetailC?id=${b.board_id}'">
-                    <%--            <div class="board-row" onclick="location.href='BoardDetailC?id=${b.b_board_id}'">--%>
                 <div class="col-category">${b.category}</div>
                 <div class="col-title">
                         ${b.title}
@@ -76,63 +70,37 @@
                     </div>
                     <div class="meta-info">
                         <span class="like-count">❤️ ${b.like_count}</span>
-
-                        <c:if test="${b.like_count > 3}"> <%-- 2개 이상이여야 인기글 배지 --%>
-
+                        <c:if test="${b.like_count > 3}">  <%-- 3개 이상이여야 인기글 배지 --%>
                             <span class="popular-badge">🔥 인기글</span>
                         </c:if>
                     </div>
                 </div>
             </div>
         </c:forEach>
-
     </div>
 
     <div class="pagination">
-        <!-- 이전 페이지 -->
         <c:if test="${currentPage > 1}">
-
-            <a href="board?p=${currentPage - 1}&category=${param.category != null ? param.category : ''}&sort=${param.sort != null ? param.sort : ''}&searchType=${param.searchType != null ? param.searchType : ''}&keyword=${param.keyword != null ? param.keyword : ''}"></a>
-
-            <a href="board?p=${currentPage - 1}&category=${param.category != null ? param.category : ""}&sort=${param.sort != null ? param.sort : ""}&searchType=${param.searchType != null ? param.searchType : ""}&keyword=${param.keyword != null ? param.keyword : ""}"
-
+            <a href="board?p=${currentPage - 1}&category=${param.category != null ? param.category : ''}&sort=${param.sort != null ? param.sort : ''}&searchType=${param.searchType != null ? param.searchType : ''}&keyword=${param.keyword != null ? param.keyword : ''}"
                class="page-btn">◀</a>
         </c:if>
 
-        <!-- 페이지 번호 -->
         <c:forEach begin="1" end="${totalPage}" var="i">
             <c:choose>
                 <c:when test="${i == currentPage}">
-
                     <span class="current-page">[${i}]</span>
                 </c:when>
+                <%-- 중복된 c:otherwise를 제거하고 하나로 합쳤습니다. --%>
                 <c:otherwise>
                     <a href="board?p=${i}&category=${param.category != null ? param.category : ''}&sort=${param.sort != null ? param.sort : ''}&searchType=${param.searchType != null ? param.searchType : ''}&keyword=${param.keyword != null ? param.keyword : ''}"
                        class="page-link">[${i}]</a>
-
-                    <span class="current-page">${i}</span>
-                </c:otherwise>
-                <c:otherwise>
-                    <a href="board?p=${i}&category=${param.category != null ? param.category : ''}&sort=${param.sort != null ? param.sort : ''}
-                    &searchType=${param.searchType != null ? param.searchType : ''}
-                    &keyword=${param.keyword != null ? param.keyword : ''}"
-                       class="page-link">${i}</a>
-
                 </c:otherwise>
             </c:choose>
         </c:forEach>
 
-        <!-- 다음 페이지 -->
+        <%-- href 안에서 줄바꿈이 일어나면 링크가 깨질 수 있어 한 줄로 합쳤습니다. --%>
         <c:if test="${currentPage < totalPage}">
-
-            <a href="board?p=${currentPage + 1}&category=${param.category != null ? param.category : ''}&sort=${param.sort != null ? param.sort : ''}&searchType=${param.searchType != null ? param.searchType : ''}&keyword=${param.keyword != null ? param.keyword : ''}"></a>
-
-            <a href="board?p=${currentPage + 1}
-            &category=${param.category != null ? param.category : ''}
-            &sort=${param.sort != null ? param.sort : ''}
-            &searchType=${param.searchType != null ? param.searchType : ''}
-            &keyword=${param.keyword != null ? param.keyword : ''}"
-
+            <a href="board?p=${currentPage + 1}&category=${param.category != null ? param.category : ''}&sort=${param.sort != null ? param.sort : ''}&searchType=${param.searchType != null ? param.searchType : ''}&keyword=${param.keyword != null ? param.keyword : ''}"
                class="page-btn">▶</a>
         </c:if>
     </div>
