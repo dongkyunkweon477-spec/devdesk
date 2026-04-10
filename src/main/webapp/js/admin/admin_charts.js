@@ -2,21 +2,17 @@
    DevDesk 관리자 대시보드 차트 그리기
 ========================================= */
 
-document.addEventListener('DOMContentLoaded', function () {
-
-    // JSP에서 세팅해준 전역 변수 가져오기
-    const memberTrendData = chartData_memberTrend;
-    const jobDistributionData = chartData_jobDistribution;
+(function () {
 
     // 1. 가입자 트렌드 차트 (선 차트)
     const ctxLine = document.getElementById('memberTrendChart').getContext('2d');
     new Chart(ctxLine, {
         type: 'line',
         data: {
-            labels: ['7일 전', '6일 전', '5일 전', '4일 전', '3일 전', '2일 전', '어제'],
+            labels: chartLabels_trend,
             datasets: [{
                 label: '신규 가입자',
-                data: memberTrendData,
+                data: chartData_trend,
                 borderColor: '#7c3aed',
                 backgroundColor: 'rgba(124, 58, 237, 0.1)',
                 borderWidth: 3,
@@ -45,19 +41,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // 2. 직무 카테고리 분포 차트 (도넛 차트)
+    const jobColors = chartLabels_job.map(label => {
+        if (label === '프론트엔드') return '#5b21b6';
+        if (label === '백엔드') return '#7c3aed';
+        if (label === '데이터/AI') return '#a78bfa';
+        if (label === '기획/디자인') return '#ddd6fe';
+        if (label === '미입력(소셜)') return '#94a3b8';
+        return '#cbd5e1';
+    });
+
     const ctxDoughnut = document.getElementById('jobDistributionChart').getContext('2d');
     new Chart(ctxDoughnut, {
         type: 'doughnut',
         data: {
-            labels: ['백엔드', '프론트엔드', 'AI', '기타'],
+            labels: chartLabels_job,
             datasets: [{
-                data: jobDistributionData,
-                backgroundColor: [
-                    '#7c3aed',
-                    '#a78bfa',
-                    '#ddd6fe',
-                    '#e2e8f0'
-                ],
+                data: chartData_job,
+                backgroundColor: jobColors,
                 borderWidth: 0
             }]
         },
@@ -67,13 +67,10 @@ document.addEventListener('DOMContentLoaded', function () {
             plugins: {
                 legend: {
                     position: 'right',
-                    labels: {
-                        color: '#475569',
-                        font: {size: 14}
-                    }
+                    labels: {color: '#475569', font: {size: 14}}
                 }
             }
         }
     });
 
-});
+})();

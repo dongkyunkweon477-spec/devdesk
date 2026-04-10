@@ -14,28 +14,26 @@ public class AdminC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        // 🌟 1. DAO에서 회원 리스트 가져오기 (최신 회원 목록용)
+// 1. 전체 회원 목록 (하단 표를 위해)
         List<AdminVO> members = AdminDAO.ADAO.getAllMembers();
         request.setAttribute("members", members);
 
-        // 🌟 2. [추가] 차트 및 요약 카드 데이터 조회 (나중에 DB에서 진짜 숫자를 가져와야 합니다)
-        // [테스트] 일단 더미 데이터를 넣습니다!
-        request.setAttribute("totalMembers", 1245);
-        request.setAttribute("totalBoards", 340);
-        request.setAttribute("todayNewMembers", 12);
+        // 🌟 2. 진짜 대시보드 통계 데이터 가져오기!
+        java.util.Map<String, Object> stats = AdminDAO.ADAO.getDashboardStats();
 
-        // [테스트] 가입자 트렌드 더미 데이터 (최근 7일)
-        int[] memberTrend = {12, 18, 15, 20, 22, 19, 21};
-        request.setAttribute("memberTrend", memberTrend);
+        // JSP에서 쓰기 편하게 꺼내서 세팅해줍니다.
+        request.setAttribute("totalMembers", stats.get("totalMembers"));
+        request.setAttribute("todayNewMembers", stats.get("todayNewMembers"));
+        request.setAttribute("totalBoards", stats.get("totalBoards"));
 
-        // [테스트] 직무 분포 더미 데이터 (백엔드, 프론트엔드, AI, 기타)
-        int[] jobDistribution = {400, 300, 150, 145};
-        request.setAttribute("jobDistribution", jobDistribution);
+        request.setAttribute("jobLabels", stats.get("jobLabels"));
+        request.setAttribute("jobData", stats.get("jobData"));
 
-        // 3. index.jsp의 <jsp:include page="${content}"> 부분에 들어갈 jsp 경로 지정!
+        request.setAttribute("trendLabels", stats.get("trendLabels"));
+        request.setAttribute("trendData", stats.get("trendData"));
+
+        // 3. 페이지 이동
         request.setAttribute("content", "admin/admin.jsp");
-
-        // 4. 최종적으로 index.jsp로 이동!
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 

@@ -152,6 +152,8 @@
 
 .chart-canvas-wrapper {
     height: 300px;
+    width: 100%;
+    position: relative; /* 🌟 이게 없으면 차트가 투명해지거나 깨집니다! */
 }
 
 /* 활동 요약 카드 */

@@ -99,20 +99,26 @@
     </div>
 </div>
 
-<%-- 🌟 JavaScript 데이터 세팅 (서버 데이터를 JS 변수로 넘겨줌) --%>
+<%-- ======================================================= --%>
+<%-- 🌟 JavaScript 데이터 세팅 (컨트롤러에서 온 데이터를 JS로!) --%>
+<%-- ======================================================= --%>
 <script>
-    const chartData_memberTrend = [
-        <c:forEach var="val" items="${memberTrend}" varStatus="status">
-        ${val}${!status.last ? ',' : ''}
-        </c:forEach>
+    // 1. 선 차트 (최근 7일 트렌드) 라벨과 데이터 - 🌟 이 부분이 에러의 원인입니다!
+    const chartLabels_trend = [
+        <c:forEach var="item" items="${trendLabels}">"${item}", </c:forEach>
+    ];
+    const chartData_trend = [
+        <c:forEach var="item" items="${trendData}">${item}, </c:forEach>
     ];
 
-    const chartData_jobDistribution = [
-        <c:forEach var="val" items="${jobDistribution}" varStatus="status">
-        ${val}${!status.last ? ',' : ''}
-        </c:forEach>
+    // 2. 도넛 차트 (직무 분포) 라벨과 데이터
+    const chartLabels_job = [
+        <c:forEach var="item" items="${jobLabels}">"${item}", </c:forEach>
+    ];
+    const chartData_job = [
+        <c:forEach var="item" items="${jobData}">${item}, </c:forEach>
     ];
 </script>
 
 <%-- 🌟 차트 그리는 외부 JS 파일 불러오기 --%>
-<script src="${pageContext.request.contextPath}/js/admin_charts.js"></script>
+<script src="${pageContext.request.contextPath}/js/admin/admin_charts.js"></script>

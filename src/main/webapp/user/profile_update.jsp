@@ -31,8 +31,10 @@
                         <option value="프론트엔드" ${sessionScope.user.job_category == '프론트엔드' ? 'selected' : ''}>프론트엔드
                         </option>
                         <option value="백엔드" ${sessionScope.user.job_category == '백엔드' ? 'selected' : ''}>백엔드</option>
-                        <option value="풀스택" ${sessionScope.user.job_category == '풀스택' ? 'selected' : ''}>풀스택</option>
-                        <option value="디자인" ${sessionScope.user.job_category == '디자인' ? 'selected' : ''}>기획/디자인</option>
+                        <option value="데이터/AI" ${sessionScope.user.job_category == '풀스택' ? 'selected' : ''}>데이터/AI
+                        </option>
+                        <option value="기획/디자인" ${sessionScope.user.job_category == '디자인' ? 'selected' : ''}>기획/디자인
+                        </option>
                     </select>
                 </div>
             </div>
