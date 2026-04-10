@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>DevDesk</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/account.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/account.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/login.css">
 </head>
 <body class="account-body">
 
