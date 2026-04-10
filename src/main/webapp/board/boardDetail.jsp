@@ -39,7 +39,11 @@
         <div class="detail-info-group">
             <div class="detail-row">
                 <div class="detail-label">작성자</div>
-                <div class="detail-content">(ID: ${board.nickname})</div>
+                <div class="detail-content">(ID:
+                    <span class="writer" data-id="${board.member_id}">
+                        ${board.nickname}
+                    </span>)
+                </div>
             </div>
             <div class="detail-row">
                 <div class="detail-label">작성일</div>
@@ -352,6 +356,21 @@
         const replyForms = document.querySelectorAll('.reply-form');
         replyForms.forEach(form => form.remove());
     }
+
+    // 작성자 클릭시 모달 및 해당 작성자 게시글 목록
+    document.addEventListener("DOMContentLoaded", () => {
+        const writer = document.querySelector(".writer");
+
+        writer.addEventListener("click", async function () {
+            const memberId = this.dataset.id;
+
+            const res = await fetch("member-posts?memberId=" + memberId);
+            const posts = await res.json();
+
+            openModal(posts);
+        });
+    });
+
 </script>
 
 </body>

@@ -48,7 +48,7 @@
         <!-- 버튼 -->
 
         <div class="form-actions">
-            <button type="submit" class="submit-btn">등록</button>
+            <button type="submit" class="submit-btn" onclick="uploadSupabase(e)">등록</button>
             <button type="button" class="cancel-btn" onclick="history.back()">취소</button>
         </div>
     </form>

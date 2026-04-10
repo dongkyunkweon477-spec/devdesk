@@ -20,8 +20,8 @@ public class SupabaseC extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("--supa --");
-        SupabaseDAO.upload(req, resp);
-
+        resp.setContentType("text/html;charset=UTF-8");
+        resp.getWriter().println(SupabaseDAO.upload(req, resp));
     }
 
     public void destroy() {
