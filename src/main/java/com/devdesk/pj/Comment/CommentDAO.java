@@ -10,19 +10,16 @@ import java.util.ArrayList;
 
 public class CommentDAO {
     public static void addComment(HttpServletRequest request) {
-        Connection con = null;
-        PreparedStatement ps = null;
         String sql = "insert into comments (c_comments_id, b_board_id, member_id, c_content, parent_id, c_created_date) " +
                 "values (seq_comments.nextval, ?, ?, ?, ?, sysdate)";
 
-        try {
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
             System.out.println("board_id: [" + request.getParameter("board_id") + "]");
             System.out.println("member_id: [" + request.getParameter("member_id") + "]");
             System.out.println("content: [" + request.getParameter("content") + "]");
             request.setCharacterEncoding("UTF-8");
-
-            con = DBManager_new.connect();
-            ps = con.prepareStatement(sql);
 
             ps.setInt(1, Integer.parseInt(request.getParameter("board_id")));
             ps.setInt(2, Integer.parseInt(request.getParameter("member_id")));
@@ -42,17 +39,12 @@ public class CommentDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, ps, null);
         }
 
     }
 
     public static ArrayList<CommentVO> getComment(HttpServletRequest request, int boardId) {
 
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
         ArrayList<CommentVO> comments = new ArrayList<>();
 
         String sql = "SELECT c.*, m.nickname " +
@@ -61,23 +53,22 @@ public class CommentDAO {
                 "WHERE c.b_board_id = ? " +
                 "ORDER BY NVL(c.parent_id, c.c_comments_id), c.c_created_date";
 
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
-        try {
-            con = DBManager_new.connect();
-            ps = con.prepareStatement(sql);
             ps.setInt(1, boardId);
 
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                CommentVO c = new CommentVO();
-                c.setComments_id(rs.getInt("c_comments_id"));
-                c.setMember_id(rs.getInt("member_id"));
-                c.setContent(rs.getString("c_content"));
-                c.setCreated_date(String.valueOf(rs.getDate("c_created_date")));
-                c.setNickname(rs.getString("nickname"));
-                c.setParent_id(rs.getObject("parent_id") != null ? rs.getInt("parent_id") : null); // parent_id 설정 추가
-                comments.add(c);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    CommentVO c = new CommentVO();
+                    c.setComments_id(rs.getInt("c_comments_id"));
+                    c.setMember_id(rs.getInt("member_id"));
+                    c.setContent(rs.getString("c_content"));
+                    c.setCreated_date(String.valueOf(rs.getDate("c_created_date")));
+                    c.setNickname(rs.getString("nickname"));
+                    c.setParent_id(rs.getObject("parent_id") != null ? rs.getInt("parent_id") : null); // parent_id 설정 추가
+                    comments.add(c);
+                }
             }
 
             System.out.println("댓글 개수: " + comments.size());
@@ -85,22 +76,18 @@ public class CommentDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, ps, rs);
         }
 
         return comments;
     }
 
     public static void delComment(HttpServletRequest request) {
-        Connection con = null;
-        PreparedStatement ps = null;
         String sql = "DELETE FROM comments WHERE c_comments_id = ?";
 
-        try {
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
             request.setCharacterEncoding("UTF-8");
-            con = DBManager_new.connect();
-            ps = con.prepareStatement(sql);
             ps.setInt(1, Integer.parseInt(request.getParameter("id")));
 
             int result = ps.executeUpdate();
@@ -111,23 +98,17 @@ public class CommentDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, ps, null);
         }
     }
 
     public static boolean updateComment(HttpServletRequest request) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-
         String commentId = request.getParameter("comment_id");
         String content = request.getParameter("content");
 
         String sql = "UPDATE comments SET c_content = ? WHERE c_comments_id = ?";
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             pstmt.setString(1, content);
             pstmt.setString(2, commentId);
@@ -146,8 +127,6 @@ public class CommentDAO {
             e.printStackTrace();
             System.out.println("댓글 수정 실패 - 예외 발생");
             return false;
-        } finally {
-            DBManager_new.close(con, pstmt, null);
         }
     }
 }

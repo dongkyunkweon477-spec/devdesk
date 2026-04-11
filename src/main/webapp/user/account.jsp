@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>DevDesk</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/account.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/account.css">
 </head>
 <body class="account-body">
 

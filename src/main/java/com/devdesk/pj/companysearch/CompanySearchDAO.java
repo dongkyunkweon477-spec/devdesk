@@ -266,8 +266,23 @@ public class CompanySearchDAO {
 
         for (String col : allowedText) {
             if (conditions.containsKey(col)) {
-                baseSql.append(" AND c.").append(col).append(" LIKE ?");
-                params.add("%" + conditions.get(col) + "%");
+                String val = conditions.get(col);
+
+                if (col.equals("company_name")) {
+                    baseSql.append(" AND c.").append(col).append(" LIKE ?");
+                    params.add("%" + val + "%");
+                } else if (val.contains(",")) {
+                    String[] values = val.split(",");
+                    baseSql.append(" AND c.").append(col).append(" IN (");
+                    for (int i = 0; i < values.length; i++) {
+                        baseSql.append(i > 0 ? ",?" : "?");
+                        params.add(values[i].trim());
+                    }
+                    baseSql.append(")");
+                } else {
+                    baseSql.append(" AND c.").append(col).append(" LIKE ?");
+                    params.add("%" + val + "%");
+                }
             }
         }
         for (String col : allowedRange) {

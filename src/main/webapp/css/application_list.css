@@ -90,6 +90,32 @@ body::before {
     box-shadow: 0 2px 8px rgba(91, 124, 248, 0.3);
 }
 
+.rb-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    font-family: inherit;
+    box-shadow: 0 2px 8px rgba(91, 124, 248, 0.3);
+}
+
+.rb-filter button {
+    all: unset;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+}
+
+
 .btn-add:hover {
     opacity: 0.88;
     transform: translateY(-1px);
@@ -672,4 +698,10 @@ body::before {
     .card-actions {
         opacity: 1;
     }
+}
+
+.two-btn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }

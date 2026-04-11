@@ -19,35 +19,30 @@ public class ResumeBlockDAO {
                 "WHERE b.member_id = ? " +
                 "ORDER BY b.is_star DESC, b.updated_date DESC";
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, memberId);
-            rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                ResumeBlockVO vo = new ResumeBlockVO();
-                vo.setBlockId(rs.getInt("block_id"));
-                vo.setMemberId(rs.getInt("member_id"));
-                vo.setCategoryId(rs.getString("category_id"));
-                vo.setTitle(rs.getString("title"));
-                vo.setContent(rs.getString("content"));
-                vo.setTags(rs.getString("tags"));
-                vo.setIsStar(rs.getInt("is_star"));
-                vo.setCharLimit(rs.getInt("char_limit"));
-                vo.setCreatedDate(rs.getString("created_date"));
-                vo.setUpdatedDate(rs.getString("updated_date"));
-                vo.setLatestVersion(rs.getInt("latest_version"));
-                list.add(vo);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    ResumeBlockVO vo = new ResumeBlockVO();
+                    vo.setBlockId(rs.getInt("block_id"));
+                    vo.setMemberId(rs.getInt("member_id"));
+                    vo.setCategoryId(rs.getString("category_id"));
+                    vo.setTitle(rs.getString("title"));
+                    vo.setContent(rs.getString("content"));
+                    vo.setTags(rs.getString("tags"));
+                    vo.setIsStar(rs.getInt("is_star"));
+                    vo.setCharLimit(rs.getInt("char_limit"));
+                    vo.setCreatedDate(rs.getString("created_date"));
+                    vo.setUpdatedDate(rs.getString("updated_date"));
+                    vo.setLatestVersion(rs.getInt("latest_version"));
+                    list.add(vo);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
         return list;
     }
@@ -61,36 +56,31 @@ public class ResumeBlockDAO {
                 "WHERE b.member_id = ? AND b.category_id = ? " +
                 "ORDER BY b.is_star DESC, b.updated_date DESC";
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, memberId);
             pstmt.setString(2, categoryId);
-            rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                ResumeBlockVO vo = new ResumeBlockVO();
-                vo.setBlockId(rs.getInt("block_id"));
-                vo.setMemberId(rs.getInt("member_id"));
-                vo.setCategoryId(rs.getString("category_id"));
-                vo.setTitle(rs.getString("title"));
-                vo.setContent(rs.getString("content"));
-                vo.setTags(rs.getString("tags"));
-                vo.setIsStar(rs.getInt("is_star"));
-                vo.setCharLimit(rs.getInt("char_limit"));
-                vo.setCreatedDate(rs.getString("created_date"));
-                vo.setUpdatedDate(rs.getString("updated_date"));
-                vo.setLatestVersion(rs.getInt("latest_version"));
-                list.add(vo);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    ResumeBlockVO vo = new ResumeBlockVO();
+                    vo.setBlockId(rs.getInt("block_id"));
+                    vo.setMemberId(rs.getInt("member_id"));
+                    vo.setCategoryId(rs.getString("category_id"));
+                    vo.setTitle(rs.getString("title"));
+                    vo.setContent(rs.getString("content"));
+                    vo.setTags(rs.getString("tags"));
+                    vo.setIsStar(rs.getInt("is_star"));
+                    vo.setCharLimit(rs.getInt("char_limit"));
+                    vo.setCreatedDate(rs.getString("created_date"));
+                    vo.setUpdatedDate(rs.getString("updated_date"));
+                    vo.setLatestVersion(rs.getInt("latest_version"));
+                    list.add(vo);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
         return list;
     }
@@ -101,35 +91,30 @@ public class ResumeBlockDAO {
                 "(SELECT NVL(MAX(version_num),1) FROM resume_block_version WHERE block_id = b.block_id) AS latest_version " +
                 "FROM resume_block b WHERE b.block_id = ?";
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, blockId);
-            rs = pstmt.executeQuery();
 
-            if (rs.next()) {
-                ResumeBlockVO vo = new ResumeBlockVO();
-                vo.setBlockId(rs.getInt("block_id"));
-                vo.setMemberId(rs.getInt("member_id"));
-                vo.setCategoryId(rs.getString("category_id"));
-                vo.setTitle(rs.getString("title"));
-                vo.setContent(rs.getString("content"));
-                vo.setTags(rs.getString("tags"));
-                vo.setIsStar(rs.getInt("is_star"));
-                vo.setCharLimit(rs.getInt("char_limit"));
-                vo.setCreatedDate(rs.getString("created_date"));
-                vo.setUpdatedDate(rs.getString("updated_date"));
-                vo.setLatestVersion(rs.getInt("latest_version"));
-                return vo;
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    ResumeBlockVO vo = new ResumeBlockVO();
+                    vo.setBlockId(rs.getInt("block_id"));
+                    vo.setMemberId(rs.getInt("member_id"));
+                    vo.setCategoryId(rs.getString("category_id"));
+                    vo.setTitle(rs.getString("title"));
+                    vo.setContent(rs.getString("content"));
+                    vo.setTags(rs.getString("tags"));
+                    vo.setIsStar(rs.getInt("is_star"));
+                    vo.setCharLimit(rs.getInt("char_limit"));
+                    vo.setCreatedDate(rs.getString("created_date"));
+                    vo.setUpdatedDate(rs.getString("updated_date"));
+                    vo.setLatestVersion(rs.getInt("latest_version"));
+                    return vo;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
         return null;
     }
@@ -137,9 +122,6 @@ public class ResumeBlockDAO {
     // ── 블록 추가 (+ 첫 번째 버전 자동 생성) ──
     public int insertBlock(int memberId, String categoryId, String title,
                            String content, String tags, int charLimit) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
         int blockId = -1;
 
         String sqlBlock = "INSERT INTO resume_block " +
@@ -152,43 +134,42 @@ public class ResumeBlockDAO {
                 "(version_id, block_id, version_num, content) " +
                 "VALUES (resume_block_version_seq.NEXTVAL, ?, 1, ?)";
 
-        try {
-            con = DBManager_new.connect();
+        try (Connection con = DBManager_new.connect()) {
             con.setAutoCommit(false);
+            try {
+                // 블록 INSERT
+                try (PreparedStatement pstmt = con.prepareStatement(sqlBlock)) {
+                    pstmt.setInt(1, memberId);
+                    pstmt.setString(2, categoryId);
+                    pstmt.setString(3, title);
+                    pstmt.setString(4, content);
+                    pstmt.setString(5, tags);
+                    pstmt.setInt(6, charLimit);
+                    pstmt.executeUpdate();
+                }
 
-            // 블록 INSERT
-            pstmt = con.prepareStatement(sqlBlock);
-            pstmt.setInt(1, memberId);
-            pstmt.setString(2, categoryId);
-            pstmt.setString(3, title);
-            pstmt.setString(4, content);
-            pstmt.setString(5, tags);
-            pstmt.setInt(6, charLimit);
-            pstmt.executeUpdate();
-            pstmt.close();
+                // 생성된 block_id 가져오기
+                try (PreparedStatement pstmt = con.prepareStatement(sqlGetId);
+                     ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        blockId = rs.getInt(1);
+                    }
+                }
 
-            // 생성된 block_id 가져오기
-            pstmt = con.prepareStatement(sqlGetId);
-            rs = pstmt.executeQuery();
-            if (rs.next()) {
-                blockId = rs.getInt(1);
+                // 첫 버전 INSERT
+                try (PreparedStatement pstmt = con.prepareStatement(sqlVersion)) {
+                    pstmt.setInt(1, blockId);
+                    pstmt.setString(2, content);
+                    pstmt.executeUpdate();
+                }
+
+                con.commit();
+            } catch (Exception e) {
+                con.rollback();
+                e.printStackTrace();
             }
-            rs.close();
-            pstmt.close();
-
-            // 첫 버전 INSERT
-            pstmt = con.prepareStatement(sqlVersion);
-            pstmt.setInt(1, blockId);
-            pstmt.setString(2, content);
-            pstmt.executeUpdate();
-
-            con.commit();
         } catch (Exception e) {
             e.printStackTrace();
-            try { if (con != null) con.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
-        } finally {
-            try { if (con != null) con.setAutoCommit(true); } catch (Exception ex) { ex.printStackTrace(); }
-            DBManager_new.close(con, pstmt, null);
         }
         return blockId;
     }
@@ -196,9 +177,6 @@ public class ResumeBlockDAO {
     // ── 블록 수정 (내용 변경 시 새 버전 자동 생성) ──
     public void updateBlock(int blockId, String categoryId, String title,
                             String content, String tags, int charLimit) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
 
         String sqlGetOld = "SELECT content FROM resume_block WHERE block_id = ?";
         String sqlUpdate = "UPDATE resume_block SET category_id = ?, title = ?, " +
@@ -208,97 +186,87 @@ public class ResumeBlockDAO {
                 "(version_id, block_id, version_num, content) " +
                 "VALUES (resume_block_version_seq.NEXTVAL, ?, ?, ?)";
 
-        try {
-            con = DBManager_new.connect();
+        try (Connection con = DBManager_new.connect()) {
             con.setAutoCommit(false);
-
-            // 기존 내용 조회
-            pstmt = con.prepareStatement(sqlGetOld);
-            pstmt.setInt(1, blockId);
-            rs = pstmt.executeQuery();
-            String oldContent = "";
-            if (rs.next()) {
-                oldContent = rs.getString("content");
-            }
-            rs.close();
-            pstmt.close();
-
-            // 블록 UPDATE
-            pstmt = con.prepareStatement(sqlUpdate);
-            pstmt.setString(1, categoryId);
-            pstmt.setString(2, title);
-            pstmt.setString(3, content);
-            pstmt.setString(4, tags);
-            pstmt.setInt(5, charLimit);
-            pstmt.setInt(6, blockId);
-            pstmt.executeUpdate();
-            pstmt.close();
-
-            // 내용이 바뀌었으면 새 버전 추가
-            if (!content.equals(oldContent)) {
-                pstmt = con.prepareStatement(sqlMaxVer);
-                pstmt.setInt(1, blockId);
-                rs = pstmt.executeQuery();
-                int maxVer = 0;
-                if (rs.next()) {
-                    maxVer = rs.getInt(1);
+            try {
+                // 기존 내용 조회
+                String oldContent = "";
+                try (PreparedStatement pstmt = con.prepareStatement(sqlGetOld)) {
+                    pstmt.setInt(1, blockId);
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        if (rs.next()) {
+                            oldContent = rs.getString("content");
+                        }
+                    }
                 }
-                rs.close();
-                pstmt.close();
 
-                pstmt = con.prepareStatement(sqlVersion);
-                pstmt.setInt(1, blockId);
-                pstmt.setInt(2, maxVer + 1);
-                pstmt.setString(3, content);
-                pstmt.executeUpdate();
+                // 블록 UPDATE
+                try (PreparedStatement pstmt = con.prepareStatement(sqlUpdate)) {
+                    pstmt.setString(1, categoryId);
+                    pstmt.setString(2, title);
+                    pstmt.setString(3, content);
+                    pstmt.setString(4, tags);
+                    pstmt.setInt(5, charLimit);
+                    pstmt.setInt(6, blockId);
+                    pstmt.executeUpdate();
+                }
+
+                // 내용이 바뀌었으면 새 버전 추가
+                if (!content.equals(oldContent)) {
+                    int maxVer = 0;
+                    try (PreparedStatement pstmt = con.prepareStatement(sqlMaxVer)) {
+                        pstmt.setInt(1, blockId);
+                        try (ResultSet rs = pstmt.executeQuery()) {
+                            if (rs.next()) {
+                                maxVer = rs.getInt(1);
+                            }
+                        }
+                    }
+
+                    try (PreparedStatement pstmt = con.prepareStatement(sqlVersion)) {
+                        pstmt.setInt(1, blockId);
+                        pstmt.setInt(2, maxVer + 1);
+                        pstmt.setString(3, content);
+                        pstmt.executeUpdate();
+                    }
+                }
+
+                con.commit();
+            } catch (Exception e) {
+                con.rollback();
+                e.printStackTrace();
             }
-
-            con.commit();
         } catch (Exception e) {
             e.printStackTrace();
-            try { if (con != null) con.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
-        } finally {
-            try { if (con != null) con.setAutoCommit(true); } catch (Exception ex) { ex.printStackTrace(); }
-            DBManager_new.close(con, pstmt, null);
         }
     }
 
     // ── 블록 삭제 (CASCADE로 버전도 삭제) ──
     public void deleteBlock(int blockId) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-
         String sql = "DELETE FROM resume_block WHERE block_id = ?";
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
             pstmt.setInt(1, blockId);
             pstmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, null);
         }
     }
 
     // ── 즐겨찾기 토글 ──
     public void toggleStar(int blockId) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-
         String sql = "UPDATE resume_block SET is_star = CASE WHEN is_star = 1 THEN 0 ELSE 1 END, " +
                 "updated_date = SYSDATE WHERE block_id = ?";
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
             pstmt.setInt(1, blockId);
             pstmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, null);
         }
     }
 
@@ -307,29 +275,24 @@ public class ResumeBlockDAO {
         List<ResumeBlockVersionVO> list = new ArrayList<>();
         String sql = "SELECT * FROM resume_block_version WHERE block_id = ? ORDER BY version_num DESC";
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, blockId);
-            rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                ResumeBlockVersionVO vo = new ResumeBlockVersionVO();
-                vo.setVersionId(rs.getInt("version_id"));
-                vo.setBlockId(rs.getInt("block_id"));
-                vo.setVersionNum(rs.getInt("version_num"));
-                vo.setContent(rs.getString("content"));
-                vo.setCreatedDate(rs.getString("created_date"));
-                list.add(vo);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    ResumeBlockVersionVO vo = new ResumeBlockVersionVO();
+                    vo.setVersionId(rs.getInt("version_id"));
+                    vo.setBlockId(rs.getInt("block_id"));
+                    vo.setVersionNum(rs.getInt("version_num"));
+                    vo.setContent(rs.getString("content"));
+                    vo.setCreatedDate(rs.getString("created_date"));
+                    list.add(vo);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
         return list;
     }
@@ -343,97 +306,83 @@ public class ResumeBlockDAO {
                 "WHERE b.member_id = ? AND b.is_star = 1 " +
                 "ORDER BY b.updated_date DESC";
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, memberId);
-            rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                ResumeBlockVO vo = new ResumeBlockVO();
-                vo.setBlockId(rs.getInt("block_id"));
-                vo.setMemberId(rs.getInt("member_id"));
-                vo.setCategoryId(rs.getString("category_id"));
-                vo.setTitle(rs.getString("title"));
-                vo.setContent(rs.getString("content"));
-                vo.setTags(rs.getString("tags"));
-                vo.setIsStar(rs.getInt("is_star"));
-                vo.setCharLimit(rs.getInt("char_limit"));
-                vo.setCreatedDate(rs.getString("created_date"));
-                vo.setUpdatedDate(rs.getString("updated_date"));
-                vo.setLatestVersion(rs.getInt("latest_version"));
-                list.add(vo);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    ResumeBlockVO vo = new ResumeBlockVO();
+                    vo.setBlockId(rs.getInt("block_id"));
+                    vo.setMemberId(rs.getInt("member_id"));
+                    vo.setCategoryId(rs.getString("category_id"));
+                    vo.setTitle(rs.getString("title"));
+                    vo.setContent(rs.getString("content"));
+                    vo.setTags(rs.getString("tags"));
+                    vo.setIsStar(rs.getInt("is_star"));
+                    vo.setCharLimit(rs.getInt("char_limit"));
+                    vo.setCreatedDate(rs.getString("created_date"));
+                    vo.setUpdatedDate(rs.getString("updated_date"));
+                    vo.setLatestVersion(rs.getInt("latest_version"));
+                    list.add(vo);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
         return list;
     }
 
     // ── 통계: 카테고리별 블록 수 ──
     public int countBlocks(int memberId) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
         int count = 0;
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement("SELECT COUNT(*) FROM resume_block WHERE member_id = ?");
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement("SELECT COUNT(*) FROM resume_block WHERE member_id = ?")) {
+
             pstmt.setInt(1, memberId);
-            rs = pstmt.executeQuery();
-            if (rs.next()) count = rs.getInt(1);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) count = rs.getInt(1);
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
         return count;
     }
 
     public int countStarBlocks(int memberId) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
         int count = 0;
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement("SELECT COUNT(*) FROM resume_block WHERE member_id = ? AND is_star = 1");
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement("SELECT COUNT(*) FROM resume_block WHERE member_id = ? AND is_star = 1")) {
+
             pstmt.setInt(1, memberId);
-            rs = pstmt.executeQuery();
-            if (rs.next()) count = rs.getInt(1);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) count = rs.getInt(1);
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
         return count;
     }
 
     public int countCategories(int memberId) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
         int count = 0;
 
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(
-                    "SELECT COUNT(DISTINCT category_id) FROM resume_block WHERE member_id = ?");
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(
+                    "SELECT COUNT(DISTINCT category_id) FROM resume_block WHERE member_id = ?")) {
+
             pstmt.setInt(1, memberId);
-            rs = pstmt.executeQuery();
-            if (rs.next()) count = rs.getInt(1);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) count = rs.getInt(1);
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
         return count;
     }

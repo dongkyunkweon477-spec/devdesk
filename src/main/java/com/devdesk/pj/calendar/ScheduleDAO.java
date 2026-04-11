@@ -15,16 +15,13 @@ public class ScheduleDAO {
 
     public ArrayList<ScheduleDTO> showAllSch() {
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
         String sql = "select * from schedule ";
                             // 작업끝나면 sql에 추가할게요=> where id = ?
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
-            rs = pstmt.executeQuery();
-            ScheduleDTO scheduleDTO = null;
+
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
             ArrayList<ScheduleDTO> schedules = new ArrayList<>();
 
             while (rs.next()) {
@@ -49,9 +46,7 @@ public class ScheduleDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
-            return null;
+        return null;
     }
 }

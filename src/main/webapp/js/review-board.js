@@ -3,7 +3,11 @@ var currentBoardPage = 1;
 $(document).ready(function () {
     // 필터/정렬 변경 시 1페이지부터 재조회
     $('#filterType, #filterResult, #sortOrder').on('change', function () {
-        loadReviews(1);
+        if (typeof activeCompanyIds !== 'undefined' && activeCompanyIds) {
+            loadFilteredReviews(activeCompanyIds, 1);
+        } else {
+            loadReviews(1);
+        }
     });
 
     // 초기 로드
@@ -25,6 +29,7 @@ function loadReviews(page) {
             page: page
         }
     }).done(function (data) {
+        if (typeof activeCompanyIds !== 'undefined' && activeCompanyIds) return;
         renderReviews(data.reviews);
         renderPaging(data.totalPages);
     }).fail(function () {

@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/review/review-write.css">
 <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
 
 <div class="write-wrap">
@@ -31,7 +30,7 @@
                                    style="cursor:pointer;" onclick="openCompanyModal()"/>
                             <button type="button" onclick="openCompanyModal()" class="btn-search">기업 선택</button>
                         </div>
-                        <jsp:include page="/company-search/companySearchModal.jsp"/>
+                        <jsp:include page="/company/company-search/companySearchModal.jsp"/>
                         <input type="hidden" name="companyId" id="selectedCompanyId"/>
                     </div>
                 </div>

@@ -10,22 +10,42 @@ $(function () {
 /* ===== 토글 버튼 (업종, 지역) ===== */
 function initToggleBtns() {
     $(document).on('click', '.cs-opt-btn', function () {
-        console.log('clicked:', $(this).attr('data-value'));
-        $(this).closest('.cs-options').find('.cs-opt-btn').removeClass('active');
-        $(this).addClass('active');
+        let container = $(this).closest('.cs-options');
+
+        if ($(this).attr('data-value') === '') {
+            container.find('.cs-opt-btn').removeClass('active');
+            $(this).addClass('active');
+            return;
+        }
+        container.find('.cs-opt-btn[data-value=""]').removeClass('active');
+        $(this).toggleClass('active');
+
+        if (container.find('.cs-opt-btn.active').length === 0) {
+            container.find('.cs-opt-btn[data-value=""]').addClass('active');
+        }
     });
 }
 
 /* ===== 검색 ===== */
 
 let currentPage = 1;
+let currentFilteredReviewPage = 1;
+var activeCompanyIds = '';
 
 function doSearch(page) {
     if (!page) page = 1;
     currentPage = page;
 
-    var industry = $('#industryBtns .cs-opt-btn.active').attr('data-value') || '';
-    var location = $('#locationBtns .cs-opt-btn.active').attr('data-value') || '';
+    let industries = [];
+    $('#industryBtns .cs-opt-btn.active').each(function () {
+        let val = $(this).attr('data-value');
+        if (val) industries.push(val);
+    });
+    let locations = [];
+    $('#locationBtns .cs-opt-btn.active').each(function () {
+        let val = $(this).attr('data-value');
+        if (val) locations.push(val);
+    });
 
     $.ajax({
         url: $('#contextPath').val() + '/company-search/ajax',
@@ -33,8 +53,8 @@ function doSearch(page) {
         dataType: 'json',
         data: {
             companyName: $('#companyName').val(),
-            companyIndustry: industry,
-            companyLocation: location,
+            companyIndustry: industries.join(','),
+            companyLocation: locations.join(','),
             minRating: $('#minRating').val(),
             maxRating: $('#maxRating').val(),
             minSize: $('#minSize').val(),
@@ -45,7 +65,63 @@ function doSearch(page) {
         $('#resultCount').text(data.totalCount);
         showResult(data.companies);
         renderPagination(data.totalPages);
+
+        let companyIds = data.companies.map(function (c) { return c.companyId; }).join(',');
+        if (companyIds) {
+            loadFilteredReviews(companyIds, 1);
+        } else {
+            $('#reviewListArea').html('<div class="no-result">검색된 면접 후기가 없습니다.</div>');
+            $('#reviewPaging').empty();
+        }
     });
+}
+
+function loadFilteredReviews(companyIds, page) {
+    activeCompanyIds = companyIds;
+    currentFilteredReviewPage = page;
+    var cp = $('#contextPath').val();
+    $.ajax({
+        url: cp + '/review/filter/ajax',
+        type: 'get',
+        dataType: 'json',
+        data: {
+            companyIds: companyIds,
+            interviewType: $('#filterType').val(),
+            result: $('#filterResult').val(),
+            sort: $('#sortOrder').val(),
+            page: page
+        }
+    }).done(function (data) {
+        console.log('[companySearch] review filter response:', data);
+        try {
+            renderReviews(data.reviews);
+        } catch (e) {
+            console.error('[companySearch] renderReviews error:', e);
+        }
+        $('#reviewListArea')[0].scrollIntoView({behavior: 'smooth', block: 'start'});
+        renderFilteredPaging(data.totalPages, companyIds);
+    }).fail(function (xhr, status, err) {
+        console.error('[companySearch] review filter AJAX failed:', xhr.status, status, err);
+        $('#reviewListArea').html('<div class="no-result">후기를 불러오는 중 오류가 발생했습니다.</div>');
+    });
+}
+
+function renderFilteredPaging(totalPages, companyIds) {
+    var pagingArea = $('#reviewPaging');
+    pagingArea.empty();
+    if (totalPages <= 1) return;
+
+    var html = '';
+    if (currentFilteredReviewPage > 1) {
+        html += '<a class="page-btn" onclick="loadFilteredReviews(\'' + companyIds + '\', ' + (currentFilteredReviewPage - 1) + ')">이전</a>';
+    }
+    for (var i = 1; i <= totalPages; i++) {
+        html += '<a class="page-btn ' + (i === currentFilteredReviewPage ? 'active' : '') + '" onclick="loadFilteredReviews(\'' + companyIds + '\', ' + i + ')">' + i + '</a>';
+    }
+    if (currentFilteredReviewPage < totalPages) {
+        html += '<a class="page-btn" onclick="loadFilteredReviews(\'' + companyIds + '\', ' + (currentFilteredReviewPage + 1) + ')">다음</a>';
+    }
+    pagingArea.html(html);
 }
 
 function renderPagination(totalPages) {

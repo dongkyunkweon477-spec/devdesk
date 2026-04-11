@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>DevDesk</title>
     <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/myboard.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/myboard.css">
 </head>
 <body>
 <main class="content">
@@ -40,15 +40,14 @@
                     <th>작성일</th>
                 </tr>
                 </thead>
-<<<<<<< HEAD
+
                 <tbody>
                 <c:if test="${empty myBoardList}">
                     <tr>
-=======
-                <tbody id="posts-tbody">
+         <tbody id="posts-tbody">
                 <c:if test="${empty myBoardList}">
                     <tr class="empty-msg-row">
->>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
+
                         <td colspan="5" class="empty-msg">아직 작성한 게시글이 없습니다. 첫 글을 남겨보세요! 📝</td>
                     </tr>
                 </c:if>
@@ -67,10 +66,10 @@
                 </c:forEach>
                 </tbody>
             </table>
-<<<<<<< HEAD
-=======
+
+
             <div id="posts-pagination" class="pagination"></div>
->>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
+
         </div>
 
         <div id="tab-comments" style="display: none;">
@@ -87,15 +86,15 @@
                     <th>작성일</th>
                 </tr>
                 </thead>
-<<<<<<< HEAD
+
                 <tbody>
                 <c:if test="${empty myCommentList}">
                     <tr>
-=======
+
                 <tbody id="comments-tbody">
                 <c:if test="${empty myCommentList}">
                     <tr class="empty-msg-row">
->>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
+
                         <td colspan="3" class="empty-msg">아직 작성한 댓글이 없습니다. 💬</td>
                     </tr>
                 </c:if>
@@ -122,16 +121,16 @@
                 </c:forEach>
                 </tbody>
             </table>
-<<<<<<< HEAD
-=======
+
+
             <div id="comments-pagination" class="pagination"></div>
->>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
+
         </div>
 
     </div>
 </main>
 
-<<<<<<< HEAD
+
 <script>
     /* 탭 클릭 시 화면 전환해주는 자바스크립트 함수 */
     function showTab(tabName) {
@@ -163,8 +162,8 @@
         location.href = url;
     }
 </script>
-=======
+
 <script src="js/myboard.js"></script>
->>>>>>> 70d1f7ed23dddda95996e5de0aadcf41fffd4bd8
+
 </body>
 </html>

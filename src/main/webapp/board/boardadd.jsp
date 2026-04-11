@@ -6,6 +6,10 @@
 </head>
 <body>
 <div class="write-container">
+    <form action="supa-upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file"/>
+        <button type="submit">supabase upload</button>
+    </form>
 
     <h2>✍ 글 작성하기</h2>
 
@@ -44,7 +48,7 @@
         <!-- 버튼 -->
 
         <div class="form-actions">
-            <button type="submit" class="submit-btn">등록</button>
+            <button type="submit" class="submit-btn" onclick="uploadSupabase(e)">등록</button>
             <button type="button" class="cancel-btn" onclick="history.back()">취소</button>
         </div>
     </form>

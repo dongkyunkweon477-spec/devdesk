@@ -46,6 +46,7 @@ bin/
 DBManager_new.java
 CLAUDE.md
 .sql
-
+src/main/webapp/WEB-INF/conf.properties
 index_
 src/main/resources/conf.properties
+.claude

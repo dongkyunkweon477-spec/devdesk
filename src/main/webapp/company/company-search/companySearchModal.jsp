@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/companySearchModal.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
 <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}"/>
 <div id="companySearchModal" class="modal-overlay" style="display:none;">
     <div class="modal-box">
