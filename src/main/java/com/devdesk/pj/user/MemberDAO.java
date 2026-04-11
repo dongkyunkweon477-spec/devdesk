@@ -399,25 +399,6 @@ public class MemberDAO {
 
     // 🌟 구글 리프레시 토큰을 DB에 저장/업데이트 하는 메서드
     public void updateGoogleRefreshToken(String email, String refreshToken) {
-        String sql = "UPDATE MEMBER SET GOOGLE_REFRESH_TOKEN = ? WHERE EMAIL = ?";
-
-        try (Connection con = DBManager_new.connect();
-             PreparedStatement pstmt = con.prepareStatement(sql)) {
-
-            pstmt.setString(1, refreshToken);
-            pstmt.setString(2, email);
-
-            pstmt.executeUpdate();
-            System.out.println("✅ DB에 Refresh Token 저장 완료 (" + email + ")");
-
-        } catch (Exception e) {
-            System.out.println("❌ Refresh Token DB 저장 실패!");
-            e.printStackTrace();
-        }
-    }
-
-    // 🌟 구글 리프레시 토큰을 DB에 저장/업데이트 하는 메서드
-    public void updateGoogleRefreshToken(String email, String refreshToken) {
         Connection con = null;
         PreparedStatement pstmt = null;
         try {

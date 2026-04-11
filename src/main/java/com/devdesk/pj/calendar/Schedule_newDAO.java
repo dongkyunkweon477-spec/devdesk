@@ -69,7 +69,7 @@ public class Schedule_newDAO {
             MemberDTO user = (MemberDTO) request.getSession().getAttribute("user");
             int memberId = user.getMember_id();
 
-            //기업명 양 옆 공백 제거
+            // 기업명 양 옆 공백 제거
             String companyName = request.getParameter("company_name");
             if (companyName != null) companyName = companyName.trim();
 
@@ -85,47 +85,11 @@ public class Schedule_newDAO {
 
             con.setAutoCommit(false);
             try {
-<<<<<<< HEAD
-                // 1. 방금 로그인한 유저의 Refresh Token을 DB에서 조회해 옵니다.
-                String refreshToken = null;
-                String tokenSql = "SELECT GOOGLE_REFRESH_TOKEN FROM MEMBER WHERE MEMBER_ID = ?";
-                // 위에서 썼던 pstmt가 닫혔을 테니 새로 열어서 씁니다.
-                pstmt = con.prepareStatement(tokenSql);
-                pstmt.setInt(1, memberId);
-                rs = pstmt.executeQuery();
-                if (rs.next()) {
-                    refreshToken = rs.getString("GOOGLE_REFRESH_TOKEN");
-                }
-                pstmt.close();
-                rs.close();
+                // ==========================================
+                // 1. 오라클 DB 저장 로직 (메인 작업)
+                // ==========================================
 
-                // 2. 토큰이 없으면 연동 안 한 사람이니 구글 저장은 패스!
-                if (refreshToken == null || refreshToken.isEmpty()) {
-                    System.out.println("⚠️ [구글 캘린더] 연동 토큰이 없어 DB에만 저장됩니다.");
-                } else {
-                    // 3. 토큰이 있다면! 헬퍼에 토큰을 찔러넣고 진짜 권한이 있는 서비스 객체를 받아옵니다.
-                    com.google.api.services.calendar.Calendar service = GoogleCalendarHelper.getCalendarService(refreshToken);
-
-                    // 구글 달력에 띄울 제목과 내용 세팅
-                    com.google.api.services.calendar.model.Event event = new com.google.api.services.calendar.model.Event()
-                            .setSummary("[" + companyName + "] " + type + " 일정")
-                            .setDescription("직무: " + (position == null ? "미정" : position) + "\n메모: " + (memo == null ? "" : memo));
-
-                    // 시간 세팅 (한국 시간 기준)
-                    String startDateTimeStr = date + "T" + time + ":00+09:00";
-                    com.google.api.client.util.DateTime startDateTime = new com.google.api.client.util.DateTime(startDateTimeStr);
-
-                    event.setStart(new com.google.api.services.calendar.model.EventDateTime().setDateTime(startDateTime));
-                    event.setEnd(new com.google.api.services.calendar.model.EventDateTime().setDateTime(startDateTime));
-
-                    // 구글 서버로 발사!
-                    service.events().insert("primary", event).execute();
-                    System.out.println("✅ [구글 캘린더] 진짜 내 캘린더에 일정 등록 완료!");
-                }
-
-            } catch (Exception googleEx) {
-                System.out.println("⚠️ [구글 캘린더] 연동 실패! (오라클 DB에는 정상 저장됩니다.) 원인: " + googleEx.getMessage());
-=======
+                // 1-1. 회사 ID 찾기
                 int companyId = 0;
                 String findCompanySql = "SELECT COMPANY_ID FROM COMPANY WHERE COMPANY_NAME = ?";
                 try (PreparedStatement pstmt = con.prepareStatement(findCompanySql)) {
@@ -141,12 +105,14 @@ public class Schedule_newDAO {
                     }
                 }
 
+                // 1-2. 새로운 APP_ID 채번
                 int newAppId = 0;
                 try (PreparedStatement pstmt = con.prepareStatement("SELECT APPLICATION_SEQ.NEXTVAL FROM DUAL");
                      ResultSet rs = pstmt.executeQuery()) {
                     if (rs.next()) newAppId = rs.getInt(1);
                 }
 
+                // 1-3. APPLICATION 인서트
                 String appSql = "INSERT INTO APPLICATION (APP_ID, MEMBER_ID, COMPANY_ID, POSITION, STAGE, APPLY_DATE, CREATED_DATE) " +
                         "VALUES (?, ?, ?, ?, ?, ?, SYSDATE)";
                 try (PreparedStatement pstmt = con.prepareStatement(appSql)) {
@@ -164,7 +130,7 @@ public class Schedule_newDAO {
                     pstmt.executeUpdate();
                 }
 
-                // SCHEDULE 인서트
+                // 1-4. SCHEDULE 인서트
                 String schSql = "INSERT INTO SCHEDULE (SCHEDULE_ID, MEMBER_ID, COMPANY_NAME, SCHEDULE_DATE, SCHEDULE_TIME, INTERVIEW_TYPE, MEMO, APP_ID) " +
                         "VALUES (SEQ_SCHEDULE.nextval, ?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ?)";
                 try (PreparedStatement pstmt = con.prepareStatement(schSql)) {
@@ -178,9 +144,11 @@ public class Schedule_newDAO {
                     pstmt.executeUpdate();
                 }
 
-                // 🌟🌟🌟 구글 캘린더 연동 로직 🌟🌟🌟
+                // ==========================================
+                // 2. 구글 캘린더 연동 로직 (부가 작업)
+                // ==========================================
                 try {
-                    // 1. 유저의 Refresh Token을 DB에서 조회
+                    // 유저의 Refresh Token 조회 (여기서 pstmt, rs 새로 선언)
                     String refreshToken = null;
                     String tokenSql = "SELECT GOOGLE_REFRESH_TOKEN FROM MEMBER WHERE MEMBER_ID = ?";
                     try (PreparedStatement pstmt = con.prepareStatement(tokenSql)) {
@@ -192,43 +160,37 @@ public class Schedule_newDAO {
                         }
                     }
 
-                    // 2. 토큰이 없으면 연동 안 한 사람이니 구글 저장은 패스!
+                    // 토큰 확인 및 구글 연동
                     if (refreshToken == null || refreshToken.isEmpty()) {
                         System.out.println("⚠️ [구글 캘린더] 연동 토큰이 없어 DB에만 저장됩니다.");
                     } else {
-                        // 3. 토큰이 있다면! 헬퍼에 토큰을 찔러넣고 진짜 권한이 있는 서비스 객체를 받아옵니다.
                         com.google.api.services.calendar.Calendar service = GoogleCalendarHelper.getCalendarService(refreshToken);
 
-                        // 구글 달력에 띄울 제목과 내용 세팅
                         com.google.api.services.calendar.model.Event event = new com.google.api.services.calendar.model.Event()
                                 .setSummary("[" + companyName + "] " + type + " 일정")
                                 .setDescription("직무: " + (position == null ? "미정" : position) + "\n메모: " + (memo == null ? "" : memo));
 
-                        // 시간 세팅 (한국 시간 기준)
                         String startDateTimeStr = date + "T" + time + ":00+09:00";
                         com.google.api.client.util.DateTime startDateTime = new com.google.api.client.util.DateTime(startDateTimeStr);
 
                         event.setStart(new com.google.api.services.calendar.model.EventDateTime().setDateTime(startDateTime));
                         event.setEnd(new com.google.api.services.calendar.model.EventDateTime().setDateTime(startDateTime));
 
-                        // 구글 서버로 발사!
                         service.events().insert("primary", event).execute();
                         System.out.println("✅ [구글 캘린더] 진짜 내 캘린더에 일정 등록 완료!");
                     }
 
                 } catch (Exception googleEx) {
-                    // 구글 연동이 실패해도 멈추지 않고 아래 DB 커밋으로 넘어가도록 처리!
+                    // 구글 연동이 실패해도 메인 DB 트랜잭션은 롤백되지 않도록 별도 예외 처리
                     System.out.println("⚠️ [구글 캘린더] 연동 실패! (오라클 DB에는 정상 저장됩니다.) 원인: " + googleEx.getMessage());
                 }
-                // 🌟🌟🌟 구글 연동 로직 끝 🌟🌟🌟
 
-                // 오라클 DB 커밋! (구글이 실패해도 여기까지 무사히 도달합니다)
+                // 모든 작업이 끝나면 오라클 DB 커밋!
                 con.commit();
 
             } catch (Exception e) {
                 con.rollback();
                 throw e;
->>>>>>> c8622362f6837183403f5e50bdb3723a881ed2f5
             }
         }
     }

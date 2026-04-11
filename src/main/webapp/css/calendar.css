@@ -1,23 +1,288 @@
-body { font-family: 'Arial', sans-serif; padding: 20px; background-color: #f7fafc;}
-#calendar { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);}
+/* =======================================================
+   1. 캘린더 메인 컨테이너
+======================================================= */
+#calendar {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: var(--bg-primary);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px var(--shadow);
+    border: 1px solid var(--border-primary);
+    color: var(--text-primary);
+}
 
-/* 팝업 공통 */
-#event-popup { display: none; position: absolute; background: #ffffff; border: 1px solid #e2e8f0; padding: 15px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-radius: 8px; z-index: 1000; width: 250px; }
-#event-popup h3 { margin: 0 0 10px 0; color: #2b6cb0; font-size: 18px; }
-.pop-info { margin-bottom: 8px; font-size: 13px; color: #4a5568; }
-.pop-info strong { display: inline-block; width: 60px; color: #2d3748; }
-.pop-close { float: right; cursor: pointer; color: #a0aec0; font-weight: bold; margin-top: -2px; }
-.btn-group-sm { display: flex; gap: 5px; margin-top: 15px; border-top: 1px solid #edf2f7; padding-top: 10px;}
-.btn-edit { background: #3182ce; color: white; flex: 1; border: none; padding: 6px; border-radius: 4px; cursor: pointer; font-size:12px;}
-.btn-delete { background: #e53e3e; color: white; flex: 1; border: none; padding: 6px; border-radius: 4px; cursor: pointer; font-size:12px;}
+/* =======================================================
+   달력 상단 헤더 정중앙 정렬 (오른쪽/왼쪽 쏠림 방지)
+======================================================= */
+.fc-header-toolbar {
+    position: relative !important;
+}
 
-/* 모달 공통 */
-#modal-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
-#schedule-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 8px; width: 320px; z-index: 1000; }
-#schedule-modal h3 { margin-top: 0; color: #1a365d; border-bottom: 2px solid #edf2f7; padding-bottom: 10px;}
-.form-group { margin-bottom: 12px; }
-.form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 4px; color: #4a5568;}
-.form-group input, .form-group select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #cbd5e0; border-radius: 4px; }
-.btn-group { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-.btn-save { background: #2b6cb0; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
-.btn-cancel { background: #e2e8f0; color: #4a5568; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+/* 2번째 묶음(가운데 prev, title, next)을 무조건 화면 정중앙에 고정 */
+.fc-toolbar-chunk:nth-child(2) {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 버튼과 텍스트 사이의 간격 조정 */
+.fc .fc-toolbar-title {
+    margin: 0 15px !important;
+    font-size: 1.5em !important;
+    font-weight: 600 !important;
+    color: var(--text-primary);
+}
+
+/* < > (이전/다음/오늘) 버튼 테마 맞춤 */
+.fc .fc-button-primary {
+    background-color: var(--bg-tertiary) !important;
+    border: 1px solid var(--border-secondary) !important;
+    color: var(--text-secondary) !important;
+    border-radius: 6px !important;
+    transition: var(--transition);
+    text-transform: capitalize !important;
+    padding: 6px 12px !important;
+}
+
+/* 버튼 마우스 호버 시 포인트 컬러 적용 */
+.fc .fc-button-primary:hover,
+.fc .fc-button-primary:active,
+.fc .fc-button-primary:focus {
+    background-color: var(--accent-light) !important;
+    color: var(--accent-hover) !important;
+    border-color: var(--accent-secondary) !important;
+    box-shadow: none !important;
+}
+
+/* =======================================================
+   3. 달력 그리드(표) 및 날짜 스타일 오버라이드
+======================================================= */
+/* 테두리 색상 테마 동기화 */
+.fc-theme-standard td,
+.fc-theme-standard th,
+.fc-theme-standard .fc-scrollgrid {
+    border-color: var(--border-primary) !important;
+}
+
+/* 요일 (일, 월, 화...) 텍스트 */
+.fc .fc-col-header-cell-cushion {
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 10px 0 !important;
+}
+
+/* 날짜 숫자 (1, 2, 3...) */
+.fc .fc-daygrid-day-number {
+    color: var(--text-secondary);
+    font-size: 14px;
+    padding: 8px !important;
+}
+
+/* 오늘 날짜 하이라이트 배경 */
+.fc .fc-day-today {
+    background-color: var(--accent-light) !important;
+}
+
+/* =======================================================
+   3-1. 캘린더 표의 선(Grid) 부드럽게 (너무 진하면 투박함)
+======================================================= */
+.fc-theme-standard td,
+.fc-theme-standard th,
+.fc-theme-standard .fc-scrollgrid {
+    border-color: var(--border-primary) !important;
+}
+
+/* =======================================================
+   4. 일정(Event) 바 블록 스타일 (심플하고 모던한 둥근 캡슐형)
+======================================================= */
+.fc-h-event {
+    background-color: var(--accent-primary) !important; /* 다시 예쁜 메인 보라색으로 복구! */
+    border: none !important;
+    border-radius: 6px !important; /* 모서리를 동글동글하게 */
+
+    /* 🌟 핵심: 블록에 양옆/위아래 여백을 줘서 칸에 꽉 끼지 않고 숨통이 트이게 함 */
+    margin: 1px 4px !important;
+    padding: 3px 6px !important;
+
+    color: #ffffff !important; /* 글씨는 무조건 흰색 */
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    transition: opacity 0.2s ease; /* 색상 반전의 촌스러움을 버리고 투명도로 승부 */
+}
+
+/* 텍스트가 칸을 길게 넘어가면 '...' 으로 깔끔하게 생략 */
+.fc-event-main {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 마우스를 올렸을 때 살짝 투명해지는 세련된 호버 효과 */
+.fc-h-event:hover {
+    opacity: 0.85 !important;
+    background-color: var(--accent-primary) !important;
+}
+/* =======================================================
+   5. 커스텀 팝업 & 모달창 테마 맞춤
+======================================================= */
+/* 일정 클릭 시 나오는 작은 팝업 */
+#event-popup {
+    display: none;
+    position: absolute;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    padding: 15px;
+    box-shadow: 0 10px 25px -5px var(--shadow);
+    border-radius: 8px;
+    z-index: 1000;
+    width: 250px;
+}
+#event-popup h3 { margin: 0 0 10px 0; color: var(--accent-primary); font-size: 16px; border-bottom: 1px solid var(--border-primary); padding-bottom: 8px; }
+.pop-info { margin-bottom: 8px; font-size: 13px; color: var(--text-secondary); }
+.pop-info strong { display: inline-block; width: 60px; color: var(--text-primary); }
+.pop-close { float: right; cursor: pointer; color: var(--text-tertiary); font-weight: bold; margin-top: -2px; transition: var(--transition); }
+.pop-close:hover { color: var(--accent-primary); }
+
+/* 새 일정 추가 모달 배경 & 본체 */
+#modal-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; backdrop-filter: blur(2px); }
+#schedule-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-primary); padding: 25px; border-radius: 12px; width: 340px; z-index: 1000; box-shadow: 0 20px 25px -5px var(--shadow); }
+#schedule-modal h3 { margin-top: 0; color: var(--text-primary); border-bottom: 2px solid var(--border-primary); padding-bottom: 12px; font-size: 18px; }
+
+/* 모달창 내부 입력 폼 */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-secondary);
+    border-radius: 6px;
+    transition: var(--transition);
+}
+.form-group input:focus, .form-group select:focus {
+    border-color: var(--accent-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+/* =======================================================
+   6. 버튼 공통 스타일
+======================================================= */
+.btn-group, .btn-group-sm { display: flex; gap: 8px; margin-top: 20px; }
+.btn-group-sm { border-top: 1px solid var(--border-primary); padding-top: 12px;}
+
+/* 저장 / 수정 (메인 액센트 버튼) */
+.btn-save, .btn-edit {
+    background: var(--accent-primary);
+    color: #ffffff;
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+}
+.btn-save:hover, .btn-edit:hover { background: var(--accent-hover); }
+
+/* 취소 버튼 */
+.btn-cancel {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+}
+.btn-cancel:hover { background: var(--border-primary); color: var(--text-primary); }
+
+/* 삭제 버튼 (위험 알림용 빨간색 유지) */
+.btn-delete {
+    background: #ef4444;
+    color: #ffffff;
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+}
+.btn-delete:hover { background: #dc2626; }
+
+/* =======================================================
+   커스텀 년/월 드롭다운 (수정본: 보라색 테러 방지 & 크기 축소)
+======================================================= */
+.fc-toolbar-title {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 기본 드롭다운 스타일 */
+.fc-custom-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: transparent;
+    border: none;
+
+    font-size: 25px !important; /* 🔥 폰트 사이즈 적당하게 고정! */
+    font-weight: 600;
+    color: var(--text-primary) !important; /* 🔥 글씨는 무조건 기본 짙은 색으로 고정! (보라색 금지) */
+
+    cursor: pointer;
+    padding: 2px 20px 2px 2px;
+
+    /* 기본 화살표 (회색) */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 14px;
+
+    outline: none;
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+/* 🔥 드롭다운 쫙 펼쳤을 때 나오는 목록(<option>) 스타일 강제 고정 */
+.fc-custom-select option {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 16px; /* 목록 글씨는 조금 더 작고 단정하게 */
+    text-align: center;
+}
+
+/* 마우스를 올렸을 때 화살표'만' 보라색으로 살짝 포인트 */
+.fc-custom-select:hover,
+.fc-custom-select:focus {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237c3aed' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* 다크 모드 대응: 화살표를 밝은 색으로 전환 */
+html[data-theme='dark'] .fc-custom-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f8fafc' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* =======================================================
+   일요일(Sunday) 날짜 및 요일 텍스트 빨간색 적용
+======================================================= */
+/* 1. 달력 맨 위 '일' 요일 글씨 */
+.fc .fc-day-sun .fc-col-header-cell-cushion {
+    color: #ef4444 !important;
+}
+
+/* 2. 달력 안쪽 '1, 8, 15...' 날짜 숫자 */
+.fc .fc-day-sun .fc-daygrid-day-number {
+    color: #ef4444 !important;
+}
