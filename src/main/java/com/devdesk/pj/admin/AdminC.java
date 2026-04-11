@@ -15,7 +15,7 @@ public class AdminC extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 // 1. 전체 회원 목록 (하단 표를 위해)
-        List<AdminVO> members = AdminDAO.ADAO.getAllMembers();
+        List<AdminVO> members = AdminDAO.ADAO.getRecentActiveMembers(); // 👈 메서드 변경!
         request.setAttribute("members", members);
 
         // 🌟 2. 진짜 대시보드 통계 데이터 가져오기!

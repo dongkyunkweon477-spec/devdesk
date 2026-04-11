@@ -6,20 +6,35 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "AdminMemberC", value = "/admin/member")
-public class AdminMemberC extends HttpServlet {
+@WebServlet(name = "MemberDeleteC", value = "/admin/memberDelete")
+public class MemberDeleteC extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        // 1. AdminDAO에 이미 만들어둔 전체 회원 조회 메서드 재활용!
-        List<AdminVO> members = AdminDAO.ADAO.getAllMembers();
-        request.setAttribute("members", members);
+    }
 
-        // 2. 회원 관리 전용 JSP 화면으로 이동
-        request.setAttribute("content", "admin/admin_member.jsp");
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        // 1. JS에서 보낸 타겟 회원의 ID 받기
+        int memberId = Integer.parseInt(request.getParameter("member_id"));
+
+        // 2. DAO의 철퇴 메서드 호출!
+        boolean isSuccess = AdminDAO.ADAO.forceDeleteMember(memberId);
+
+        // 3. 결과를 다시 JS(브라우저)로 알려주기 (화면 이동 없음!)
+        response.setContentType("text/plain;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+
+        if (isSuccess) {
+            out.print("success");
+        } else {
+            out.print("fail");
+        }
+        out.flush();
     }
 }
