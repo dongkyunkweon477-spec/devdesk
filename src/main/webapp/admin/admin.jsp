@@ -19,7 +19,7 @@
             <li><a href="${pageContext.request.contextPath}/admin/member">👥 회원 관리</a></li>
             <%-- 🌟 게시글 관리 주소도 연결 완료! --%>
             <li><a href="${pageContext.request.contextPath}/admin/board">📝 게시글 관리</a></li>
-            <li><a href="#">🏢 기업 정보 관리</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/company">🏢 기업 정보 관리</a></li>
         </ul>
     </div>
 

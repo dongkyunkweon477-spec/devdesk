@@ -291,5 +291,214 @@ public class AdminDAO {
         return boardList;
     }
 
+// =====================================================================
+    // 🏢 기업 정보 관리 메서드들 (AdminDAO.java 하단에 추가)
+    // =====================================================================
+
+    // 🌟 [기업 관리] 페이징 포함 기업 목록 조회
+    public java.util.Map<String, Object> getCompaniesPaged(String filter, String keyword, int page, int pageSize) {
+        StringBuilder baseSql = new StringBuilder(
+                "SELECT c.company_id, c.company_name, c.company_industry, " +
+                        "c.company_location, c.company_rating, c.company_size, c.is_verified, " +
+                        "TO_CHAR(c.company_created_date, 'YYYY-MM-DD') as company_created_date, " +
+                        "COUNT(r.r_id) as review_count " +
+                        "FROM company c " +
+                        "LEFT JOIN review r ON c.company_id = r.r_company_id "
+        );
+
+        List<Object> params = new ArrayList<>();
+        boolean hasWhere = false;
+
+        if (filter != null && (filter.equals("Y") || filter.equals("N"))) {
+            baseSql.append("WHERE c.is_verified = ? ");
+            params.add(filter);
+            hasWhere = true;
+        }
+        if (keyword != null && !keyword.isBlank()) {
+            baseSql.append(hasWhere ? "AND " : "WHERE ").append("c.company_name LIKE ? ");
+            params.add("%" + keyword + "%");
+        }
+
+        baseSql.append("GROUP BY c.company_id, c.company_name, c.company_industry, " +
+                "c.company_location, c.company_rating, c.company_size, " +
+                "c.is_verified, c.company_created_date " +
+                "ORDER BY c.company_id DESC");
+
+        String countSql = "SELECT COUNT(*) FROM (" + baseSql + ")";
+        String pagedSql = "SELECT * FROM (" +
+                "  SELECT ROWNUM rn, t.* FROM (" + baseSql + ") t " +
+                ") WHERE rn BETWEEN ? AND ?";
+
+        int start = (page - 1) * pageSize + 1;
+        int end = page * pageSize;
+
+        java.util.Map<String, Object> result = new java.util.HashMap<>();
+
+        try (Connection con = DBManager_new.connect()) {
+
+            // 전체 건수
+            try (PreparedStatement ps = con.prepareStatement(countSql)) {
+                for (int i = 0; i < params.size(); i++) ps.setObject(i + 1, params.get(i));
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) result.put("totalCount", rs.getInt(1));
+                }
+            }
+
+            // 페이징 데이터
+            try (PreparedStatement ps = con.prepareStatement(pagedSql)) {
+                for (int i = 0; i < params.size(); i++) ps.setObject(i + 1, params.get(i));
+                ps.setInt(params.size() + 1, start);
+                ps.setInt(params.size() + 2, end);
+
+                List<AdminCompanyVO> list = new ArrayList<>();
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        AdminCompanyVO vo = new AdminCompanyVO();
+                        vo.setCompany_id(rs.getInt("company_id"));
+                        vo.setCompany_name(rs.getString("company_name"));
+                        vo.setCompany_industry(rs.getString("company_industry"));
+                        vo.setCompany_location(rs.getString("company_location"));
+                        vo.setCompany_rating(rs.getDouble("company_rating"));
+                        vo.setCompany_size(rs.getInt("company_size"));
+                        vo.setIs_verified(rs.getString("is_verified"));
+                        vo.setCompany_created_date(rs.getString("company_created_date"));
+                        vo.setReview_count(rs.getInt("review_count"));
+                        list.add(vo);
+                    }
+                }
+                result.put("companies", list);
+            }
+
+            int totalCount = (int) result.getOrDefault("totalCount", 0);
+            result.put("totalPages", (int) Math.ceil((double) totalCount / pageSize));
+            result.put("currentPage", page);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    // 🌟 [기업 관리] 승인 처리 (is_verified = 'N' → 'Y')
+    public boolean approveCompany(int companyId) {
+        String sql = "UPDATE company SET is_verified = 'Y' WHERE company_id = ?";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, companyId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // 🌟 [기업 관리] 반려 처리 (is_verified = 'Y' → 'N')
+    public boolean rejectCompany(int companyId) {
+        String sql = "UPDATE company SET is_verified = 'N' WHERE company_id = ?";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, companyId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // 🌟 [기업 관리] 기업 삭제 (review도 함께 삭제)
+    public boolean deleteCompanyAdmin(int companyId) {
+        String sqlDelRev = "DELETE FROM review WHERE r_company_id = ?";
+        String sqlDelComp = "DELETE FROM company WHERE company_id = ?";
+        try (Connection con = DBManager_new.connect()) {
+            con.setAutoCommit(false);
+            try {
+                try (PreparedStatement ps = con.prepareStatement(sqlDelRev)) {
+                    ps.setInt(1, companyId);
+                    ps.executeUpdate();
+                }
+                try (PreparedStatement ps = con.prepareStatement(sqlDelComp)) {
+                    ps.setInt(1, companyId);
+                    ps.executeUpdate();
+                }
+                con.commit();
+                return true;
+            } catch (Exception e) {
+                con.rollback();
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // 🌟 [기업 관리] 기업 정보 수정
+    public boolean updateCompanyAdmin(int companyId, String name, String industry,
+                                      String location, double rating, int size) {
+        String sql = "UPDATE company SET company_name=?, company_industry=?, " +
+                "company_location=?, company_rating=?, company_size=? " +
+                "WHERE company_id=?";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, name);
+            ps.setString(2, industry);
+            ps.setString(3, location);
+            ps.setDouble(4, rating);
+            ps.setInt(5, size);
+            ps.setInt(6, companyId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // 🌟 [기업 관리] 중복 기업 병합
+    public boolean mergeCompanies(int keepId, int deleteId) {
+        try (Connection con = DBManager_new.connect()) {
+            con.setAutoCommit(false);
+            try {
+                String sqlApp = "UPDATE application SET company_id = ? WHERE company_id = ?";
+                try (PreparedStatement ps = con.prepareStatement(sqlApp)) {
+                    ps.setInt(1, keepId);
+                    ps.setInt(2, deleteId);
+                    ps.executeUpdate();
+                }
+                String sqlRev = "UPDATE review SET r_company_id = ? WHERE r_company_id = ?";
+                try (PreparedStatement ps = con.prepareStatement(sqlRev)) {
+                    ps.setInt(1, keepId);
+                    ps.setInt(2, deleteId);
+                    ps.executeUpdate();
+                }
+                String sqlDel = "DELETE FROM company WHERE company_id = ?";
+                try (PreparedStatement ps = con.prepareStatement(sqlDel)) {
+                    ps.setInt(1, deleteId);
+                    ps.executeUpdate();
+                }
+                con.commit();
+                return true;
+            } catch (Exception e) {
+                con.rollback();
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // 🌟 [기업 관리] 승인 대기 건수
+    public int getPendingCompanyCount() {
+        String sql = "SELECT COUNT(*) FROM company WHERE is_verified = 'N'";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 
 }
