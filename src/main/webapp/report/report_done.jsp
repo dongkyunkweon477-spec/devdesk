@@ -36,7 +36,7 @@
         <a href="${pageContext.request.contextPath}/main"
            style="padding: 10px 24px; border-radius: 6px; background: #7c3aed; color: #fff;
                   text-decoration: none; font-size: 14px; font-weight: 600;">
-            홈으로
+            홈
         </a>
     </div>
 </div>
