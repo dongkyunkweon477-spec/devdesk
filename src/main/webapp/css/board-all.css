@@ -513,7 +513,7 @@
     width: 60%;
     margin: 60px auto;
     padding: 30px;
-    background: #ffffff;
+    background: var(--bg-primary);
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
@@ -581,7 +581,7 @@
 
 /* Submit button */
 .submit-btn {
-    background: #4f46e5;
+    background-color: var(--accent-primary);
     color: white;
     border: none;
     padding: 12px 20px;
@@ -592,7 +592,7 @@
 }
 
 .submit-btn:hover {
-    background: #4338ca;
+    background-color: var(--accent-secondary);
 }
 
 /* Cancel button */
