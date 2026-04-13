@@ -1,8 +1,10 @@
 package com.devdesk.pj.board;
 
 import com.devdesk.pj.main.DBManager_new;
+import com.devdesk.pj.main.SupabaseDAO;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +13,19 @@ import java.util.List;
 
 public class BoardDAO {
     public static void addBoard(HttpServletRequest request) {
-
+        String imageUrl = "";
+        
+        try {
+            // Check if there's a file to upload
+            Part filePart = request.getPart("file");
+            if (filePart != null && filePart.getSize() > 0) {
+                // Upload image to Supabase
+                imageUrl = SupabaseDAO.upload(request, null);
+                System.out.println("Uploaded image URL: " + imageUrl);
+            }
+        } catch (Exception e) {
+            System.out.println("No file uploaded or upload failed: " + e.getMessage());
+        }
 
         String sql = "INSERT INTO board (b_board_id, member_id,b_category, b_title, b_content) " +
                 " VALUES (board_seq.NEXTVAL, ?, ?, ?, ?)";
@@ -27,7 +41,12 @@ public class BoardDAO {
             ps.setInt(1, Integer.parseInt(request.getParameter("member_id")));
             ps.setString(2, request.getParameter("category"));
             ps.setString(3, request.getParameter("title"));
-            ps.setString(4, request.getParameter("txt"));
+            // Get original content and append image URL if uploaded
+            String content = request.getParameter("txt");
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                content += "\n\n" + imageUrl;
+            }
+            ps.setString(4, content);
 
             // ✔ 실행은 한 번만
             int result = ps.executeUpdate();
