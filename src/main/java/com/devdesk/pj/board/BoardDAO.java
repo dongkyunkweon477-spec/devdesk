@@ -1,8 +1,10 @@
 package com.devdesk.pj.board;
 
 import com.devdesk.pj.main.DBManager_new;
+import com.devdesk.pj.main.SupabaseDAO;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +13,19 @@ import java.util.List;
 
 public class BoardDAO {
     public static void addBoard(HttpServletRequest request) {
-
+        String imageUrl = "";
+        
+        try {
+            // Check if there's a file to upload
+            Part filePart = request.getPart("file");
+            if (filePart != null && filePart.getSize() > 0) {
+                // Upload image to Supabase
+                imageUrl = SupabaseDAO.upload(request, null);
+                System.out.println("Uploaded image URL: " + imageUrl);
+            }
+        } catch (Exception e) {
+            System.out.println("No file uploaded or upload failed: " + e.getMessage());
+        }
 
         String sql = "INSERT INTO board (b_board_id, member_id,b_category, b_title, b_content) " +
                 " VALUES (board_seq.NEXTVAL, ?, ?, ?, ?)";
@@ -27,7 +41,12 @@ public class BoardDAO {
             ps.setInt(1, Integer.parseInt(request.getParameter("member_id")));
             ps.setString(2, request.getParameter("category"));
             ps.setString(3, request.getParameter("title"));
-            ps.setString(4, request.getParameter("txt"));
+            // Get original content and append image URL if uploaded
+            String content = request.getParameter("txt");
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                content += "\n\n" + imageUrl;
+            }
+            ps.setString(4, content);
 
             // ✔ 실행은 한 번만
             int result = ps.executeUpdate();
@@ -155,6 +174,48 @@ public class BoardDAO {
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static BoardVO getBoardById(int boardId) {
+        String sql = "SELECT b.*, m.nickname FROM board b JOIN member m ON b.member_id = m.member_id WHERE b.b_board_id = ?";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, boardId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    BoardVO vo = new BoardVO();
+                    vo.setMember_id(rs.getInt("member_id"));
+                    vo.setBoard_id(rs.getInt("b_board_id"));
+                    vo.setTitle(rs.getString("b_title"));
+                    vo.setContent(rs.getString("b_content"));
+                    vo.setCategory(rs.getString("b_category"));
+                    vo.setCreated_date(rs.getString("b_created_date"));
+                    vo.setNickname(rs.getString("nickname"));
+                    return vo;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static int delBoardById(int boardId) {
+        String delComments = "DELETE FROM comments WHERE b_board_id = ?";
+        String delBoard    = "DELETE FROM board WHERE b_board_id = ?";
+        try (Connection con = DBManager_new.connect()) {
+            try (PreparedStatement ps = con.prepareStatement(delComments)) {
+                ps.setInt(1, boardId);
+                ps.executeUpdate();
+            }
+            try (PreparedStatement ps = con.prepareStatement(delBoard)) {
+                ps.setInt(1, boardId);
+                return ps.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 

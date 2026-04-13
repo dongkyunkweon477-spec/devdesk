@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-//@WebServlet(name = "calenderC", value = "")
+//@WebServlet(name = "calenderC", value = "/calendar")
 public class CalendarC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

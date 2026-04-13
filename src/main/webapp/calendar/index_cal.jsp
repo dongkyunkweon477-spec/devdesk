@@ -2,8 +2,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <title>DevDesk - 내 면접 일정</title>
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet'/>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
 
@@ -23,6 +23,8 @@
         <button class="btn-delete" id="btn-do-delete">삭제</button>
     </div>
 </div>
+
+<div id="modal-backdrop" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:999;"></div>
 
 <div id="schedule-modal">
     <h3 id="modal-title">새 일정 추가</h3>
@@ -138,6 +140,7 @@
                 right: ''
             },
             editable: true,
+            selectable: true,
 
             // ✨👇 날짜에서 "일" 텍스트를 제거하고 숫자만 렌더링
             dayCellContent: function (info) {

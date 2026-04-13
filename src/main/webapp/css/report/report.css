@@ -1,0 +1,85 @@
+/* ===== 신고 목록 - 대상 유형 배지 (리뷰 / 게시글) ===== */
+.report-type-badge {
+    width: 60px;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-align: center;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.report-type-badge.review { color: #7c3aed; background-color: #f5f3ff; }
+.report-type-badge.board  { color: #0369a1; background-color: #e0f2fe; }
+
+/* ===== 신고 목록 - 신고 사유 배지 ===== */
+.report-reason-badge {
+    width: 90px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-align: center;
+    margin-right: 12px;
+    color: #374151;
+    background-color: #f3f4f6;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ===== 신고 목록 - 처리 상태 배지 ===== */
+.report-status-badge {
+    width: 70px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.report-status-badge.pending { color: #dc2626; background-color: #fee2e2; }
+.report-status-badge.done    { color: #16a34a; background-color: #dcfce7; }
+
+/* ===== 신고 폼 - 안내 메시지 ===== */
+.report-notice {
+    background-color: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 16px;
+    margin-bottom: 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #92400e;
+    line-height: 1.6;
+}
+
+/* ===== 신고 폼 - 신고 대상 정보 ===== */
+.report-target-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    font-size: 15px;
+    color: #555;
+}
+
+.report-target-info span {
+    font-weight: 600;
+    color: #7c3aed;
+}
+
+/* ===== 신고 폼 - 글자 수 카운터 ===== */
+.report-char-count {
+    font-size: 13px;
+    color: #888;
+    text-align: right;
+    margin-top: 4px;
+}

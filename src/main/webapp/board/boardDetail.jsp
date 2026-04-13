@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board-all.css">
+
 
 <html>
 <head>
@@ -53,12 +55,6 @@
                 <div class="detail-label">조회수</div>
                 <div class="detail-content">${board.view_count}</div>
             </div>
-            <c:if test="${not empty board.updated_date}">
-                <div class="detail-row">
-                    <div class="detail-label">최종 수정일</div>
-                    <div class="detail-content">${board.updated_date}</div>
-                </div>
-            </c:if>
         </div>
 
         <div class="detail-row content-area">
@@ -67,12 +63,18 @@
         </div>
     </div>
 
-    <c:if test="${sessionScope.user.member_id == board.member_id}">
-        <div class="detail-buttons">
+    <div class="detail-buttons">
+        <%-- 작성자 본인: 수정/삭제 --%>
+        <c:if test="${sessionScope.user.member_id == board.member_id}">
             <button class="edit-btn" onclick="location.href='board_update?id=${board.board_id}'">수정</button>
             <button class="delete-btn" onclick="deleteBoard(${board.board_id})">삭제</button>
-        </div>
-    </c:if>
+        </c:if>
+        <%-- 로그인 했고, 본인 글이 아닌 경우에만 신고 버튼 표시 --%>
+        <c:if test="${sessionScope.user != null && sessionScope.user.member_id != board.member_id}">
+            <a href="${pageContext.request.contextPath}/report_form?targetType=board&targetId=${board.board_id}&targetTitle=${board.title}"
+               class="delete-btn">신고</a>
+        </c:if>
+    </div>
 
     <div class="comment-section">
         <hr class="comment-divider">
@@ -466,6 +468,32 @@
         });
     });
 
+    // Convert Supabase image URLs to img tags
+    document.addEventListener('DOMContentLoaded', function () {
+        const textBox = document.querySelector('.text-box');
+        if (textBox) {
+            let content = textBox.innerHTML;
+            console.log('Original content:', content);
+
+            // More flexible pattern to match Supabase URLs
+            const supabaseUrlPattern = /(https:\/\/[a-zA-Z0-9-]+\.supabase\.co\/storage\/v1\/object\/public\/upload\/file\/[^\s\)]+)/g;
+
+            const replacedContent = content.replace(supabaseUrlPattern, function (url) {
+                console.log('Found URL:', url);
+                const imageExtensions = /\.(jpg|jpeg|png|gif|webp)$/i;
+                if (imageExtensions.test(url)) {
+                    const imgTag = '<img src="' + url + '" alt="uploaded image" style="max-width: 100%; height: auto; margin: 10px 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">';
+                    console.log('Replaced with:', imgTag);
+                    console.log('IMG src should be:', url);
+                    return imgTag;
+                }
+                return url;
+            });
+
+            textBox.innerHTML = replacedContent;
+            console.log('Final content:', replacedContent);
+        }
+    });
 
 </script>
 

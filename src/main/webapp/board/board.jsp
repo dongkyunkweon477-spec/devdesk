@@ -1,5 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board-all.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board.css">
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,8 +36,9 @@
                     onchange="location.href='board?category=' + this.value + '&sort=${param.sort != null ? param.sort : ""}&searchType=${param.searchType != null ? param.searchType : ""}&keyword=${param.keyword != null ? param.keyword : ""}'">
                 <option value="전체" ${param.category == '전체' or param.category == null ? 'selected' : ''}>전체</option>
                 <option value="자유토크" ${param.category == '자유토크' ? 'selected' : ''}>자유토크</option>
+                <option value="TIL" ${param.category == 'TIL' ? 'selected' : ''}>TIL</option>
                 <option value="이력서" ${param.category == '이력서' ? 'selected' : ''}>이력서</option>
-                <option value="TIP" ${param.category == 'TIP' ? 'selected' : ''}>TIP</option>
+                <option value="자기만의TIP" ${param.category == '자기만의TIP' ? 'selected' : ''}>TIP</option>
             </select>
 
             <select onchange="location.href='board?sort=' + this.value">
