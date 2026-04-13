@@ -69,6 +69,11 @@ public class SupabaseDAO {
             // 업로드 완료된 그 url return
         } catch (Exception e) {
             e.printStackTrace();
+            try {
+                response.getWriter().println("업로드 에러: " + e.getMessage());
+            } catch (Exception ex) {
+                System.err.println("Error writing response: " + ex.getMessage());
+            }
         }
         return "";
     }

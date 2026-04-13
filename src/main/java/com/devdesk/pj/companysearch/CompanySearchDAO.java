@@ -133,7 +133,8 @@ public class CompanySearchDAO {
     public int insertCompany(CompanySearchVO vo) {
         String sql = "insert into company(company_id, company_name, company_industry, " +
                 "company_location, company_rating, company_size, company_created_date, company_application_date, is_verified) " +
-                "values(company_seq.nextval, ?, ?, ?, ?, ?, ?, ?, 'Y')";
+                //"values(company_seq.nextval, ?, ?, ?, ?, ?, ?, ?, 'Y')";
+                "values(company_seq.nextval, ?, ?, ?, ?, ?, ?, ?, 'N')"; // 영은 추가-기업 승인용
         try (
                 Connection con = DBManager_new.connect();
                 PreparedStatement pstmt = con.prepareStatement(sql);
@@ -379,4 +380,6 @@ public class CompanySearchDAO {
 
         return newCompanyId;
     }
+
+
 }
