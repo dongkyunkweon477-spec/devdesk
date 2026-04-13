@@ -27,6 +27,7 @@
             <select name="category" required>
                 <option value="">선택하세요</option>
                 <option value="자유토크">자유토크</option>
+                <option value="TIL">TIL</option>
                 <option value="이력서">이력서</option>
                 <option value="TIP">자기만의 TIP</option>
             </select>
