@@ -3,7 +3,9 @@
     width: 1000px;
     margin: 20px auto;
     border-top: 2px solid #7c3aed;
-    font-family: 'Pretendard', sans-serif;
+    /* 얘 있어서 다시 글자들 복구 */
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    line-height: 1.4;
 }
 
 /* 헤더 */
@@ -19,11 +21,16 @@
 
 .board-header h2 {
     margin: 0; /* 🔥 이거 꼭 추가 */
+    line-height: 1.2;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .board-actions {
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
 /* 행 */
@@ -94,6 +101,7 @@
     border: none;
     cursor: pointer;
     border-radius: 6px;
+    vertical-align: middle;
 }
 
 .write-btn a {
@@ -232,6 +240,7 @@
     background-color: white;
     font-size: 13px;
     cursor: pointer;
+    vertical-align: middle;
 }
 
 /* Pagination styling */
