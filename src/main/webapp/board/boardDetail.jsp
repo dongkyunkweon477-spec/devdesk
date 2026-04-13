@@ -360,34 +360,6 @@
         replyForms.forEach(form => form.remove());
     }
 
-    // // 작성자 클릭시 모달 및 해당 작성자 게시글 목록
-    // document.addEventListener("DOMContentLoaded", () => {
-    //     const writer = document.querySelector(".writer");
-    //
-    //     writer.addEventListener("click", async function () {
-    //         const memberId = this.dataset.id;
-    //
-    //         const res = await fetch("member-posts?memberId=" + memberId);
-    //         const posts = await res.json();
-    //
-    //         openModal(posts);
-    //     });
-    // });
-
-    // 작성자 클릭 모달 이벤트 펑션
-    // document.addEventListener("DOMContentLoaded", () => {
-    //     const writer = document.querySelector(".writer");
-    //
-    //     writer.addEventListener("click", async function () {
-    //         const memberId = this.dataset.id;
-    //
-    //         const res = await fetch("member-posts?memberId=" + memberId);
-    //         const posts = await res.json();
-    //
-    //         openModal(posts);
-    //     });
-    // });
-
     document.addEventListener("DOMContentLoaded", () => {
         const writer = document.querySelector(".writer");
         const modal = document.getElementById("modal");
