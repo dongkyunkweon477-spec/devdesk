@@ -9,9 +9,9 @@
     <meta name="ctx" content="${pageContext.request.contextPath}">
     <title>이력서 블록 라이브러리 — DevDesk</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/base.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/resume-block.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/resume-block.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 </head>
 <body>
 <div class="page-wrap">

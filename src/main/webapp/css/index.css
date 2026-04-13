@@ -12,10 +12,10 @@
     --text-tertiary: #64748b;
     --border-primary: #e2e8f0;
     --border-secondary: #cbd5e1;
-    --accent-primary: #7c3aed;
+    --accent-primary: #8e5ae5;
     --accent-secondary: #a78bfa;
     --accent-light: #ede9fe;
-    --accent-hover: #6d28d9;
+    --accent-hover: #8d75b3;
     --shadow: rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
 }
@@ -33,7 +33,7 @@
     --accent-primary: #a78bfa;
     --accent-secondary: #c4b5fd;
     --accent-light: #4c1d95;
-    --accent-hover: #8b5cf6;
+    --accent-hover: #b99dfa;
     --shadow: rgba(0, 0, 0, 0.3);
     --transition: all 0.3s ease;
 }
