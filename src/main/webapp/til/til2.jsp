@@ -31,7 +31,7 @@
             <a href="application-list" class="nav-item"><span class="nav-icon">📋</span>지원 현황</a>
             <a href="calendar" class="nav-item"><span class="nav-icon">📅</span>면접 일정</a>
             <div class="nav-section-label">학습</div>
-            <a href="til" class="nav-item active"><span class="nav-icon">📚</span>TIL</a>
+            <a href="til-list" class="nav-item active"><span class="nav-icon">📚</span>TIL</a>
         </nav>
 
         <div id="sidebar-mini-calendar">
@@ -43,7 +43,13 @@
                 </div>
             </div>
             <div class="g-cal-weekdays">
-                <div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div><div>일</div>
+                <div>월</div>
+                <div>화</div>
+                <div>수</div>
+                <div>목</div>
+                <div>금</div>
+                <div>토</div>
+                <div>일</div>
             </div>
             <div class="g-cal-days" id="g-cal-days">
             </div>
@@ -508,12 +514,12 @@
     });
 
     // ... 기존 오버레이 닫기 로직 생략 ...
-    document.getElementById('confirmOverlay').addEventListener('click', function(e) {
+    document.getElementById('confirmOverlay').addEventListener('click', function (e) {
         if (e.target === e.currentTarget) closeConfirm();
     });
 
     // 🌟 여기서부터 미니 캘린더 자바스크립트 통째로 추가! 🌟
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const rawEvents = [
             <c:forEach var="sch" items="${schList}">
             '<fmt:formatDate value="${sch.schedule_date}" pattern="yyyy-MM-dd" />',
@@ -563,7 +569,7 @@
                 if (eventCounts[dateStr]) {
                     dotsHTML = '<div class="g-dots">';
                     let dotCount = Math.min(eventCounts[dateStr], 3);
-                    for(let k = 0; k < dotCount; k++) {
+                    for (let k = 0; k < dotCount; k++) {
                         dotsHTML += '<span class="g-dot"></span>';
                     }
                     dotsHTML += '</div>';
@@ -578,7 +584,7 @@
             // 3. 달력 모양 유지를 위해 남은 빈칸은 다음 달 날짜로 채우기
             const totalCells = firstDayIndex + lastDay.getDate();
             let nextMonthDay = 1;
-            while(totalCells + nextMonthDay - 1 < 42) {
+            while (totalCells + nextMonthDay - 1 < 42) {
                 daysHTML += `<div class="g-day-cell" onclick="location.href='${pageContext.request.contextPath}/calendar'">
                                 <div class="g-day-num other-month">\${nextMonthDay}</div>
                              </div>`;

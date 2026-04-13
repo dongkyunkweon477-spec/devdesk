@@ -38,7 +38,7 @@ body::before {
     background-image: linear-gradient(rgba(91, 124, 248, 0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(91, 124, 248, 0.04) 1px, transparent 1px);
     background-size: 48px 48px;
-    pointer-events: none;
+    pointer-events: auto;
     z-index: 0;
 }
 
@@ -700,7 +700,7 @@ body::before {
     }
 }
 
-.two-btn {
+.three-btn {
     display: flex;
     flex-direction: column;
     gap: 10px;

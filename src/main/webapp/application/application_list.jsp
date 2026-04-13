@@ -3,6 +3,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
 <link rel="stylesheet" href="${ctx}/css/application_list.css">
+<link rel="stylesheet" href="${ctx}/css/index.css">
 <link rel="stylesheet" href="${ctx}/css/resume-block.css">
 
 <!-- 페이지 헤더 -->
@@ -11,7 +12,12 @@
         <h1 class="page-title">지원한 회사 목록</h1>
         <p class="page-sub">지원 현황을 한눈에 확인하고 단계를 관리하세요</p>
     </div>
-    <div class="two-btn">
+    <div class="three-btn">
+        <div>
+            <a href="${pageContext.request.contextPath}/til-list">
+                <button class="btn-add">TIL</button>
+            </a>
+        </div>
         <div>
             <button class="btn-add" id="btnOpenInsert">+ 지원 추가</button>
         </div>
@@ -135,7 +141,7 @@
                            readonly placeholder="기업을 선택해주세요" style="cursor:pointer;"/>
                     <button type="button" id="btnOpenCompany" class="modal-btn-search">기업 선택</button>
                 </div>
-                <jsp:include page="/company-search/companySearchModal.jsp"/>
+                <jsp:include page="/company/company-search/companySearchModal.jsp"/>
                 <input type="hidden" name="companyId" id="selectedCompanyId"/>
             </div>
 
