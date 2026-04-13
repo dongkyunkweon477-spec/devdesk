@@ -7,6 +7,7 @@
     <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 
 <div id="event-popup">
     <span class="pop-close" id="close-popup">✕</span>
@@ -111,30 +112,76 @@
     </div>
 </div>
 
-<div class="calendar-wrapper" style="position: relative; max-width: 1000px; margin: 0 auto;">
+<aside class="sidebar">
+    <div class="sidebar-section">
+        <div class="section-header" id="toggle-list" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+            <span>이번 달 일정</span>
+            <span class="toggle-icon">▼</span>
+        </div>
+        <div class="section-content" id="upcoming-list">
+            <ul class="schedule-list">...</ul>
+        </div>
+    </div>
+                <%-- 현재 날짜의 월 구하기 (Java 코드로 간단히 처리) --%>
+                <%
+                    java.util.Calendar cal = java.util.Calendar.getInstance();
+                    String currentMonth = String.format("%02d", cal.get(java.util.Calendar.MONTH) + 1);
+                %>
+                <c:set var="curM" value="<%= currentMonth %>" />
 
-    <div id='calendar'></div>
+                <c:forEach var="sch" items="${list}">
+                    <%-- 날짜 문자열(YYYY-MM-DD)에서 월 부분(MM) 추출하여 비교 --%>
+                    <c:if test="${fn:substring(sch.schedule_date, 5, 7) == curM}">
+                        <li class="list-item" onclick="calendar.gotoDate('${sch.schedule_date}')">
+                            <span class="item-date">${sch.schedule_date}</span>
+                            <span class="item-title">${sch.company_name}</span>
+                        </li>
+                    </c:if>
+                </c:forEach>
+            </ul>
+        </div>
+        <c:if test="${empty list}">
+            <li class="list-empty">일정이 없습니다.</li>
+        </c:if>
+        </ul>
+    </div>
 
-    <div class="fab-container">
-        <button class="fab-main" id="fabMain">+</button>
-        <div class="fab-menu" id="fabMenu">
-            <div class="fab-item" id="fabAddSchedule">
-                <span>📅</span>
-                <span class="fab-label">일정 추가하기</span>
+    <div class="sidebar-section">
+            <div class="section-header">
+                <span id="todo-month-title">4월 To-do List</span>
             </div>
-
-            <div class="fab-item" onclick="location.href='/application-list'">
-                <span>📋</span>
-                <span class="fab-label">지원현황</span>
-            </div>
-
-            <div class="fab-item" onclick="location.href='/dashboard'">
-                <span>🏠</span>
-                <span class="fab-label">대시보드</span>
+            <div class="section-content 메모장">
+                <textarea id="todo-textarea" placeholder="이달의 목표를 적어보세요..."></textarea>
             </div>
         </div>
 
-    </div>
+        <div id="sidebar-mini-calendar">
+            <div class="g-cal-header">
+                <div class="g-cal-title" id="g-cal-title">2026년 4월</div>
+                <div class="g-cal-nav">
+                    <button class="g-nav-btn" id="g-prev-month">‹</button>
+                    <button class="g-nav-btn" id="g-next-month">›</button>
+                </div>
+            </div>
+            <div class="g-cal-weekdays">
+                <div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div><div>일</div>
+            </div>
+            <div class="g-cal-days" id="g-cal-days"></div>
+        </div>
+    </aside>
+
+    <main class="calendar-main">
+        <div id='calendar'></div>
+
+        <div class="fab-container">
+            <button class="fab-main" id="fabMain">+</button>
+            <div class="fab-menu" id="fabMenu">
+                <div class="fab-item" id="fabAddSchedule"><span>📅</span><span class="fab-label">일정 추가</span></div>
+                <div class="fab-item" onclick="location.href='/application-list'"><span>📋</span><span class="fab-label">지원현황</span></div>
+                <div class="fab-item" onclick="location.href='/dashboard'"><span>🏠</span><span class="fab-label">대시보드</span></div>
+            </div>
+        </div>
+    </main>
 </div>
 
 <script>
@@ -401,6 +448,33 @@
             $('#fabMain').removeClass('active');
             $('#fabMenu').fadeOut(200);
         }
+    });
+
+    // 1. 리스트 접었다 펴기
+    $('#toggle-list').click(function() {
+        $('#upcoming-list').slideToggle(300);
+        $(this).find('.toggle-icon').toggleClass('rotate');
+    });
+
+    // 2. To-do List 메모 저장 (로컬 스토리지 사용 - 새로고침해도 유지됨)
+    $('#todo-textarea').val(localStorage.getItem('devdesk_todo'));
+    $('#todo-textarea').on('input', function() {
+        localStorage.setItem('devdesk_todo', $(this).val());
+    });
+
+    // 3. To-do List 제목에 해당 월 표시
+    function updateTodoTitle(date) {
+        const month = date.getMonth() + 1;
+        $('#todo-month-title').text(month + '월 To-do List');
+    }
+    updateTodoTitle(new Date());
+
+    $('#toggle-list').click(function() {
+        $('#upcoming-list').slideToggle(300); // 부드럽게 접고 펴기
+        // 아이콘 회전 효과 (선택사항)
+        $(this).find('.toggle-icon').css('transform', function(i, v) {
+            return v === 'rotate(180deg)' ? 'rotate(0deg)' : 'rotate(180deg)';
+        });
     });
 
 </script>

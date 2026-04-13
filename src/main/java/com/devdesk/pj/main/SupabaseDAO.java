@@ -16,7 +16,7 @@ public class SupabaseDAO {
     public static String upload(HttpServletRequest request, HttpServletResponse response) {
         try {
             Properties prop = new Properties();
-            InputStream input = request.getServletContext().getResourceAsStream("/WEB-INF/conf.properties");
+            InputStream input = request.getServletContext().getResourceAsStream("conf.properties");
             prop.load(input);
             String SUPABASE_URL = prop.getProperty("supabase.url");
             String API_KEY = prop.getProperty("service.role");
