@@ -6,6 +6,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
 
 <div id='calendar'></div>
 
@@ -112,6 +113,26 @@
     </div>
 </div>
 
+<div class="calendar-wrapper">
+    <div id='calendar'></div> <div class="fab-container">
+    <button class="fab-main" id="fabMain">+</button>
+    <div class="fab-menu" id="fabMenu">
+        <div class="fab-item" id="fabAddSchedule">
+            <span>📅</span>
+            <span class="fab-label">일정 추가하기</span>
+        </div>
+        <div class="fab-item" onclick="location.href='/application-list'">
+            <span>📑</span>
+            <span class="fab-label">지원현황</span>
+        </div>
+        <div class="fab-item" onclick="location.href='/dashboard'">
+            <span>📊</span>
+            <span class="fab-label">대시보드</span>
+        </div>
+    </div>
+</div>
+</div>
+
 <script>
     $(document).ready(function () {
         $('#customAlertModal, #customConfirmModal').hide();
@@ -132,6 +153,7 @@
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             locale: 'ko',
+            selectable: true,
             headerToolbar: {
                 left: 'today',
                 center: 'prev title next',
@@ -335,6 +357,48 @@
             $('#modal-backdrop, #schedule-modal').fadeOut(200);
         });
     });
+
+    // 1. FAB 버튼 토글 애니메이션
+    $('#fabMain').click(function() {
+        $(this).toggleClass('active');
+        $('#fabMenu').fadeToggle(200).css('display', 'flex');
+    });
+
+    // 2. FAB를 통한 일정 추가 모달 열기
+    $('#fabAddSchedule').click(function() {
+        // 기존 select 이벤트에서 쓰던 초기화 로직 그대로 활용
+        $('#form-hour').val("14");
+        $('#form-minute').val("00");
+        $('#modal-title').text("새 일정 추가");
+        $('#form-id').val("");
+
+        // 날짜는 오늘 날짜로 기본 설정 (사용자가 직접 변경 가능)
+        var today = new Date().toISOString().split('T')[0];
+        $('#form-date').val(today);
+
+        $('#selectedCompanyName').val("");
+        $('#form-apply-date').val("");
+        $('#form-position').val("");
+        $('#form-memo').val("");
+        $('#form-type').val("코딩테스트");
+        $('#form-type-direct').hide().val("");
+
+        // 모달 띄우기
+        $('#modal-backdrop, #schedule-modal').fadeIn(200);
+
+        // 메뉴 닫기
+        $('#fabMain').removeClass('active');
+        $('#fabMenu').fadeOut(100);
+    });
+
+    // 외부 클릭 시 메뉴 닫기 (선택사항)
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.fab-container').length) {
+            $('#fabMain').removeClass('active');
+            $('#fabMenu').fadeOut(200);
+        }
+    });
+
 </script>
 
 <div class="modal-overlay" id="customAlertModal"
