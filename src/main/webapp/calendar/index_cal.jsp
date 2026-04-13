@@ -1,19 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
     <title>DevDesk - 내 면접 일정</title>
-
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet'/>
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet'/>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
-</head>
-<body>
 
 <div id='calendar'></div>
 
@@ -140,10 +132,47 @@
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             locale: 'ko',
-            headerToolbar: {left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek'},
+            headerToolbar: {
+                left: 'today',
+                center: 'prev title next',
+                right: ''
+            },
             editable: true,
-            selectable: true,
 
+            // ✨👇 날짜에서 "일" 텍스트를 제거하고 숫자만 렌더링
+            dayCellContent: function (info) {
+                return info.dayNumberText.replace('일', '');
+            },
+
+            // ✨👇 커스텀 년/월 드롭다운 (아까 추가했던 기능)
+            datesSet: function (info) {
+                var currentDate = calendar.getDate();
+                var year = currentDate.getFullYear();
+                var month = currentDate.getMonth() + 1;
+
+                var yearHtml = '<select id="custom-year" class="fc-custom-select">';
+                for (var i = 2000; i <= 2100; i++) {
+                    yearHtml += '<option value="' + i + '" ' + (i === year ? 'selected' : '') + '>' + i + '년</option>';
+                }
+                yearHtml += '</select>';
+
+                var monthHtml = '<select id="custom-month" class="fc-custom-select">';
+                for (var m = 1; m <= 12; m++) {
+                    var displayMonth = m < 10 ? '0' + m : m;
+                    monthHtml += '<option value="' + displayMonth + '" ' + (m === month ? 'selected' : '') + '>' + m + '월</option>';
+                }
+                monthHtml += '</select>';
+
+                $('.fc-toolbar-title').html(yearHtml + ' ' + monthHtml);
+
+                $('.fc-custom-select').off('change').on('change', function () {
+                    var selectedYear = $('#custom-year').val();
+                    var selectedMonth = $('#custom-month').val();
+                    calendar.gotoDate(selectedYear + '-' + selectedMonth + '-01');
+                });
+            },
+
+            // ✨👇 DB에서 불러온 이벤트 리스트
             events: [
                 <c:forEach var="sch" items="${list}" varStatus="status">
                 {
@@ -152,7 +181,7 @@
                     start: '${sch.schedule_date}',
                     extendedProps: {
                         company: '${sch.company_name}',
-                        position: '${sch.position}', // ✨ 여기에 position이 꼭 있어야 합니다!
+                        position: '${sch.position}',
                         time: '${sch.schedule_time}',
                         type: '${sch.interview_type}',
                         memo: '${sch.schedule_memo}'
@@ -160,6 +189,7 @@
                 }<c:if test="${!status.last}">, </c:if>
                 </c:forEach>
             ],
+
 
             eventClick: function (info) {
                 currentEvent = info.event;
@@ -338,6 +368,3 @@
         </div>
     </div>
 </div>
-
-</body>
-</html>
