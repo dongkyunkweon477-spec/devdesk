@@ -158,6 +158,11 @@
             <c:if test="${sessionScope.user != null && (sessionScope.user.member_id == r.reviewMemberId || sessionScope.user.role == 'ADMIN')}">
                 <button class="rd-nav-btn rd-nav-del" onclick="confirmDelete(${r.reviewId})">삭제</button>
             </c:if>
+            <%-- 로그인 했고, 본인 글이 아닌 경우에만 신고 버튼 표시 --%>
+            <c:if test="${sessionScope.user != null && sessionScope.user.member_id != r.reviewMemberId}">
+                <a href="${pageContext.request.contextPath}/report_form?targetType=review&targetId=${r.reviewId}&targetTitle=${r.reviewTitle}"
+                   class="rd-nav-btn rd-nav-del">신고</a>
+            </c:if>
         </div>
         <div class="rd-nav-right">
             <button class="rd-nav-btn" onclick="history.back()">목록으로</button>
