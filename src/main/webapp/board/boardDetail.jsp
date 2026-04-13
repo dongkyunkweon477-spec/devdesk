@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board-all.css">
+
 
 <html>
 <head>
@@ -61,12 +63,18 @@
         </div>
     </div>
 
-    <c:if test="${sessionScope.user.member_id == board.member_id}">
-        <div class="detail-buttons">
+    <div class="detail-buttons">
+        <%-- 작성자 본인: 수정/삭제 --%>
+        <c:if test="${sessionScope.user.member_id == board.member_id}">
             <button class="edit-btn" onclick="location.href='board_update?id=${board.board_id}'">수정</button>
             <button class="delete-btn" onclick="deleteBoard(${board.board_id})">삭제</button>
-        </div>
-    </c:if>
+        </c:if>
+        <%-- 로그인 했고, 본인 글이 아닌 경우에만 신고 버튼 표시 --%>
+        <c:if test="${sessionScope.user != null && sessionScope.user.member_id != board.member_id}">
+            <a href="${pageContext.request.contextPath}/report_form?targetType=board&targetId=${board.board_id}&targetTitle=${board.title}"
+               class="delete-btn">신고</a>
+        </c:if>
+    </div>
 
     <div class="comment-section">
         <hr class="comment-divider">

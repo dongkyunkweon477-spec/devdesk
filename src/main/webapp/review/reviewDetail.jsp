@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/review/review-detail.css">
+
 
 <script>var contextPath = '${pageContext.request.contextPath}';</script>
 <script src="${pageContext.request.contextPath}/js/review.js"></script>
@@ -155,6 +157,11 @@
             <%-- sessionScope.user.member_id 로 변경 --%>
             <c:if test="${sessionScope.user != null && (sessionScope.user.member_id == r.reviewMemberId || sessionScope.user.role == 'ADMIN')}">
                 <button class="rd-nav-btn rd-nav-del" onclick="confirmDelete(${r.reviewId})">삭제</button>
+            </c:if>
+            <%-- 로그인 했고, 본인 글이 아닌 경우에만 신고 버튼 표시 --%>
+            <c:if test="${sessionScope.user != null && sessionScope.user.member_id != r.reviewMemberId}">
+                <a href="${pageContext.request.contextPath}/report_form?targetType=review&targetId=${r.reviewId}&targetTitle=${r.reviewTitle}"
+                   class="rd-nav-btn rd-nav-del">신고</a>
             </c:if>
         </div>
         <div class="rd-nav-right">

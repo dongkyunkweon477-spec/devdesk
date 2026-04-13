@@ -237,3 +237,74 @@
 .sidebar-overlay {
     display: none; /* 생략 */
 }
+
+.main-layout {
+    display: flex;
+    max-width: 1300px;
+    margin: 0 auto;
+    gap: 20px;
+    padding: 20px;
+}
+
+.sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.calendar-main {
+    flex-grow: 1;
+    position: relative;
+}
+
+.sidebar-section {
+    margin-bottom: 25px !important; /* 섹션 사이 간격 확보 */
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.section-header {
+    padding: 12px 15px;
+    background: #f8fafc;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.schedule-list {
+    list-style: none;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.list-item {
+    padding: 8px;
+    font-size: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.list-item:hover { background: #f1f5f9; }
+
+.item-date { color: #8e5ae5; font-weight: 600; margin-right: 8px; }
+
+/* To-do 메모장 스타일 */
+#todo-textarea {
+    width: 100%;
+    height: 120px;
+    border: none;
+    padding: 12px;
+    font-size: 13px;
+    resize: none;
+    outline: none;
+    line-height: 1.5;
+    background: #fffbeb; /* 연한 노란색 포스트잇 느낌 */
+}
