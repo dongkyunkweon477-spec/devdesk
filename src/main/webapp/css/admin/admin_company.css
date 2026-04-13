@@ -166,48 +166,61 @@
     color: #b45309;
 }
 
-/* ── 액션 버튼들 ────────────────────────── */
+/* ── 액션 버튼들
+   .action-cell 하위로 범위 제한 → 다른 CSS 충돌 방지 ── */
 .action-cell {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
+    /* td에 flex를 직접 주면 테이블이 깨집니다! */
+    text-align: center;
+    white-space: nowrap; /* 버튼이 밑으로 안 떨어지고 한 줄로 예쁘게 서게 해줌 */
 }
 
-.btn-approve, .btn-edit, .btn-delete {
-    padding: 5px 12px;
-    border: none;
-    border-radius: 5px;
-    font-size: 12px;
-    font-weight: 600;
+.action-cell .btn-approve,
+.action-cell .btn-edit,
+.action-cell .btn-delete {
+    padding: 5px 12px !important;
+    border: none !important;
+    border-radius: 5px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
     cursor: pointer;
     transition: opacity 0.2s;
-    white-space: nowrap;
+
+    /* flex 대신 가로로 나란히 서는 inline-block 사용 */
+    display: inline-block !important;
+    margin: 0 3px !important; /* 버튼들 사이의 간격을 마진으로 띄움 */
+
+    width: auto !important;
+    height: auto !important;
+    line-height: normal !important;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: middle;
 }
 
-.btn-approve {
-    background: #10b981;
-    color: #fff;
+.action-cell .btn-approve {
+    background: #10b981 !important;
+    color: #fff !important;
 }
 
-.btn-approve:hover {
+.action-cell .btn-approve:hover {
     opacity: 0.85;
 }
 
-.btn-edit {
-    background: #7c3aed;
-    color: #fff;
+.action-cell .btn-edit {
+    background: #7c3aed !important;
+    color: #fff !important;
 }
 
-.btn-edit:hover {
+.action-cell .btn-edit:hover {
     opacity: 0.85;
 }
 
-.btn-delete {
-    background: #ef4444;
-    color: #fff;
+.action-cell .btn-delete {
+    background: #ef4444 !important;
+    color: #fff !important;
 }
 
-.btn-delete:hover {
+.action-cell .btn-delete:hover {
     opacity: 0.85;
 }
 
@@ -384,6 +397,7 @@
 .btn-confirm--danger {
     background: #ef4444;
 }
+
 
 .btn-confirm--danger:hover {
     background: #dc2626;

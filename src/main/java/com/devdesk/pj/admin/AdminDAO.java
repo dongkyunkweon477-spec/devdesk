@@ -500,5 +500,17 @@ public class AdminDAO {
         return 0;
     }
 
+    // 🌟 [기업 관리] 전체 기업 수 (필터 무관, 카드용)
+    public int getTotalAllCompanyCount() {
+        String sql = "SELECT COUNT(*) FROM company";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 }
