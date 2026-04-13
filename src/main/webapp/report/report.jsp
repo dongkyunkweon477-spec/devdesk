@@ -41,10 +41,10 @@
         <c:choose>
             <c:when test="${not empty reports}">
                 <c:forEach var="r" items="${reports}">
-                    <div class="board-row" onclick="location.href='reportDetail?id=${r.reportId}'">
+                    <div class="board-row" onclick="location.href='${pageContext.request.contextPath}/reportDetail?id=${r.reportId}'">
                         <%-- 신고 대상 유형 배지: reviewId 있으면 리뷰, boardId 있으면 게시글 --%>
                         <c:choose>
-                            <c:when test="${not empty r.reviewId}">
+                            <c:when test="${r.repoReviewId > 0}">
                                 <div class="report-type-badge review">리뷰</div>
                             </c:when>
                             <c:otherwise>
@@ -60,7 +60,7 @@
 
                         <%-- 날짜 + 처리 상태 --%>
                         <div class="col-date">
-                            <div class="date-info">${r.repoCreatedDate}</div>
+                            <div class="date-info">${r.repoCreated}</div>
                             <div class="report-status-badge ${r.repoStatus == 'PENDING' ? 'pending' : 'done'}">
                                 ${r.repoStatus == 'PENDING' ? '미처리' : '처리완료'}
                             </div>

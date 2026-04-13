@@ -11,7 +11,7 @@
         신고 내용은 관리자 검토 후 신속히 처리됩니다.
     </div>
 
-    <form action="report" method="post" onsubmit="return validateForm()">
+    <form action="${pageContext.request.contextPath}/admin/report" method="post" onsubmit="return validateForm()">
         <%-- REVIEW_ID / BOARD_ID: targetType에 따라 하나만 값 세팅, 나머지는 빈 값 --%>
         <input type="hidden" name="reviewId" value="${param.targetType == 'review' ? param.targetId : ''}">
         <input type="hidden" name="boardId"  value="${param.targetType == 'board'  ? param.targetId : ''}">

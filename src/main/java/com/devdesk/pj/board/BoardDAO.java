@@ -158,6 +158,48 @@ public class BoardDAO {
         }
     }
 
+    public static BoardVO getBoardById(int boardId) {
+        String sql = "SELECT b.*, m.nickname FROM board b JOIN member m ON b.member_id = m.member_id WHERE b.b_board_id = ?";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, boardId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    BoardVO vo = new BoardVO();
+                    vo.setMember_id(rs.getInt("member_id"));
+                    vo.setBoard_id(rs.getInt("b_board_id"));
+                    vo.setTitle(rs.getString("b_title"));
+                    vo.setContent(rs.getString("b_content"));
+                    vo.setCategory(rs.getString("b_category"));
+                    vo.setCreated_date(rs.getString("b_created_date"));
+                    vo.setNickname(rs.getString("nickname"));
+                    return vo;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static int delBoardById(int boardId) {
+        String delComments = "DELETE FROM comments WHERE b_board_id = ?";
+        String delBoard    = "DELETE FROM board WHERE b_board_id = ?";
+        try (Connection con = DBManager_new.connect()) {
+            try (PreparedStatement ps = con.prepareStatement(delComments)) {
+                ps.setInt(1, boardId);
+                ps.executeUpdate();
+            }
+            try (PreparedStatement ps = con.prepareStatement(delBoard)) {
+                ps.setInt(1, boardId);
+                return ps.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
     public static int delBoard(HttpServletRequest request) {
         String sql = "DELETE FROM board WHERE b_board_id = ?";
 
