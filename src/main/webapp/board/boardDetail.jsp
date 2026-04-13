@@ -467,8 +467,8 @@
             let content = textBox.innerHTML;
             console.log('Original content:', content);
 
-            // More flexible pattern to match Supabase URLs
-            const supabaseUrlPattern = /(https:\/\/[a-zA-Z0-9-]+\.supabase\.co\/storage\/v1\/object\/public\/upload\/file\/[^\s\)]+)/g;
+            // More comprehensive pattern to match Supabase URLs
+            const supabaseUrlPattern = /(https:\/\/[a-zA-Z0-9-]+\.supabase\.co\/storage\/v1\/object\/public\/upload\/file\/[^\s\)\]\}]+)/g;
 
             const replacedContent = content.replace(supabaseUrlPattern, function (url) {
                 console.log('Found URL:', url);
