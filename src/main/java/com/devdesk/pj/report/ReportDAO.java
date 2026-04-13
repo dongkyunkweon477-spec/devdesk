@@ -1,19 +1,26 @@
 package com.devdesk.pj.report;
 
 import com.devdesk.pj.main.DBManager_new;
+import com.devdesk.pj.review.ReviewDAO;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum ReportDAO {
-    RDAO;
+public class ReportDAO {
+
+    public static final ReportDAO REPORT_DAO = new ReportDAO();
+
+    public ReportDAO() {
+    }
+
 
     // 1. 신고 등록 (Insert)
     public int insertReport(ReportVO r) {
         String sql = "INSERT INTO report (report_id, review_id, member_id, repo_reason, repo_content) "
-                   + "VALUES (report_seq.NEXTVAL, ?, ?, ?, ?)";
+                + "VALUES (report_seq.NEXTVAL, ?, ?, ?, ?)";
         try (Connection con = DBManager_new.connect();
              PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, r.getRepoReviewId());

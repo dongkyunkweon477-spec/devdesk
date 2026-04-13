@@ -1,13 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>신고하기</title>
-    <link rel="stylesheet" href="../css/board-all.css">
-    <link rel="stylesheet" href="../css/report/report.css">
-</head>
-<body>
+<link rel="stylesheet" href="../css/board-all.css">
+<link rel="stylesheet" href="../css/report/report.css">
+
 <div class="write-container" style="max-width: 600px; margin: 50px auto; padding: 20px;">
     <h2 style="margin-bottom: 24px;">신고하기</h2>
 
@@ -17,15 +12,24 @@
     </div>
 
     <form action="report" method="post" onsubmit="return validateForm()">
-        <input type="hidden" name="reviewId" value="${param.reviewId}">
-        
+        <%-- REVIEW_ID / BOARD_ID: targetType에 따라 하나만 값 세팅, 나머지는 빈 값 --%>
+        <input type="hidden" name="reviewId" value="${param.targetType == 'review' ? param.targetId : ''}">
+        <input type="hidden" name="boardId"  value="${param.targetType == 'board'  ? param.targetId : ''}">
+        <%-- MEMBER_ID --%>
+        <input type="hidden" name="memberId" value="${sessionScope.user.member_id}">
+
         <div class="report-target-info">
-            신고 대상: <span><c:out value="${param.reviewTitle}"/></span>
+            <span class="report-type-badge ${param.targetType == 'review' ? 'review' : 'board'}">
+                ${param.targetType == 'review' ? '리뷰' : '게시글'}
+            </span>
+            신고 대상: <span><c:out value="${param.targetTitle}"/></span>
         </div>
 
+        <%-- REPO_REASON --%>
         <div class="form-group" style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 8px; font-weight: 600;">신고 사유</label>
-            <select name="repoReason" id="reportReason" class="form-select" style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ddd;" required>
+            <select name="repoReason" id="reportReason"
+                    style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ddd;" required>
                 <option value="">사유를 선택해 주세요</option>
                 <option value="욕설/비방">부적절한 언어 (욕설/비방)</option>
                 <option value="스팸/광고">스팸/영리적 광고</option>
@@ -35,20 +39,21 @@
             </select>
         </div>
 
+        <%-- REPO_CONTENT --%>
         <div class="form-group" style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 8px; font-weight: 600;">상세 내용 (최소 10자)</label>
-            <textarea name="repoContent" id="reportContent" maxlength="500" rows="6" 
-                      placeholder="신고 내용을 구체적으로 입력해 주세요." 
-                      style="width: 100%; padding: 12px; border-radius: 4px; border: 1px solid #ddd; resize: vertical;" required></textarea>
+            <textarea name="repoContent" id="reportContent" maxlength="500" rows="6"
+                      placeholder="신고 내용을 구체적으로 입력해 주세요."
+                      style="width: 100%; padding: 12px; border-radius: 4px; border: 1px solid #ddd; resize: vertical;"
+                      required></textarea>
             <div class="report-char-count"><span id="cntSpan">0</span> / 500</div>
         </div>
 
         <div class="form-actions" style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 30px;">
-            <button type="button" class="btn-cancel" style="padding: 10px 20px; border: 1px solid #ddd; background: #fff; border-radius: 4px; cursor: pointer;" onclick="history.back()">취소</button>
-            <button type="submit" class="btn-save" style="padding: 10px 30px; background: #7c3aed; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">신고 제출</button>
+            <button type="button" class="cancel-btn" onclick="history.back()">취소</button>
+            <button type="submit" class="submit-btn">신고 제출</button>
         </div>
     </form>
 </div>
+
 <script src="../js/report-form.js"></script>
-</body>
-</html>

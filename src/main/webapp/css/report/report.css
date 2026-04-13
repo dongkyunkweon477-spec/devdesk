@@ -1,44 +1,49 @@
-/* ===== 신고 목록 - 유형 배지 ===== */
+/* ===== 신고 목록 - 대상 유형 배지 (리뷰 / 게시글) ===== */
 .report-type-badge {
-    width: 80px;
+    width: 60px;
     font-weight: 600;
     font-size: 13px;
     padding: 3px 8px;
     border-radius: 4px;
     text-align: center;
-    margin-right: 12px;
+    margin-right: 10px;
+    flex-shrink: 0;
 }
-.report-type-badge.post    { color: #7c3aed; background-color: #f5f3ff; }
-.report-type-badge.comment { color: #0369a1; background-color: #e0f2fe; }
-.report-type-badge.user    { color: #b45309; background-color: #fef3c7; }
 
-/* ===== 신고 목록 - 컬럼 레이아웃 ===== */
-.report-col-reporter {
-    width: 100px;
-    font-size: 13px;
-    color: #555;
+.report-type-badge.review { color: #7c3aed; background-color: #f5f3ff; }
+.report-type-badge.board  { color: #0369a1; background-color: #e0f2fe; }
+
+/* ===== 신고 목록 - 신고 사유 배지 ===== */
+.report-reason-badge {
+    width: 90px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-align: center;
     margin-right: 12px;
-}
-.report-col-target {
-    width: 100px;
-    font-size: 13px;
-    color: #555;
-    margin-right: 12px;
+    color: #374151;
+    background-color: #f3f4f6;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* ===== 신고 목록 - 처리 상태 배지 ===== */
 .report-status-badge {
-    width: 80px;
+    width: 70px;
     text-align: center;
     font-size: 13px;
     font-weight: 600;
     padding: 3px 8px;
     border-radius: 4px;
     margin-left: 10px;
+    flex-shrink: 0;
 }
-.report-status-badge.pending    { color: #dc2626; background-color: #fee2e2; }
-.report-status-badge.processing { color: #d97706; background-color: #fef3c7; }
-.report-status-badge.done       { color: #16a34a; background-color: #dcfce7; }
+
+.report-status-badge.pending { color: #dc2626; background-color: #fee2e2; }
+.report-status-badge.done    { color: #16a34a; background-color: #dcfce7; }
 
 /* ===== 신고 폼 - 안내 메시지 ===== */
 .report-notice {
@@ -54,6 +59,9 @@
 
 /* ===== 신고 폼 - 신고 대상 정보 ===== */
 .report-target-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     background-color: #f5f5f5;
     border: 1px solid #e9ecef;
     border-radius: 8px;
@@ -62,6 +70,7 @@
     font-size: 15px;
     color: #555;
 }
+
 .report-target-info span {
     font-weight: 600;
     color: #7c3aed;
