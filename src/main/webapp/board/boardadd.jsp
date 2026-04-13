@@ -7,8 +7,7 @@
 <body>
 <div class="write-container">
     <form action="supa-upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file"/>
-        <button type="submit">supabase upload</button>
+        <input type="file" name="file" id="imageFile"/>
     </form>
 
     <h2>✍ 글 작성하기</h2>
@@ -29,7 +28,7 @@
                 <option value="자유토크">자유토크</option>
                 <option value="TIL">TIL</option>
                 <option value="이력서">이력서</option>
-                <option value="TIP">자기만의 TIP</option>
+                <option value="자기만의TIP">자기만의TIP</option>
             </select>
         </div>
 
@@ -62,18 +61,20 @@
             cntSpan.innerText = len;
         });
 
-        // Handle image upload form submission
-        document.querySelector('form[action="supa-upload"]').addEventListener('submit', function (e) {
+        // Handle file selection for automatic upload
+        document.getElementById('imageFile').addEventListener('change', function (e) {
             e.preventDefault();
 
-            const formData = new FormData(this);
-            const fileInput = this.querySelector('input[type="file"]');
+            const fileInput = this;
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
 
             if (fileInput.files.length === 0) {
-                alert('Please select an image file first.');
                 return;
             }
 
+            console.log('File selected, starting upload...');
+            
             fetch('supa-upload', {
                 method: 'POST',
                 body: formData
