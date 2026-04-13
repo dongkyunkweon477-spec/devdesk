@@ -20,7 +20,7 @@ public class BoardDAO {
             Part filePart = request.getPart("file");
             if (filePart != null && filePart.getSize() > 0) {
                 // Upload image to Supabase
-                imageUrl = SupabaseDAO.upload(request, null);
+                imageUrl = SupabaseDAO.SUPADAO.upload(request, null);
                 System.out.println("Uploaded image URL: " + imageUrl);
             }
         } catch (Exception e) {
