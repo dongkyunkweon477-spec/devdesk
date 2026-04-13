@@ -11,10 +11,13 @@
     <div class="admin-sidebar">
         <h3>Admin Panel</h3>
         <ul>
-            <li><a href="${pageContext.request.contextPath}/admin" class="active">📊 대시보드</a></li>
+            <%-- 대시보드에 있던 active 삭제! --%>
+            <li><a href="${pageContext.request.contextPath}/admin">📊 대시보드</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/member">👥 회원 관리</a></li>
-            <%-- 🌟 게시글 관리 주소도 연결 완료! --%>
-            <li><a href="${pageContext.request.contextPath}/admin/board">📝 게시글 관리</a></li>
+
+            <%-- 👇 게시글 관리에 active 추가! 👇 --%>
+            <li><a href="${pageContext.request.contextPath}/admin/board" class="active">📝 게시글 관리</a></li>
+
             <li><a href="${pageContext.request.contextPath}/admin/report">🚨 신고 관리</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/company">🏢 기업 정보 관리</a></li>
         </ul>
@@ -94,4 +97,4 @@
 </div>
 
 <%-- 나중에 추가할 자바스크립트 연결 --%>
-<%-- <script src="${pageContext.request.contextPath}/js/admin/admin_board.js"></script> --%>
+<script src="${pageContext.request.contextPath}/js/admin/admin_board.js"></script>

@@ -292,3 +292,53 @@
     text-align: right;
     margin-top: 4px;
 }
+
+/* ── 5. 페이징 ─────────────────────────── */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 30px;
+    padding-bottom: 20px;
+}
+
+.page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #475569;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* 활성화 안 된 버튼에 마우스 올렸을 때만 보라색! */
+.page-btn:hover:not(.page-btn--disabled):not(.page-btn--active) {
+    border-color: #7c3aed;
+    color: #7c3aed;
+}
+
+/* 현재 선택된 페이지 (Active) */
+.page-btn--active {
+    background: #7c3aed;
+    color: #fff !important;
+    font-weight: bold;
+    border: 1px solid #7c3aed;
+}
+
+/* 1페이지나 마지막 페이지에서 이전/다음 버튼 비활성화 (Disabled) */
+.page-btn--disabled {
+    color: #cbd5e1;
+    border-color: #f1f5f9;
+    background: #f8fafc;
+    cursor: not-allowed;
+    pointer-events: none;
+}

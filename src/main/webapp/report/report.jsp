@@ -107,30 +107,22 @@
                 </c:choose>
             </div>
 
-            <div class="pagination">
-                <c:if test="${currentPage > 1}">
-                    <a href="report?p=${currentPage - 1}&targetType=${param.targetType}&status=${param.status}&searchType=${param.searchType}&keyword=${param.keyword}"
-                       class="page-btn">이전</a>
-                </c:if>
-
-                <c:forEach begin="1" end="${totalPage}" var="i">
-                    <c:choose>
-                        <c:when test="${i == currentPage}">
-                            <span class="current-page">[${i}]</span>
-                        </c:when>
-                        <c:otherwise>
-                            <a href="report?p=${i}&targetType=${param.targetType}&status=${param.status}&searchType=${param.searchType}&keyword=${param.keyword}"
-                               class="page-link">${i}</a>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-
-                <c:if test="${currentPage < totalPage}">
-                    <a href="report?p=${currentPage + 1}&targetType=${param.targetType}&status=${param.status}&searchType=${param.searchType}&keyword=${param.keyword}"
-                       class="page-btn">다음</a>
-                </c:if>
+            <%-- 🌟 페이징 버튼이 들어갈 빈 껍데기 (데이터만 JS로 넘겨줍니다) --%>
+            <div id="report-pagination" class="pagination"
+                 data-current="${currentPage}"
+                 data-total="${totalPage}"
+                 data-target="${param.targetType}"
+                 data-status="${param.status}"
+                 data-search="${param.searchType}"
+                 data-keyword="${param.keyword}">
             </div>
         </div>
-
     </div>
+</div>
+
+<%-- 🌟 맨 아랫줄에 페이징 전용 JS 파일 연결! --%>
+<script src="${pageContext.request.contextPath}/js/admin/admin_report.js"></script>
+</div>
+
+</div>
 </div>
