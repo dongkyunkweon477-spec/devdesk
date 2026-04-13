@@ -1,14 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>DevDesk</title>
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/myboard.css">
-</head>
-<body>
+<%-- 🌟 불필요한 <html>, <head>, <body> 태그 삭제 완료! --%>
+<%-- 🌟 index.css는 부모인 index.jsp에서 이미 불러오므로 삭제하고 myboard.css만 부릅니다! --%>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/myboard.css">
+
+<%-- 여기서부터 진짜 알맹이 내용만 시작! --%>
 <main class="content">
     <div class="myboard-wrap">
 
@@ -41,22 +38,19 @@
                 </tr>
                 </thead>
 
-                <tbody>
-                <c:if test="${empty myBoardList}">
-                    <tr>
-         <tbody id="posts-tbody">
+                <tbody id="posts-tbody">
                 <c:if test="${empty myBoardList}">
                     <tr class="empty-msg-row">
-
                         <td colspan="5" class="empty-msg">아직 작성한 게시글이 없습니다. 첫 글을 남겨보세요! 📝</td>
                     </tr>
                 </c:if>
 
                 <c:forEach var="board" items="${myBoardList}">
-                    <tr onclick="goToDetail('BoardDetailC?id=${board.board_id}')" style="cursor: pointer;">
+                    <tr onclick="goToDetail('${pageContext.request.contextPath}/BoardDetailC?id=${board.board_id}')"
+                        style="cursor: pointer;">
                         <td><span class="category-badge">${board.category}</span></td>
                         <td class="td-title">
-                            <a href="BoardDetailC?id=${board.board_id}">${board.title}</a>
+                            <a href="${pageContext.request.contextPath}/BoardDetailC?id=${board.board_id}">${board.title}</a>
                             <span style="color: #ef4444; font-size: 12px; margin-left: 4px;">[${board.comment_count}]</span>
                         </td>
                         <td>${board.view_count}</td>
@@ -67,9 +61,7 @@
                 </tbody>
             </table>
 
-
             <div id="posts-pagination" class="pagination"></div>
-
         </div>
 
         <div id="tab-comments" style="display: none;">
@@ -87,25 +79,21 @@
                 </tr>
                 </thead>
 
-                <tbody>
-                <c:if test="${empty myCommentList}">
-                    <tr>
-
                 <tbody id="comments-tbody">
                 <c:if test="${empty myCommentList}">
                     <tr class="empty-msg-row">
-
                         <td colspan="3" class="empty-msg">아직 작성한 댓글이 없습니다. 💬</td>
                     </tr>
                 </c:if>
 
                 <c:forEach var="comment" items="${myCommentList}">
-                    <tr onclick="goToDetail('BoardDetailC?id=${comment.board_id}')" style="cursor: pointer;">
+                    <tr onclick="goToDetail('${pageContext.request.contextPath}/BoardDetailC?id=${comment.board_id}')"
+                        style="cursor: pointer;">
                         <td class="td-title" style="color: #94a3b8; font-size: 14px;">
                                 ${comment.board_title}
                         </td>
                         <td class="td-title">
-                            <a href="BoardDetailC?id=${comment.board_id}">${comment.content}</a>
+                            <a href="${pageContext.request.contextPath}/BoardDetailC?id=${comment.board_id}">${comment.content}</a>
                         </td>
                         <td>
                             <c:choose>
@@ -122,48 +110,10 @@
                 </tbody>
             </table>
 
-
             <div id="comments-pagination" class="pagination"></div>
-
         </div>
 
     </div>
 </main>
 
-
-<script>
-    /* 탭 클릭 시 화면 전환해주는 자바스크립트 함수 */
-    function showTab(tabName) {
-        document.getElementById('tab-posts').style.display = 'none';
-        document.getElementById('tab-comments').style.display = 'none';
-        document.getElementById('btn-posts').classList.remove('active');
-        document.getElementById('btn-comments').classList.remove('active');
-
-        if (tabName === 'posts') {
-            document.getElementById('tab-posts').style.display = 'block';
-            document.getElementById('btn-posts').classList.add('active');
-        } else {
-            document.getElementById('tab-comments').style.display = 'block';
-            document.getElementById('btn-comments').classList.add('active');
-        }
-    }
-
-    /* 🌟 추가된 똑똑한 이동 함수! */
-    function goToDetail(url) {
-        // 유저가 마우스로 텍스트를 드래그해서 선택한 내용이 있는지 검사합니다.
-        var selectedText = window.getSelection().toString();
-
-        if (selectedText.length > 0) {
-            // 선택한 텍스트가 있다면? (복사하려는 의도이므로 이동을 취소합니다!)
-            return;
-        }
-
-        // 텍스트를 선택한 게 아니라 단순 클릭이라면 정상적으로 페이지를 이동합니다.
-        location.href = url;
-    }
-</script>
-
-<script src="js/myboard.js"></script>
-
-</body>
-</html>
+<script src="${pageContext.request.contextPath}/js/myboard.js"></script>

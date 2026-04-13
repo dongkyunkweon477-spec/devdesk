@@ -53,12 +53,6 @@
                 <div class="detail-label">조회수</div>
                 <div class="detail-content">${board.view_count}</div>
             </div>
-            <c:if test="${not empty board.updated_date}">
-                <div class="detail-row">
-                    <div class="detail-label">최종 수정일</div>
-                    <div class="detail-content">${board.updated_date}</div>
-                </div>
-            </c:if>
         </div>
 
         <div class="detail-row content-area">
@@ -467,16 +461,16 @@
     });
 
     // Convert Supabase image URLs to img tags
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const textBox = document.querySelector('.text-box');
         if (textBox) {
             let content = textBox.innerHTML;
             console.log('Original content:', content);
-            
+
             // More flexible pattern to match Supabase URLs
             const supabaseUrlPattern = /(https:\/\/[a-zA-Z0-9-]+\.supabase\.co\/storage\/v1\/object\/public\/upload\/file\/[^\s\)]+)/g;
-            
-            const replacedContent = content.replace(supabaseUrlPattern, function(url) {
+
+            const replacedContent = content.replace(supabaseUrlPattern, function (url) {
                 console.log('Found URL:', url);
                 const imageExtensions = /\.(jpg|jpeg|png|gif|webp)$/i;
                 if (imageExtensions.test(url)) {
@@ -487,7 +481,7 @@
                 }
                 return url;
             });
-            
+
             textBox.innerHTML = replacedContent;
             console.log('Final content:', replacedContent);
         }
