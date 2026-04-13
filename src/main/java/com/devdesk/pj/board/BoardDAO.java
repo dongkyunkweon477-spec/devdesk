@@ -1,6 +1,7 @@
 package com.devdesk.pj.board;
 
 import com.devdesk.pj.main.DBManager_new;
+
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,6 +20,7 @@ public class BoardDAO {
         ) {
             request.setCharacterEncoding("UTF-8");
 
+            // ✔ 파라미터 세팅 먼저
             ps.setInt(1, Integer.parseInt(request.getParameter("member_id")));
             ps.setString(2, request.getParameter("category"));
             ps.setString(3, request.getParameter("title"));
