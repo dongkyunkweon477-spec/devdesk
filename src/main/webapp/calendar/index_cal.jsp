@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
 
-<div id='calendar'></div>
-
 <div id="event-popup">
     <span class="pop-close" id="close-popup">✕</span>
     <h3 id="pop-title">회사 이름</h3>
@@ -113,24 +111,30 @@
     </div>
 </div>
 
-<div class="calendar-wrapper">
-    <div id='calendar'></div> <div class="fab-container">
-    <button class="fab-main" id="fabMain">+</button>
-    <div class="fab-menu" id="fabMenu">
-        <div class="fab-item" id="fabAddSchedule">
-            <span>📅</span>
-            <span class="fab-label">일정 추가하기</span>
+<div class="calendar-wrapper" style="position: relative; max-width: 1000px; margin: 0 auto;">
+
+    <div id='calendar'></div>
+
+    <div class="fab-container">
+        <button class="fab-main" id="fabMain">+</button>
+        <div class="fab-menu" id="fabMenu">
+            <div class="fab-item" id="fabAddSchedule">
+                <span>📅</span>
+                <span class="fab-label">일정 추가하기</span>
+            </div>
+
+            <div class="fab-item" onclick="location.href='/application-list'">
+                <span>📋</span>
+                <span class="fab-label">지원현황</span>
+            </div>
+
+            <div class="fab-item" onclick="location.href='/dashboard'">
+                <span>🏠</span>
+                <span class="fab-label">대시보드</span>
+            </div>
         </div>
-        <div class="fab-item" onclick="location.href='/application-list'">
-            <span>📑</span>
-            <span class="fab-label">지원현황</span>
-        </div>
-        <div class="fab-item" onclick="location.href='/dashboard'">
-            <span>📊</span>
-            <span class="fab-label">대시보드</span>
-        </div>
+
     </div>
-</div>
 </div>
 
 <script>
