@@ -11,10 +11,12 @@
     <div class="admin-sidebar">
         <h3>Admin Panel</h3>
         <ul>
-            <li><a href="${pageContext.request.contextPath}/admin">📊 대시보드</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin" class="active">📊 대시보드</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/member">👥 회원 관리</a></li>
+            <%-- 🌟 게시글 관리 주소도 연결 완료! --%>
             <li><a href="${pageContext.request.contextPath}/admin/board">📝 게시글 관리</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/company" class="active">🏢 기업 정보 관리</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/report">🚨 신고 관리</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/company">🏢 기업 정보 관리</a></li>
         </ul>
     </div>
 
@@ -31,14 +33,15 @@
             </div>
             <div class="stat-card stat-card--total">
                 <div class="stat-card__label">전체 기업</div>
-                <div class="stat-card__value">${totalCount} 개</div>
+                <div class="stat-card__value">${totalAllCompanies} 개</div>
             </div>
         </div>
 
         <%-- 필터 탭 + 검색 --%>
         <div class="company-toolbar">
             <div class="filter-tabs">
-                <a href="?filter=&keyword=${keyword}" class="filter-tab ${currentFilter == '' ? 'active' : ''}">전체</a>
+                <a href="${pageContext.request.contextPath}/admin/company"
+                   class="filter-tab ${currentFilter == '' ? 'active' : ''}">전체</a>
                 <a href="?filter=N&keyword=${keyword}"
                    class="filter-tab filter-tab--pending ${currentFilter == 'N' ? 'active' : ''}">
                     승인 대기
@@ -63,13 +66,13 @@
 
         <%-- 병합 안내 --%>
         <div class="merge-guide">
-            strong>중복 기업 병합:</strong> 표에서 <strong>기업 체크박스를 2개</strong> 선택한 뒤 [선택 병합] 버튼을 누르세요.
+            <strong>중복 기업 병합:</strong> 표에서 <strong>기업 체크박스를 2개</strong> 선택한 뒤 [선택 병합] 버튼을 누르세요.
         </div>
 
         <%-- 병합 버튼 (체크박스 선택 시 활성화) --%>
         <div class="bulk-action-bar" id="bulkBar" style="display:none;">
             <span id="selectedInfo">0개 선택됨</span>
-            <button class="btn-merge" onclick="openMergeModal()">🔀 선택 병합</button>
+            <button class="btn-merge" onclick="openMergeModal()">선택 병합</button>
         </div>
 
         <%-- 기업 목록 테이블 --%>
@@ -116,20 +119,27 @@
                             </c:choose>
                         </td>
                         <td class="action-cell">
-                                <%-- 대기 중인 기업만 승인 버튼 표시 --%>
-                            <c:if test="${c.is_verified == 'N'}">
-                                <button class="btn-approve"
-                                        onclick="approveCompany(${c.company_id}, '${c.company_name}')">승인
-                                </button>
-                            </c:if>
-                                <%-- 승인/미승인 관계없이 수정·삭제는 항상 표시 --%>
-                            <button class="btn-edit"
-                                    onclick="openEditModal(${c.company_id},'${c.company_name}','${c.company_industry}','${c.company_location}',${c.company_rating},${c.company_size})">
-                                수정
-                            </button>
-                            <button class="btn-delete"
-                                    onclick="deleteCompany(${c.company_id}, '${c.company_name}')">삭제
-                            </button>
+                            <c:choose>
+                                <c:when test="${c.is_verified == 'N'}">
+                                    <%-- 승인 대기: 승인 + 삭제만 --%>
+                                    <button class="btn-approve"
+                                            onclick="approveCompany(${c.company_id}, '${c.company_name}')">승인
+                                    </button>
+                                    <button class="btn-delete"
+                                            onclick="deleteCompany(${c.company_id}, '${c.company_name}')">삭제
+                                    </button>
+                                </c:when>
+                                <c:otherwise>
+                                    <%-- 승인 완료: 수정 + 삭제만 --%>
+                                    <button class="btn-edit"
+                                            onclick="openEditModal(${c.company_id},'${c.company_name}','${c.company_industry}','${c.company_location}',${c.company_rating},${c.company_size})">
+                                        수정
+                                    </button>
+                                    <button class="btn-delete"
+                                            onclick="deleteCompany(${c.company_id}, '${c.company_name}')">삭제
+                                    </button>
+                                </c:otherwise>
+                            </c:choose>
                         </td>
                     </tr>
                 </c:forEach>
@@ -216,7 +226,7 @@
 <%-- ===================== 병합 모달 ===================== --%>
 <div id="mergeModal" class="modal-overlay" style="display:none;">
     <div class="modal-box">
-        <h3>🔀 중복 기업 병합</h3>
+        <h3>중복 기업 병합</h3>
         <p class="modal-desc">두 기업 중 <strong>남길 기업</strong>을 선택하세요.<br>
             선택하지 않은 기업의 리뷰·지원이력이 남길 기업으로 이전된 후 삭제됩니다.</p>
         <div class="merge-option">
