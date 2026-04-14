@@ -1,10 +1,8 @@
 package com.devdesk.pj.main;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -16,8 +14,15 @@ public class SupabaseDAO {
     public static String upload(HttpServletRequest request, HttpServletResponse response) {
         try {
             Properties prop = new Properties();
-            InputStream input = request.getServletContext().getResourceAsStream("/WEB-INF/conf.properties");
-            prop.load(input);
+            InputStream input = SupabaseDAO.class.getClassLoader().getResourceAsStream("conf.properties");
+            if (input == null) {
+                throw new RuntimeException("conf.properties file not found in classpath");
+            }
+            try {
+                prop.load(input);
+            } finally {
+                input.close();
+            }
             String SUPABASE_URL = prop.getProperty("supabase.url");
             String API_KEY = prop.getProperty("service.role");
             Part filePart = request.getPart("file");
@@ -69,6 +74,11 @@ public class SupabaseDAO {
             // 업로드 완료된 그 url return
         } catch (Exception e) {
             e.printStackTrace();
+            try {
+                response.getWriter().println("업로드 에러: " + e.getMessage());
+            } catch (Exception ex) {
+                System.err.println("Error writing response: " + ex.getMessage());
+            }
         }
         return "";
     }

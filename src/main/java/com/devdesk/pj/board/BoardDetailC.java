@@ -21,11 +21,18 @@ public class BoardDetailC extends HttpServlet {
         // 0. 게시글 번호 받기
         int boardId = Integer.parseInt(request.getParameter("id"));
 
-        // 1. 조회수 증가 (테스트를 위해 중복 방지 제거)
-        BoardDAO.increaseViewCount(boardId);
-
-// 2. 게시물 정보 가져오기 (이 때 boardVO.like_count는 DB의 b_like_count를 가져옴)
+        // 1. 게시물 정보 가져오기
         BoardDAO.getBoard(request);
+
+        // 삭제된 게시글 처리
+        if (request.getAttribute("board") == null) {
+            request.setAttribute("content", "board/boardDeleted.jsp");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            return;
+        }
+
+        // 2. 조회수 증가
+        BoardDAO.increaseViewCount(boardId);
 
 // 3. 핵심 : 로그인한 유저별로 "좋아요 여부" 체크
         HttpSession session = request.getSession();

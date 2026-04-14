@@ -1,26 +1,3 @@
-// // 좋아요 상태 로드
-// function loadLikeStatus() {
-//     const boardId = ${board.board_id};
-//     const memberId = ${sessionScope.user.member_id};
-//
-//     fetch(`/like?board_id=${boardId}&member_id=${memberId}`)
-//         .then(response => response.json())
-//         .then(data => {
-//             isLiked = data.isLiked;
-//             likeCount = data.likeCount;
-//             updateLikeUI();
-//         })
-//         .catch(error => console.error('Error:', error));
-// }
-//
-// // 초기 좋아요 상태 설정 (JSP 로딩 시 서버 데이터를 자바스크립트 변수에 저장)
-// let currentIsLiked = ${isLiked} // 기본값
-//
-// // 1. 페이지 로드 시 서버가 보낸 초기 상태 (BoardDetailC에서 request.setAttribute한 값)
-// let
-//     isLiked = ${isLiked};
-// boardDetail.jsp 에서 js가 안 먹음
-
 function toggleLike() {
     // 1. EL 태그 값을 자바스크립트 변수에 할당 (따옴표 필수!)
     const boardId = "${board.board_id}";
@@ -198,3 +175,102 @@ function hideAllReplyForms() {
     const replyForms = document.querySelectorAll('.reply-form');
     replyForms.forEach(form => form.remove());
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const writer = document.querySelector(".writer");
+    const modal = document.getElementById("modal");
+    const closeBtn = document.querySelector(".close-btn");
+
+    // 👉 작성자 클릭
+    writer.addEventListener("click", async function () {
+        console.log("작성자 클릭됨");
+        const memberId = this.dataset.id;
+        console.log("memberId:", memberId);
+
+        try {
+            console.log("fetch 호출 시작");
+            const res = await fetch("/member-posts?memberId=" + memberId);
+            console.log("fetch 응답 상태:", res.status);
+
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+
+            const posts = await res.json();
+            console.log("받은 데이터:", posts);
+
+            const list = document.getElementById("postList");
+            list.innerHTML = "";
+
+            if (posts.length === 0) {
+                console.log("게시글 없음");
+                list.innerHTML = "<li>게시글이 없습니다</li>";
+            } else {
+                console.log("게시글 있음, 개수:", posts.length);
+                posts.forEach(post => {
+                    console.log("게시글:", post);
+                    const li = document.createElement("li");
+
+                    //  fire style
+                    li.style.color = "black";
+                    li.style.padding = "10px";
+
+                    const a = document.createElement("a");
+                    a.href = "BoardDetailC?id=" + post.board_id;
+                    a.innerText = post.title;
+                    a.style.color = "black";
+
+                    li.appendChild(a);
+                    list.appendChild(li);
+                });
+            }
+
+            modal.style.display = "block";
+            modal.classList.add("show");
+
+        } catch (e) {
+            console.error("에러:", e);
+        }
+    });
+
+    // 👉 닫기 버튼
+    closeBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+        modal.classList.remove("show");
+    });
+
+    // 👉 바깥 클릭 시 닫기
+    window.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            modal.style.display = "none";
+            modal.classList.remove("show");
+        }
+    });
+});
+
+// Convert Supabase image URLs to img tags
+document.addEventListener('DOMContentLoaded', function () {
+    const textBox = document.querySelector('.text-box');
+    if (textBox) {
+        let content = textBox.innerHTML;
+        console.log('Original content:', content);
+
+        // More comprehensive pattern to match Supabase URLs
+        const supabaseUrlPattern = /(https:\/\/[a-zA-Z0-9-]+\.supabase\.co\/storage\/v1\/object\/public\/upload\/file\/[^\s\)\]\}]+)/g;
+
+        const replacedContent = content.replace(supabaseUrlPattern, function (url) {
+            console.log('Found URL:', url);
+            const imageExtensions = /\.(jpg|jpeg|png|gif|webp)$/i;
+            if (imageExtensions.test(url)) {
+                const imgTag = '<img src="' + url + '" alt="uploaded image" style="max-width: 100%; height: auto; margin: 10px 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">';
+                console.log('Replaced with:', imgTag);
+                console.log('IMG src should be:', url);
+                return imgTag;
+            }
+            return url;
+        });
+
+        textBox.innerHTML = replacedContent;
+        console.log('Final content:', replacedContent);
+    }
+});

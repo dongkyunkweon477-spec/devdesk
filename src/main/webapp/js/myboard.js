@@ -1,6 +1,4 @@
-/* ===== myboard.js ===== */
-
-/* 탭 클릭 시 화면 전환 */
+/* 1. 탭 클릭 시 화면 전환 */
 function showTab(tabName) {
     document.getElementById('tab-posts').style.display = 'none';
     document.getElementById('tab-comments').style.display = 'none';
@@ -16,14 +14,14 @@ function showTab(tabName) {
     }
 }
 
-/* 드래그 복사 방지 기능이 포함된 이동 함수 */
+/* 2. 드래그 복사 방지 기능이 포함된 이동 함수 */
 function goToDetail(url) {
     var selectedText = window.getSelection().toString();
-    if (selectedText.length > 0) return;
-    location.href = url;
+    if (selectedText.length > 0) return; // 드래그 중이면 이동 취소
+    location.href = url; // 단순 클릭이면 이동
 }
 
-/* 🔥 이전/다음 버튼 똑똑하게 숨기는 페이징 마법! */
+/* 3. 🔥 이전/다음 버튼 똑똑하게 숨기는 페이징 마법! */
 function setupPagination(tbodyId, paginationId, rowsPerPage) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
@@ -108,6 +106,7 @@ function setupPagination(tbodyId, paginationId, rowsPerPage) {
     render();
 }
 
+// HTML 렌더링이 끝나면 자동으로 두 개의 테이블에 페이징 세팅!
 document.addEventListener("DOMContentLoaded", function () {
     setupPagination('posts-tbody', 'posts-pagination', 7);
     setupPagination('comments-tbody', 'comments-pagination', 7);

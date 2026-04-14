@@ -23,15 +23,27 @@
     border-bottom: 1px solid var(--border-primary);
     align-items: center;
     transition: var(--transition);
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    flex-wrap: nowrap;
+    white-space: nowrap;
 }
 
 .board-header h2 {
     margin: 0;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    line-height: 1.2;
+    font-size: 18px;
+    font-weight: 600;
+    vertical-align: middle;
 }
 
 .board-actions {
     display: flex;
     gap: 10px;
+    align-items: center;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    flex-wrap: nowrap;
+    white-space: nowrap;
 }
 
 /* Row */
@@ -74,7 +86,7 @@
 
 /* 3. Date */
 .col-date {
-    width: 120px;
+    width: 140px;
     text-align: right;
     color: var(--text-tertiary);
     font-size: 14px;
@@ -310,6 +322,8 @@
     border: 1px solid var(--border-primary);
     overflow: hidden;
     transition: var(--transition);
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    line-height: 1.4;
 }
 
 /* Header area */
@@ -331,6 +345,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    line-height: 1.2;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
 }
 
 /* JetBrains Mono style decoration */
@@ -357,14 +373,35 @@
     font-weight: 600;
     color: var(--text-tertiary);
     font-size: 14px;
-    padding-top: 2px;
+    padding: 0;
+    margin: 0;
+    line-height: 1.4;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    vertical-align: middle;
 }
 
+/* 1. 컨테이너 정렬 수정 */
 .detail-content {
     flex: 1;
     color: var(--text-secondary);
     font-size: 15px;
-    line-height: 1.6;
+    line-height: 1.4;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    vertical-align: middle;
+    padding: 0;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.detail-info-group .detail-content .writer {
+    display: inline !important;
+    vertical-align: baseline !important;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif !important;
+    font-size: 15px !important;
+    color: var(--text-secondary) !important;
+    line-height: 1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 /* Title emphasis */
@@ -372,6 +409,8 @@
     font-size: 22px;
     font-weight: 700;
     color: var(--text-primary);
+    line-height: 1.2;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
 }
 
 /* Author, date info group */
@@ -383,10 +422,16 @@
     margin: 20px 0 30px 0;
     gap: 40px;
     transition: var(--transition);
+    height: 90px;
 }
 
 .detail-info-group .detail-row {
     margin-bottom: 0;
+    align-items: center;
+}
+
+.detail-info-group .detail-row:last-child {
+    margin-left: auto;
 }
 
 .detail-info-group .detail-label {
@@ -472,7 +517,7 @@
     width: 60%;
     margin: 60px auto;
     padding: 30px;
-    background: #ffffff;
+    background: var(--bg-primary);
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
@@ -540,7 +585,7 @@
 
 /* Submit button */
 .submit-btn {
-    background: #4f46e5;
+    background-color: var(--accent-primary);
     color: white;
     border: none;
     padding: 12px 20px;
@@ -551,7 +596,7 @@
 }
 
 .submit-btn:hover {
-    background: #4338ca;
+    background-color: var(--accent-secondary);
 }
 
 /* Cancel button */
@@ -625,6 +670,7 @@
     cursor: pointer;
     color: #4CAF50;
     font-weight: bold;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
 }
 
 .modal {

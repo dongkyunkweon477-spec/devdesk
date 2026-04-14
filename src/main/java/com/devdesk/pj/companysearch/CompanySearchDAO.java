@@ -133,7 +133,8 @@ public class CompanySearchDAO {
     public int insertCompany(CompanySearchVO vo) {
         String sql = "insert into company(company_id, company_name, company_industry, " +
                 "company_location, company_rating, company_size, company_created_date, company_application_date, is_verified) " +
-                "values(company_seq.nextval, ?, ?, ?, ?, ?, ?, ?, 'Y')";
+                //"values(company_seq.nextval, ?, ?, ?, ?, ?, ?, ?, 'Y')";
+                "values(company_seq.nextval, ?, ?, ?, ?, ?, ?, ?, 'N')"; // 영은 추가-기업 승인용
         try (
                 Connection con = DBManager_new.connect();
                 PreparedStatement pstmt = con.prepareStatement(sql);
@@ -206,7 +207,7 @@ public class CompanySearchDAO {
         String sql = "SELECT COUNT(*) AS total_count,"
                 + " ROUND(AVG(r_difficulty), 1) AS avg_difficulty,"
                 + " ROUND(AVG(r_rating), 1) AS avg_rating,"
-                + " ROUND(COUNT(CASE WHEN r_result='PASS' THEN 1 END) * 100.0 / COUNT(*), 1) AS pass_rate"
+                + " ROUND(COUNT(CASE WHEN r_result='PASS' THEN 1 END) * 100.0 / NULLIF(COUNT(*), 0), 1) AS pass_rate"
                 + " FROM review WHERE r_company_id = ?";
         Map<String, Object> stats = new HashMap<>();
         try (Connection con = DBManager_new.connect();
@@ -379,4 +380,6 @@ public class CompanySearchDAO {
 
         return newCompanyId;
     }
+
+
 }

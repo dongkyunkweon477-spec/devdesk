@@ -36,6 +36,11 @@ public class ReviewDetailC extends HttpServlet {
         }
 
         ReviewVO review = ReviewDAO.REVIEW_DAO.getReviewById(reviewId);
+        if (review == null) {
+            request.setAttribute("content", "/review/deleted.jsp");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            return;
+        }
         CompanySearchVO company = CompanySearchDAO.COMPANY_SEARCH_DAO.getCompanyById(review.getReviewCompanyId());
         request.setAttribute("r", review);
         request.setAttribute("company", company);

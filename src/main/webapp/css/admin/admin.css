@@ -242,3 +242,47 @@
     font-weight: bold;
 }
 
+/* =========================================
+   기업 정보 관리 버튼 충돌 방지
+   (admin.css 맨 아래에 추가)
+========================================= */
+
+/* admin-table td의 color 상속 차단 +
+   admin_member.css의 btn 스타일 덮어쓰기 방지 */
+.admin-table .action-cell .btn-approve,
+.admin-table .action-cell .btn-edit,
+.admin-table .action-cell .btn-delete {
+    padding: 5px 12px !important;
+    border: none !important;
+    border-radius: 5px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: normal !important;
+    display: inline-block !important;
+    color: #fff !important;
+    cursor: pointer;
+    white-space: nowrap;
+    box-sizing: border-box;
+    text-align: center;
+    text-decoration: none !important;
+}
+
+.admin-table .action-cell .btn-approve {
+    background: #10b981 !important;
+}
+
+.admin-table .action-cell .btn-edit {
+    background: #7c3aed !important;
+}
+
+.admin-table .action-cell .btn-delete {
+    background: #ef4444 !important;
+}
+
+.admin-table .action-cell .btn-approve:hover,
+.admin-table .action-cell .btn-edit:hover,
+.admin-table .action-cell .btn-delete:hover {
+    opacity: 0.85;
+}
