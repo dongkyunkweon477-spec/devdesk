@@ -15,6 +15,7 @@
     --teal: #4ecdc4;
     --orange: #ff9f69;
     --red: #ff6b6b;
+    --stage-color: var(--accent); /* 또는 원하는 색상으로 지정 - 선민 수정 */
 }
 
 * {
@@ -28,7 +29,7 @@ body {
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    padding: 40px 24px;
+    /*padding: 40px 24px; 선민 수정 */
 }
 
 body::before {
