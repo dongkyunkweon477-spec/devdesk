@@ -3,8 +3,8 @@ var currentBoardPage = 1;
 $(document).ready(function () {
     // 필터/정렬 변경 시 1페이지부터 재조회
     $('#filterType, #filterResult, #sortOrder').on('change', function () {
-        if (typeof activeCompanyIds !== 'undefined' && activeCompanyIds) {
-            loadFilteredReviews(activeCompanyIds, 1);
+        if (typeof activeSearchConditions !== 'undefined' && activeSearchConditions) {
+            loadFilteredReviews(activeSearchConditions, 1);
         } else {
             loadReviews(1);
         }
@@ -29,7 +29,7 @@ function loadReviews(page) {
             page: page
         }
     }).done(function (data) {
-        if (typeof activeCompanyIds !== 'undefined' && activeCompanyIds) return;
+        if (typeof activeSearchConditions !== 'undefined' && activeSearchConditions) return;
         renderReviews(data.reviews);
         renderPaging(data.totalPages);
     }).fail(function () {
@@ -62,7 +62,7 @@ function renderReviews(reviews) {
         html += '<div class="card">'
             + '<div class="card-header">'
             + '  <div>'
-            + '    <a href="' + contextPath + '/review?companyId=' + r.reviewCompanyId + '">' + (r.companyName || '') + '</a>'
+            + '  <a href="' + contextPath + '/review?companyId=' + r.reviewCompanyId + '">' + (r.companyName || '') + '</a>'
             + '  </div>'
             + '  <div>[북마크] ' + r.reviewBookmarkCount + '</div>'
             + '</div>'

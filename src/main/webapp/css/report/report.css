@@ -10,8 +10,15 @@
     flex-shrink: 0;
 }
 
-.report-type-badge.review { color: #7c3aed; background-color: #f5f3ff; }
-.report-type-badge.board  { color: #0369a1; background-color: #e0f2fe; }
+.report-type-badge.review {
+    color: #7c3aed;
+    background-color: #f5f3ff;
+}
+
+.report-type-badge.board {
+    color: #039ca1;
+    background-color: #e0f2fe;
+}
 
 /* ===== 신고 목록 - 신고 사유 배지 ===== */
 .report-reason-badge {
@@ -42,8 +49,15 @@
     flex-shrink: 0;
 }
 
-.report-status-badge.pending { color: #dc2626; background-color: #fee2e2; }
-.report-status-badge.done    { color: #16a34a; background-color: #dcfce7; }
+.report-status-badge.pending {
+    color: #dc2626;
+    background-color: #fee2e2;
+}
+
+.report-status-badge.done {
+    color: #16a34a;
+    background-color: #dcfce7;
+}
 
 /* ===== 신고 폼 - 안내 메시지 ===== */
 .report-notice {

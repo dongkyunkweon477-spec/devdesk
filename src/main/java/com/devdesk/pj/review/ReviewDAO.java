@@ -479,6 +479,99 @@ public class ReviewDAO {
         return data;
     }
 
+    public Map<String, Object> getFilteredReviewsByCondition(
+            String companyName, String companyIndustry, String companyLocation,
+            String minRating, String maxRating,
+            String interviewType, String result, String sort, int page, int pageSize) {
+
+        StringBuilder baseSql = new StringBuilder(
+                "SELECT r.*, c.company_name FROM review r " +
+                "JOIN company c ON r.r_company_id = c.company_id " +
+                "WHERE c.is_verified = 'Y'"
+        );
+        List<Object> params = new ArrayList<>();
+
+        if (companyName != null && !companyName.isBlank()) {
+            baseSql.append(" AND c.company_name LIKE ?");
+            params.add("%" + companyName + "%");
+        }
+        if (companyIndustry != null && !companyIndustry.isBlank()) {
+            String[] industries = companyIndustry.split(",");
+            baseSql.append(" AND c.company_industry IN (");
+            for (int i = 0; i < industries.length; i++) {
+                baseSql.append(i > 0 ? ",?" : "?");
+                params.add(industries[i].trim());
+            }
+            baseSql.append(")");
+        }
+        if (companyLocation != null && !companyLocation.isBlank()) {
+            String[] locations = companyLocation.split(",");
+            baseSql.append(" AND c.company_location IN (");
+            for (int i = 0; i < locations.length; i++) {
+                baseSql.append(i > 0 ? ",?" : "?");
+                params.add(locations[i].trim());
+            }
+            baseSql.append(")");
+        }
+        if (minRating != null && !minRating.isBlank()) {
+            baseSql.append(" AND c.company_rating >= ?");
+            params.add(Double.parseDouble(minRating));
+        }
+        if (maxRating != null && !maxRating.isBlank()) {
+            baseSql.append(" AND c.company_rating <= ?");
+            params.add(Double.parseDouble(maxRating));
+        }
+        if (interviewType != null && !interviewType.isBlank()) {
+            baseSql.append(" AND r.r_interview_type = ?");
+            params.add(interviewType);
+        }
+        if (result != null && !result.isBlank()) {
+            baseSql.append(" AND r.r_result = ?");
+            params.add(result);
+        }
+
+        String orderBy = " ORDER BY r.r_created_date DESC";
+        if ("difficulty_desc".equals(sort)) {
+            orderBy = " ORDER BY r.r_difficulty DESC";
+        } else if ("difficulty_asc".equals(sort)) {
+            orderBy = " ORDER BY r.r_difficulty ASC";
+        }
+        baseSql.append(orderBy);
+
+        String countSql = "SELECT COUNT(*) FROM (" + baseSql + ")";
+        String pagedSql = "SELECT * FROM ("
+                + "  SELECT ROWNUM rn, t.* FROM (" + baseSql + ") t"
+                + ") WHERE rn BETWEEN ? AND ?";
+        int start = (page - 1) * pageSize + 1;
+        int end = page * pageSize;
+
+        Map<String, Object> data = new HashMap<>();
+        try (Connection con = DBManager_new.connect()) {
+            try (PreparedStatement pstmt = con.prepareStatement(countSql)) {
+                for (int i = 0; i < params.size(); i++) pstmt.setObject(i + 1, params.get(i));
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) data.put("totalCount", rs.getInt(1));
+                }
+            }
+            try (PreparedStatement pstmt = con.prepareStatement(pagedSql)) {
+                for (int i = 0; i < params.size(); i++) pstmt.setObject(i + 1, params.get(i));
+                pstmt.setInt(params.size() + 1, start);
+                pstmt.setInt(params.size() + 2, end);
+                List<ReviewVO> reviews = new ArrayList<>();
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    while (rs.next()) reviews.add(ReviewVO.fromResultSet(rs));
+                }
+                data.put("reviews", reviews);
+            }
+            int totalCount = (int) data.getOrDefault("totalCount", 0);
+            data.put("totalPages", (int) Math.ceil((double) totalCount / pageSize));
+            data.put("currentPage", page);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
     public int insertReviewWithReturnId(ReviewVO vo) {
         int generatedId = 0;
         String seqSql = "SELECT review_seq.nextval FROM dual";

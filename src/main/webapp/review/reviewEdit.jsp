@@ -190,7 +190,7 @@
     </form>
 </div>
 
-<script src="${pageContext.request.contextPath}/js/review-write.js"></script>
+<script src="${pageContext.request.contextPath}/js/review/review-write.js"></script>
 <script>
     $(function () {
         // 수정 페이지 진입 시 글자수 초기화

@@ -206,4 +206,4 @@
     </form>
 </div>
 
-<script src="${pageContext.request.contextPath}/js/review-write.js"></script>
+<script src="${pageContext.request.contextPath}/js/review/review-write.js"></script>

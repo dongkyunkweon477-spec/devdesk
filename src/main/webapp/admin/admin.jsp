@@ -42,6 +42,7 @@
                 </div>
 
                 <div class="card">
+                    
                     <div class="card-title">오늘의 신규 가입</div>
                     <div class="card-value" style="color: var(--success-color);">+ ${todayNewMembers} 명</div>
                 </div>

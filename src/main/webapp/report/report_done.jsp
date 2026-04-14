@@ -16,7 +16,7 @@
             </p>
         </c:when>
         <c:otherwise>
-            <div style="font-size: 48px; margin-bottom: 20px;">✅</div>
+            <div style="font-size: 48px; margin-bottom: 20px;">📋</div>
             <h2 style="font-size: 22px; font-weight: 700; color: var(--text-primary, #1a1a1a); margin-bottom: 12px;">
                 신고가 접수되었습니다.
             </h2>
@@ -25,6 +25,7 @@
                 허위 신고 시 서비스 이용이 제한될 수 있습니다.
             </p>
         </c:otherwise>
+        
     </c:choose>
 
     <div style="display: flex; gap: 12px;">

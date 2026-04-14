@@ -5,7 +5,7 @@
 
 
 <script>var contextPath = '${pageContext.request.contextPath}';</script>
-<script src="${pageContext.request.contextPath}/js/review.js"></script>
+<script src="${pageContext.request.contextPath}/js/review/review.js"></script>
 <div class="detail-wrap">
 
     <div class="detail-header">
