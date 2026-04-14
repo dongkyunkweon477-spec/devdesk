@@ -21,6 +21,11 @@ public class CompanySearchDirectAjaxC extends HttpServlet {
             response.getWriter().write("{\"error\":\"회사명이 비어있습니다.\"}");
             return;
         }
+        if (companyName.length() > 50) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"회사명은 50자 이내로 입력해주세요.\"}");
+            return;
+        }
 
 
         int newId = CompanySearchDAO.COMPANY_SEARCH_DAO.directInsertCompany(companyName);

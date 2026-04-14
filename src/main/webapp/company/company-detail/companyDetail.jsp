@@ -14,7 +14,7 @@
         <div class="cd-hero-left">
             <div class="cd-logo-box">
                 <span class="cd-logo-text">
-                    ${company.companyName.substring(0, 1)}
+                    ${not empty company.companyName ? company.companyName.substring(0, 1) : '?'}
                 </span>
             </div>
             <div class="cd-hero-info">

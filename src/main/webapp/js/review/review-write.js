@@ -83,6 +83,12 @@ function initFormSubmit() {
             }
         });
 
+        // 기업 선택 여부 (기업검색 모달에서 선택하는 경우)
+        if ($('#selectedCompanyId').length && !$('#selectedCompanyId').val()) {
+            $('#companySearchInput').closest('.field-group').addClass('error');
+            hasError = true;
+        }
+
         // 상세 후기 50자 이상
         if ($('#content').val().length < 50) {
             $('#content').closest('.field-group').addClass('error');

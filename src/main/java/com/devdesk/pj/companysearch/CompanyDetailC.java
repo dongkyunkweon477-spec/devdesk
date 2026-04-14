@@ -18,7 +18,12 @@ public class CompanyDetailC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        int companyId = Integer.parseInt(request.getParameter("companyId"));
+        String companyIdStr = request.getParameter("companyId");
+        if (companyIdStr == null || companyIdStr.isBlank()) {
+            response.sendRedirect(request.getContextPath() + "/company-search");
+            return;
+        }
+        int companyId = Integer.parseInt(companyIdStr);
         int totalCount = ReviewDAO.REVIEW_DAO.getReviewCount(companyId);
         int pageSize = 10;
         int totalPages = (int) Math.ceil((double) totalCount / pageSize);

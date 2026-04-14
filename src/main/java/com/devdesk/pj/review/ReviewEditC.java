@@ -44,7 +44,7 @@ public class ReviewEditC extends HttpServlet {
         int memberId = user.getMember_id();
         int reviewId = Integer.parseInt(request.getParameter("reviewId"));
         ReviewVO review = ReviewDAO.REVIEW_DAO.getReviewById(reviewId);
-        if (review.getReviewMemberId() != memberId) {
+        if (review == null || review.getReviewMemberId() != memberId) {
             response.sendRedirect(request.getContextPath() + "/review");
             return;
         }

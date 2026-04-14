@@ -25,6 +25,11 @@ public class ReviewLikeC extends HttpServlet {
 
         boolean liked = ReviewDAO.REVIEW_DAO.toggleLike(memberId, reviewId);
         ReviewVO review = ReviewDAO.REVIEW_DAO.getReviewById(reviewId);
+        if (review == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.getWriter().write("{\"error\":\"review not found\"}");
+            return;
+        }
 
         response.getWriter().write("{\"liked\":" + liked
                 + ",\"count\":" + review.getReviewLikeCount() + "}");
