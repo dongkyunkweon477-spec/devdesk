@@ -1,176 +1,124 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-    <title>DevDesk - 내 면접 일정</title>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<title>DevDesk - 내 면접 일정</title>
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet'/>
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
 
-<div id="event-popup">
-    <span class="pop-close" id="close-popup">✕</span>
-    <h3 id="pop-title">회사 이름</h3>
-    <div class="pop-info"><strong>직무:</strong> <span id="pop-position"></span></div>
-    <div class="pop-info"><strong>날짜:</strong> <span id="pop-date"></span></div>
-    <div class="pop-info"><strong>시간:</strong> <span id="pop-time"></span></div>
-    <div class="pop-info"><strong>면접:</strong> <span id="pop-type"></span></div>
-    <div class="pop-info"><strong>메모:</strong> <span id="pop-memo"></span></div>
+<%-- ── 이번 주 날짜 범위 계산 ── --%>
+<%
+    java.util.Calendar cal = java.util.Calendar.getInstance();
+    cal.set(java.util.Calendar.DAY_OF_WEEK, java.util.Calendar.SUNDAY);
+    java.util.Date startDate = cal.getTime();
+    cal.add(java.util.Calendar.DATE, 6);
+    java.util.Date endDate = cal.getTime();
+    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 
-    <div class="btn-group-sm">
-        <button class="btn-edit" id="btn-go-edit">수정</button>
-        <button class="btn-delete" id="btn-do-delete">삭제</button>
-    </div>
-</div>
+    request.setAttribute("weekStart", sdf.format(startDate));
+    request.setAttribute("weekEnd", sdf.format(endDate));
+%>
 
-<div id="schedule-modal">
-    <h3 id="modal-title">새 일정 추가</h3>
-    <input type="hidden" id="form-id">
-    <input type="hidden" id="form-appId" value="1">
+<%--
+    ════════════════════════════════════════════════════════
+    [사용 방법]
+    sidebar.jsp (또는 layout include 파일)에서
+    미니캘린더 위쪽에 아래 두 블록(이번 주 일정 / To-do)을 붙여넣고,
+    calendar.jsp 본문엔 .calendar-page-wrapper 블록만 남기세요.
+    ════════════════════════════════════════════════════════
+--%>
 
-    <div class="company-header">
-        <div class="company-badge">일정 등록</div>
-        <div class="field-group">
+<%-- ────────────────────────────────────────
+     [A] 사이드바 삽입 블록
+──────────────────────────────────────── --%>
+<div class="sidebar">
 
-            <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}"/>
+    <%-- 1. 상단 스크롤 영역 (일정, 메모) --%>
+    <div class="sidebar-nav">
+        <span class="nav-section-label">일정</span>
 
-            <div style="display:flex; align-items:center; gap:8px;">
-                <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요" style="cursor:pointer;"
-                       onclick="openCompanyModal()"/>
-                <button type="button" onclick="openCompanyModal()" class="modal-btn-search">기업 선택</button>
-            </div>
-            <jsp:include page="/company/company-search/companySearchModal.jsp"/>
-            <input type="hidden" name="companyId" id="selectedCompanyId"/>
+        <%-- 이번 주 일정 토글 버튼 --%>
+        <div class="week-nav-toggle" id="weekToggle">
+            <span class="nav-icon">📅</span>
+            <span class="toggle-label">이번 주 일정</span>
+            <span class="toggle-arrow">▼</span>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label>지원 직무</label>
-        <input type="text" id="form-position" placeholder="ex) 백엔드 개발자, 서비스 기획">
-    </div>
+        <%-- 펼쳐지는 일정 목록 --%>
+        <div class="week-schedule-dropdown" id="weekDropdown">
+            <c:set var="hasWeekEvent" value="false"/>
 
-    <div class="form-group">
-        <label>서류 지원 일자 (선택)</label>
-        <input type="date" id="form-apply-date">
-    </div>
+            <c:forEach var="sch" items="${list}">
+                <c:if test="${not empty sch.schedule_date}">
+                    <fmt:parseDate value="${sch.schedule_date}" pattern="yyyy-MM-dd" var="schDate"/>
+                    <fmt:parseDate value="${weekStart}" pattern="yyyy-MM-dd" var="start"/>
+                    <fmt:parseDate value="${weekEnd}" pattern="yyyy-MM-dd" var="end"/>
 
-    <div class="form-group">
-        <label>면접 날짜</label>
-        <input type="date" id="form-date">
-    </div>
-
-    <div class="form-group">
-        <label>시간</label>
-        <div style="display: flex; gap: 5px;">
-            <select id="form-hour" style="flex: 1;">
-                <option value="08">08시</option>
-                <option value="09">09시</option>
-                <option value="10">10시</option>
-                <option value="11">11시</option>
-                <option value="12">12시</option>
-                <option value="13">13시</option>
-                <option value="14">14시</option>
-                <option value="15">15시</option>
-                <option value="16">16시</option>
-                <option value="17">17시</option>
-                <option value="18">18시</option>
-                <option value="19">19시</option>
-            </select>
-
-            <select id="form-minute" style="flex: 1;">
-                <option value="00">00분</option>
-                <option value="10">10분</option>
-                <option value="20">20분</option>
-                <option value="30">30분</option>
-                <option value="40">40분</option>
-                <option value="50">50분</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label>면접 전형</label>
-        <select id="form-type">
-            <option value="코딩테스트">코딩테스트</option>
-            <option value="1차면접">1차면접</option>
-            <option value="2차면접">2차면접</option>
-            <option value="임원면접">임원면접</option>
-            <option value="direct">직접 입력...</option>
-        </select>
-        <input type="text" id="form-type-direct" placeholder="ex) SPI, 인성면접" style="display:none; margin-top:5px;">
-    </div>
-
-    <div class="form-group">
-        <label>메모</label>
-        <input type="text" id="form-memo">
-    </div>
-
-    <div class="btn-group">
-        <button class="btn-cancel" id="btn-modal-close">취소</button>
-        <button class="btn-save" id="btn-save-schedule">저장</button>
-    </div>
-</div>
-
-<aside class="sidebar">
-    <div class="sidebar-section">
-        <div class="section-header" id="toggle-list" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
-            <span>이번 달 일정</span>
-            <span class="toggle-icon">▼</span>
-        </div>
-        <div class="section-content" id="upcoming-list">
-            <ul class="schedule-list">...</ul>
-        </div>
-    </div>
-                <%-- 현재 날짜의 월 구하기 (Java 코드로 간단히 처리) --%>
-                <%
-                    java.util.Calendar cal = java.util.Calendar.getInstance();
-                    String currentMonth = String.format("%02d", cal.get(java.util.Calendar.MONTH) + 1);
-                %>
-                <c:set var="curM" value="<%= currentMonth %>" />
-
-                <c:forEach var="sch" items="${list}">
-                    <%-- 날짜 문자열(YYYY-MM-DD)에서 월 부분(MM) 추출하여 비교 --%>
-                    <c:if test="${fn:substring(sch.schedule_date, 5, 7) == curM}">
-                        <li class="list-item" onclick="calendar.gotoDate('${sch.schedule_date}')">
-                            <span class="item-date">${sch.schedule_date}</span>
-                            <span class="item-title">${sch.company_name}</span>
-                        </li>
+                    <c:if test="${schDate.time >= start.time and schDate.time <= end.time}">
+                        <div class="week-schedule-item"
+                             onclick="if(window.calendar){window.calendar.gotoDate('${sch.schedule_date}');}">
+                            <span class="week-item-day">${fn:substring(sch.schedule_date, 8, 10)}일</span>
+                            <div class="week-item-info">
+                                <span class="week-item-company">${sch.company_name}</span>
+                                <span class="week-item-type">${sch.interview_type}</span>
+                            </div>
+                        </div>
+                        <c:set var="hasWeekEvent" value="true"/>
                     </c:if>
-                </c:forEach>
-            </ul>
+                </c:if>
+            </c:forEach>
+
+            <c:if test="${hasWeekEvent == 'false'}">
+                <div class="week-schedule-empty">이번 주 일정이 없어요 😊</div>
+            </c:if>
         </div>
-        <c:if test="${empty list}">
-            <li class="list-empty">일정이 없습니다.</li>
-        </c:if>
-        </ul>
+
+        <span class="nav-section-label" style="margin-top:4px;">메모</span>
+
+        <%-- To-do 체크박스 리스트 --%>
+        <div class="todo-section">
+            <div class="todo-section-header">
+                <div class="todo-section-title">
+                    <span class="nav-icon">✅</span>
+                    <span id="todo-month-title" style="font-size:13px; color:var(--text2);">To-do</span>
+                </div>
+                <button class="todo-add-btn" id="todo-add-btn" title="추가">+</button>
+            </div>
+            <ul class="todo-list" id="todo-list"></ul>
+            <div class="todo-input-row" id="todo-input-row" style="display:none;">
+                <input type="text" class="todo-input" id="todo-input" placeholder="할 일 입력..." maxlength="40"/>
+                <button class="todo-input-confirm" id="todo-input-confirm">✓</button>
+            </div>
+        </div>
+    </div> <%-- // sidebar-nav 종료 --%>
+
+    <%-- 2. 하단 고정 영역 (미니 캘린더) --%>
+    <div id="sidebar-mini-calendar" style="margin-top: auto; border-top: 1px solid var(--border, #e2e8f0); padding-top: 15px;">
+        <div class="g-cal-header">
+            <button class="g-nav-btn" id="g-prev-month">❮</button>
+            <span class="g-cal-title" id="g-cal-title"></span>
+            <button class="g-nav-btn" id="g-next-month">❯</button>
+        </div>
+        <div class="g-cal-weekdays">
+            <div class="sun">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
+        </div>
+        <div class="g-cal-days" id="g-cal-days"></div>
     </div>
 
-    <div class="sidebar-section">
-            <div class="section-header">
-                <span id="todo-month-title">4월 To-do List</span>
-            </div>
-            <div class="section-content 메모장">
-                <textarea id="todo-textarea" placeholder="이달의 목표를 적어보세요..."></textarea>
-            </div>
-        </div>
+</div> <%-- // 사이드바 컨테이너 종료 --%>
 
-        <div id="sidebar-mini-calendar">
-            <div class="g-cal-header">
-                <div class="g-cal-title" id="g-cal-title">2026년 4월</div>
-                <div class="g-cal-nav">
-                    <button class="g-nav-btn" id="g-prev-month">‹</button>
-                    <button class="g-nav-btn" id="g-next-month">›</button>
-                </div>
-            </div>
-            <div class="g-cal-weekdays">
-                <div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div><div>일</div>
-            </div>
-            <div class="g-cal-days" id="g-cal-days"></div>
-        </div>
-    </aside>
+<%-- ────────────────────────────────────────
+     [B] 캘린더 메인 본문 (calendar.jsp)
+──────────────────────────────────────── --%>
 
-    <main class="calendar-main">
+<div class="calendar-page-wrapper">
+    <div class="calendar-main">
         <div id='calendar'></div>
 
         <div class="fab-container">
@@ -181,332 +129,378 @@
                 <div class="fab-item" onclick="location.href='/dashboard'"><span>🏠</span><span class="fab-label">대시보드</span></div>
             </div>
         </div>
-    </main>
+    </div>
+</div>
+
+<!-- 이벤트 클릭 팝업 -->
+<div id="event-popup">
+    <span class="pop-close" id="close-popup">✕</span>
+    <h3 id="pop-title"></h3>
+    <div class="pop-info"><strong>직무</strong><span id="pop-position"></span></div>
+    <div class="pop-info"><strong>날짜</strong><span id="pop-date"></span></div>
+    <div class="pop-info"><strong>시간</strong><span id="pop-time"></span></div>
+    <div class="pop-info"><strong>전형</strong><span id="pop-type"></span></div>
+    <div class="pop-info"><strong>메모</strong><span id="pop-memo"></span></div>
+    <div class="btn-group-sm">
+        <button class="btn-edit" id="btn-go-edit">수정</button>
+        <button class="btn-delete" id="btn-do-delete">삭제</button>
+    </div>
+</div>
+
+<!-- 일정 추가/수정 모달 -->
+<div id="modal-backdrop"></div>
+<div id="schedule-modal">
+    <h3 id="modal-title">새 일정 추가</h3>
+    <input type="hidden" id="form-id">
+    <input type="hidden" id="form-appId" value="1">
+    <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}"/>
+
+    <div class="form-group">
+        <label>기업</label>
+        <div style="display:flex;align-items:center;gap:8px;">
+            <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요"
+                   style="cursor:pointer;flex:1;" onclick="openCompanyModal()"/>
+            <button type="button" onclick="openCompanyModal()" class="modal-btn-search">선택</button>
+        </div>
+        <jsp:include page="/company/company-search/companySearchModal.jsp"/>
+        <input type="hidden" name="companyId" id="selectedCompanyId"/>
+    </div>
+    <div class="form-group">
+        <label>지원 직무</label>
+        <input type="text" id="form-position" placeholder="ex) 백엔드 개발자">
+    </div>
+    <div class="form-group">
+        <label>서류 지원 일자 <span style="font-weight:400;color:var(--text3);">(선택)</span></label>
+        <input type="date" id="form-apply-date">
+    </div>
+    <div class="form-group">
+        <label>면접 날짜</label>
+        <input type="date" id="form-date">
+    </div>
+    <div class="form-group">
+        <label>시간</label>
+        <div style="display:flex;gap:8px;">
+            <select id="form-hour" style="flex:1;">
+                <option value="08">08시</option><option value="09">09시</option>
+                <option value="10">10시</option><option value="11">11시</option>
+                <option value="12">12시</option><option value="13">13시</option>
+                <option value="14">14시</option><option value="15">15시</option>
+                <option value="16">16시</option><option value="17">17시</option>
+                <option value="18">18시</option><option value="19">19시</option>
+            </select>
+            <select id="form-minute" style="flex:1;">
+                <option value="00">00분</option><option value="10">10분</option>
+                <option value="20">20분</option><option value="30">30분</option>
+                <option value="40">40분</option><option value="50">50분</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>면접 전형</label>
+        <select id="form-type">
+            <option value="코딩테스트">코딩테스트</option>
+            <option value="1차면접">1차면접</option>
+            <option value="2차면접">2차면접</option>
+            <option value="임원면접">임원면접</option>
+            <option value="direct">직접 입력...</option>
+        </select>
+        <input type="text" id="form-type-direct" placeholder="ex) SPI, 인성면접" style="display:none;margin-top:6px;">
+    </div>
+    <div class="form-group">
+        <label>메모</label>
+        <input type="text" id="form-memo">
+    </div>
+    <div class="btn-group">
+        <button class="btn-cancel" id="btn-modal-close">취소</button>
+        <button class="btn-save"   id="btn-save-schedule">저장</button>
+    </div>
+</div>
+
+<!-- 알림/확인 모달 -->
+<div class="modal-overlay" id="customAlertModal">
+    <div class="modal-box">
+        <p id="alertMessage"></p>
+        <button class="btn-save" id="btn-alert-ok" style="width:100%;">확인</button>
+    </div>
+</div>
+<div class="modal-overlay" id="customConfirmModal">
+    <div class="modal-box">
+        <p style="font-weight:700;color:#e53e3e;margin-bottom:6px;">정말 삭제하시겠습니까?</p>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:20px;">삭제된 일정은 복구할 수 없습니다.</p>
+        <div style="display:flex;gap:10px;">
+            <button class="btn-cancel" onclick="$('#customConfirmModal').fadeOut(200);">취소</button>
+            <button class="btn-delete" id="btn-real-delete">삭제</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function(){
+
         $('#customAlertModal, #customConfirmModal').hide();
         var currentEvent = null;
 
-
-        function showCustomAlert(message, reloadAfter = false) {
-            $('#alertMessage').text(message);
-            $('#customAlertModal').css('display', 'flex').hide().fadeIn(200);
-
-            $('#btn-alert-ok').off('click').on('click', function () {
+        function showCustomAlert(msg, reload){
+            $('#alertMessage').text(msg);
+            $('#customAlertModal').css('display','flex').hide().fadeIn(200);
+            $('#btn-alert-ok').off('click').on('click', function(){
                 $('#customAlertModal').fadeOut(200);
-                if (reloadAfter) location.reload(); // 확인 누르면 새로고침
+                if(reload) location.reload();
             });
         }
 
+        /* ── FullCalendar ─────────────────────────────── */
         var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+        window.calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             locale: 'ko',
             selectable: true,
-            headerToolbar: {
-                left: 'today',
-                center: 'prev title next',
-                right: ''
-            },
+            headerToolbar: { left:'today', center:'prev title next', right:'' },
             editable: true,
 
-            // ✨👇 날짜에서 "일" 텍스트를 제거하고 숫자만 렌더링
-            dayCellContent: function (info) {
-                return info.dayNumberText.replace('일', '');
-            },
+            dayCellContent: function(info){ return info.dayNumberText.replace('일',''); },
 
-            // ✨👇 커스텀 년/월 드롭다운 (아까 추가했던 기능)
-            datesSet: function (info) {
-                var currentDate = calendar.getDate();
-                var year = currentDate.getFullYear();
-                var month = currentDate.getMonth() + 1;
+            datesSet: function(){
+                var d = window.calendar.getDate();
+                var y = d.getFullYear(), m = d.getMonth()+1;
 
-                var yearHtml = '<select id="custom-year" class="fc-custom-select">';
-                for (var i = 2000; i <= 2100; i++) {
-                    yearHtml += '<option value="' + i + '" ' + (i === year ? 'selected' : '') + '>' + i + '년</option>';
+                var yHtml = '<select id="custom-year" class="fc-custom-select">';
+                for(var i=2000;i<=2100;i++)
+                    yHtml += '<option value="'+i+'"'+(i===y?' selected':'')+'>'+i+'년</option>';
+                yHtml += '</select>';
+
+                var mHtml = '<select id="custom-month" class="fc-custom-select">';
+                for(var j=1;j<=12;j++){
+                    var dm = j<10?'0'+j:''+j;
+                    mHtml += '<option value="'+dm+'"'+(j===m?' selected':'')+'>'+j+'월</option>';
                 }
-                yearHtml += '</select>';
+                mHtml += '</select>';
 
-                var monthHtml = '<select id="custom-month" class="fc-custom-select">';
-                for (var m = 1; m <= 12; m++) {
-                    var displayMonth = m < 10 ? '0' + m : m;
-                    monthHtml += '<option value="' + displayMonth + '" ' + (m === month ? 'selected' : '') + '>' + m + '월</option>';
-                }
-                monthHtml += '</select>';
-
-                $('.fc-toolbar-title').html(yearHtml + ' ' + monthHtml);
-
-                $('.fc-custom-select').off('change').on('change', function () {
-                    var selectedYear = $('#custom-year').val();
-                    var selectedMonth = $('#custom-month').val();
-                    calendar.gotoDate(selectedYear + '-' + selectedMonth + '-01');
+                $('.fc-toolbar-title').html(yHtml+' '+mHtml);
+                $('.fc-custom-select').off('change').on('change',function(){
+                    window.calendar.gotoDate($('#custom-year').val()+'-'+$('#custom-month').val()+'-01');
                 });
             },
 
-            // ✨👇 DB에서 불러온 이벤트 리스트
             events: [
                 <c:forEach var="sch" items="${list}" varStatus="status">
                 {
                     id: '${sch.schedule_id}',
                     title: '${sch.company_name} 면접',
                     start: '${sch.schedule_date}',
-                    extendedProps: {
-                        company: '${sch.company_name}',
-                        position: '${sch.position}',
-                        time: '${sch.schedule_time}',
-                        type: '${sch.interview_type}',
-                        memo: '${sch.schedule_memo}'
+                    extendedProps:{
+                        company:'${sch.company_name}', position:'${sch.position}',
+                        time:'${sch.schedule_time}', type:'${sch.interview_type}',
+                        memo:'${sch.schedule_memo}'
                     }
-                }<c:if test="${!status.last}">, </c:if>
+                }<c:if test="${!status.last}">,</c:if>
                 </c:forEach>
             ],
 
-
-            eventClick: function (info) {
+            eventClick: function(info){
                 currentEvent = info.event;
-                var x = info.jsEvent.pageX;
-                var y = info.jsEvent.pageY;
-
+                var x=info.jsEvent.pageX, y=info.jsEvent.pageY;
                 $('#pop-title').text(currentEvent.title);
-                $('#pop-position').text(currentEvent.extendedProps.position || "미정");
+                $('#pop-position').text(currentEvent.extendedProps.position||'미정');
                 $('#pop-date').text(currentEvent.startStr);
-                $('#pop-time').text(currentEvent.extendedProps.time || "미정");
-                $('#pop-type').text(currentEvent.extendedProps.type || "-");
-                $('#pop-memo').text(currentEvent.extendedProps.memo || "-");
-
-                $('#event-popup').css({top: y + 15 + 'px', left: x + 15 + 'px'}).fadeIn(150);
+                $('#pop-time').text(currentEvent.extendedProps.time||'미정');
+                $('#pop-type').text(currentEvent.extendedProps.type||'-');
+                $('#pop-memo').text(currentEvent.extendedProps.memo||'-');
+                var popW=260, winW=$(window).width();
+                $('#event-popup').css({top:y+15+'px', left:(x+15+popW>winW?x-popW-15:x+15)+'px'}).fadeIn(150);
             },
 
-            select: function (info) {
-                $('#form-hour').val("14");
-                $('#form-minute').val("00");
-                $('#modal-title').text("새 일정 추가");
-                $('#form-id').val("");
+            select: function(info){
+                resetModal();
                 $('#form-date').val(info.startStr);
-
-                $('#selectedCompanyName').val("");
-                $('#form-apply-date').val(""); // ✨ 지원일자 초기화 추가
-
-                $('#form-type').val("코딩테스트");
-                $('#form-type-direct').hide().val("");
-
                 $('#modal-backdrop, #schedule-modal').fadeIn(200);
             }
         });
-        calendar.render();
+        window.calendar.render();
 
-        $('#close-popup').click(function () {
-            $('#event-popup').fadeOut(150);
+        /* ── 팝업/모달 닫기 ── */
+        $('#close-popup').click(function(){ $('#event-popup').fadeOut(150); });
+        $(document).click(function(e){
+            if(!$(e.target).closest('#event-popup,.fc-event').length) $('#event-popup').fadeOut(150);
         });
 
-        $('#form-type').change(function () {
-            if ($(this).val() === 'direct') {
-                $('#form-type-direct').show().focus();
-            } else {
-                $('#form-type-direct').hide().val("");
-            }
+        /* ── 전형 직접입력 ── */
+        $('#form-type').change(function(){
+            $(this).val()==='direct' ? $('#form-type-direct').show().focus() : $('#form-type-direct').hide().val('');
         });
 
-        $('#btn-go-edit').click(function () {
+        /* ── 수정 ── */
+        $('#btn-go-edit').click(function(){
             $('#event-popup').hide();
-            $('#modal-title').text("일정 수정");
-
+            $('#modal-title').text('일정 수정');
             $('#form-id').val(currentEvent.id);
             $('#selectedCompanyName').val(currentEvent.extendedProps.company);
             $('#form-position').val(currentEvent.extendedProps.position);
             $('#form-date').val(currentEvent.startStr);
-            var existingTime = currentEvent.extendedProps.time;
-            if (existingTime) {
-                var timeArr = existingTime.split(':'); // ["14", "30"]
-                $('#form-hour').val(timeArr[0]);
-                $('#form-minute').val(timeArr[1]);
-            } else {
-                $('#form-hour').val("14");
-                $('#form-minute').val("00");
-            }
-            $('#modal-backdrop, #schedule-modal').fadeIn(200);
             $('#form-memo').val(currentEvent.extendedProps.memo);
-
-            var existingType = currentEvent.extendedProps.type;
-            var isOptionExists = $('#form-type option').filter(function () {
-                return $(this).val() === existingType;
-            }).length > 0;
-
-            if (isOptionExists) {
-                $('#form-type').val(existingType);
-                $('#form-type-direct').hide().val("");
-            } else {
-                $('#form-type').val("direct");
-                $('#form-type-direct').show().val(existingType);
-            }
-
+            var t=(currentEvent.extendedProps.time||'14:00').split(':');
+            $('#form-hour').val(t[0]); $('#form-minute').val(t[1]);
+            var et=currentEvent.extendedProps.type;
+            var exists=$('#form-type option').filter(function(){return $(this).val()===et;}).length>0;
+            if(exists){$('#form-type').val(et);$('#form-type-direct').hide().val('');}
+            else{$('#form-type').val('direct');$('#form-type-direct').show().val(et);}
             $('#modal-backdrop, #schedule-modal').fadeIn(200);
         });
 
-
-        $('#btn-do-delete').click(function () {
+        /* ── 삭제 ── */
+        $('#btn-do-delete').click(function(){
             $('#event-popup').fadeOut(150);
-            $('#customConfirmModal').css('display', 'flex').hide().fadeIn(200);
-
-            $('#btn-real-delete').off('click').on('click', function () {
+            $('#customConfirmModal').css('display','flex').hide().fadeIn(200);
+            $('#btn-real-delete').off('click').on('click',function(){
                 $('#customConfirmModal').fadeOut(200);
-
-                $.ajax({
-                    url: '/delete-calendar',
-                    type: 'POST',
-                    data: {schedule_id: currentEvent.id},
-                    success: function () {
-                        showCustomAlert("일정이 삭제되었습니다.", true);
-                    },
-                    error: function () {
-                        showCustomAlert("DELETE ERROR");
-                    }
+                $.ajax({url:'/delete-calendar',type:'POST',data:{schedule_id:currentEvent.id},
+                    success:function(){showCustomAlert('일정이 삭제되었습니다.',true);},
+                    error:function(){showCustomAlert('DELETE ERROR');}
                 });
             });
         });
 
-        $('#btn-save-schedule').click(function () {
-            var id = $('#form-id').val();
-            var targetUrl = id ? '/update-calendar' : '/add-calendar';
-
-            var selectedType = $('#form-type').val();
-            var finalType = (selectedType === 'direct') ? $('#form-type-direct').val() : selectedType;
-
-            if (!$('#selectedCompanyName').val().trim() || (selectedType === 'direct' && finalType.trim() === '')) {
-                showCustomAlert("회사 이름과 면접 전형을 확인해 주세요.");
-                return;
+        /* ── 저장 ── */
+        $('#btn-save-schedule').click(function(){
+            var id=$('#form-id').val(), st=$('#form-type').val();
+            var ft=(st==='direct')?$('#form-type-direct').val():st;
+            if(!$('#selectedCompanyName').val().trim()||(st==='direct'&&!ft.trim())){
+                showCustomAlert('회사 이름과 면접 전형을 확인해 주세요.'); return;
             }
-
-            var requestData = {
-                schedule_id: id,
-                app_id: $('#form-appId').val(),
-                company_name: $('#selectedCompanyName').val(),
-                position: $('#form-position').val(),
-                apply_date: $('#form-apply-date').val(),
-                date: $('#form-date').val(),
-                time: $('#form-hour').val() + ":" + $('#form-minute').val(),
-                type: finalType,
-                memo: $('#form-memo').val()
-            };
-
             $.ajax({
-                url: targetUrl,
-                type: 'POST',
-                data: requestData,
-                success: function () {
-                    showCustomAlert("츄가완료!! ><", true);
-                },
-                error: function () {
-                    showCustomAlert("저장 중 오류가 발생했습니다. (회사 이름을 확인해주세요)");
-                }
+                url:id?'/update-calendar':'/add-calendar', type:'POST',
+                data:{schedule_id:id,app_id:$('#form-appId').val(),
+                    company_name:$('#selectedCompanyName').val(),position:$('#form-position').val(),
+                    apply_date:$('#form-apply-date').val(),date:$('#form-date').val(),
+                    time:$('#form-hour').val()+':'+$('#form-minute').val(),type:ft,memo:$('#form-memo').val()},
+                success:function(){showCustomAlert('저장되었습니다!',true);},
+                error:function(){showCustomAlert('저장 중 오류가 발생했습니다.');}
             });
         });
 
-        $('#btn-modal-close, #modal-backdrop').click(function () {
+        $('#btn-modal-close, #modal-backdrop').click(function(){
             $('#modal-backdrop, #schedule-modal').fadeOut(200);
         });
-    });
 
-    // 1. FAB 버튼 토글 애니메이션
-    $('#fabMain').click(function() {
-        $(this).toggleClass('active');
-        $('#fabMenu').fadeToggle(200).css('display', 'flex');
-    });
-
-    // 2. FAB를 통한 일정 추가 모달 열기
-    $('#fabAddSchedule').click(function() {
-        // 기존 select 이벤트에서 쓰던 초기화 로직 그대로 활용
-        $('#form-hour').val("14");
-        $('#form-minute').val("00");
-        $('#modal-title').text("새 일정 추가");
-        $('#form-id').val("");
-
-        // 날짜는 오늘 날짜로 기본 설정 (사용자가 직접 변경 가능)
-        var today = new Date().toISOString().split('T')[0];
-        $('#form-date').val(today);
-
-        $('#selectedCompanyName').val("");
-        $('#form-apply-date').val("");
-        $('#form-position').val("");
-        $('#form-memo').val("");
-        $('#form-type').val("코딩테스트");
-        $('#form-type-direct').hide().val("");
-
-        // 모달 띄우기
-        $('#modal-backdrop, #schedule-modal').fadeIn(200);
-
-        // 메뉴 닫기
-        $('#fabMain').removeClass('active');
-        $('#fabMenu').fadeOut(100);
-    });
-
-    // 외부 클릭 시 메뉴 닫기 (선택사항)
-    $(document).on('click', function(e) {
-        if (!$(e.target).closest('.fab-container').length) {
-            $('#fabMain').removeClass('active');
-            $('#fabMenu').fadeOut(200);
+        function resetModal(){
+            $('#modal-title').text('새 일정 추가');
+            $('#form-id,#form-position,#form-memo,#form-apply-date').val('');
+            $('#selectedCompanyName').val('');
+            $('#form-hour').val('14'); $('#form-minute').val('00');
+            $('#form-type').val('코딩테스트');
+            $('#form-type-direct').hide().val('');
         }
-    });
 
-    // 1. 리스트 접었다 펴기
-    $('#toggle-list').click(function() {
-        $('#upcoming-list').slideToggle(300);
-        $(this).find('.toggle-icon').toggleClass('rotate');
-    });
-
-    // 2. To-do List 메모 저장 (로컬 스토리지 사용 - 새로고침해도 유지됨)
-    $('#todo-textarea').val(localStorage.getItem('devdesk_todo'));
-    $('#todo-textarea').on('input', function() {
-        localStorage.setItem('devdesk_todo', $(this).val());
-    });
-
-    // 3. To-do List 제목에 해당 월 표시
-    function updateTodoTitle(date) {
-        const month = date.getMonth() + 1;
-        $('#todo-month-title').text(month + '월 To-do List');
-    }
-    updateTodoTitle(new Date());
-
-    $('#toggle-list').click(function() {
-        $('#upcoming-list').slideToggle(300); // 부드럽게 접고 펴기
-        // 아이콘 회전 효과 (선택사항)
-        $(this).find('.toggle-icon').css('transform', function(i, v) {
-            return v === 'rotate(180deg)' ? 'rotate(0deg)' : 'rotate(180deg)';
+        /* ── FAB ── */
+        $('#fabMain').click(function(e){
+            e.stopPropagation();
+            $(this).toggleClass('active');
+            $('#fabMenu').fadeToggle(200).css('display','flex');
         });
-    });
+        $('#fabAddSchedule').click(function(){
+            resetModal();
+            $('#form-date').val(new Date().toISOString().split('T')[0]);
+            $('#modal-backdrop, #schedule-modal').fadeIn(200);
+            $('#fabMain').removeClass('active'); $('#fabMenu').fadeOut(100);
+        });
+        $(document).on('click',function(e){
+            if(!$(e.target).closest('.fab-container').length){
+                $('#fabMain').removeClass('active'); $('#fabMenu').fadeOut(200);
+            }
+        });
 
+        /* ── 이번 주 일정 토글 ── */
+        $('#weekToggle').click(function(){
+            $(this).toggleClass('open');
+            $('#weekDropdown').slideToggle(250);
+        });
+
+        /* ── To-do ── */
+        var TODO_KEY='devdesk_todos_v2';
+        function loadTodos(){try{return JSON.parse(localStorage.getItem(TODO_KEY))||[];}catch(e){return[];}}
+        function saveTodos(t){localStorage.setItem(TODO_KEY,JSON.stringify(t));}
+
+        function renderTodos(){
+            var todos=loadTodos(), $list=$('#todo-list');
+            $list.empty();
+            if(!todos.length){$list.append('<li class="todo-empty">+ 버튼으로 추가해보세요</li>');return;}
+            todos.forEach(function(item,idx){
+                var $li=$('<li class="todo-item'+(item.done?' done':'')+'"></li>');
+                var $cb=$('<input type="checkbox"'+(item.done?' checked':'')+'>');
+                $cb.on('change',function(){todos[idx].done=this.checked;saveTodos(todos);renderTodos();});
+                var $txt=$('<span class="todo-text"></span>').text(item.text);
+                var $del=$('<button class="todo-del" title="삭제">×</button>');
+                $del.on('click',function(){todos.splice(idx,1);saveTodos(todos);renderTodos();});
+                $li.append($cb,$txt,$del); $list.append($li);
+            });
+        }
+
+        $('#todo-add-btn').click(function(e){
+            e.stopPropagation();
+            $('#todo-input-row').toggle();
+            if($('#todo-input-row').is(':visible')) $('#todo-input').focus();
+        });
+        function addTodo(){
+            var text=$('#todo-input').val().trim(); if(!text) return;
+            var todos=loadTodos(); todos.push({text:text,done:false}); saveTodos(todos);
+            $('#todo-input').val(''); $('#todo-input-row').hide(); renderTodos();
+        }
+        $('#todo-input-confirm').click(addTodo);
+        $('#todo-input').keydown(function(e){
+            if(e.key==='Enter') addTodo();
+            if(e.key==='Escape'){$('#todo-input-row').hide();$(this).val('');}
+        });
+        renderTodos();
+        $('#todo-month-title').text((new Date().getMonth()+1)+'월 To-do');
+
+        /* ── 미니 캘린더 (점 표시) ── */
+        var eventDates={};
+        <c:forEach var="sch" items="${list}">
+        (function(){var d='${sch.schedule_date}';if(d)eventDates[d]=(eventDates[d]||0)+1;})();
+        </c:forEach>
+
+        var currentDispDate=new Date();
+        function renderMiniCalendar(d){
+            var year=d.getFullYear(), month=d.getMonth();
+            var today=new Date();
+            var todayStr=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+            document.getElementById('g-cal-title').textContent=year+'년 '+(month+1)+'월';
+
+            var firstDay=new Date(year,month,1), lastDay=new Date(year,month+1,0);
+            var prevLast=new Date(year,month,0).getDate();
+            var firstIdx=(firstDay.getDay()+6)%7;
+            var html='';
+
+            for(var i=firstIdx;i>0;i--)
+                html+='<div class="g-day-cell"><div class="g-day-num other-month">'+(prevLast-i+1)+'</div></div>';
+
+            for(var day=1;day<=lastDay.getDate();day++){
+                var ds=year+'-'+String(month+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+                var cls=(ds===todayStr?' today':'')+(new Date(year,month,day).getDay()===0?' sun':'');
+                var cnt=eventDates[ds]||0, dots='';
+                if(cnt>0){
+                    dots='<div class="g-dots">';
+                    for(var k=0;k<Math.min(cnt,3);k++) dots+='<span class="g-dot"></span>';
+                    dots+='</div>';
+                }
+                html+='<div class="g-day-cell" onclick="window.calendar.gotoDate(\''+ds+'\')">'
+                    +'<div class="g-day-num'+cls+'">'+day+'</div>'+dots+'</div>';
+            }
+
+            var remain=(firstIdx+lastDay.getDate())%7;
+            if(remain>0) for(var nd=1;nd<=7-remain;nd++)
+                html+='<div class="g-day-cell"><div class="g-day-num other-month">'+nd+'</div></div>';
+
+            document.getElementById('g-cal-days').innerHTML=html;
+        }
+
+        document.getElementById('g-prev-month').addEventListener('click',function(){
+            currentDispDate.setMonth(currentDispDate.getMonth()-1); renderMiniCalendar(currentDispDate);
+        });
+        document.getElementById('g-next-month').addEventListener('click',function(){
+            currentDispDate.setMonth(currentDispDate.getMonth()+1); renderMiniCalendar(currentDispDate);
+        });
+        renderMiniCalendar(currentDispDate);
+
+    }); // end ready
 </script>
-
-<div class="modal-overlay" id="customAlertModal"
-     style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10001; align-items:center; justify-content:center;">
-    <div class="modal-box"
-         style="background:#fff; padding:25px; border-radius:8px; width:300px; text-align:center; box-shadow:0 10px 15px rgba(0,0,0,0.1);">
-        <p id="alertMessage" style="font-size:16px; font-weight:bold; color:#2d3748; margin-bottom:20px;">메시지 내용</p>
-        <div class="modal-btns">
-            <button class="btn-save" id="btn-alert-ok"
-                    style="width:100%; padding:10px; background:#2b6cb0; color:white; border:none; border-radius:4px; cursor:pointer;">
-                확인
-            </button>
-        </div>
-    </div>
-</div>
-
-<div class="modal-overlay" id="customConfirmModal"
-     style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10001; align-items:center; justify-content:center;">
-    <div class="modal-box"
-         style="background:#fff; padding:25px; border-radius:8px; width:300px; text-align:center; box-shadow:0 10px 15px rgba(0,0,0,0.1);">
-        <p style="font-size:16px; font-weight:bold; color:#e53e3e; margin-bottom:10px;">정말 삭제하시겠습니까?</p>
-        <p class="modal-sub" style="font-size:13px; color:#718096; margin-bottom:20px;">삭제된 일정은 복구할 수 없습니다.</p>
-        <div class="modal-btns" style="display:flex; gap:10px;">
-            <button class="btn-cancel" onclick="$('#customConfirmModal').fadeOut(200);"
-                    style="flex:1; padding:10px; background:#e2e8f0; border:none; border-radius:4px; cursor:pointer;">취소
-            </button>
-            <button class="btn-delete" id="btn-real-delete"
-                    style="flex:1; padding:10px; background:#e53e3e; color:white; border:none; border-radius:4px; cursor:pointer;">
-                삭제
-            </button>
-        </div>
-    </div>
-</div>

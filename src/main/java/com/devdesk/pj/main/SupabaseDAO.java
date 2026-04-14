@@ -14,17 +14,30 @@ import java.util.UUID;
 
 public class SupabaseDAO {
 
-    public static final SupabaseDAO SUPADAO = new SupabaseDAO();
+//  강사님ver  public static final SupabaseDAO SUPADAO = new SupabaseDAO();
+//
+//    private SupabaseDAO() {
+//
+//    }
+//
+//    public String upload(HttpServletRequest request, HttpServletResponse response) {
+//        try {
+//            Properties prop = new Properties();
+//            InputStream input = getClass().getClassLoader().getResourceAsStream("conf.properties");
+//            prop.load(input);
 
-    private SupabaseDAO() {
-
-    }
-
-    public String upload(HttpServletRequest request, HttpServletResponse response) {
+    public static String upload(HttpServletRequest request, HttpServletResponse response) {
         try {
             Properties prop = new Properties();
-            InputStream input = getClass().getClassLoader().getResourceAsStream("conf.properties");
-            prop.load(input);
+            InputStream input = SupabaseDAO.class.getClassLoader().getResourceAsStream("conf.properties");
+            if (input == null) {
+                throw new RuntimeException("conf.properties file not found in classpath");
+            }
+            try {
+                prop.load(input);
+            } finally {
+                input.close();
+            }
             String SUPABASE_URL = prop.getProperty("supabase.url");
             String API_KEY = prop.getProperty("service.role");
             Part filePart = request.getPart("file");
