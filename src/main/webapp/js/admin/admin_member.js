@@ -47,64 +47,83 @@ function searchMember() {
     setupAdminPagination();
 }
 
-// 2️⃣ 똑똑한 페이징 처리 기능
+// 🌟 2️⃣ 똑똑한 페이징 처리 기능 (보라색 꺾쇠 디자인 완벽 호환!)
 function setupAdminPagination() {
     const pagination = document.getElementById('member-pagination');
 
+    // 검색 결과가 없을 때 처리
     if (filteredRows.length === 0) {
         pagination.innerHTML = '<span style="color:#64748b; font-weight:bold;">검색 결과가 없습니다. 😢</span>';
+        document.querySelectorAll('tr.member-row').forEach(row => row.style.display = 'none');
         return;
     }
 
     const pageCount = Math.ceil(filteredRows.length / rowsPerPage);
 
-    if (pageCount <= 1) {
-        pagination.innerHTML = '';
-        showAdminPage(1);
-        return;
-    }
-
     function render() {
         pagination.innerHTML = '';
 
+        if (pageCount <= 0) return;
+
+        // ◀ 이전 버튼 (첫 페이지면 회색으로 비활성화)
         if (currentPage > 1) {
             const prevBtn = document.createElement('button');
-            prevBtn.innerHTML = '&lt;';
             prevBtn.className = 'page-btn';
+            prevBtn.innerHTML = '&#8249;'; // 꺾쇠 아이콘 ‹
             prevBtn.onclick = () => {
                 currentPage--;
                 render();
+                showAdminPage(currentPage);
             };
             pagination.appendChild(prevBtn);
+        } else {
+            const prevDisabled = document.createElement('span');
+            prevDisabled.className = 'page-btn page-btn--disabled';
+            prevDisabled.innerHTML = '&#8249;';
+            pagination.appendChild(prevDisabled);
         }
 
-        for (let i = 1; i <= pageCount; i++) {
+        // 🌟 페이지 번호 (최대 5개씩만 노출되도록 계산!)
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(pageCount, startPage + 4);
+        if (endPage - startPage < 4) {
+            startPage = Math.max(1, endPage - 4);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
             const btn = document.createElement('button');
+            btn.className = `page-btn ${i === currentPage ? "page-btn--active" : ""}`;
             btn.innerText = i;
-            btn.className = 'page-btn';
-            if (i === currentPage) btn.classList.add('active');
             btn.onclick = () => {
                 currentPage = i;
                 render();
+                showAdminPage(currentPage);
             };
             pagination.appendChild(btn);
         }
 
+        // ▶ 다음 버튼 (마지막 페이지면 회색으로 비활성화)
         if (currentPage < pageCount) {
             const nextBtn = document.createElement('button');
-            nextBtn.innerHTML = '&gt;';
             nextBtn.className = 'page-btn';
+            nextBtn.innerHTML = '&#8250;'; // 꺾쇠 아이콘 ›
             nextBtn.onclick = () => {
                 currentPage++;
                 render();
+                showAdminPage(currentPage);
             };
             pagination.appendChild(nextBtn);
+        } else {
+            const nextDisabled = document.createElement('span');
+            nextDisabled.className = 'page-btn page-btn--disabled';
+            nextDisabled.innerHTML = '&#8250;';
+            pagination.appendChild(nextDisabled);
         }
-
-        showAdminPage(currentPage);
     }
 
+    // 처음 렌더링 호출 및 화면 업데이트
     render();
+    showAdminPage(currentPage);
 }
 
 function showAdminPage(page) {
@@ -129,14 +148,9 @@ let shouldReload = false;  // 성공 시 새로고침 여부를 기억할 변수
 // 삭제 확인 모달 열기
 function deleteMember(memberId, nickname) {
     targetDeleteId = memberId;
-
-    // 모달창 안에 닉네임 글씨 갈아끼우기
     document.getElementById('modalTargetNickname').innerText = nickname;
-
-    // 숨겨뒀던 확인 모달창 켜기
     document.getElementById('deleteConfirmModal').style.display = 'flex';
 
-    // 확인 모달창 안의 [강제 탈퇴] 버튼에 진짜 삭제 이벤트 연결
     document.getElementById('btnConfirmDelete').onclick = function () {
         executeDelete(targetDeleteId, nickname);
     };
@@ -150,7 +164,7 @@ function closeDeleteModal() {
 
 // 진짜 DB 삭제 AJAX 요청
 function executeDelete(memberId, nickname) {
-    closeDeleteModal(); // 확인 모달은 일단 닫기!
+    closeDeleteModal();
 
     const url = window.location.pathname + "Delete";
 
@@ -162,7 +176,6 @@ function executeDelete(memberId, nickname) {
         .then(response => response.text())
         .then(data => {
             if (data.trim() === "success") {
-                // alert 대신 예쁜 알림 모달 띄우기
                 showNotification("✅ 처리 완료", `'${nickname}' 회원이 강제 탈퇴 처리되었습니다.`, true);
             } else {
                 showNotification("❌ 오류 발생", "탈퇴 처리 중 DB 오류가 발생했습니다.", false);
@@ -179,16 +192,12 @@ function showNotification(title, message, isSuccess) {
     document.getElementById('notiTitle').innerText = title;
     document.getElementById('notiText').innerText = message;
     document.getElementById('notiModal').style.display = 'flex';
-
-    // 성공했을 때만 나중에 창 닫을 때 새로고침하게 설정
     shouldReload = isSuccess;
 }
 
 // 🌟 알림 모달을 닫는 함수
 function closeNotiModal() {
     document.getElementById('notiModal').style.display = 'none';
-
-    // 작업이 성공적이었다면 확인 버튼을 눌렀을 때 비로소 새로고침!
     if (shouldReload) {
         location.reload();
     }
@@ -196,11 +205,9 @@ function closeNotiModal() {
 
 // 🌟 4️⃣ 상세 정보 조회 및 모달 열기
 function showDetail(memberId) {
-    // 서버에 유저 상세 정보 요청 (AJAX GET)
     fetch(`${window.location.pathname.replace('/member', '')}/memberDetail?member_id=${memberId}`)
         .then(res => res.json())
         .then(user => {
-            // 모달 데이터 채우기
             document.getElementById('detNickname').innerText = user.nickname;
             document.getElementById('detEmail').innerText = user.email;
             document.getElementById('detJob').innerText = user.job || '미입력(소셜)';
@@ -209,8 +216,6 @@ function showDetail(memberId) {
             document.getElementById('detStatus').innerText = user.status === 'active' ? '정상 활동' : '탈퇴 회원';
             document.getElementById('detBoardCnt').innerText = user.boardCnt;
             document.getElementById('detCommentCnt').innerText = user.commentCnt;
-
-            // 모달 띄우기
             document.getElementById('detailModal').style.display = 'flex';
         })
         .catch(err => {

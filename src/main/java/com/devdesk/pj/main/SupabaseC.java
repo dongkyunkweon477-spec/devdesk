@@ -1,7 +1,5 @@
 package com.devdesk.pj.main;
 
-import com.devdesk.pj.board.BoardDAO;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -22,7 +20,10 @@ public class SupabaseC extends HttpServlet {
         System.out.println("--supa --");
         resp.setContentType("text/html;charset=UTF-8");
         resp.getWriter().println(SupabaseDAO.upload(req, resp));
+<<<<<<< HEAD
         // resp.getWriter().println(SupabaseDAO.SUPADAO.upload(req, resp));
+=======
+>>>>>>> e60537aaa883d4736088d00fdd47701a2b844ce1
     }
 
     public void destroy() {

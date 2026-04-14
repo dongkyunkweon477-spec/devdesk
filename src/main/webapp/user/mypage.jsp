@@ -21,6 +21,11 @@
             <p><strong>계정(이메일) :</strong> ${sessionScope.user.email}</p>
             <p><strong>관심 직무 :</strong> ${sessionScope.user.job_category}</p>
         </div>
+        <c:if test="${sessionScope.user.role == 'admin'}">
+            <button class="btn-admin-page" onclick="location.href='${pageContext.request.contextPath}/admin'">
+                ⚙️ 관리자 페이지
+            </button>
+        </c:if>
     </div>
 
     <div class="mypage-menu-grid">

@@ -198,6 +198,70 @@ public class BoardDAO {
         }
     }
 
+    // [NEW] Handle combined category and sort filtering
+    public static ArrayList<BoardVO> searchBoardsByCategoryAndSort(HttpServletRequest request) {
+        ArrayList<BoardVO> boards = new ArrayList<>();
+
+        String category = request.getParameter("category");
+        String sort = request.getParameter("sort");
+
+        // If category is empty or "All", return sorted boards
+        if (category == null || category.trim().isEmpty() || category.equals("All") || category.equals("All")) {
+            if ("popular".equals(sort)) {
+                return showPopularBoard(request);
+            } else if ("viewcount".equals(sort)) {
+                return showViewCountBoard(request);
+            } else {
+                return showAllBoard(request);
+            }
+        }
+
+        // Build SQL with category filter and sorting
+        String sql = "SELECT b.*, " +
+                "(SELECT COUNT(*) FROM comments WHERE b_board_id = b.b_board_id) as comment_count, " +
+                "COALESCE(b.b_like_count, 0) as like_count, " +
+                "m.nickname " +
+                "FROM board b " +
+                "JOIN member m ON b.member_id = m.member_id " +
+                "WHERE b.b_category = ? ";
+
+        // Add sorting based on sort parameter
+        if ("popular".equals(sort)) {
+            sql += "ORDER BY b.b_like_count DESC, b.b_board_id DESC";
+        } else if ("viewcount".equals(sort)) {
+            sql += "ORDER BY b.b_view_count DESC, b.b_board_id DESC";
+        } else {
+            sql += "ORDER BY b.b_board_id DESC"; // default: latest
+        }
+
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement ps = con.prepareStatement(sql);
+        ) {
+            ps.setString(1, category);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    BoardVO bo = new BoardVO();
+                    bo.setBoard_id(rs.getInt("b_board_id"));
+                    bo.setCategory(rs.getString("b_category"));
+                    bo.setTitle(rs.getString("b_title"));
+                    bo.setMember_id(rs.getInt("member_id"));
+                    bo.setCreated_date(rs.getString("b_created_date"));
+                    bo.setView_count(rs.getInt("b_view_count"));
+                    bo.setComment_count(rs.getInt("comment_count"));
+                    bo.setLike_count(rs.getInt("like_count"));
+                    bo.setNickname(rs.getString("nickname"));
+                    boards.add(bo);
+                }
+                request.setAttribute("boards", boards);
+                return boards;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static int delBoard(HttpServletRequest request) {
         String sql = "DELETE FROM board WHERE b_board_id = ?";
 

@@ -52,8 +52,12 @@ public class AdminCompanyC extends HttpServlet {
         // 승인 대기 건수 (상단 뱃지용)
         int pendingCount = AdminDAO.ADAO.getPendingCompanyCount();
 
+        // 전체 기업 수 (필터 관계없이 항상 전체 카운트)
+        int totalAllCompanies = AdminDAO.ADAO.getTotalAllCompanyCount();
+
         request.setAttribute("companies", companies);
         request.setAttribute("pendingCount", pendingCount);
+        request.setAttribute("totalAllCompanies", totalAllCompanies);
         request.setAttribute("totalCount", totalCount);
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
