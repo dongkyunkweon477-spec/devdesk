@@ -28,13 +28,17 @@
         </div>
 
         <div class="form-group">
-            <label>내용</label>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px;">
+                <label style="margin-bottom: 0;">내용</label>
+                <div style="text-align: right;">
+                    <label for="imageFile" style="cursor: pointer; border: 1px solid #d1d5db; padding: 6px 12px; border-radius: 6px; background-color: #fff; font-size: 0.85rem; color: #495057; transition: all 0.2s ease-in-out; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                        <span style="margin-right: 4px;">📷</span>이미지 첨부
+                    </label>
+                    <input type="file" id="imageFile" style="display: none;" accept="image/*"/>
+                </div>
+            </div>
             <textarea name="content" rows="15" required>${board.content}</textarea>
         </div>
-
-        <form action="supa-upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" id="imageFile"/>
-        </form>
         
         <div class="form-actions">
             <button type="submit" class="submit-btn">수정 완료</button>
