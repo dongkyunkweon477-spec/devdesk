@@ -62,7 +62,8 @@ public class TilDAO {
             String title = request.getParameter("title");
             String content = request.getParameter("content");
             String tag = request.getParameter("tag");
-            Double studyTime = Double.parseDouble(request.getParameter("study_time"));
+            String studyTimeParam = request.getParameter("study_time");
+            double studyTime = (studyTimeParam == null || studyTimeParam.isEmpty()) ? 0 : Double.parseDouble(studyTimeParam);
 
             // 바인딩
             pstmt.setInt(1, memberId);
@@ -97,7 +98,8 @@ public class TilDAO {
             String title = request.getParameter("title");
             String content = request.getParameter("content");
             String tag = request.getParameter("tag");
-            Double studyTime = Double.parseDouble(request.getParameter("study_time"));
+            String studyTimeParam = request.getParameter("study_time");
+            double studyTime = (studyTimeParam == null || studyTimeParam.isEmpty()) ? 0 : Double.parseDouble(studyTimeParam);
             String tilId = request.getParameter("til_id");
 
             pstmt.setString(1, title);
