@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board-all.css">
+
 
 <html>
 <head>
@@ -61,12 +63,18 @@
         </div>
     </div>
 
-    <c:if test="${sessionScope.user.member_id == board.member_id}">
-        <div class="detail-buttons">
+    <div class="detail-buttons">
+        <%-- 작성자 본인: 수정/삭제 --%>
+        <c:if test="${sessionScope.user.member_id == board.member_id}">
             <button class="edit-btn" onclick="location.href='board_update?id=${board.board_id}'">수정</button>
             <button class="delete-btn" onclick="deleteBoard(${board.board_id})">삭제</button>
-        </div>
-    </c:if>
+        </c:if>
+        <%-- 로그인 했고, 본인 글이 아닌 경우에만 신고 버튼 표시 --%>
+        <c:if test="${sessionScope.user != null && sessionScope.user.member_id != board.member_id}">
+            <a href="${pageContext.request.contextPath}/report_form?targetType=board&targetId=${board.board_id}&targetTitle=${board.title}"
+               class="delete-btn">신고</a>
+        </c:if>
+    </div>
 
     <div class="comment-section">
         <hr class="comment-divider">
@@ -360,34 +368,6 @@
         replyForms.forEach(form => form.remove());
     }
 
-    // // 작성자 클릭시 모달 및 해당 작성자 게시글 목록
-    // document.addEventListener("DOMContentLoaded", () => {
-    //     const writer = document.querySelector(".writer");
-    //
-    //     writer.addEventListener("click", async function () {
-    //         const memberId = this.dataset.id;
-    //
-    //         const res = await fetch("member-posts?memberId=" + memberId);
-    //         const posts = await res.json();
-    //
-    //         openModal(posts);
-    //     });
-    // });
-
-    // 작성자 클릭 모달 이벤트 펑션
-    // document.addEventListener("DOMContentLoaded", () => {
-    //     const writer = document.querySelector(".writer");
-    //
-    //     writer.addEventListener("click", async function () {
-    //         const memberId = this.dataset.id;
-    //
-    //         const res = await fetch("member-posts?memberId=" + memberId);
-    //         const posts = await res.json();
-    //
-    //         openModal(posts);
-    //     });
-    // });
-
     document.addEventListener("DOMContentLoaded", () => {
         const writer = document.querySelector(".writer");
         const modal = document.getElementById("modal");
@@ -467,8 +447,8 @@
             let content = textBox.innerHTML;
             console.log('Original content:', content);
 
-            // More flexible pattern to match Supabase URLs
-            const supabaseUrlPattern = /(https:\/\/[a-zA-Z0-9-]+\.supabase\.co\/storage\/v1\/object\/public\/upload\/file\/[^\s\)]+)/g;
+            // More comprehensive pattern to match Supabase URLs
+            const supabaseUrlPattern = /(https:\/\/[a-zA-Z0-9-]+\.supabase\.co\/storage\/v1\/object\/public\/upload\/file\/[^\s\)\]\}]+)/g;
 
             const replacedContent = content.replace(supabaseUrlPattern, function (url) {
                 console.log('Found URL:', url);

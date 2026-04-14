@@ -6,16 +6,6 @@
 <head>
     <title>DevDesk</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review/review-detail.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review/review-write.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review/review-board.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review/review-write.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-detail.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
-
-
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/index.js"></script>
@@ -34,7 +24,6 @@
         <!-- 메뉴 -->
         <div class="menu-left">
             <a href="${pageContext.request.contextPath}/ws">워크 스페이스</a>
-            <a href="${pageContext.request.contextPath}/resume-block">이력서 관리</a>
             <a href="${pageContext.request.contextPath}/calendar">면접 일정</a>
             <a href="${pageContext.request.contextPath}/review">면접 후기</a>
             <a href="${pageContext.request.contextPath}/board">커뮤니티</a>

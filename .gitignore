@@ -4,7 +4,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 .kotlin
-
+.git-rewrite
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
@@ -50,3 +50,10 @@ src/main/webapp/WEB-INF/conf.properties
 index_
 src/main/resources/conf.properties
 .claude
+.gemini
+GEMINI.md
+package-lock.json
+package.json
+process_css.js
+wrap_jsp.py
+node_modules

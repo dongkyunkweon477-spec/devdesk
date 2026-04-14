@@ -5,10 +5,18 @@
 
 <title>DevDesk - 내 면접 일정</title>
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet'/>
+<<<<<<< HEAD
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
+=======
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+    <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
+>>>>>>> 451020e210769e8f9b0823a37dcba8fc5b8a9242
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
 
@@ -25,6 +33,7 @@
     request.setAttribute("weekEnd", sdf.format(endDate));
 %>
 
+<<<<<<< HEAD
 <%--
     ════════════════════════════════════════════════════════
     [사용 방법]
@@ -33,6 +42,14 @@
     calendar.jsp 본문엔 .calendar-page-wrapper 블록만 남기세요.
     ════════════════════════════════════════════════════════
 --%>
+=======
+<div id="modal-backdrop" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:999;"></div>
+
+<div id="schedule-modal">
+    <h3 id="modal-title">새 일정 추가</h3>
+    <input type="hidden" id="form-id">
+    <input type="hidden" id="form-appId" value="1">
+>>>>>>> 451020e210769e8f9b0823a37dcba8fc5b8a9242
 
 <%-- ────────────────────────────────────────
      [A] 사이드바 삽입 블록
@@ -257,6 +274,7 @@
             selectable: true,
             headerToolbar: { left:'today', center:'prev title next', right:'' },
             editable: true,
+            selectable: true,
 
             dayCellContent: function(info){ return info.dayNumberText.replace('일',''); },
 

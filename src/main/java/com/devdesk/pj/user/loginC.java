@@ -1,5 +1,7 @@
 package com.devdesk.pj.user;
 
+import com.devdesk.pj.main.RecaptchaUtil;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +21,17 @@ public class loginC extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 로그인 하는 일
         request.setCharacterEncoding("UTF-8");
+
+        String token = request.getParameter("g-recaptcha-response");
+        System.out.println("[reCAPTCHA] token: [" + token + "]");
+        if (!RecaptchaUtil.verify(token)) {
+            request.setAttribute("msg", "보안 인증에 실패했습니다. 다시 시도해주세요.");
+            request.setAttribute("content", "user/login.jsp");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            return;
+        }
+
         MemberDAO.MBAO.login(request);
 
         HttpSession session = request.getSession();
