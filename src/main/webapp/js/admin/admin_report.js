@@ -76,4 +76,6 @@ function renderReportPagination() {
         nextDisabled.innerHTML = "&#8250;";
         container.appendChild(nextDisabled);
     }
+
+
 }
