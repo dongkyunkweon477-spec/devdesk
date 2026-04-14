@@ -14,8 +14,9 @@
     z-index: 200;
 }
 
+/* 선민 수정 */
 .sidebar-logo {
-    padding: 20px 16px 16px;
+    padding: 10px 0px 10px;
 }
 
 .logo-mark {
@@ -292,9 +293,15 @@
     transition: background 0.2s;
 }
 
-.list-item:hover { background: #f1f5f9; }
+.list-item:hover {
+    background: #f1f5f9;
+}
 
-.item-date { color: #8e5ae5; font-weight: 600; margin-right: 8px; }
+.item-date {
+    color: #8e5ae5;
+    font-weight: 600;
+    margin-right: 8px;
+}
 
 /* To-do 메모장 스타일 */
 #todo-textarea {
