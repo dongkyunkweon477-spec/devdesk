@@ -15,6 +15,18 @@
                 동일한 게시물에 대한 중복 신고는 접수되지 않습니다.
             </p>
         </c:when>
+
+        <c:when test="${param.pending == 'true'}">
+            <div style="font-size: 48px; margin-bottom: 20px;">⏳</div>
+            <h2 style="font-size: 22px; font-weight: 700; color: #d97706; margin-bottom: 12px;">
+                신고한 게시글 처리 후 신고 접수됩니다
+            </h2>
+            <p style="font-size: 14px; color: var(--text-tertiary, #888); line-height: 1.8; margin-bottom: 32px;">
+                현재 처리 중인 다른 신고가 있습니다.<br>
+                관리자가 먼저 처리한 후 새로운 신고가 접수됩니다.
+            </p>
+        </c:when>
+
         <c:otherwise>
             <div style="font-size: 48px; margin-bottom: 20px;">✅</div>
             <h2 style="font-size: 22px; font-weight: 700; color: var(--text-primary, #1a1a1a); margin-bottom: 12px;">

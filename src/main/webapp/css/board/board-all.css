@@ -1,0 +1,801 @@
+/* ===== BOARD ALL CSS - board.css + board-detail.css + board-add.css + board_like.css ===== */
+
+/* ===== board.css - Main Board ===== */
+/* 1. board-container */
+.board-container {
+    width: 1000px;
+    margin: 20px auto;
+    border-top: 2px solid var(--accent-primary);
+    font-family: 'Pretendard', sans-serif;
+    background-color: var(--bg-primary);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px var(--shadow);
+    transition: var(--transition);
+}
+
+/* Header */
+.board-header {
+    display: flex;
+    padding: 10px 15px;
+    justify-content: space-between;
+    background-color: var(--bg-tertiary);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-primary);
+    align-items: center;
+    transition: var(--transition);
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.board-header h2 {
+    margin: 0;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    line-height: 1.2;
+    font-size: 18px;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.board-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+/* Row */
+.board-row {
+    display: flex;
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--border-primary);
+    cursor: pointer;
+    transition: var(--transition);
+    align-items: center;
+}
+
+/* hover effect */
+.board-row:hover {
+    background-color: var(--bg-tertiary);
+}
+
+/* 1. Category */
+.col-category {
+    width: 90px;
+    font-weight: 600;
+    color: var(--accent-primary);
+    font-size: 13px;
+    background-color: var(--accent-light);
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-align: center;
+    margin-right: 15px;
+}
+
+/* 2. Title */
+.col-title {
+    flex: 1;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 3. Date */
+.col-date {
+    width: 140px;
+    text-align: right;
+    color: var(--text-tertiary);
+    font-size: 14px;
+    margin-left: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.col-date .meta-info {
+    order: -1;
+    margin-right: 10px;
+}
+
+.col-date .date-info {
+    flex: 1;
+    text-align: right;
+}
+
+.write-btn {
+    padding: 8px 15px;
+    background-color: var(--accent-primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.write-btn a {
+    color: white;
+}
+
+.board-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.board-table th, .board-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-primary);
+    color: var(--text-primary);
+}
+
+.board-table th {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.board-table tr:hover {
+    background-color: var(--bg-tertiary);
+}
+
+/* Like count style */
+.like-count {
+    color: #e74c3c;
+    font-size: 13px;
+    margin-left: 8px;
+    font-weight: 500;
+}
+
+/* Popular badge style */
+.popular-badge {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 8px;
+    display: inline-block;
+    animation: pulse 2s infinite;
+}
+
+/* Popular badge animation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Search form style */
+.search-form {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-right: 50px;
+}
+
+/* Search type select */
+.search-type {
+    height: 32px;
+    padding: 6px 8px;
+    border: 1px solid var(--border-primary);
+    border-radius: 4px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 13px;
+    min-width: 80px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+/* Search input */
+.search-input {
+    height: 32px;
+    padding: 6px 12px;
+    border: 1px solid var(--border-primary);
+    border-radius: 4px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 13px;
+    width: 200px;
+    outline: none;
+    transition: var(--transition);
+}
+
+.search-input:focus {
+    border-color: var(--accent-primary);
+}
+
+/* Search button */
+.search-btn {
+    height: 32px;
+    padding: 6px 15px;
+    background-color: var(--accent-primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.search-btn:hover {
+    background-color: var(--accent-hover);
+}
+
+/* Reset button */
+.reset-btn {
+    height: 32px;
+    padding: 6px 15px;
+    background-color: var(--text-tertiary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.reset-btn:hover {
+    background-color: var(--text-secondary);
+}
+
+/* Board actions select */
+.board-actions select {
+    height: 32px;
+    padding: 6px 8px;
+    border: 1px solid var(--border-primary);
+    border-radius: 4px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 13px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+/* Pagination styling */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0;
+    padding: 15px 0;
+}
+
+.page-btn, .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 6px 12px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 4px;
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.page-btn:hover, .page-link:hover {
+    background-color: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+
+.current-page {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 6px 12px;
+    background-color: var(--accent-primary);
+    color: white;
+    border: 1px solid var(--accent-primary);
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ===== board-detail.css - Board Detail ===== */
+/* Board detail container */
+.board-container.detail {
+    max-width: 900px;
+    margin: 40px auto;
+    background: var(--bg-primary);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-primary);
+    overflow: hidden;
+    transition: var(--transition);
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    line-height: 1.4;
+}
+
+/* Header area */
+.board-header.detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px;
+    background-color: var(--bg-primary);
+    border-bottom: 1px solid var(--border-primary);
+    transition: var(--transition);
+}
+
+.board-header.detail h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.2;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+}
+
+/* JetBrains Mono style decoration */
+.board-header.detail h2::before {
+    content: '>';
+    color: var(--accent-primary);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Content area */
+.detail-view {
+    padding: 30px;
+}
+
+/* Row layout */
+.detail-row {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: flex-start;
+}
+
+.detail-label {
+    width: 100px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    line-height: 1.4;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    vertical-align: middle;
+}
+
+/* 1. 컨테이너 정렬 수정 */
+.detail-content {
+    flex: 1;
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.4;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    vertical-align: middle;
+    padding: 0;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.detail-info-group .detail-content .writer {
+    display: inline !important;
+    vertical-align: baseline !important;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif !important;
+    font-size: 15px !important;
+    color: var(--text-secondary) !important;
+    line-height: 1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Title emphasis */
+.title-bold {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+}
+
+/* Author, date info group */
+.detail-info-group {
+    display: flex;
+    background-color: var(--bg-tertiary);
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin: 20px 0 30px 0;
+    gap: 40px;
+    transition: var(--transition);
+    height: 90px;
+}
+
+.detail-info-group .detail-row {
+    margin-bottom: 0;
+    align-items: center;
+}
+
+.detail-info-group .detail-row:last-child {
+    margin-left: auto;
+}
+
+.detail-info-group .detail-label {
+    width: auto;
+    margin-right: 15px;
+}
+
+/* Content area */
+.content-area {
+    flex-direction: column;
+}
+
+.content-area .detail-label {
+    width: 100%;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-primary);
+    padding-bottom: 10px;
+}
+
+.text-box {
+    min-height: 300px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    padding: 10px 0;
+}
+
+/* Button area */
+.detail-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 20px 30px;
+    background-color: var(--bg-tertiary);
+    border-top: 1px solid var(--border-primary);
+    transition: var(--transition);
+}
+
+/* Common button style */
+.board-actions button,
+.detail-buttons button {
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+    border: none;
+}
+
+/* Write button */
+.write-btn.detail {
+    background-color: var(--accent-light);
+    color: var(--accent-hover);
+}
+
+.write-btn.detail:hover {
+    background-color: var(--accent-secondary);
+}
+
+/* Edit button */
+.edit-btn {
+    background-color: var(--accent-primary);
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: var(--accent-hover);
+}
+
+/* Delete button */
+.delete-btn {
+    background-color: #fee2e2;
+    color: #ef4444;
+}
+
+.delete-btn:hover {
+    background-color: #fecaca;
+}
+
+/* ===== board-add.css - Board Add ===== */
+/* Write container */
+.write-container {
+    width: 60%;
+    margin: 60px auto;
+    padding: 30px;
+    background: var(--bg-primary);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Title */
+.write-container h2 {
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Form group */
+.form-group {
+    margin-bottom: 25px;
+}
+
+/* Label */
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+/* Input, select, textarea common */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+/* Focus effect */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #4f46e5;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+}
+
+/* Textarea */
+.form-group textarea {
+    resize: none;
+    line-height: 1.5;
+}
+
+/* Character count */
+#cntSpan {
+    font-size: 13px;
+    color: #888;
+}
+
+/* Button area */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Submit button */
+.submit-btn {
+    background-color: var(--accent-primary);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.submit-btn:hover {
+    background-color: var(--accent-secondary);
+}
+
+/* Cancel button */
+.cancel-btn {
+    background: #e5e7eb;
+    color: #333;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.cancel-btn:hover {
+    background: #d1d5db;
+}
+
+/* ===== board_like.css - Like Function ===== */
+/* Board actions for like */
+.board-actions.like {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.like-section {
+    display: flex;
+    align-items: center;
+}
+
+.like-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 2px solid #ff6b6b;
+    background: white;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.like-btn:hover {
+    background: #ff6b6b;
+    transform: scale(1.05);
+}
+
+.like-icon {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+.like-btn:hover .like-icon {
+    transform: scale(1.2);
+}
+
+.like-count.like-btn {
+    font-weight: bold;
+    color: #333;
+    min-width: 20px;
+    text-align: center;
+}
+
+.like-btn:hover .like-count {
+    color: white;
+}
+
+/* 모달 클릭 css */
+.writer {
+    cursor: pointer;
+    color: #4CAF50;
+    font-weight: bold;
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.modal-content {
+    background: #fff;
+    width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.close-btn {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #666;
+}
+
+#postList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Enhanced modal styling with theme support */
+#postList li,
+.modal-post-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    background-color: #f8f9fa;
+    border-left: 3px solid #7c3aed;
+}
+
+#postList li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+#postList li:hover,
+.modal-post-item:hover {
+    background-color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-left-color: #5b21b6;
+}
+
+#postList a,
+.modal-post-link {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.4;
+    transition: color 0.2s ease;
+    padding: 0;
+}
+
+#postList a:hover,
+.modal-post-link:hover {
+    color: #7c3aed;
+    background-color: transparent;
+}
+
+/* Dark theme support */
+[data-theme="dark"] #postList li,
+[data-theme="dark"] .modal-post-item {
+    border-bottom-color: #444;
+    background-color: #2d2d2d;
+    border-left-color: #7c3aed;
+}
+
+[data-theme="dark"] #postList li:hover,
+[data-theme="dark"] .modal-post-item:hover {
+    background-color: #3d3d3d;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    border-left-color: #5b21b6;
+}
+
+[data-theme="dark"] #postList a,
+[data-theme="dark"] .modal-post-link {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] #postList a:hover,
+[data-theme="dark"] .modal-post-link:hover {
+    color: #4dabf7;
+}
+
+/* Modal theme support */
+[data-theme="dark"] .modal-content {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .modal-content h3 {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .close-btn {
+    color: #e0e0e0;
+}

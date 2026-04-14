@@ -36,32 +36,35 @@ public class ReportC extends HttpServlet {
             return;
         }
 
-        String targetType  = request.getParameter("targetType");
-        String status      = request.getParameter("status");
-        String searchType  = request.getParameter("searchType");
-        String keyword     = request.getParameter("keyword");
-        String pageStr     = request.getParameter("p");
+        String targetType = request.getParameter("targetType");
+        String status = request.getParameter("status");
+        String searchType = request.getParameter("searchType");
+        String keyword = request.getParameter("keyword");
+        String pageStr = request.getParameter("p");
 
-        if (targetType == null || targetType.isEmpty())  targetType  = "ALL";
-        if (status     == null || status.isEmpty())      status      = "ALL";
-        if (searchType == null || searchType.isEmpty())  searchType  = "repoContent";
-        if (keyword    == null)                          keyword     = "";
+        if (targetType == null || targetType.isEmpty()) targetType = "ALL";
+        if (status == null || status.isEmpty()) status = "ALL";
+        if (searchType == null || searchType.isEmpty()) searchType = "repoContent";
+        if (keyword == null) keyword = "";
 
         final int PAGE_SIZE = 10;
         int currentPage = 1;
-        try { currentPage = Integer.parseInt(pageStr); } catch (Exception ignored) {}
+        try {
+            currentPage = Integer.parseInt(pageStr);
+        } catch (Exception ignored) {
+        }
         if (currentPage < 1) currentPage = 1;
 
         int totalCount = reportDAO.countReports(targetType, status, searchType, keyword);
-        int totalPage  = (int) Math.ceil((double) totalCount / PAGE_SIZE);
+        int totalPage = (int) Math.ceil((double) totalCount / PAGE_SIZE);
         if (totalPage < 1) totalPage = 1;
         if (currentPage > totalPage) currentPage = totalPage;
 
         List<ReportVO> reports = reportDAO.getReports(targetType, status, searchType, keyword, currentPage, PAGE_SIZE);
 
-        request.setAttribute("reports",     reports);
+        request.setAttribute("reports", reports);
         request.setAttribute("currentPage", currentPage);
-        request.setAttribute("totalPage",   totalPage);
+        request.setAttribute("totalPage", totalPage);
 
         request.setAttribute("content", "report/report.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
@@ -89,18 +92,24 @@ public class ReportC extends HttpServlet {
 
         // REVIEW_ID / BOARD_ID (둘 중 하나만 값 있음)
         String reviewIdStr = request.getParameter("reviewId");
-        String boardIdStr  = request.getParameter("boardId");
+        String boardIdStr = request.getParameter("boardId");
 
         int reviewId = (reviewIdStr != null && !reviewIdStr.isEmpty()) ? Integer.parseInt(reviewIdStr) : 0;
-        int boardId  = (boardIdStr  != null && !boardIdStr.isEmpty())  ? Integer.parseInt(boardIdStr)  : 0;
+        int boardId = (boardIdStr != null && !boardIdStr.isEmpty()) ? Integer.parseInt(boardIdStr) : 0;
 
         // REPO_REASON, REPO_CONTENT
-        String repoReason  = request.getParameter("repoReason");
+        String repoReason = request.getParameter("repoReason");
         String repoContent = request.getParameter("repoContent");
 
         // 중복 신고 체크
         if (reportDAO.checkDuplicate(memberId, reviewId, boardId)) {
             response.sendRedirect(request.getContextPath() + "/report_form?done=true&duplicate=true");
+            return;
+        }
+
+        // 처리 중인 다른 신고가 있는지 체크 // 선민 수정
+        if (reportDAO.hasPendingReport(memberId)) {
+            response.sendRedirect(request.getContextPath() + "/report_form?done=true&pending=true");
             return;
         }
 

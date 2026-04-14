@@ -1,10 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board-all.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board/board-all.css">
 
 <html>
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="../css/board-all.css">
 </head>
 <body>
 <div class="write-container">
@@ -76,7 +75,7 @@
             }
 
             console.log('File selected, starting upload...');
-            
+
             fetch('supa-upload', {
                 method: 'POST',
                 body: formData
