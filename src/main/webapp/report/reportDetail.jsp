@@ -40,8 +40,8 @@
             </div>
 
             <div class="detail-view">
-                <%-- 기본 정보 그룹 --%>
-                <div class="detail-info-group">
+                <%-- 기본 정보 그룹 (2x2 그리드 적용) --%>
+                <div class="detail-info-group grid-2x2">
                     <div class="detail-row">
                         <div class="detail-label">신고 유형</div>
                         <div class="detail-content">
@@ -77,8 +77,9 @@
                     <div class="detail-label">신고 사유</div>
                     <div class="detail-content">
                         <span class="report-reason-badge"
-                              style="display: inline-block; width: auto; padding: 5px 12px;"><c:out
-                                value="${report.repoReason}"/></span>
+                              style="display: inline-block; width: auto; padding: 5px 12px;">
+                            <c:out value="${report.repoReason}" escapeXml="false"/>
+                        </span>
                     </div>
                 </div>
 
@@ -93,7 +94,7 @@
                     <div class="detail-label">상세 내용</div>
                     <div class="detail-content text-box"
                          style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; line-height: 1.6;">
-                        <c:out value="${report.repoContent}"/>
+                        <c:out value="${report.repoContent}" escapeXml="false"/>
                     </div>
                 </div>
 
@@ -114,21 +115,41 @@
                             </div>
                         </div>
                     </c:when>
+                    <%--                    <c:when test="${not empty targetBoard}">--%>
+                    <%--                        <div class="detail-row" style="margin-top: 16px;">--%>
+                    <%--                            <div class="detail-label">게시글 원문</div>--%>
+                    <%--                            <div class="detail-content"--%>
+                    <%--                                 style="background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">--%>
+                    <%--                                <div style="font-weight: 600; margin-bottom: 4px; color: #1e293b;"><c:out--%>
+                    <%--                                        value="${targetBoard.title}"/></div>--%>
+                    <%--                                <div style="color: #64748b; font-size: 13px; margin-bottom: 12px;">--%>
+                    <%--                                        ${targetBoard.nickname} &nbsp;·&nbsp; ${targetBoard.created_date}--%>
+                    <%--                                </div>--%>
+                    <%--                                <div style="line-height: 1.6; color: #334155;"><c:out--%>
+                    <%--                                        value="${targetBoard.content}"/></div>--%>
+                    <%--                            </div>--%>
+                    <%--                        </div>--%>
+                    <%--                    </c:when>--%>
+
                     <c:when test="${not empty targetBoard}">
                         <div class="detail-row" style="margin-top: 16px;">
                             <div class="detail-label">게시글 원문</div>
                             <div class="detail-content"
                                  style="background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                                <div style="font-weight: 600; margin-bottom: 4px; color: #1e293b;"><c:out
-                                        value="${targetBoard.title}"/></div>
+                                <div style="font-weight: 600; margin-bottom: 4px; color: #1e293b;">
+                                    <c:out value="${targetBoard.title}"/>
+                                </div>
                                 <div style="color: #64748b; font-size: 13px; margin-bottom: 12px;">
                                         ${targetBoard.nickname} &nbsp;·&nbsp; ${targetBoard.created_date}
                                 </div>
-                                <div style="line-height: 1.6; color: #334155;"><c:out
-                                        value="${targetBoard.content}"/></div>
+                                    <%-- 🌟 이미지 URL을 <img> 태그로 변환해서 출력 --%>
+                                    <%--                                <div style="line-height: 1.6; color: #334155;" id="boardContentArea"></div>--%>
+                                <div style="line-height: 1.6; color: #334155;" id="boardContentArea"
+                                     data-content="${targetBoard.content}"></div>
                             </div>
                         </div>
                     </c:when>
+
                     <c:otherwise>
                         <div class="detail-row" style="margin-top: 16px;">
                             <div class="detail-label">원문</div>
@@ -159,23 +180,6 @@
                             <input type="hidden" name="cmd" value="delBoard">
                             <button type="submit" class="search-btn" style="background-color: #ef4444;">게시글 강제 삭제
                             </button>
-                        </c:otherwise>
-                    </c:choose>
-                </form>
-
-                <%-- 상태 변경 폼 --%>
-                <form method="post" action="${pageContext.request.contextPath}/reportDetail" style="margin: 0;">
-                    <input type="hidden" name="reportId" value="${report.reportId}">
-                    <input type="hidden" name="cmd" value="status">
-                    <c:choose>
-                        <c:when test="${report.repoStatus == 'PENDING'}">
-                            <input type="hidden" name="status" value="COMPLETED">
-                            <button type="submit" class="search-btn" style="background-color: #10b981;">✅ 처리완료로 변경
-                            </button>
-                        </c:when>
-                        <c:otherwise>
-                            <input type="hidden" name="status" value="PENDING">
-                            <button type="submit" class="reset-btn">미처리로 되돌리기</button>
                         </c:otherwise>
                     </c:choose>
                 </form>
