@@ -24,7 +24,7 @@ public class BoardDAO {
             ps.setInt(1, Integer.parseInt(request.getParameter("member_id")));
             ps.setString(2, request.getParameter("category"));
             ps.setString(3, request.getParameter("title"));
-            ps.setString(4, request.getParameter("txt"));
+ps.setString(4, request.getParameter("txt"));
             ps.setString(4, request.getParameter("txt"));
 
             // ✔ 실행은 한 번만
