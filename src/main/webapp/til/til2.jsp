@@ -2,19 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light">
-    <title>TIL — 취뽀 워크스페이스</title>
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/til.css">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/sidebar.css">
-</head>
-<body>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/til.css">
+<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/sidebar.css">
 <div class="page-wrap">
 
     <button class="hamburger">☰</button>
@@ -26,31 +17,49 @@
         </div>
         <nav class="sidebar-nav">
             <div class="nav-section-label">메인</div>
-            <a href="dashboard" class="nav-item"><span class="nav-icon">🏠</span>대시보드</a>
+            <a href="${pageContext.request.contextPath}/dashboard" class="nav-item">
+                <span class="nav-icon">🏠</span>대시보드
+            </a>
             <div class="nav-section-label">취업 관리</div>
-            <a href="application-list" class="nav-item"><span class="nav-icon">📋</span>지원 현황</a>
-            <a href="calendar" class="nav-item"><span class="nav-icon">📅</span>면접 일정</a>
+            <a href="${pageContext.request.contextPath}/application-list" class="nav-item">
+                <span class="nav-icon">📋</span>지원 현황
+            </a>
+            <a href="${pageContext.request.contextPath}/calendar" class="nav-item">
+                <span class="nav-icon">📅</span>면접 일정
+            </a>
+            <div class="nav-section-label">이력서</div>
+            <a href="${pageContext.request.contextPath}/resume-block" class="nav-item">
+                <span class="nav-icon">📝</span>블록 라이브러리
+            </a>
             <div class="nav-section-label">학습</div>
-            <a href="til" class="nav-item active"><span class="nav-icon">📚</span>TIL</a>
+            <a href="${pageContext.request.contextPath}/til-list" class="nav-item active">
+                <span class="nav-icon">📚</span>TIL
+            </a>
+            <div class="nav-section-label">커뮤니티</div>
+            <a href="${pageContext.request.contextPath}/review" class="nav-item">
+                <span class="nav-icon">💬</span>면접 후기
+            </a>
+            <a href="${pageContext.request.contextPath}/board" class="nav-item">
+                <span class="nav-icon">📢</span>게시판
+            </a>
         </nav>
 
         <div id="sidebar-mini-calendar">
             <div class="g-cal-header">
-                <div class="g-cal-title" id="g-cal-title">2026년 4월</div>
-                <div class="g-cal-nav">
-                    <button class="g-nav-btn" id="g-prev-month">‹</button>
-                    <button class="g-nav-btn" id="g-next-month">›</button>
-                </div>
+                <button id="g-prev-month" class="g-nav-btn">‹</button>
+                <span id="g-cal-title" class="g-cal-title-text"></span>
+                <button id="g-next-month" class="g-nav-btn">›</button>
             </div>
             <div class="g-cal-weekdays">
-                <div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div><div>일</div>
+                <span>월</span><span>화</span><span>수</span>
+                <span>목</span><span>금</span><span>토</span><span>일</span>
             </div>
-            <div class="g-cal-days" id="g-cal-days">
-            </div>
+            <div class="g-cal-days" id="g-cal-days"></div>
         </div>
     </aside>
 
     <main class="content-area">
+        <!-- 여기부터 본문 -->
         <div class="page-header-row">
             <div>
                 <h1 class="page-title">TIL</h1>
@@ -87,11 +96,11 @@
 
                 <!-- Tag filter -->
                 <div class="tag-filter">
-                    <a href="til" class="tag-btn ${empty param.tag ? 'active' : ''}">
+                    <a href="til-list" class="tag-btn ${empty param.tag ? 'active' : ''}">
                         전체 <span class="tag-cnt">${totalCount}</span>
                     </a>
                     <c:forEach var="entry" items="${tagStats}">
-                        <a href="til?tag=${entry.key}"
+                        <a href="til-list?tag=${entry.key}"
                            class="tag-btn ${param.tag == entry.key ? 'active' : ''}">
                                 ${entry.key} <span class="tag-cnt">${entry.value}</span>
                         </a>
@@ -307,299 +316,12 @@
         {tag: '${entry.key}', count: ${entry.value}}${vs.last ? '' : ','}
         </c:forEach>
     ];
-
-    const TAG_CONFIG = {
-        'Java': {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
-        'Spring': {color: '#56e39f', bg: 'rgba(86,227,159,0.12)'},
-        'SQL': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
-        'JavaScript': {color: '#ffd166', bg: 'rgba(255,209,102,0.12)'},
-        'Git': {color: '#ff6b6b', bg: 'rgba(255,107,107,0.12)'},
-        'Python': {color: '#5b7cf8', bg: 'rgba(91,124,248,0.12)'},
-        'CSS': {color: '#8b6ef5', bg: 'rgba(139,110,245,0.12)'},
-        'React': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
-        '기타': {color: '#9da3b8', bg: 'rgba(157,163,184,0.12)'}
-    };
-
-    /* ── 도넛 차트 ── */
-    function drawDonut() {
-        if (!TAG_STATS.length) return;
-        var total = TAG_STATS.reduce(function (a, d) {
-            return a + d.count;
-        }, 0);
-        var canvas = document.getElementById('donutCanvas');
-        var ctx = canvas.getContext('2d');
-        var cx = 65, cy = 65, r = 50, ir = 30, gap = 0.04;
-        var angle = -Math.PI / 2;
-
-        TAG_STATS.forEach(function (d) {
-            var cfg = TAG_CONFIG[d.tag] || TAG_CONFIG['기타'];
-            var sweep = (d.count / total) * Math.PI * 2 - gap;
-            ctx.beginPath();
-            ctx.moveTo(cx, cy);
-            ctx.arc(cx, cy, r, angle + gap / 2, angle + sweep + gap / 2);
-            ctx.closePath();
-            ctx.fillStyle = cfg.color;
-            ctx.fill();
-            angle += sweep + gap;
-        });
-
-        ctx.beginPath();
-        ctx.arc(cx, cy, ir, 0, Math.PI * 2);
-        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--surface') || '#141720';
-        ctx.fill();
-
-        document.getElementById('chartLegend').innerHTML = TAG_STATS.map(function (d) {
-            var cfg = TAG_CONFIG[d.tag] || TAG_CONFIG['기타'];
-            var pct = Math.round(d.count / total * 100);
-            return '<div class="legend-row">' +
-                '<div class="legend-dot" style="background:' + cfg.color + '"></div>' +
-                '<span class="legend-name">' + d.tag + '</span>' +
-                '<span class="legend-pct" style="color:' + cfg.color + '">' + pct + '%</span>' +
-                '</div>';
-        }).join('');
-    }
-
-    drawDonut();
-
-    /* ── 등록 / 수정 모달 ── */
-    function openTilEditor(id) {
-        var form = document.getElementById('tilForm');
-        document.getElementById('editorTitle').textContent = id ? 'TIL 수정' : 'TIL 작성';
-        form.action = id ? 'til_update' : 'til_insert';
-
-        document.getElementById('editorPreview').style.display = 'none';
-        document.getElementById('tilContent').style.display = 'block';
-        document.getElementById('previewBtn').textContent = '👁 미리보기';
-
-        if (id) {
-            var el = document.getElementById('til_data_' + id);
-            document.getElementById('formTilId').value = id;
-            document.getElementById('tilTitle').value = el.dataset.title;
-            document.getElementById('tilTag').value = el.dataset.tag;
-            document.getElementById('tilTime').value = el.dataset.time;
-            document.getElementById('tilContent').value = el.dataset.content;
-        } else {
-            document.getElementById('formTilId').value = '';
-            document.getElementById('tilTitle').value = '';
-            document.getElementById('tilTag').value = 'Java';
-            document.getElementById('tilTime').value = '';
-            document.getElementById('tilContent').value = '';
-        }
-
-        document.getElementById('tilEditorModal').classList.add('open');
-        document.getElementById('tilTitle').focus();
-    }
-
-    function closeEditor() {
-        document.getElementById('tilEditorModal').classList.remove('open');
-    }
-
-    /* ── 상세 모달 ── */
-    function openDetail(id) {
-        var el = document.getElementById('til_data_' + id);
-        if (!el) return;
-        var cfg = TAG_CONFIG[el.dataset.tag] || TAG_CONFIG['기타'];
-
-        document.getElementById('detailTitle').textContent = el.dataset.title;
-        document.getElementById('detailMeta').innerHTML =
-            '<span class="badge" style="background:' + cfg.bg + ';color:' + cfg.color + '">' + el.dataset.tag + '</span>' +
-            '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + el.dataset.date + '</span>' +
-            (el.dataset.time > 0
-                ? '<span style="font-size:12px;color:var(--text3);margin-left:8px">⏱ ' + el.dataset.time + 'h</span>'
-                : '');
-
-        document.getElementById('detailContent').innerHTML = renderMarkdown(el.dataset.content);
-        document.getElementById('detailEditBtn').onclick = function () {
-            closeDetail();
-            openTilEditor(id);
-        };
-        document.getElementById('detailDeleteBtn').onclick = function () {
-            closeDetail();
-            openDeleteConfirm(id, el.dataset.title);
-        };
-
-        document.getElementById('tilDetailModal').classList.add('open');
-    }
-
-    function closeDetail() {
-        document.getElementById('tilDetailModal').classList.remove('open');
-    }
-
-    /* ── 삭제 확인 ── */
-    function openDeleteConfirm(id, title) {
-        document.getElementById('confirmMsg').textContent = '"' + title + '" 를 삭제할까요? 이 작업은 되돌릴 수 없습니다.';
-        document.getElementById('deleteTilId').value = id;
-        document.getElementById('confirmOverlay').classList.add('open');
-    }
-
-    function closeConfirm() {
-        document.getElementById('confirmOverlay').classList.remove('open');
-    }
-
-    /* ── 마크다운 렌더러 ── */
-    function renderMarkdown(text) {
-        if (!text) return '<p style="color:var(--text3)">내용이 없어요.</p>';
-        return text
-            .replace(/```([\s\S]*?)```/g, '<pre class="md-code">$1</pre>')
-            .replace(/`([^`]+)`/g, '<code class="md-inline">$1</code>')
-            .replace(/^### (.+)$/gm, '<h3 class="md-h3">$1</h3>')
-            .replace(/^## (.+)$/gm, '<h2 class="md-h2">$1</h2>')
-            .replace(/^# (.+)$/gm, '<h1 class="md-h1">$1</h1>')
-            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-            .replace(/^- (.+)$/gm, '<li class="md-li">$1</li>')
-            .replace(/\n\n/g, '</p><p class="md-p">')
-            .replace(/\n/g, '<br>');
-    }
-
-    /* ── 에디터 툴바 ── */
-    function insertMd(prefix) {
-        var ta = document.getElementById('tilContent');
-        var s = ta.selectionStart;
-        ta.value = ta.value.slice(0, s) + prefix + ta.value.slice(ta.selectionEnd);
-        ta.selectionStart = ta.selectionEnd = s + prefix.length;
-        ta.focus();
-    }
-
-    function wrapMd(open, close) {
-        var ta = document.getElementById('tilContent');
-        var s = ta.selectionStart, e = ta.selectionEnd;
-        var sel = ta.value.slice(s, e) || 'text';
-        ta.value = ta.value.slice(0, s) + open + sel + close + ta.value.slice(e);
-        ta.selectionStart = s + open.length;
-        ta.selectionEnd = s + open.length + sel.length;
-        ta.focus();
-    }
-
-    var showPreview = false;
-
-    function togglePreview() {
-        showPreview = !showPreview;
-        var ta = document.getElementById('tilContent');
-        var pre = document.getElementById('editorPreview');
-        var btn = document.getElementById('previewBtn');
-        if (showPreview) {
-            pre.innerHTML = renderMarkdown(ta.value);
-            pre.style.display = 'block';
-            ta.style.display = 'none';
-            btn.textContent = '✏️ 편집';
-        } else {
-            pre.style.display = 'none';
-            ta.style.display = 'block';
-            btn.textContent = '👁 미리보기';
-        }
-    }
-
-    /* ── 키보드 / 오버레이 닫기 ── */
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
-            closeEditor();
-            closeDetail();
-            closeConfirm();
-        }
-    });
-    document.getElementById('tilEditorModal').addEventListener('click', function (e) {
-        if (e.target === e.currentTarget) closeEditor();
-    });
-    document.getElementById('tilDetailModal').addEventListener('click', function (e) {
-        if (e.target === e.currentTarget) closeDetail();
-    });
-    document.getElementById('confirmOverlay').addEventListener('click', function (e) {
-        if (e.target === e.currentTarget) closeConfirm();
-    });
-
-    // ... 기존 오버레이 닫기 로직 생략 ...
-    document.getElementById('confirmOverlay').addEventListener('click', function(e) {
-        if (e.target === e.currentTarget) closeConfirm();
-    });
-
-    // 🌟 여기서부터 미니 캘린더 자바스크립트 통째로 추가! 🌟
-    document.addEventListener('DOMContentLoaded', function() {
-        const rawEvents = [
-            <c:forEach var="sch" items="${schList}">
-            '<fmt:formatDate value="${sch.schedule_date}" pattern="yyyy-MM-dd" />',
-            </c:forEach>
-        ];
-
-        const eventCounts = {};
-        rawEvents.forEach(date => {
-            if (date && date.trim() !== '') {
-                const pureDate = date.split(' ')[0];
-                eventCounts[pureDate] = (eventCounts[pureDate] || 0) + 1;
-            }
-        });
-
-        let currentDispDate = new Date();
-
-        function renderMiniCalendar(dateToRender) {
-            const year = dateToRender.getFullYear();
-            const month = dateToRender.getMonth();
-            const today = new Date();
-            const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-
-            document.getElementById('g-cal-title').textContent = year + '년 ' + (month + 1) + '월';
-
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const prevMonthLastDay = new Date(year, month, 0).getDate();
-
-            let firstDayIndex = firstDay.getDay() - 1;
-            if (firstDayIndex === -1) firstDayIndex = 6;
-
-            let daysHTML = '';
-
-            // 1. 이전 달 날짜 흐리게 채우기
-            for (let i = firstDayIndex; i > 0; i--) {
-                daysHTML += `<div class="g-day-cell" onclick="location.href='${pageContext.request.contextPath}/calendar'">
-                                <div class="g-day-num other-month">\${prevMonthLastDay - i + 1}</div>
-                             </div>`;
-            }
-
-            // 2. 이번 달 1일부터 말일까지 꽉꽉 채우기!!
-            for (let i = 1; i <= lastDay.getDate(); i++) {
-                const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(i).padStart(2, '0');
-                let isToday = (dateStr === todayStr) ? ' today' : '';
-
-                let dotsHTML = '';
-                if (eventCounts[dateStr]) {
-                    dotsHTML = '<div class="g-dots">';
-                    let dotCount = Math.min(eventCounts[dateStr], 3);
-                    for(let k = 0; k < dotCount; k++) {
-                        dotsHTML += '<span class="g-dot"></span>';
-                    }
-                    dotsHTML += '</div>';
-                }
-
-                daysHTML += `<div class="g-day-cell" onclick="location.href='${pageContext.request.contextPath}/calendar'">
-                                <div class="g-day-num\${isToday}">\${i}</div>
-                                \${dotsHTML}
-                             </div>`;
-            }
-
-            // 3. 달력 모양 유지를 위해 남은 빈칸은 다음 달 날짜로 채우기
-            const totalCells = firstDayIndex + lastDay.getDate();
-            let nextMonthDay = 1;
-            while(totalCells + nextMonthDay - 1 < 42) {
-                daysHTML += `<div class="g-day-cell" onclick="location.href='${pageContext.request.contextPath}/calendar'">
-                                <div class="g-day-num other-month">\${nextMonthDay}</div>
-                             </div>`;
-                nextMonthDay++;
-            }
-
-            document.getElementById('g-cal-days').innerHTML = daysHTML;
-        } // 👈 이 닫는 괄호(})가 빠져있어서 터졌습니다! 추가 완료!
-
-        document.getElementById('g-prev-month').addEventListener('click', () => {
-            currentDispDate.setMonth(currentDispDate.getMonth() - 1);
-            renderMiniCalendar(currentDispDate);
-        });
-        document.getElementById('g-next-month').addEventListener('click', () => {
-            currentDispDate.setMonth(currentDispDate.getMonth() + 1);
-            renderMiniCalendar(currentDispDate);
-        });
-
-        renderMiniCalendar(currentDispDate);
-    });
+    const RAW_EVENTS = [
+        <c:forEach var="sch" items="${schList}">
+        '<fmt:formatDate value="${sch.schedule_date}" pattern="yyyy-MM-dd" />',
+        </c:forEach>
+    ];
+    const CTX_PATH = '${pageContext.request.contextPath}';
 </script>
-</body>
-</html>
+<script src="${pageContext.request.contextPath}/js/til/til.js"></script>
 

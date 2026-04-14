@@ -17,8 +17,8 @@
             <div class="pw-icon-box">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                      stroke="#7c3aed" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="11" width="18" height="11" rx="2"/>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                 </svg>
             </div>
             <h2 class="pw-title">비밀번호 변경</h2>

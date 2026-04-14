@@ -3,21 +3,27 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
 <link rel="stylesheet" href="${ctx}/css/application_list.css">
+<link rel="stylesheet" href="${ctx}/css/index.css">
 <link rel="stylesheet" href="${ctx}/css/resume-block.css">
+<link rel="stylesheet" href="${ctx}/css/index.css">
+<!-- 선민 수정 -->
 
 <!-- 페이지 헤더 -->
 <div class="page-header">
-    <div>
+    <div class="page-info">
         <h1 class="page-title">지원한 회사 목록</h1>
         <p class="page-sub">지원 현황을 한눈에 확인하고 단계를 관리하세요</p>
     </div>
-    <div class="two-btn">
-        <div>
+    <div class="three-btn">
+        <div class="right-btns">
+
+            <a href="${pageContext.request.contextPath}/til-list">
+                <button class="btn-til">TIL</button>
+            </a>
+
             <button class="btn-add" id="btnOpenInsert">+ 지원 추가</button>
-        </div>
-        <div class="rb-filters">
             <form class="rb-filter" action="application-star" method="get">
-                <button>즐겨찾기⭐</button>
+                <button>즐겨찾기✨</button>
             </form>
         </div>
     </div>
@@ -218,5 +224,5 @@
 </div>
 
 <!-- JS는 모달 HTML 아래에서 로드 → DOM 순서 보장 -->
-<script src="${ctx}/js/companySearchModal.js"></script>
+<script src="${ctx}/js/company/company-search-modal.js"></script>
 <script src="${ctx}/js/application_list.js"></script>

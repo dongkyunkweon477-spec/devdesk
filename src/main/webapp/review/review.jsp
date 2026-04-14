@@ -7,8 +7,8 @@
     var contextPath = '${pageContext.request.contextPath}';
     var currentCompanyId = '${not empty companyId ? companyId : ""}';
 </script>
-<script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
-<script src="${pageContext.request.contextPath}/js/review-board.js"></script>
+<script src="${pageContext.request.contextPath}/js/company/company-search-modal.js"></script>
+<script src="${pageContext.request.contextPath}/js/review/review-board.js"></script>
 
 <jsp:include page="/company/company-search/companySearch.jsp"/>
 

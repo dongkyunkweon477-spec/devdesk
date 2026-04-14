@@ -443,6 +443,25 @@ public class ReportDAO {
         }
         return false;
     }
+<<<<<<< HEAD
     
 
 }
+=======
+
+    // 유저가 처리 중인 신고가 있는지 체크 // 선민 추가
+    public boolean hasPendingReport(int memberId) {
+        String sql = "SELECT COUNT(*) FROM report WHERE member_id = ? AND repo_status = 'PENDING'";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, memberId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+}
+>>>>>>> 4f368d8f92cbcb5247e17b86b362136f9abb3365

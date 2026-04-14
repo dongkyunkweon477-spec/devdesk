@@ -17,40 +17,46 @@
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/sidebar.css">
-    </head>
-
 </head>
 <body>
 <div class="page-wrap">
-    <!-- ════════════════════════════
-         사이드바
-    ════════════════════════════ -->
+    <%-- ── Sidebar ── --%>
+    <button class="hamburger">☰</button>
+    <div class="sidebar-overlay"></div>
     <aside class="sidebar">
-
         <div class="sidebar-logo">
             <span class="logo-mark">취뽀 워크스페이스</span>
             <span class="logo-sub">IT 취업 준비 플랫폼</span>
         </div>
-
         <nav class="sidebar-nav">
             <div class="nav-section-label">메인</div>
-            <a href="dashboard" class="nav-item active">
-                <span class="nav-icon">🏠</span> 대시보드
+            <a href="${pageContext.request.contextPath}/dashboard" class="nav-item">
+                <span class="nav-icon">🏠</span>대시보드
             </a>
-
             <div class="nav-section-label">취업 관리</div>
-            <a href="application-list" class="nav-item">
-                <span class="nav-icon">📋</span> 지원 현황
+            <a href="${pageContext.request.contextPath}/application-list" class="nav-item">
+                <span class="nav-icon">📋</span>지원 현황
             </a>
-            <a href="calendar" class="nav-item">
-                <span class="nav-icon">📅</span> 면접 일정
+            <a href="${pageContext.request.contextPath}/calendar" class="nav-item">
+                <span class="nav-icon">📅</span>면접 일정
             </a>
-
+            <div class="nav-section-label">이력서</div>
+            <a href="${pageContext.request.contextPath}/resume-block" class="nav-item active">
+                <span class="nav-icon">📝</span>블록 라이브러리
+            </a>
             <div class="nav-section-label">학습</div>
-            <a href="til-list" class="nav-item">
-                <span class="nav-icon">📚</span> TIL
+            <a href="${pageContext.request.contextPath}/til-list" class="nav-item">
+                <span class="nav-icon">📚</span>TIL
+            </a>
+            <div class="nav-section-label">커뮤니티</div>
+            <a href="${pageContext.request.contextPath}/review" class="nav-item">
+                <span class="nav-icon">💬</span>면접 후기
+            </a>
+            <a href="${pageContext.request.contextPath}/board" class="nav-item">
+                <span class="nav-icon">📢</span>게시판
             </a>
         </nav>
+
 
         <div id="sidebar-mini-calendar">
             <div class="g-cal-header">
@@ -61,24 +67,17 @@
                 </div>
             </div>
             <div class="g-cal-weekdays">
-                <div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div><div>일</div>
+                <div>월</div>
+                <div>화</div>
+                <div>수</div>
+                <div>목</div>
+                <div>금</div>
+                <div>토</div>
+                <div>일</div>
             </div>
             <div class="g-cal-days" id="g-cal-days">
             </div>
         </div>
-        <div class="sidebar-footer">
-            <div class="user-card">
-                <div class="user-avatar">
-                    <%-- 로그인 유저 이니셜 --%>
-                    ${sessionScope.loginUser.nickname.substring(0,1)}
-                </div>
-                <div>
-                    <div class="user-name">${sessionScope.loginUser.nickname}</div>
-                    <div class="user-role">${sessionScope.loginUser.jobCategory}</div>
-                </div>
-            </div>
-        </div>
-
     </aside>
 
     <!-- ════════════════════════════
@@ -89,7 +88,7 @@
         <!-- 헤더 -->
         <div class="dash-header">
             <div>
-                <h1 class="dash-title">안녕하세요, ${sessionScope.loginUser.nickname}님 👋</h1>
+                <h1 class="dash-title">안녕하세요, ${sessionScope.user.nickname}님 👋</h1>
                 <p class="dash-sub">
                     <%-- Java에서 넘겨준 오늘 날짜 문자열 --%>
                     ${todayStr}
@@ -172,7 +171,9 @@
                 <span class="stage-chip-unit">회</span>
             </a>
 
+
         </div>
+       
 
         <!-- ── 2×2 카드 그리드 ────────────────────────── -->
         <div class="dash-grid">
@@ -426,15 +427,15 @@
         document.getElementById('detailContent').innerHTML = renderMarkdown(el.dataset.content);
 
         var editBtn = document.getElementById('detailEditBtn');
-        if(editBtn) editBtn.href = 'til?id=' + id;
+        if (editBtn) editBtn.href = 'til?id=' + id;
 
         var modal = document.getElementById('tilDetailModal');
-        if(modal) modal.classList.add('open');
+        if (modal) modal.classList.add('open');
     }
 
     function closeDetail() {
         var modal = document.getElementById('tilDetailModal');
-        if(modal) modal.classList.remove('open');
+        if (modal) modal.classList.remove('open');
     }
 
     // ESC 키 & 오버레이 클릭으로 닫기
@@ -443,14 +444,14 @@
     });
 
     var modalOverlay = document.getElementById('tilDetailModal');
-    if(modalOverlay) {
+    if (modalOverlay) {
         modalOverlay.addEventListener('click', function (e) {
             if (e.target === e.currentTarget) closeDetail();
         });
     }
 
     // 3. 대시보드 미니 캘린더 관련 스크립트 (점 찍는 기능 포함)
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
 
         // 서버에서 받아온 면접 일정 리스트
         const rawEvents = [
@@ -505,7 +506,7 @@
                 if (eventCounts[dateStr]) {
                     dotsHTML = '<div class="g-dots">';
                     let dotCount = Math.min(eventCounts[dateStr], 3); // 최대 3개까지만 표시
-                    for(let k = 0; k < dotCount; k++) {
+                    for (let k = 0; k < dotCount; k++) {
                         dotsHTML += '<span class="g-dot"></span>';
                     }
                     dotsHTML += '</div>';
@@ -520,7 +521,7 @@
             // 3. 달력 모양 유지를 위해 남은 빈칸은 다음 달 날짜로 채우기
             const totalCells = firstDayIndex + lastDay.getDate();
             let nextMonthDay = 1;
-            while(totalCells + nextMonthDay - 1 < 42) {
+            while (totalCells + nextMonthDay - 1 < 42) {
                 daysHTML += `<div class="g-day-cell" onclick="location.href='${pageContext.request.contextPath}/calendar'">
                                 <div class="g-day-num other-month">\${nextMonthDay}</div>
                              </div>`;

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<<<<<<< HEAD
 
 <%-- 🌟 어드민 공통 CSS & 리포트 전용 CSS 연결 --%>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/admin.css">
@@ -17,6 +18,18 @@
             <li><a href="${pageContext.request.contextPath}/admin/report" class="active">🚨 신고 관리</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/company">🏢 기업 정보 관리</a></li>
         </ul>
+=======
+<link rel="stylesheet" href="../css/board/board-all.css">
+<link rel="stylesheet" href="../css/report/report.css">
+
+<div class="board-container detail">
+    <div class="board-header detail">
+        <h2>신고 상세</h2>
+        <div class="board-actions">
+            <button class="write-btn" onclick="location.href='${pageContext.request.contextPath}/admin/report'">목록으로
+            </button>
+        </div>
+>>>>>>> 4f368d8f92cbcb5247e17b86b362136f9abb3365
     </div>
 
     <%-- 🌟 오른쪽 메인 컨텐츠 영역 --%>
@@ -195,8 +208,100 @@
                 </form>
             </div>
         </div>
+<<<<<<< HEAD
+=======
+
+        <%-- 신고 대상 원문 --%>
+        <c:choose>
+            <c:when test="${not empty targetReview}">
+                <div class="detail-row" style="margin-top: 16px;">
+                    <div class="detail-label">리뷰 원문</div>
+                    <div class="detail-content">
+                        <div style="font-weight: 600; margin-bottom: 4px;"><c:out
+                                value="${targetReview.reviewTitle}"/></div>
+                        <div style="color: #555; font-size: 13px; margin-bottom: 6px;">
+                                ${targetReview.companyName} &nbsp;·&nbsp; ${targetReview.reviewCreatedDate}
+                        </div>
+                        <div class="detail-content text-box"><c:out value="${targetReview.reviewContent}"/></div>
+                    </div>
+                </div>
+            </c:when>
+            <c:when test="${not empty targetBoard}">
+                <div class="detail-row" style="margin-top: 16px;">
+                    <div class="detail-label">게시글 원문</div>
+                    <div class="detail-content">
+                        <div style="font-weight: 600; margin-bottom: 4px;"><c:out value="${targetBoard.title}"/></div>
+                        <div style="color: #555; font-size: 13px; margin-bottom: 6px;">
+                                ${targetBoard.nickname} &nbsp;·&nbsp; ${targetBoard.created_date}
+                        </div>
+                        <div class="detail-content text-box"><c:out value="${targetBoard.content}"/></div>
+                    </div>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="detail-row" style="margin-top: 16px;">
+                    <div class="detail-label">원문</div>
+                    <div class="detail-content" style="color: #999;">이미 삭제된 콘텐츠입니다.</div>
+                </div>
+            </c:otherwise>
+        </c:choose>
+>>>>>>> 4f368d8f92cbcb5247e17b86b362136f9abb3365
     </div>
 </div>
 
+<<<<<<< HEAD
 <%-- 🌟 새로 만든 JS 파일 연결! --%>
 <script src="${pageContext.request.contextPath}/js/admin/admin_report_detail.js"></script>
+=======
+    <%-- 신고 대상 삭제 버튼 --%>
+    <div class="detail-buttons" style="margin-bottom: 8px;">
+        <c:choose>
+            <c:when test="${report.repoReviewId > 0}">
+                <form method="post" action="${pageContext.request.contextPath}/reportDetail"
+                      style="display:inline;" onsubmit="return confirm('리뷰를 삭제하시겠습니까?')">
+                    <input type="hidden" name="reportId" value="${report.reportId}">
+                    <input type="hidden" name="reviewId" value="${report.repoReviewId}">
+                    <input type="hidden" name="cmd" value="delReview">
+                    <button type="submit" class="delete-btn">리뷰 삭제</button>
+                </form>
+            </c:when>
+            <c:otherwise>
+                <form method="post" action="${pageContext.request.contextPath}/reportDetail"
+                      style="display:inline;" onsubmit="return confirm('게시글을 삭제하시겠습니까?')">
+                    <input type="hidden" name="reportId" value="${report.reportId}">
+                    <input type="hidden" name="boardId" value="${report.repoBoardId}">
+                    <input type="hidden" name="cmd" value="delBoard">
+                    <button type="submit" class="delete-btn">게시글 삭제</button>
+                </form>
+            </c:otherwise>
+        </c:choose>
+    </div>
+
+    <%-- 상태 변경 + 신고 삭제 버튼 --%>
+    <div class="detail-buttons">
+        <%-- 상태 변경 --%>
+        <form method="post" action="${pageContext.request.contextPath}/reportDetail" style="display:inline;">
+            <input type="hidden" name="reportId" value="${report.reportId}">
+            <input type="hidden" name="cmd" value="status">
+            <c:choose>
+                <c:when test="${report.repoStatus == 'PENDING'}">
+                    <input type="hidden" name="status" value="COMPLETED">
+                    <button type="submit" class="edit-btn">처리완료로 변경</button>
+                </c:when>
+                <c:otherwise>
+                    <input type="hidden" name="status" value="PENDING">
+                    <button type="submit" class="write-btn detail">미처리로 되돌리기</button>
+                </c:otherwise>
+            </c:choose>
+        </form>
+
+        <%-- 삭제 --%>
+        <form method="post" action="${pageContext.request.contextPath}/reportDetail"
+              style="display:inline;" onsubmit="return confirm('신고를 삭제하시겠습니까?')">
+            <input type="hidden" name="reportId" value="${report.reportId}">
+            <input type="hidden" name="cmd" value="delete">
+            <button type="submit" class="delete-btn">삭제</button>
+        </form>
+    </div>
+</div>
+>>>>>>> 4f368d8f92cbcb5247e17b86b362136f9abb3365
