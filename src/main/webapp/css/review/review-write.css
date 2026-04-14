@@ -516,3 +516,21 @@
 .modal-box > button:hover {
     background: #f8fafc;
 }
+
+/* Dark Mode */
+[data-theme="dark"] .company-header { border-bottom-color: #334155; }
+[data-theme="dark"] .company-name { color: #f8fafc; }
+[data-theme="dark"] .company-meta { color: #cbd5e1; }
+[data-theme="dark"] .form-section { background: #1e293b; border-color: #334155; }
+[data-theme="dark"] .section-title { color: #f8fafc; }
+[data-theme="dark"] .field-label { color: #cbd5e1; }
+[data-theme="dark"] .field-hint { color: #94a3b8; }
+[data-theme="dark"] .field-group input[type="text"],
+[data-theme="dark"] .field-group select,
+[data-theme="dark"] .field-group textarea { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+[data-theme="dark"] .field-group input[type="text"]:focus,
+[data-theme="dark"] .field-group select:focus,
+[data-theme="dark"] .field-group textarea:focus { border-color: #a78bfa; background: #1e293b; }
+[data-theme="dark"] .char-count { color: #cbd5e1; }
+[data-theme="dark"] .char-min { color: #cbd5e1; }
+[data-theme="dark"] .company-badge { background: #334155; color: #c4b5fd; }

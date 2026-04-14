@@ -75,7 +75,6 @@
                 <input type="text" id="companyName" placeholder="기업명을 입력하세요"/>
             </div>
         </div>
-        <button class="cs-search-btn" onclick="location.href='/company/insert'">임시버튼</button>
     </div>
 
     <%-- ===== 검색 바 ===== --%>

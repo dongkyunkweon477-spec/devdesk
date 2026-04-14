@@ -257,3 +257,22 @@
     color: #94a3b8;
     font-size: 15px;
 }
+
+/* Dark Mode */
+[data-theme="dark"] .card { background: #1e293b; border-color: #334155; }
+[data-theme="dark"] .card-title { color: #f8fafc; }
+[data-theme="dark"] .card-header { color: #cbd5e1; }
+[data-theme="dark"] .card-header a { color: #a78bfa; }
+[data-theme="dark"] .info-label { color: #cbd5e1; }
+[data-theme="dark"] .info-value { color: #e2e8f0; }
+[data-theme="dark"] .tag { background: #334155; color: #e2e8f0; }
+[data-theme="dark"] .card-footer { border-top-color: #334155; color: #cbd5e1; }
+[data-theme="dark"] .read-more-btn { background: #1e293b; color: #a78bfa; border-color: #a78bfa; }
+[data-theme="dark"] .read-more-btn:hover { background: #334155; color: #c4b5fd; }
+[data-theme="dark"] .page-btn { background: #1e293b; border-color: #334155; color: #e2e8f0; }
+[data-theme="dark"] .page-btn:hover { border-color: #a78bfa; color: #c4b5fd; }
+[data-theme="dark"] .page-btn.active { background: #a78bfa; color: #ffffff; border-color: #a78bfa; }
+[data-theme="dark"] .review-filter-bar select { background-color: #1e293b; border-color: #334155; color: #e2e8f0; }
+[data-theme="dark"] .review-filter-bar select:focus { border-color: #a78bfa; background-color: #334155; }
+[data-theme="dark"] .review-toolbar { color: #e2e8f0; }
+[data-theme="dark"] .no-result { color: #cbd5e1; }
