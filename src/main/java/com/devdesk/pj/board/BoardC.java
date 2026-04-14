@@ -19,6 +19,10 @@ public class BoardC extends HttpServlet {
         // 검색 파라미터가 있으면 검색 실행
         if (searchType != null && keyword != null && !keyword.trim().isEmpty()) {
             BoardDAO.searchBoards(request);
+        } else if (category != null && !category.trim().isEmpty() && !category.equals("전체") &&
+                (sort != null && !sort.trim().isEmpty())) {
+            // 카테고리와 정렬이 함께 있는 경우 결합 처리
+            BoardDAO.searchBoardsByCategoryAndSort(request);
         } else if (category != null && !category.trim().isEmpty() && !category.equals("전체")) {
             // 카테고리 필터링 실행
             BoardDAO.searchBoardsByCategory(request);

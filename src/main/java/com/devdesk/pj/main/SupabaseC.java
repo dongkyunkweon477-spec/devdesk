@@ -1,7 +1,5 @@
 package com.devdesk.pj.main;
 
-import com.devdesk.pj.board.BoardDAO;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
