@@ -443,11 +443,6 @@ public class ReportDAO {
         }
         return false;
     }
-<<<<<<< HEAD
-    
-
-}
-=======
 
     // 유저가 처리 중인 신고가 있는지 체크 // 선민 추가
     public boolean hasPendingReport(int memberId) {
@@ -464,4 +459,3 @@ public class ReportDAO {
         return false;
     }
 }
->>>>>>> 4f368d8f92cbcb5247e17b86b362136f9abb3365
