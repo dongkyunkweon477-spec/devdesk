@@ -1,7 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <title>DevDesk - 내 면접 일정</title>
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet'/>
@@ -13,18 +11,6 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
 
-<%-- ── 이번 주 날짜 범위 계산 ── --%>
-<%
-    java.util.Calendar cal = java.util.Calendar.getInstance();
-    cal.set(java.util.Calendar.DAY_OF_WEEK, java.util.Calendar.SUNDAY);
-    java.util.Date startDate = cal.getTime();
-    cal.add(java.util.Calendar.DATE, 6);
-    java.util.Date endDate = cal.getTime();
-    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-
-    request.setAttribute("weekStart", sdf.format(startDate));
-    request.setAttribute("weekEnd", sdf.format(endDate));
-%>
 <%-- ────────────────────────────────────────
      [A] 사이드바 삽입 블록
 ──────────────────────────────────────── --%>
@@ -41,34 +27,11 @@
             <span class="toggle-arrow">▼</span>
         </div>
 
-        <%-- 펼쳐지는 일정 목록 --%>
+        <%-- 펼쳐지는 일정 목록 (JS가 동적으로 채움) --%>
         <div class="week-schedule-dropdown" id="weekDropdown">
-            <c:set var="hasWeekEvent" value="false"/>
-
-            <c:forEach var="sch" items="${list}">
-                <c:if test="${not empty sch.schedule_date}">
-                    <fmt:parseDate value="${sch.schedule_date}" pattern="yyyy-MM-dd" var="schDate"/>
-                    <fmt:parseDate value="${weekStart}" pattern="yyyy-MM-dd" var="start"/>
-                    <fmt:parseDate value="${weekEnd}" pattern="yyyy-MM-dd" var="end"/>
-
-                    <c:if test="${schDate.time >= start.time and schDate.time <= end.time}">
-                        <div class="week-schedule-item"
-                             onclick="if(window.calendar){window.calendar.gotoDate('${sch.schedule_date}');}">
-                            <span class="week-item-day">${fn:substring(sch.schedule_date, 8, 10)}일</span>
-                            <div class="week-item-info">
-                                <span class="week-item-company">${sch.company_name}</span>
-                                <span class="week-item-type">${sch.interview_type}</span>
-                            </div>
-                        </div>
-                        <c:set var="hasWeekEvent" value="true"/>
-                    </c:if>
-                </c:if>
-            </c:forEach>
-
-            <c:if test="${hasWeekEvent == 'false'}">
-                <div class="week-schedule-empty">이번 주 일정이 없어요 😊</div>
-            </c:if>
         </div>
+
+        <span class="nav-section-label" style="margin-top:4px;">메모</span>
 
         <%-- To-do 체크박스 리스트 --%>
         <div class="todo-section">
@@ -100,11 +63,12 @@
         <div class="g-cal-days" id="g-cal-days"></div>
     </div>
 
-</div> <%-- // 사이드바 컨테이너 종료 --%>
+</div>
 
 <%-- ────────────────────────────────────────
      [B] 캘린더 메인 본문 (calendar.jsp)
 ──────────────────────────────────────── --%>
+
 
 <div class="calendar-page-wrapper">
     <div class="calendar-main">
