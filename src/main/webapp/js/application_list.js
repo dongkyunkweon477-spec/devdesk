@@ -151,7 +151,37 @@ $('#cardGrid').on('click', '.btn-status', function () {
 });
 
 /* ══════════════════════════════
-   8. ESC 키
+   8. 단계 필터링
+══════════════════════════════ */
+var activeFilter = null;
+
+$('#stageBar').on('click', '.stage-chip', function () {
+    var stage = $(this).find('[id^="cnt-"]').attr('id').replace('cnt-', '');
+
+    if (activeFilter === stage) {
+        // 같은 칩 다시 클릭 → 필터 해제 (전체 보기)
+        activeFilter = null;
+        $(this).removeClass('active');
+        $('.app-card').show();
+    } else {
+        activeFilter = stage;
+        $('.stage-chip').removeClass('active');
+        $(this).addClass('active');
+
+        $('.app-card').each(function () {
+            var cardId = this.id.replace('card_', '');
+            var cardStage = $('#init_status_' + cardId).val();
+            if (cardStage === stage) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+});
+
+/* ══════════════════════════════
+   9. ESC 키
 ══════════════════════════════ */
 $(document).on('keydown', function (e) {
     if (e.key === 'Escape') {

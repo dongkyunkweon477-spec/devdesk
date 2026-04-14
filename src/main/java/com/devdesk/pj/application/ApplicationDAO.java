@@ -25,10 +25,9 @@ public class ApplicationDAO {
              PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             // 파라미터 받기
-//            String memberId = request.getParameter("member_id");
-            String memberId = "3";
-//            String companyId = request.getParameter("company_id");
-            String companyId = "1";
+            MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
+            int memberId = loginUser.getMember_id();
+            String companyId = request.getParameter("companyId");
             String position = request.getParameter("position");
             String stage = request.getParameter("stage");
             String applyDate = request.getParameter("apply_date");
@@ -43,8 +42,8 @@ public class ApplicationDAO {
             System.out.println(memo);
 
             // 바인딩
-            pstmt.setInt(1, Integer.parseInt(memberId));
-            pstmt.setInt(2, Integer.parseInt(companyId));
+            pstmt.setInt(1, memberId);
+            pstmt.setString(2, companyId);
             pstmt.setString(3, position);
             pstmt.setString(4, stage);
 
@@ -61,7 +60,7 @@ public class ApplicationDAO {
             int result = pstmt.executeUpdate();
 
             if (result == 1) {
-                System.out.println("지원 등록 성공");
+                System.out.println("application applied successfully");
             }
 
         } catch (Exception e) {
