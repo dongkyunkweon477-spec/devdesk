@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review/review-write.css">
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
+<script src="${pageContext.request.contextPath}/js/company/company-search-modal.js"></script>
 
 <div class="write-wrap">
 

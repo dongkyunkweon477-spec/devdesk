@@ -21,7 +21,7 @@ public class SupabaseC extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("--supa --");
         resp.setContentType("text/html;charset=UTF-8");
-        resp.getWriter().println(SupabaseDAO.SUPADAO.upload(req, resp));
+        resp.getWriter().println(SupabaseDAO.upload(req, resp));
     }
 
     public void destroy() {

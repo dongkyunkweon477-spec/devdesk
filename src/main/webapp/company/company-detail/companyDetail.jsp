@@ -6,7 +6,7 @@
     var companyId = '${company.companyId}';
     var contextPath = '${pageContext.request.contextPath}';
 </script>
-<script src="${pageContext.request.contextPath}/js/companyDetail.js"></script>
+<script src="${pageContext.request.contextPath}/js/company/company-detail.js"></script>
 
 <%-- ===== 다크 헤더 영역 ===== --%>
 <div class="cd-hero">

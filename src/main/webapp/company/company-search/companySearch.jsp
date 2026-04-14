@@ -94,4 +94,4 @@
     <div id="companyPaging" class="cs-paging"></div>
 </div>
 
-<script src="${pageContext.request.contextPath}/js/companySearch.js"></script>
+<script src="${pageContext.request.contextPath}/js/company/company-search.js"></script>
