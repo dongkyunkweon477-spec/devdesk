@@ -81,11 +81,7 @@ public class ReportC extends HttpServlet {
             return;
         }
 
-        // MEMBER_ID — JSP hidden 필드로 넘어온 값 사용
-        // (UserVO 캐스팅으로 직접 꺼낼 경우 session.getAttribute("user") 캐스팅 필요)
-        String memberIdStr = request.getParameter("memberId");
-        int memberId = (memberIdStr != null && !memberIdStr.isEmpty())
-                ? Integer.parseInt(memberIdStr) : 0;
+        int memberId = ((com.devdesk.pj.user.MemberDTO) session.getAttribute("user")).getMember_id();
 
         // REVIEW_ID / BOARD_ID (둘 중 하나만 값 있음)
         String reviewIdStr = request.getParameter("reviewId");

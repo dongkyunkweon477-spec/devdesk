@@ -17,7 +17,12 @@ import java.util.Set;
 public class ReviewDetailC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        int reviewId = Integer.parseInt(request.getParameter("reviewId"));
+        String reviewIdStr = request.getParameter("reviewId");
+        if (reviewIdStr == null || reviewIdStr.isBlank()) {
+            response.sendRedirect(request.getContextPath() + "/review");
+            return;
+        }
+        int reviewId = Integer.parseInt(reviewIdStr);
         Set<Integer> viewed = (Set<Integer>) request.getSession().getAttribute("viewedReviews");
         if (viewed == null) {
             viewed = new HashSet<>();

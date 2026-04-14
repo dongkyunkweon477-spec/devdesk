@@ -20,9 +20,9 @@ public class CompanyDetailC extends HttpServlet {
 
         int companyId = Integer.parseInt(request.getParameter("companyId"));
         int totalCount = ReviewDAO.REVIEW_DAO.getReviewCount(companyId);
-        int totalPages = (int) Math.ceil((double) totalCount / 5);
-        int page = 1;
         int pageSize = 10;
+        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+        int page = 1;
         if (request.getParameter("page") != null) {
             page = Integer.parseInt(request.getParameter("page"));
         }

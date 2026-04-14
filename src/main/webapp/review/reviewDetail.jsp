@@ -165,7 +165,7 @@
             </c:if>
         </div>
         <div class="rd-nav-right">
-            <button class="rd-nav-btn" onclick="history.back()">목록으로</button>
+            <button class="rd-nav-btn" onclick="location.href='${pageContext.request.contextPath}/review'">목록으로</button>
             <%-- sessionScope.user.member_id 로 변경 --%>
             <c:if test="${sessionScope.user != null && (sessionScope.user.member_id == r.reviewMemberId || sessionScope.user.role == 'ADMIN')}">
                 <a href="${pageContext.request.contextPath}/review/edit?reviewId=${r.reviewId}"

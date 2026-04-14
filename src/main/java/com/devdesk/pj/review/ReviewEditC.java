@@ -17,13 +17,16 @@ public class ReviewEditC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         int reviewId = Integer.parseInt(request.getParameter("reviewId"));
-        ReviewVO review = ReviewDAO.REVIEW_DAO.getReviewById(reviewId);
         MemberDTO user = (MemberDTO) request.getSession().getAttribute("user");
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/user/login.jsp");
             return;
         }
-        int memberId = user.getMember_id();
+        ReviewVO review = ReviewDAO.REVIEW_DAO.getReviewById(reviewId);
+        if (review == null || review.getReviewMemberId() != user.getMember_id()) {
+            response.sendRedirect(request.getContextPath() + "/review");
+            return;
+        }
         CompanySearchVO company = CompanySearchDAO.COMPANY_SEARCH_DAO.getCompanyById(review.getReviewCompanyId());
         request.setAttribute("r", review);
         request.setAttribute("company", company);
@@ -33,8 +36,13 @@ public class ReviewEditC extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("utf-8");
+        MemberDTO user = (MemberDTO) request.getSession().getAttribute("user");
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/user/login.jsp");
+            return;
+        }
+        int memberId = user.getMember_id();
         int reviewId = Integer.parseInt(request.getParameter("reviewId"));
-        int memberId = (int) request.getSession().getAttribute("memberId");
         ReviewVO review = ReviewDAO.REVIEW_DAO.getReviewById(reviewId);
         if (review.getReviewMemberId() != memberId) {
             response.sendRedirect(request.getContextPath() + "/review");

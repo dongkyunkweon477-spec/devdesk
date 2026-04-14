@@ -25,7 +25,10 @@
                 허위 신고 시 서비스 이용이 제한될 수 있습니다.
             </p>
         </c:otherwise>
-        
+        <c:when test="${param.memberId} == ${user.member_id}">
+
+
+        </c:when>
     </c:choose>
 
     <div style="display: flex; gap: 12px;">

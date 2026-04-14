@@ -12,8 +12,6 @@
         <%-- ===== 상단: 기업 정보 (자동 표시) ===== --%>
         <c:choose>
             <c:when test="${not empty company}">
-                <%-- companyId로 들어온 경우: 기업 정보 표시 --%>
-                <input type="hidden" name="companyId" value="${company.companyId}"/>
                 <div class="company-header">
                     <div class="company-badge">면접 후기 작성</div>
                     <h2 class="company-name">${company.companyName}</h2>
@@ -48,7 +46,7 @@
             <div class="field-row">
                 <div class="field-group">
                     <label class="field-label required">제목</label>
-                    <input type="text" name="title" value="${r.reviewTitle}" maxlength="50"/>
+                    <input type="text" name="title" id="title" value="${r.reviewTitle}" maxlength="50"/>
                     <span class="char-count"><span id="titleCount">0</span>/50</span>
                 </div>
             </div>
@@ -56,7 +54,7 @@
             <div class="field-row two-col">
                 <div class="field-group">
                     <label class="field-label required">지원 직무</label>
-                    <input type="text" name="jobPosition" value="${r.reviewJobPosition}" maxlength="20"/>
+                    <input type="text" name="jobPosition" id="jobPosition" value="${r.reviewJobPosition}" maxlength="20"/>
 
                 </div>
                 <div class="field-group">
@@ -170,7 +168,7 @@
                 <div class="field-group">
                     <label class="field-label required">면접 내용</label>
                     <p class="field-hint">면접에서 받은 질문, 본인의 답변, 면접 준비 방법 등을 자유롭게 작성해주세요.</p>
-                    <textarea name="content">${r.reviewContent}</textarea>
+                    <textarea name="content" id="content">${r.reviewContent}</textarea>
                     <div class="textarea-footer">
                         <span class="char-count"><span id="contentCount">0</span>자</span>
                         <span class="char-min">50자 이상 작성해주세요</span>
