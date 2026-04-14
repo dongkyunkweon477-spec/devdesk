@@ -92,8 +92,12 @@ public class TilC extends HttpServlet {
                 .mapToDouble(Double::doubleValue).max().orElse(1);
 
 
-        // 5. setAttribute
-        request.setAttribute("tilList", allList);
+        // 5. 태그 필터 적용 (통계는 전체 기준 유지)
+        List<TilV0> tilList = (tagFilter != null && !tagFilter.isEmpty())
+                ? allList.stream().filter(t -> tagFilter.equals(t.getTag())).collect(Collectors.toList())
+                : allList;
+
+        request.setAttribute("tilList", tilList);
         request.setAttribute("totalCount", totalCount);
         request.setAttribute("totalHours", totalHours);
         request.setAttribute("avgHours", avgHours);
@@ -102,8 +106,7 @@ public class TilC extends HttpServlet {
         request.setAttribute("tagHours", tagHours);
         request.setAttribute("maxHours", maxHours);
 
-        request.setAttribute("content", "/til/til2.jsp");
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/til/til2.jsp").forward(request, response);
     }
 
     public void destroy() {

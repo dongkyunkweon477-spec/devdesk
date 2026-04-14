@@ -115,38 +115,6 @@ function initFormSubmit() {
     });
 }
 
-$('#companySearchInput').on('input', function () {
-    const keyword = $(this).val().trim();
-    if (keyword.length < 1) {
-        $('#companyDropdown').hide();
-        return;
-    }
-
-    $.ajax({
-        url: '/company-search/ajax',
-        type: 'get',
-        dataType: 'json',
-        data: {companyName: keyword}
-    }).done(function (data) {
-        let html = '';
-        $.each(data, function (i, c) {
-            html += '<div class="dropdown-item" data-id="' + c.companyId
-                + '" data-name="' + c.companyName + '">'
-                + c.companyName
-                + '<span class="dropdown-meta">' + c.companyIndustry + '</span>'
-                + '</div>';
-        });
-        $('#companyDropdown').html(html).show();
-    });
-});
-
-$(document).on('click', '.dropdown-item', function () {
-    console.log('id:', $(this).data('id'));
-    console.log('name:', $(this).data('name'));
-    $('#selectedCompanyId').val($(this).data('id'));
-    $('#companySearchInput').val($(this).data('name'));
-    $('#companyDropdown').hide();
-});
 
 $(function () {
     // 수정 모드일 때 기존 난이도 표시

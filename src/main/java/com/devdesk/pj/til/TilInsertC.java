@@ -20,7 +20,7 @@ public class TilInsertC extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         TilDAO.addTil(request);
-        response.sendRedirect("/til-list");
+        response.sendRedirect("til-list");
 
     }
 

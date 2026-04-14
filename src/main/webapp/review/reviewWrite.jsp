@@ -206,4 +206,6 @@
     </form>
 </div>
 
+<script>var contextPath = '${pageContext.request.contextPath}';</script>
 <script src="${pageContext.request.contextPath}/js/review/review-write.js"></script>
+<script src="${pageContext.request.contextPath}/js/review/review-company-dropdown.js"></script>
