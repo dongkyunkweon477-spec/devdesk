@@ -60,6 +60,11 @@ body::before {
     gap: 16px;
 }
 
+.page-info {
+    margin-right: auto;
+}
+
+
 .page-title {
     font-size: 24px;
     font-weight: 700;
@@ -77,6 +82,25 @@ body::before {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    font-family: inherit;
+    box-shadow: 0 2px 8px rgba(91, 124, 248, 0.3);
+}
+
+.btn-til {
+    display: inline-flex;
+    margin: auto;
+    align-items: center;
+    gap: 12px;
     padding: 10px 20px;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     color: #fff;

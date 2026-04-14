@@ -26,37 +26,40 @@
         </div>
         <nav class="sidebar-nav">
             <div class="nav-section-label">메인</div>
-            <a href="dashboard" class="nav-item"><span class="nav-icon">🏠</span>대시보드</a>
+            <a href="${pageContext.request.contextPath}/dashboard" class="nav-item">
+                <span class="nav-icon">🏠</span>대시보드
+            </a>
             <div class="nav-section-label">취업 관리</div>
-            <a href="application-list" class="nav-item"><span class="nav-icon">📋</span>지원 현황</a>
-            <a href="calendar" class="nav-item"><span class="nav-icon">📅</span>면접 일정</a>
+            <a href="${pageContext.request.contextPath}/application-list" class="nav-item">
+                <span class="nav-icon">📋</span>지원 현황
+            </a>
+            <a href="${pageContext.request.contextPath}/calendar" class="nav-item">
+                <span class="nav-icon">📅</span>면접 일정
+            </a>
+            <div class="nav-section-label">이력서</div>
+            <a href="${pageContext.request.contextPath}/resume-block" class="nav-item">
+                <span class="nav-icon">📝</span>블록 라이브러리
+            </a>
             <div class="nav-section-label">학습</div>
-            <a href="til-list" class="nav-item active"><span class="nav-icon">📚</span>TIL</a>
+            <a href="${pageContext.request.contextPath}/til-list" class="nav-item active">
+                <span class="nav-icon">📚</span>TIL
+            </a>
+            <div class="nav-section-label">커뮤니티</div>
+            <a href="${pageContext.request.contextPath}/review" class="nav-item">
+                <span class="nav-icon">💬</span>면접 후기
+            </a>
+            <a href="${pageContext.request.contextPath}/board" class="nav-item">
+                <span class="nav-icon">📢</span>게시판
+            </a>
         </nav>
 
         <div id="sidebar-mini-calendar">
-            <div class="g-cal-header">
-                <div class="g-cal-title" id="g-cal-title">2026년 4월</div>
-                <div class="g-cal-nav">
-                    <button class="g-nav-btn" id="g-prev-month">‹</button>
-                    <button class="g-nav-btn" id="g-next-month">›</button>
-                </div>
-            </div>
-            <div class="g-cal-weekdays">
-                <div>월</div>
-                <div>화</div>
-                <div>수</div>
-                <div>목</div>
-                <div>금</div>
-                <div>토</div>
-                <div>일</div>
-            </div>
-            <div class="g-cal-days" id="g-cal-days">
-            </div>
+            <!-- 캘린더 내용 그대로 -->
         </div>
     </aside>
 
     <main class="content-area">
+        <!-- 여기부터 본문 -->
         <div class="page-header-row">
             <div>
                 <h1 class="page-title">TIL</h1>
@@ -271,7 +274,7 @@
     </div>
 </c:forEach>
 
-<div class="modal-overlay" id="tilDetailModal">
+<div class="modal -overlay" id="tilDetailModal">
     <div class="modal modal-lg">
         <div class="modal-header">
             <div>

@@ -10,22 +10,20 @@
 
 <!-- 페이지 헤더 -->
 <div class="page-header">
-    <div>
+    <div class="page-info">
         <h1 class="page-title">지원한 회사 목록</h1>
         <p class="page-sub">지원 현황을 한눈에 확인하고 단계를 관리하세요</p>
     </div>
     <div class="three-btn">
-        <div>
+        <div class="right-btns">
+
             <a href="${pageContext.request.contextPath}/til-list">
-                <button class="btn-add">TIL</button>
+                <button class="btn-til">TIL</button>
             </a>
-        </div>
-        <div>
+
             <button class="btn-add" id="btnOpenInsert">+ 지원 추가</button>
-        </div>
-        <div class="rb-filters">
             <form class="rb-filter" action="application-star" method="get">
-                <button>즐겨찾기⭐</button>
+                <button>즐겨찾기✨</button>
             </form>
         </div>
     </div>
