@@ -11,6 +11,19 @@ import java.util.Properties;
 import java.util.UUID;
 
 public class SupabaseDAO {
+
+//  강사님ver  public static final SupabaseDAO SUPADAO = new SupabaseDAO();
+//
+//    private SupabaseDAO() {
+//
+//    }
+//
+//    public String upload(HttpServletRequest request, HttpServletResponse response) {
+//        try {
+//            Properties prop = new Properties();
+//            InputStream input = getClass().getClassLoader().getResourceAsStream("conf.properties");
+//            prop.load(input);
+
     public static String upload(HttpServletRequest request, HttpServletResponse response) {
         try {
             Properties prop = new Properties();

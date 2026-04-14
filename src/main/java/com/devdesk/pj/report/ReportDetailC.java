@@ -36,6 +36,7 @@ public class ReportDetailC extends HttpServlet {
         }
 
         request.setAttribute("report", report);
+        
 
         if (report.getRepoReviewId() > 0) {
             request.setAttribute("targetReview",
@@ -59,7 +60,7 @@ public class ReportDetailC extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String idStr = request.getParameter("reportId");
-        String cmd   = request.getParameter("cmd");
+        String cmd = request.getParameter("cmd");
         int reportId = Integer.parseInt(idStr);
 
         if ("delete".equals(cmd)) {
