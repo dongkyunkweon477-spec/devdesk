@@ -125,3 +125,17 @@
     background: #94a3b8;
     margin-top: 10px;
 }
+
+/* Dark Mode */
+[data-theme="dark"] #companySearchModal .modal-box { background: #1e293b; color: #f8fafc; }
+[data-theme="dark"] #companySearchModal .modal-box input[type="text"] { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+[data-theme="dark"] #companySearchModal .modal-box ul { border-top-color: #334155; }
+[data-theme="dark"] #companySearchModal .modal-box ul li { border-bottom-color: #334155; }
+[data-theme="dark"] #companySearchModal .modal-box ul li a { color: #e2e8f0; }
+[data-theme="dark"] #companySearchModal .modal-box ul li a:hover { color: #c4b5fd; background: #334155; }
+[data-theme="dark"] .modal-btn-search { background: #a78bfa; color: #ffffff; }
+[data-theme="dark"] .modal-btn-search:hover { background: #8b5cf6; }
+[data-theme="dark"] #miniResultList button { background: #0f172a; color: #cbd5e1; border-color: #475569; }
+[data-theme="dark"] #miniResultList button:hover { background: #334155; color: #c4b5fd; border-color: #a78bfa; }
+[data-theme="dark"] #companySearchModal .modal-box > button[onclick^="close"] { background: #475569; color: #f8fafc; }
+[data-theme="dark"] #companySearchModal .modal-box > button[onclick^="close"]:hover { background: #334155; }
