@@ -4,7 +4,7 @@
 .sidebar {
     position: fixed;
     left: 0;
-    top: 65px;          /* ★ 상단 네비게이션바 높이만큼 내려서 메뉴가 가려지지 않도록 */
+    top: 65px;
     bottom: 0;
     width: 240px;
     background: var(--surface, #ffffff);
@@ -32,15 +32,23 @@
     color: var(--text3);
 }
 
+/* 화살표가 처음부터 위를 향하게 하려면 아래 속성 추가 */
+.week-nav-toggle.open .toggle-arrow {
+    transform: rotate(180deg);
+}
+
 /* ─────────────────────────────
-   스크롤 가능한 상단 콘텐츠 영역
+   스크롤 가능한 상단 콘텐츠 영역 (일정 전용)
 ───────────────────────────── */
 .sidebar-nav {
-    flex: 1;
-    padding: 4px 8px 8px;
-    overflow-y: auto;
+    flex: 1; /* ★ 남는 공간을 모두 차지하도록 변경 */
+    min-height: 0;
+
+    /* max-height: 45vh; <--- 이 줄이 있다면 지워주세요! */
+
+    padding: 30px 8px 8px;
+    overflow-y: auto; /* 내용이 넘치면 자기 안에서만 스크롤됨 */
     overflow-x: hidden;
-    /* 스크롤바 얇게 */
     scrollbar-width: thin;
     scrollbar-color: var(--border, #e2e8f0) transparent;
 }
@@ -353,37 +361,19 @@
 .g-day-num.today.sun { color: #fff !important; }
 
 /* =======================================================
-   FOOTER & USER CARD
+   FOOTER & USER CARD (심플한 한 줄 스타일)
 ======================================================= */
 .sidebar-footer {
     flex-shrink: 0;
-    padding: 12px 10px;
+    padding: 16px 12px;
     border-top: 1px solid var(--border, #e2e8f0);
+
+    margin-top: auto;
+
+    background: var(--surface, #ffffff); /* 스크롤 될 때 뒷배경이 비치지 않도록 흰색 바탕 처리 */
 }
 
-.user-card {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    border-radius: 10px;
-    background: var(--surface2, #f8fafc);
-    border: 1px solid var(--border, #e2e8f0);
-}
-.user-avatar {
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent, #8e5ae5), var(--accent2, #a78bfa));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 700;
-    color: #fff;
-    flex-shrink: 0;
-}
-.user-name { font-size: 13px; font-weight: 500; color: var(--text, #1a202c); }
-.user-role { font-size: 10px; color: var(--text3, #a0aec0); }
+
 
 /* =======================================================
    모바일 햄버거 (기본 숨김)

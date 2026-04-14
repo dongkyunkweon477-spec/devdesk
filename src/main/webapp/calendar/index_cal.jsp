@@ -16,7 +16,7 @@
 ──────────────────────────────────────── --%>
 <div class="sidebar">
 
-    <%-- 1. 상단 스크롤 영역 (일정, 메모) --%>
+    <%-- 1. 상단 스크롤 영역 (일정 전용) --%>
     <div class="sidebar-nav">
         <span class="nav-section-label">일정</span>
 
@@ -30,8 +30,11 @@
         <%-- 펼쳐지는 일정 목록 (JS가 동적으로 채움) --%>
         <div class="week-schedule-dropdown" id="weekDropdown">
         </div>
+    </div> <%-- // 1. 상단 스크롤 영역 끝 (여기서 스크롤이 끊깁니다!) --%>
 
-        <span class="nav-section-label" style="margin-top:4px;">메모</span>
+    <%-- ★ 새로 추가된 To-do 고정 영역 (휩쓸리지 않음) ★ --%>
+    <div class="sidebar-todo-wrapper" style="flex-shrink: 0; border-top: 1px solid var(--border, #e2e8f0); padding: 10px 8px;">
+        <span class="nav-section-label" style="padding-top: 4px;">메모</span>
 
         <%-- To-do 체크박스 리스트 --%>
         <div class="todo-section">
@@ -48,10 +51,11 @@
                 <button class="todo-input-confirm" id="todo-input-confirm">✓</button>
             </div>
         </div>
-    </div> <%-- // sidebar-nav 종료 --%>
+    </div>
 
     <%-- 2. 하단 고정 영역 (미니 캘린더) --%>
-    <div id="sidebar-mini-calendar" style="margin-top: auto; border-top: 1px solid var(--border, #e2e8f0); padding-top: 15px;">
+    <%-- ★ margin-top을 조절하여 높이를 맞춥니다. (기본값 40px) --%>
+    <div id="sidebar-mini-calendar" style="margin-top: 40px; border-top: 1px solid var(--border, #e2e8f0); padding-top: 15px; padding-bottom: 20px;">
         <div class="g-cal-header">
             <button class="g-nav-btn" id="g-prev-month">❮</button>
             <span class="g-cal-title" id="g-cal-title"></span>
@@ -63,7 +67,8 @@
         <div class="g-cal-days" id="g-cal-days"></div>
     </div>
 
-</div>
+
+</div> <%-- // 사이드바 컨테이너 완벽 종료! 이 밑으로는 건드리면 안 됩니다. --%>
 
 <%-- ────────────────────────────────────────
      [B] 캘린더 메인 본문 (calendar.jsp)
@@ -503,6 +508,8 @@
             currentDispDate.setMonth(currentDispDate.getMonth()+1); renderMiniCalendar(currentDispDate);
         });
         renderMiniCalendar(currentDispDate);
+
+        renderThisWeekEvents();
 
     }); // end ready
 </script>
