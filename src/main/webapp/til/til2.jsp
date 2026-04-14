@@ -45,7 +45,16 @@
         </nav>
 
         <div id="sidebar-mini-calendar">
-            <!-- 캘린더 내용 그대로 -->
+            <div class="g-cal-header">
+                <button id="g-prev-month" class="g-nav-btn">‹</button>
+                <span id="g-cal-title" class="g-cal-title-text"></span>
+                <button id="g-next-month" class="g-nav-btn">›</button>
+            </div>
+            <div class="g-cal-weekdays">
+                <span>월</span><span>화</span><span>수</span>
+                <span>목</span><span>금</span><span>토</span><span>일</span>
+            </div>
+            <div class="g-cal-days" id="g-cal-days"></div>
         </div>
     </aside>
 
@@ -87,11 +96,11 @@
 
                 <!-- Tag filter -->
                 <div class="tag-filter">
-                    <a href="til" class="tag-btn ${empty param.tag ? 'active' : ''}">
+                    <a href="til-list" class="tag-btn ${empty param.tag ? 'active' : ''}">
                         전체 <span class="tag-cnt">${totalCount}</span>
                     </a>
                     <c:forEach var="entry" items="${tagStats}">
-                        <a href="til?tag=${entry.key}"
+                        <a href="til-list?tag=${entry.key}"
                            class="tag-btn ${param.tag == entry.key ? 'active' : ''}">
                                 ${entry.key} <span class="tag-cnt">${entry.value}</span>
                         </a>
@@ -265,7 +274,7 @@
     </div>
 </c:forEach>
 
-<div class="modal -overlay" id="tilDetailModal">
+<div class="modal-overlay" id="tilDetailModal">
     <div class="modal modal-lg">
         <div class="modal-header">
             <div>
