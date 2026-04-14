@@ -500,5 +500,54 @@ public class AdminDAO {
         return 0;
     }
 
+    // 🌟 [기업 관리] 전체 기업 수 (필터 무관, 카드용)
+    public int getTotalAllCompanyCount() {
+        String sql = "SELECT COUNT(*) FROM company";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // 🌟 [게시글 관리] 관리자 권한으로 게시글 강제 삭제 (댓글 포함 완벽 파기)
+    public boolean deleteBoardAdmin(int boardId) {
+        // 외래키(FK) 제약 조건 에러를 막기 위해 댓글부터 싹 지우고 게시글을 지웁니다!
+        String sqlDelComments = "DELETE FROM comments WHERE b_board_id = ?";
+        String sqlDelBoard = "DELETE FROM board WHERE b_board_id = ?";
+
+        try (Connection con = DBManager_new.connect()) {
+            con.setAutoCommit(false); // 트랜잭션 시작 (안전장치)
+
+            try {
+                // 1. 자식 데이터(댓글) 삭제
+                try (PreparedStatement ps = con.prepareStatement(sqlDelComments)) {
+                    ps.setInt(1, boardId);
+                    ps.executeUpdate(); // 댓글이 없어도 에러 안 남
+                }
+
+                // 2. 부모 데이터(게시글) 삭제
+                try (PreparedStatement ps = con.prepareStatement(sqlDelBoard)) {
+                    ps.setInt(1, boardId);
+                    int result = ps.executeUpdate();
+                    if (result > 0) {
+                        con.commit(); // 🌟 모두 성공하면 확정!
+                        return true;
+                    }
+                }
+                con.rollback();
+            } catch (Exception e) {
+                con.rollback(); // 에러 나면 롤백!
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
 }

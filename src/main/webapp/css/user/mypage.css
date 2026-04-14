@@ -29,7 +29,31 @@
     border-radius: 10px;
     margin-bottom: 40px;
     border: 1px solid #e2e8f0;
+    position: relative;
 }
+
+.btn-admin-page {
+    position: absolute; /* 회색 상자 안에서 자유롭게 이동 */
+    right: 25px; /* 오른쪽에서 25px 떨어짐 */
+    bottom: 25px; /* 아래쪽에서 25px 떨어짐 */
+
+    background: #1e293b; /* 어드민 느낌이 나는 다크 네이비 색상 */
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+/*.btn-admin-page:hover {*/
+/*    background: #0f172a;*/
+/*    transform: translateY(-2px);*/
+/*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);*/
+/*}*/
 
 /* 동그란 프로필 사진(아바타) */
 .profile-avatar {

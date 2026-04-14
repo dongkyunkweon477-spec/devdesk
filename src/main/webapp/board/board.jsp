@@ -41,7 +41,7 @@
                 <option value="TIP" ${param.category == 'TIP' ? 'selected' : ''}>자기만의TIP</option>
             </select>
 
-            <select onchange="location.href='board?sort=' + this.value">
+            <select onchange="location.href='board?sort=' + this.value + '&category=${param.category != null ? param.category : ""}&searchType=${param.searchType != null ? param.searchType : ""}&keyword=${param.keyword != null ? param.keyword : ""}'">
                 <option value="" ${param.sort == null or param.sort == '' ? 'selected' : ''}>최신순</option>
                 <option value="popular" ${param.sort == 'popular' ? 'selected' : ''}>인기순</option>
                 <option value="viewcount" ${param.sort == 'viewcount' ? 'selected' : ''}>조회순</option>

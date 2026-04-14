@@ -277,3 +277,52 @@ tr.is-deleted td {
 .info-row span {
     color: #64748b;
 }
+
+/* =========================================
+   🌟 페이징 버튼 디자인
+========================================= */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 24px;
+    padding-bottom: 10px;
+}
+
+.page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1.5px solid #e2e8f0;
+    background: #fff;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.page-btn:hover {
+    border-color: #7c3aed;
+    color: #7c3aed;
+}
+
+.page-btn.active,
+.page-btn--active {
+    background: #7c3aed;
+    border-color: #7c3aed;
+    color: #fff !important;
+}
+
+.page-btn--disabled {
+    color: #cbd5e1;
+    border-color: #f1f5f9;
+    background: #f8fafc;
+    cursor: not-allowed;
+    pointer-events: none;
+}

@@ -11,9 +11,14 @@
     <div class="admin-sidebar">
         <h3>Admin Panel</h3>
         <ul>
+            <%-- 대시보드에 있던 active 삭제! --%>
             <li><a href="${pageContext.request.contextPath}/admin">📊 대시보드</a></li>
+
+            <%-- 👇 회원 관리에 active 추가! 👇 --%>
             <li><a href="${pageContext.request.contextPath}/admin/member" class="active">👥 회원 관리</a></li>
+
             <li><a href="${pageContext.request.contextPath}/admin/board">📝 게시글 관리</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/report">🚨 신고 관리</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/company">🏢 기업 정보 관리</a></li>
         </ul>
     </div>
