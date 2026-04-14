@@ -8,6 +8,7 @@
 <body>
 <div class="write-container">
 
+
     <h2>✍ 글 작성하기</h2>
 
     <form action="board_add" method="post">
@@ -39,18 +40,18 @@
         <!-- 내용 -->
         <div class="form-group">
             <label>내용</label>
+            <div style="margin-bottom: 10px; text-align: right;">
+                <label for="imageFile" style="font-weight: 500; cursor: pointer; border: 1px solid #ddd; padding: 6px 12px; border-radius: 4px; background-color: #f8f9fa; font-size: 0.9rem;">📷 이미지 첨부</label>
+                <input type="file" id="imageFile" style="display: none;" accept="image/*"/>
+            </div>
             <textarea name="txt" maxlength="1500" rows="10" placeholder="내용을 입력하세요" required></textarea>
             <br> <span id="cntSpan">0</span> / 1500
         </div>
 
-        <form action="supa-upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" id="imageFile"/>
-        </form>
-
         <!-- 버튼 -->
 
         <div class="form-actions">
-            <button type="submit" class="submit-btn" onclick="uploadSupabase(e)">등록</button>
+            <button type="submit" class="submit-btn">등록</button>
             <button type="button" class="cancel-btn" onclick="history.back()">취소</button>
         </div>
     </form>

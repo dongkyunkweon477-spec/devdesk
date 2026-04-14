@@ -88,7 +88,7 @@
         <c:forEach begin="1" end="${totalPage}" var="i">
             <c:choose>
                 <c:when test="${i == currentPage}">
-                    <span class="current-page">[${i}]</span>
+                    <span class="current-page">${i}</span>
                 </c:when>
                 <%-- 중복된 c:otherwise를 제거하고 하나로 합쳤습니다. --%>
                 <c:otherwise>
