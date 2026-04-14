@@ -47,7 +47,7 @@ public class ReportDAO {
     public List<ReportVO> getReports(String targetType, String status, String searchType, String keyword, int page, int pageSize) {
         List<ReportVO> reports = new ArrayList<>();
         StringBuilder sb = new StringBuilder(
-            "SELECT * FROM (SELECT a.*, ROWNUM rn FROM (SELECT * FROM report WHERE 1=1");
+                "SELECT * FROM (SELECT a.*, ROWNUM rn FROM (SELECT * FROM report WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
         appendFilters(sb, params, targetType, status, searchType, keyword);
@@ -93,7 +93,7 @@ public class ReportDAO {
     }
 
     private void appendFilters(StringBuilder sb, List<Object> params,
-                                String targetType, String status, String searchType, String keyword) {
+                               String targetType, String status, String searchType, String keyword) {
         if ("review".equals(targetType)) {
             sb.append(" AND review_id IS NOT NULL");
         } else if ("board".equals(targetType)) {
@@ -217,6 +217,21 @@ public class ReportDAO {
              PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, memberId);
             pstmt.setInt(2, targetId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // 유저가 처리 중인 신고가 있는지 체크 // 선민 추가
+    public boolean hasPendingReport(int memberId) {
+        String sql = "SELECT COUNT(*) FROM report WHERE member_id = ? AND repo_status = 'PENDING'";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, memberId);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) return rs.getInt(1) > 0;
             }
