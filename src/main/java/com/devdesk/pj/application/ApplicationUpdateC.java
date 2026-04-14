@@ -20,7 +20,7 @@ public class ApplicationUpdateC extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ApplicationDAO.updateApplication(request);
 
-        response.sendRedirect("application_list");
+        response.sendRedirect("application-list");
     }
 
 
