@@ -5,18 +5,11 @@
 
 <title>DevDesk - 내 면접 일정</title>
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet'/>
-<<<<<<< HEAD
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
 <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
-=======
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
-    <script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
->>>>>>> 451020e210769e8f9b0823a37dcba8fc5b8a9242
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
 
@@ -32,25 +25,6 @@
     request.setAttribute("weekStart", sdf.format(startDate));
     request.setAttribute("weekEnd", sdf.format(endDate));
 %>
-
-<<<<<<< HEAD
-<%--
-    ════════════════════════════════════════════════════════
-    [사용 방법]
-    sidebar.jsp (또는 layout include 파일)에서
-    미니캘린더 위쪽에 아래 두 블록(이번 주 일정 / To-do)을 붙여넣고,
-    calendar.jsp 본문엔 .calendar-page-wrapper 블록만 남기세요.
-    ════════════════════════════════════════════════════════
---%>
-=======
-<div id="modal-backdrop" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:999;"></div>
-
-<div id="schedule-modal">
-    <h3 id="modal-title">새 일정 추가</h3>
-    <input type="hidden" id="form-id">
-    <input type="hidden" id="form-appId" value="1">
->>>>>>> 451020e210769e8f9b0823a37dcba8fc5b8a9242
-
 <%-- ────────────────────────────────────────
      [A] 사이드바 삽입 블록
 ──────────────────────────────────────── --%>
@@ -95,8 +69,6 @@
                 <div class="week-schedule-empty">이번 주 일정이 없어요 😊</div>
             </c:if>
         </div>
-
-        <span class="nav-section-label" style="margin-top:4px;">메모</span>
 
         <%-- To-do 체크박스 리스트 --%>
         <div class="todo-section">
@@ -271,9 +243,9 @@
         window.calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             locale: 'ko',
-            selectable: true,
-            headerToolbar: { left:'today', center:'prev title next', right:'' },
-            editable: true,
+            height: '100%',
+            expandRows: true,
+            dayMaxEvents: 4,
             selectable: true,
 
             dayCellContent: function(info){ return info.dayNumberText.replace('일',''); },
@@ -427,11 +399,59 @@
             }
         });
 
-        /* ── 이번 주 일정 토글 ── */
+        /* ── 이번 주 일정 토글 및 데이터 동적 렌더링 ── */
         $('#weekToggle').click(function(){
-            $(this).toggleClass('open');
-            $('#weekDropdown').slideToggle(250);
+            var $this = $(this);
+            var $dropdown = $('#weekDropdown');
+
+            $this.toggleClass('open');
+
+            if ($this.hasClass('open')) {
+                renderThisWeekEvents();
+            }
+            $dropdown.slideToggle(250);
         });
+
+        function renderThisWeekEvents() {
+            var today = new Date();
+            var dayOfWeek = today.getDay(); // 0(일) ~ 6(토)
+
+            // 시분초 차이로 인한 누락을 막기 위해 날짜를 00:00:00 ~ 23:59:59로 고정
+            var startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - dayOfWeek);
+            var endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (6 - dayOfWeek), 23, 59, 59);
+
+            var events = window.calendar.getEvents();
+            var $dropdown = $('#weekDropdown');
+
+            $dropdown.empty();
+            var hasWeekEvent = false;
+
+            events.forEach(function(ev) {
+                if (!ev.start) return;
+                var evDate = new Date(ev.start.getFullYear(), ev.start.getMonth(), ev.start.getDate());
+
+                if (evDate >= startOfWeek && evDate <= endOfWeek) {
+                    hasWeekEvent = true;
+                    var dateStr = ev.start.getDate() + '일';
+                    var company = ev.extendedProps.company || ev.title;
+                    var type = ev.extendedProps.type || '-';
+                    var targetDate = ev.startStr.split('T')[0];
+
+                    // ★ JSP EL 태그와 충돌하지 않도록 문자열 병합(+) 방식으로 변경
+                    var html = '<div class="week-schedule-item" onclick="if(window.calendar){window.calendar.gotoDate(\'' + targetDate + '\');}">' +
+                        '<span class="week-item-day">' + dateStr + '</span>' +
+                        '<div class="week-item-info">' +
+                        '<span class="week-item-company">' + company + '</span>' +
+                        '<span class="week-item-type">' + type + '</span>' +
+                        '</div></div>';
+                    $dropdown.append(html);
+                }
+            });
+
+            if (!hasWeekEvent) {
+                $dropdown.append('<div class="week-schedule-empty">이번 주 일정이 없어요 😊</div>');
+            }
+        }
 
         /* ── To-do ── */
         var TODO_KEY='devdesk_todos_v2';
