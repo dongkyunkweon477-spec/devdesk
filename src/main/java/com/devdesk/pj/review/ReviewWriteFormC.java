@@ -37,9 +37,13 @@ public class ReviewWriteFormC extends HttpServlet {
             return;
         }
 
+        MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
+        if (loginUser == null) {
+            response.sendRedirect(request.getContextPath() + "/user/login.jsp");
+            return;
+        }
         ReviewVO vo = new ReviewVO();
         vo.setReviewCompanyId(Integer.parseInt(companyId));
-        MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
         vo.setReviewMemberId(loginUser.getMember_id());
         vo.setReviewTitle(request.getParameter("title"));
         vo.setReviewJobPosition(request.getParameter("jobPosition"));

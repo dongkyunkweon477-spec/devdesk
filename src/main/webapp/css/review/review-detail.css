@@ -318,3 +318,20 @@
 .modal-btns .btn-cancel:hover {
     background: #f8fafc;
 }
+
+/* Dark Mode */
+[data-theme="dark"] .detail-title { color: #f8fafc; }
+[data-theme="dark"] .detail-header { border-bottom-color: #334155; }
+[data-theme="dark"] .detail-meta { color: #cbd5e1; }
+[data-theme="dark"] .detail-section { background: #1e293b; border-color: #334155; }
+[data-theme="dark"] .info-item .info-label { color: #cbd5e1; }
+[data-theme="dark"] .info-item .info-value { color: #e2e8f0; }
+[data-theme="dark"] .detail-content { color: #e2e8f0; }
+[data-theme="dark"] .company-badge { background: #334155; color: #e2e8f0; }
+[data-theme="dark"] .company-meta { color: #cbd5e1; }
+[data-theme="dark"] .section-title { color: #f8fafc; }
+[data-theme="dark"] .rd-social-center { border-top-color: #334155; }
+[data-theme="dark"] .rd-pill { background: #1e293b; border-color: #334155; color: #cbd5e1; }
+[data-theme="dark"] .rd-pill:hover { background: #334155; }
+[data-theme="dark"] .detail-actions .btn-cancel { background: #1e293b; border-color: #334155; color: #e2e8f0; }
+[data-theme="dark"] .detail-actions .btn-cancel:hover { background: #334155; }

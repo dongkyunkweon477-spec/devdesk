@@ -25,6 +25,11 @@ public class ReviewBookmarkC extends HttpServlet {
 
         boolean bookmarked = ReviewDAO.REVIEW_DAO.toggleBookmark(memberId, reviewId);
         ReviewVO review = ReviewDAO.REVIEW_DAO.getReviewById(reviewId);
+        if (review == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.getWriter().write("{\"error\":\"review not found\"}");
+            return;
+        }
 
         response.getWriter().write("{\"bookmarked\":" + bookmarked
                 + ",\"count\":" + review.getReviewBookmarkCount() + "}");

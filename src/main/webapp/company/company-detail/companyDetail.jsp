@@ -6,7 +6,7 @@
     var companyId = '${company.companyId}';
     var contextPath = '${pageContext.request.contextPath}';
 </script>
-<script src="${pageContext.request.contextPath}/js/companyDetail.js"></script>
+<script src="${pageContext.request.contextPath}/js/company/company-detail.js"></script>
 
 <%-- ===== 다크 헤더 영역 ===== --%>
 <div class="cd-hero">
@@ -14,7 +14,7 @@
         <div class="cd-hero-left">
             <div class="cd-logo-box">
                 <span class="cd-logo-text">
-                    ${company.companyName.substring(0, 1)}
+                    ${not empty company.companyName ? company.companyName.substring(0, 1) : '?'}
                 </span>
             </div>
             <div class="cd-hero-info">

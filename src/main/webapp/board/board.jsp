@@ -1,15 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board-all.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board/board-all.css">
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>review</title>
-    <link rel="stylesheet" href="css/board.css">
-    <link rel="stylesheet" href="../css/board-all.css">
-
+    <title>커뮤니티</title>
 </head>
 
 <body>
@@ -92,7 +88,7 @@
         <c:forEach begin="1" end="${totalPage}" var="i">
             <c:choose>
                 <c:when test="${i == currentPage}">
-                    <span class="current-page">[${i}]</span>
+                    <span class="current-page">${i}</span>
                 </c:when>
                 <%-- 중복된 c:otherwise를 제거하고 하나로 합쳤습니다. --%>
                 <c:otherwise>

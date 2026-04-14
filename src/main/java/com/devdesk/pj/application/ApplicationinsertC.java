@@ -16,7 +16,7 @@ public class ApplicationinsertC extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setCharacterEncoding("UTF-8");
         ApplicationDAO.addApplication(request);
-        response.sendRedirect("application_list");
+        response.sendRedirect("application-list");
 
 
     }

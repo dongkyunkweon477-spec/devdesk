@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link rel="stylesheet" href="../css/board-all.css">
+<link rel="stylesheet" href="../css/board/board-all.css">
 <link rel="stylesheet" href="../css/report/report.css">
 
 <div class="write-container" style="max-width: 600px; margin: 50px auto; padding: 20px;">
@@ -14,9 +14,8 @@
     <form action="${pageContext.request.contextPath}/admin/report" method="post" onsubmit="return validateForm()">
         <%-- REVIEW_ID / BOARD_ID: targetType에 따라 하나만 값 세팅, 나머지는 빈 값 --%>
         <input type="hidden" name="reviewId" value="${param.targetType == 'review' ? param.targetId : ''}">
-        <input type="hidden" name="boardId"  value="${param.targetType == 'board'  ? param.targetId : ''}">
-        <%-- MEMBER_ID --%>
-        <input type="hidden" name="memberId" value="${sessionScope.user.member_id}">
+        <input type="hidden" name="boardId" value="${param.targetType == 'board'  ? param.targetId : ''}">
+        <%-- MEMBER_ID는 서버에서 세션으로 처리 --%>
 
         <div class="report-target-info">
             <span class="report-type-badge ${param.targetType == 'review' ? 'review' : 'board'}">

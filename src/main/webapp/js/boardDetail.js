@@ -1,7 +1,7 @@
 function toggleLike() {
-    // 1. EL 태그 값을 자바스크립트 변수에 할당 (따옴표 필수!)
-    const boardId = "${board.board_id}";
-    const memberId = "${sessionScope.user.member_id}";
+    // JSP에서 전달받은 전역 변수 사용
+    const boardId = typeof GLOBAL_BOARD_ID !== 'undefined' ? GLOBAL_BOARD_ID : "";
+    const memberId = typeof GLOBAL_MEMBER_ID !== 'undefined' ? GLOBAL_MEMBER_ID : "";
 
     // 콘솔에 값이 찍히는지 먼저 확인 (F12 콘솔창에서 확인 가능)
     console.log("전송 데이터 확인 - boardId:", boardId, "memberId:", memberId);
@@ -80,7 +80,7 @@ function openEdit(commentId) {
         '<div id="edit-form-' + commentId + '" class="edit-form">' +
         '<form action="comment_update" method="post">' +
         '<input type="hidden" name="comment_id" value="' + commentId + '">' +
-        '<input type="hidden" name="board_id" value="${board.board_id}">' +
+        '<input type="hidden" name="board_id" value="' + (typeof GLOBAL_BOARD_ID !== 'undefined' ? GLOBAL_BOARD_ID : '') + '">' +
         '<div class="edit-input-wrapper">' +
         '<textarea name="content" required>' + originalContent + '</textarea>' +
         '<div class="edit-buttons">' +

@@ -15,7 +15,7 @@ public class TildeleteC extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         TilDAO.deleteTil(request);
-        response.sendRedirect("/til-list");
+        response.sendRedirect("til-list");
 
     }
 

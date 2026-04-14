@@ -1,13 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link rel="stylesheet" href="../css/board-all.css">
+<link rel="stylesheet" href="../css/board/board-all.css">
 <link rel="stylesheet" href="../css/report/report.css">
 
 <div class="board-container detail">
     <div class="board-header detail">
         <h2>신고 상세</h2>
         <div class="board-actions">
-            <button class="write-btn" onclick="location.href='${pageContext.request.contextPath}/admin/report'">목록으로</button>
+            <button class="write-btn" onclick="location.href='${pageContext.request.contextPath}/admin/report'">목록으로
+            </button>
         </div>
     </div>
 
@@ -83,9 +84,10 @@
                 <div class="detail-row" style="margin-top: 16px;">
                     <div class="detail-label">리뷰 원문</div>
                     <div class="detail-content">
-                        <div style="font-weight: 600; margin-bottom: 4px;"><c:out value="${targetReview.reviewTitle}"/></div>
+                        <div style="font-weight: 600; margin-bottom: 4px;"><c:out
+                                value="${targetReview.reviewTitle}"/></div>
                         <div style="color: #555; font-size: 13px; margin-bottom: 6px;">
-                            ${targetReview.companyName} &nbsp;·&nbsp; ${targetReview.reviewCreatedDate}
+                                ${targetReview.companyName} &nbsp;·&nbsp; ${targetReview.reviewCreatedDate}
                         </div>
                         <div class="detail-content text-box"><c:out value="${targetReview.reviewContent}"/></div>
                     </div>
@@ -97,7 +99,7 @@
                     <div class="detail-content">
                         <div style="font-weight: 600; margin-bottom: 4px;"><c:out value="${targetBoard.title}"/></div>
                         <div style="color: #555; font-size: 13px; margin-bottom: 6px;">
-                            ${targetBoard.nickname} &nbsp;·&nbsp; ${targetBoard.created_date}
+                                ${targetBoard.nickname} &nbsp;·&nbsp; ${targetBoard.created_date}
                         </div>
                         <div class="detail-content text-box"><c:out value="${targetBoard.content}"/></div>
                     </div>
@@ -118,9 +120,9 @@
             <c:when test="${report.repoReviewId > 0}">
                 <form method="post" action="${pageContext.request.contextPath}/reportDetail"
                       style="display:inline;" onsubmit="return confirm('리뷰를 삭제하시겠습니까?')">
-                    <input type="hidden" name="reportId"  value="${report.reportId}">
-                    <input type="hidden" name="reviewId"  value="${report.repoReviewId}">
-                    <input type="hidden" name="cmd"       value="delReview">
+                    <input type="hidden" name="reportId" value="${report.reportId}">
+                    <input type="hidden" name="reviewId" value="${report.repoReviewId}">
+                    <input type="hidden" name="cmd" value="delReview">
                     <button type="submit" class="delete-btn">리뷰 삭제</button>
                 </form>
             </c:when>
@@ -128,8 +130,8 @@
                 <form method="post" action="${pageContext.request.contextPath}/reportDetail"
                       style="display:inline;" onsubmit="return confirm('게시글을 삭제하시겠습니까?')">
                     <input type="hidden" name="reportId" value="${report.reportId}">
-                    <input type="hidden" name="boardId"  value="${report.repoBoardId}">
-                    <input type="hidden" name="cmd"      value="delBoard">
+                    <input type="hidden" name="boardId" value="${report.repoBoardId}">
+                    <input type="hidden" name="cmd" value="delBoard">
                     <button type="submit" class="delete-btn">게시글 삭제</button>
                 </form>
             </c:otherwise>
@@ -141,7 +143,7 @@
         <%-- 상태 변경 --%>
         <form method="post" action="${pageContext.request.contextPath}/reportDetail" style="display:inline;">
             <input type="hidden" name="reportId" value="${report.reportId}">
-            <input type="hidden" name="cmd"      value="status">
+            <input type="hidden" name="cmd" value="status">
             <c:choose>
                 <c:when test="${report.repoStatus == 'PENDING'}">
                     <input type="hidden" name="status" value="COMPLETED">
@@ -158,7 +160,7 @@
         <form method="post" action="${pageContext.request.contextPath}/reportDetail"
               style="display:inline;" onsubmit="return confirm('신고를 삭제하시겠습니까?')">
             <input type="hidden" name="reportId" value="${report.reportId}">
-            <input type="hidden" name="cmd"      value="delete">
+            <input type="hidden" name="cmd" value="delete">
             <button type="submit" class="delete-btn">삭제</button>
         </form>
     </div>
