@@ -7,9 +7,6 @@
 </head>
 <body>
 <div class="write-container">
-    <form action="supa-upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" id="imageFile"/>
-    </form>
 
     <h2>✍ 글 작성하기</h2>
 
@@ -45,6 +42,10 @@
             <textarea name="txt" maxlength="1500" rows="10" placeholder="내용을 입력하세요" required></textarea>
             <br> <span id="cntSpan">0</span> / 1500
         </div>
+
+        <form action="supa-upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" id="imageFile"/>
+        </form>
 
         <!-- 버튼 -->
 

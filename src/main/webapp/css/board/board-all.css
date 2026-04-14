@@ -463,7 +463,7 @@
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-    padding: 20px 30px;
+    padding: 10px 20px;
     background-color: var(--bg-tertiary);
     border-top: 1px solid var(--border-primary);
     transition: var(--transition);

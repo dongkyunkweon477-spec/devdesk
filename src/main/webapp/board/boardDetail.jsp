@@ -79,7 +79,11 @@
 
     <div class="comment-section">
         <hr class="comment-divider">
-        <h3>댓글</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin-bottom: 0;">댓글</h3>
+            <button type="button" class="write-btn" onclick="location.href='board'" style="margin-right: 30px;">목록으로
+            </button>
+        </div>
         <hr class="comment-divider">
 
         <c:if test="${not empty sessionScope.user}">
@@ -173,7 +177,7 @@
     function loadLikeStatus() {
         const boardId = GLOBAL_BOARD_ID;
         const memberId = GLOBAL_MEMBER_ID;
-        
+
         if (!boardId || !memberId) return;
 
         fetch(`/like?board_id=${boardId}&member_id=${memberId}`)
