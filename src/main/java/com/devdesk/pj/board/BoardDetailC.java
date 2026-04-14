@@ -26,7 +26,7 @@ public class BoardDetailC extends HttpServlet {
 
         // 삭제된 게시글 처리
         if (request.getAttribute("board") == null) {
-            request.setAttribute("content", "board/deleted.jsp");
+            request.setAttribute("content", "board/boardDeleted.jsp");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
             return;
         }

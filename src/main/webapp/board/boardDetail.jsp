@@ -1,18 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board-all.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board/board-all.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board/comment.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
 
 
 <html>
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="../css/index.css">
-    <link rel="stylesheet" href="../css/board-all.css">
-    <link rel="stylesheet" href="../css/comment.css">
     <script src="../js/boardDetail.js"></script>
-    <style>
-
-    </style>
 </head>
 <body>
 <div class="board-container">

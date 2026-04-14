@@ -1,15 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board-all.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/board/board-all.css">
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>review</title>
-    <link rel="stylesheet" href="css/board.css">
-    <link rel="stylesheet" href="../css/board-all.css">
-
+    <title>커뮤니티</title>
 </head>
 
 <body>
@@ -38,10 +34,10 @@
                 <option value="자유토크" ${param.category == '자유토크' ? 'selected' : ''}>자유토크</option>
                 <option value="TIL" ${param.category == 'TIL' ? 'selected' : ''}>TIL</option>
                 <option value="이력서" ${param.category == '이력서' ? 'selected' : ''}>이력서</option>
-                <option value="자기만의TIP" ${param.category == '자기만의TIP' ? 'selected' : ''}>자기만의TIP</option>
+                <option value="TIP" ${param.category == 'TIP' ? 'selected' : ''}>자기만의TIP</option>
             </select>
 
-            <select onchange="location.href='board?sort=' + this.value">
+            <select onchange="location.href='board?sort=' + this.value + '&category=${param.category != null ? param.category : ""}&searchType=${param.searchType != null ? param.searchType : ""}&keyword=${param.keyword != null ? param.keyword : ""}'">
                 <option value="" ${param.sort == null or param.sort == '' ? 'selected' : ''}>최신순</option>
                 <option value="popular" ${param.sort == 'popular' ? 'selected' : ''}>인기순</option>
                 <option value="viewcount" ${param.sort == 'viewcount' ? 'selected' : ''}>조회순</option>

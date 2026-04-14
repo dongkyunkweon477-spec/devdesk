@@ -95,10 +95,6 @@ a:hover {
     top: 0;
     z-index: 1000;
 
-
-    background: #ffffff;
-    border-bottom: 1px solid #e2e8f0;
-
     background: var(--bg-primary);
     border-bottom: 1px solid var(--border-primary);
     transition: var(--transition);
@@ -238,7 +234,6 @@ a:hover {
 /* ===== 콘텐츠 ===== */
 .content {
     background-color: var(--bg-secondary);
-    margin-top: 30px;
     padding: 30px;
     min-height: 800px;
     transition: var(--transition);

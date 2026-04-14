@@ -4,6 +4,8 @@
 
 <link rel="stylesheet" href="${ctx}/css/application_list.css">
 <link rel="stylesheet" href="${ctx}/css/resume-block.css">
+<link rel="stylesheet" href="${ctx}/css/index.css">
+<!-- 선민 수정 -->
 
 <!-- 페이지 헤더 -->
 <div class="page-header">
