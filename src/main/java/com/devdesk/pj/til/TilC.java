@@ -106,7 +106,8 @@ public class TilC extends HttpServlet {
         request.setAttribute("tagHours", tagHours);
         request.setAttribute("maxHours", maxHours);
 
-        request.getRequestDispatcher("/til/til2.jsp").forward(request, response);
+        request.setAttribute("content", "/til/til2.jsp"); // 109 110 선민 추가
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     public void destroy() {
