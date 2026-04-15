@@ -44,15 +44,14 @@
             </a>
         </nav>
 
-        <div id="sidebar-mini-calendar">
+        <div id="sidebar-mini-calendar" style="margin-top: auto; border-top: 1px solid var(--border, #e2e8f0); padding-top: 15px; padding-bottom: 20px;">
             <div class="g-cal-header">
-                <button id="g-prev-month" class="g-nav-btn">‹</button>
-                <span id="g-cal-title" class="g-cal-title-text"></span>
-                <button id="g-next-month" class="g-nav-btn">›</button>
+                <button class="g-nav-btn" id="g-prev-month">❮</button>
+                <span class="g-cal-title" id="g-cal-title"></span>
+                <button class="g-nav-btn" id="g-next-month">❯</button>
             </div>
             <div class="g-cal-weekdays">
-                <span>월</span><span>화</span><span>수</span>
-                <span>목</span><span>금</span><span>토</span><span>일</span>
+                <div class="sun">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
             </div>
             <div class="g-cal-days" id="g-cal-days"></div>
         </div>

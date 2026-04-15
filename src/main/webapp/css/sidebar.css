@@ -392,12 +392,23 @@
    MINI CALENDAR (사이드바 하단 고정 미니 달력)
 ======================================================= */
 #sidebar-mini-calendar {
-    flex-shrink: 0; /* ★ 하단에서 압축되지 않게 */
+    flex-shrink: 0;
     margin: 0;
+    /* 기존 패딩 유지 */
     padding: 10px 14px 16px;
     border-top: 1px solid var(--border, #e2e8f0);
     background: transparent;
     font-family: 'Noto Sans KR', sans-serif;
+
+    /* 👇 !important를 붙여서 강제 적용합니다 */
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* 달력 내부의 모든 요소도 박스 크기 계산 방식을 통일합니다 */
+#sidebar-mini-calendar * {
+    box-sizing: border-box !important;
 }
 
 .g-cal-header {

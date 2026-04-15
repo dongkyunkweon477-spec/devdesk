@@ -58,25 +58,16 @@
         </nav>
 
 
-        <div id="sidebar-mini-calendar">
+        <div id="sidebar-mini-calendar" style="margin-top: auto; border-top: 1px solid var(--border, #e2e8f0); padding-top: 15px; padding-bottom: 20px;">
             <div class="g-cal-header">
-                <div class="g-cal-title" id="g-cal-title">2026년 4월</div>
-                <div class="g-cal-nav">
-                    <button class="g-nav-btn" id="g-prev-month">‹</button>
-                    <button class="g-nav-btn" id="g-next-month">›</button>
-                </div>
+                <button class="g-nav-btn" id="g-prev-month">❮</button>
+                <span class="g-cal-title" id="g-cal-title"></span>
+                <button class="g-nav-btn" id="g-next-month">❯</button>
             </div>
             <div class="g-cal-weekdays">
-                <div>월</div>
-                <div>화</div>
-                <div>수</div>
-                <div>목</div>
-                <div>금</div>
-                <div>토</div>
-                <div>일</div>
+                <div class="sun">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
             </div>
-            <div class="g-cal-days" id="g-cal-days">
-            </div>
+            <div class="g-cal-days" id="g-cal-days"></div>
         </div>
     </aside>
 
