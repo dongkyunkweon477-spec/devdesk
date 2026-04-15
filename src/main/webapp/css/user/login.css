@@ -28,6 +28,11 @@
 
 /* --- 소셜 로그인 버튼 및 구분선 추가 스타일 --- */
 
+/* 로그인 카드 그림자 제거 */
+.signup-card {
+    box-shadow: none !important;
+}
+
 /* 이메일 로그인 버튼 (어두운 회색/검정 톤) */
 .email-login-btn {
     width: 100%;

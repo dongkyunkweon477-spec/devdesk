@@ -213,12 +213,21 @@ a:hover {
 
 /* [버튼 2] 회원가입 (보라색 강조 버튼) */
 .menu-right a.btn-primary {
-    background-color: var(--accent-light);
-    color: var(--accent-hover);
+    background: var(--accent-light) !important;
+    color: var(--accent-hover) !important;
+    padding: 6px 12px !important;
+    border-radius: 6px !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    transition: var(--transition) !important;
+    border: none !important;
 }
 
 .menu-right a.btn-primary:hover {
-    background-color: var(--accent-secondary);
+    background: var(--accent-secondary) !important;
+    color: white !important;
 }
 
 /* [버튼 3] 로그아웃 (회색 차분한 버튼) */
