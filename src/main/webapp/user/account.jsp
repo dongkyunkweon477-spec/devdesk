@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%-- <%@ page import="com.devdesk.pj.main.RecaptchaUtil" %> --%>
+<%@ page import="com.devdesk.pj.main.RecaptchaUtil" %>
 <html>
 <head>
     <meta charset="utf-8">
     <title>DevDesk</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/account.css">
-    <%-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> --%>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body class="account-body">
 
@@ -47,7 +47,7 @@
                 </select>
             </div>
 
-            <%-- <div class="g-recaptcha" data-sitekey="<%= RecaptchaUtil.getSiteKey() %>"></div> --%>
+            <div class="g-recaptcha" data-sitekey="<%= RecaptchaUtil.getSiteKey() %>"></div>
 
             <div class="form-actions">
                 <button type="submit" class="btn-submit">가입완료</button>
