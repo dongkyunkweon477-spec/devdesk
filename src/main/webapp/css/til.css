@@ -2,23 +2,11 @@
    SIDEBAR (til2.jsp 전용 오버라이드)
    sidebar.css와 함께 로드됨 — TIL 페이지는 헤더가 없으므로 top:0 적용
 ════════════════════════ */
-/* 선민 수정 */
-.sidebar {
-    width: 240px;
-    position: fixed;
-    left: 0;
-    background: var(--surface);
-    display: flex;
-    flex-direction: column;
-    z-index: 100;
-    transition: transform 0.25s;
-    top: 0;
-    height: 100vh;
-}
+
 
 /* sidebar.css와 달리 TIL 페이지 사이드바 로고 여백 */
 .sidebar-logo {
-    padding: 24px 20px 20px;
+    padding: 24px 20px 0px;
 }
 
 /* sidebar.css와 달리 TIL 페이지 nav 항목 스타일 */
