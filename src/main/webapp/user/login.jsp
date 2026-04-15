@@ -1,21 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%-- <%@ page import="com.devdesk.pj.main.RecaptchaUtil" %> --%>
-<html>
-<head>
-    <title>DevDesk</title>
-    <%--  선민 추가  --%>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/base.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
+<%@ page import="com.devdesk.pj.main.RecaptchaUtil" %>
 
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/account.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/login.css">
-    <%--  선민 추가  --%>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/index.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <%-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> --%>
-</head>
-<body class="account-body">
+<%-- 
+  주의: 이 파일은 index.jsp의 <jsp:include>를 통해 삽입됩니다.
+  따라서 <html>, <head>, <body> 태그 및 중복 스크립트(jquery, index.js)는 제거해야 합니다.
+--%>
+
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/account.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/login.css">
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <div class="signup-wrapper">
     <div class="signup-card">
@@ -41,7 +34,7 @@
                 <input type="password" name="password" placeholder="비밀번호를 입력해주세요" required>
             </div>
 
-            <%-- <div class="g-recaptcha" data-sitekey="<%= RecaptchaUtil.getSiteKey() %>"></div> --%>
+            <div class="g-recaptcha" data-sitekey="<%= RecaptchaUtil.getSiteKey() %>"></div>
 
             <div class="form-actions">
                 <button type="submit" class="btn-submit email-login-btn">이메일 로그인</button>
@@ -69,14 +62,12 @@
             </div>
 
             <div class="login-options" style="margin-top: 25px;">
-                <span>아직 회원이 아니신가요?</span>
-                <a href="account">회원가입 하기</a>
+                <a href="find-password">비밀번호 찾기</a>
+                <span class="divider-bar">|</span>
+                <a href="account" class="btn-primary">회원가입 하기</a>
             </div>
 
         </form>
 
     </div>
 </div>
-
-</body>
-</html>
