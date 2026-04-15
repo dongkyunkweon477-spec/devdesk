@@ -1,21 +1,23 @@
 /* TAG_STATS, RAW_EVENTS, CTX_PATH 는 til2.jsp 인라인 스크립트에서 주입됩니다. */
 
 const TAG_CONFIG = {
-    'Java':       {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
-    'Spring':     {color: '#56e39f', bg: 'rgba(86,227,159,0.12)'},
-    'SQL':        {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
+    'Java': {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
+    'Spring': {color: '#56e39f', bg: 'rgba(86,227,159,0.12)'},
+    'SQL': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
     'JavaScript': {color: '#ffd166', bg: 'rgba(255,209,102,0.12)'},
-    'Git':        {color: '#ff6b6b', bg: 'rgba(255,107,107,0.12)'},
-    'Python':     {color: '#5b7cf8', bg: 'rgba(91,124,248,0.12)'},
-    'CSS':        {color: '#8b6ef5', bg: 'rgba(139,110,245,0.12)'},
-    'React':      {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
-    '기타':       {color: '#9da3b8', bg: 'rgba(157,163,184,0.12)'}
+    'Git': {color: '#ff6b6b', bg: 'rgba(255,107,107,0.12)'},
+    'Python': {color: '#5b7cf8', bg: 'rgba(91,124,248,0.12)'},
+    'CSS': {color: '#8b6ef5', bg: 'rgba(139,110,245,0.12)'},
+    'React': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
+    '기타': {color: '#9da3b8', bg: 'rgba(157,163,184,0.12)'}
 };
 
 /* ── 도넛 차트 ── */
 function drawDonut() {
     if (!TAG_STATS.length) return;
-    var total = TAG_STATS.reduce(function (a, d) { return a + d.count; }, 0);
+    var total = TAG_STATS.reduce(function (a, d) {
+        return a + d.count;
+    }, 0);
     var canvas = document.getElementById('donutCanvas');
     var ctx = canvas.getContext('2d');
     var cx = 65, cy = 65, r = 50, ir = 30, gap = 0.04;
@@ -129,9 +131,25 @@ function closeConfirm() {
 /* ── 마크다운 렌더러 ── */
 function renderMarkdown(text) {
     if (!text) return '<p style="color:var(--text3)">내용이 없어요.</p>';
-    return text
-        .replace(/```([\s\S]*?)```/g, '<pre class="md-code">$1</pre>')
-        .replace(/`([^`]+)`/g, '<code class="md-inline">$1</code>')
+
+    // 1) 코드블록을 먼저 추출해서 보호
+    var codeBlocks = [];
+    text = text.replace(/```([\s\S]*?)```/g, function (_, code) {
+        codeBlocks.push(code);
+        return '%%CODEBLOCK_' + (codeBlocks.length - 1) + '%%';
+    });
+
+    var inlineCodes = [];
+    text = text.replace(/`([^`]+)`/g, function (_, code) {
+        inlineCodes.push(code);
+        return '%%INLINE_' + (inlineCodes.length - 1) + '%%';
+    });
+
+    // 2) HTML 태그 이스케이프
+    text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // 3) 마크다운 변환
+    text = text
         .replace(/^### (.+)$/gm, '<h3 class="md-h3">$1</h3>')
         .replace(/^## (.+)$/gm, '<h2 class="md-h2">$1</h2>')
         .replace(/^# (.+)$/gm, '<h1 class="md-h1">$1</h1>')
@@ -139,6 +157,18 @@ function renderMarkdown(text) {
         .replace(/^- (.+)$/gm, '<li class="md-li">$1</li>')
         .replace(/\n\n/g, '</p><p class="md-p">')
         .replace(/\n/g, '<br>');
+
+    // 4) 코드블록 복원 (이스케이프된 상태로)
+    text = text.replace(/%%CODEBLOCK_(\d+)%%/g, function (_, i) {
+        var code = codeBlocks[i].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return '<pre class="md-code">' + code + '</pre>';
+    });
+    text = text.replace(/%%INLINE_(\d+)%%/g, function (_, i) {
+        var code = inlineCodes[i].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return '<code class="md-inline">' + code + '</code>';
+    });
+
+    return text;
 }
 
 /* ── 에디터 툴바 ── */

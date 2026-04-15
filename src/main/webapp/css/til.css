@@ -1,45 +1,18 @@
 /* ════════════════════════
-   SIDEBAR (til2.jsp용 - hamburger 포함)
+   SIDEBAR (til2.jsp 전용 오버라이드)
+   sidebar.css와 함께 로드됨 — TIL 페이지는 헤더가 없으므로 top:0 적용
 ════════════════════════ */
 .sidebar {
-    width: 240px;
-    position: fixed;
     top: 0;
-    left: 0;
     height: 100vh;
-    background: var(--surface);
-    display: flex;
-    flex-direction: column;
-    z-index: 100;
-    transition: transform 0.25s;
 }
 
+/* sidebar.css와 달리 TIL 페이지 사이드바 로고 여백 */
 .sidebar-logo {
     padding: 24px 20px 20px;
 }
 
-.logo-mark {
-    display: block;
-    font-family: 'Gowun Batang', serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: -0.3px;
-}
-
-.logo-sub {
-    display: block;
-    font-size: 11px;
-    color: var(--text3);
-    margin-top: 3px;
-}
-
-.sidebar-nav {
-    flex: 1;
-    padding: 16px 12px;
-    overflow-y: auto;
-}
-
+/* sidebar.css와 달리 TIL 페이지 nav 항목 스타일 */
 .nav-section-label {
     font-size: 10px;
     font-weight: 600;
@@ -50,20 +23,13 @@
 }
 
 .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 12px;
     border-radius: var(--radius-sm);
-    font-size: 13px;
     font-weight: 500;
-    color: var(--text2);
     transition: all 0.15s;
     margin-bottom: 2px;
 }
 
 .nav-item:hover {
-    background: var(--surface2);
     color: var(--text);
 }
 
@@ -73,73 +39,7 @@
     font-weight: 600;
 }
 
-.nav-icon {
-    font-size: 15px;
-}
-
-.sidebar-footer {
-    padding: 16px;
-}
-
-.user-card {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.user-avatar {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff;
-    font-size: 13px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.user-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-}
-
-.user-role {
-    font-size: 11px;
-    color: var(--text3);
-    margin-top: 1px;
-}
-
-/* Hamburger */
-.hamburger {
-    display: none;
-    position: fixed;
-    top: 16px;
-    left: 16px;
-    z-index: 200;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-size: 16px;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--shadow);
-}
-
-.sidebar-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(30, 34, 60, 0.3);
-    z-index: 99;
-    backdrop-filter: blur(2px);
-}
+/* .hamburger, .sidebar-overlay → sidebar.css에서 정의 (중복 제거) */
 
 /* ════════════════════════
    PAGE HEADER
