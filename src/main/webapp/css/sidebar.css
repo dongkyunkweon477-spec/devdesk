@@ -4,7 +4,7 @@
 .sidebar {
     position: fixed;
     left: 0;
-    top: 65px;
+    top: 70px;
     bottom: 0;
     width: 240px;
     background: var(--surface, #ffffff);
@@ -19,6 +19,7 @@
 .sidebar-logo {
     padding: 10px 0px 10px;
     flex-shrink: 0;
+    border-bottom: 1px solid var(--border);
 }
 
 .logo-mark {
@@ -26,11 +27,15 @@
     font-weight: 700;
     color: var(--text);
     display: block;
+    /* 선민 수정 */
+    margin-left: 20px;
 }
 
 .logo-sub {
     font-size: 11px;
     color: var(--text3);
+    /* 선민 수정 */
+    margin-left: 20px;
 }
 
 /* 화살표가 처음부터 위를 향하게 하려면 아래 속성 추가 */
@@ -47,7 +52,7 @@
 
     /* max-height: 45vh; <--- 이 줄이 있다면 지워주세요! */
 
-    padding: 30px 8px 8px;
+    padding: 8px 8px 8px; /* 선민 수정 */
     overflow-y: auto; /* 내용이 넘치면 자기 안에서만 스크롤됨 */
     overflow-x: hidden;
     scrollbar-width: thin;
@@ -103,6 +108,31 @@
     width: 20px;
     text-align: center;
     flex-shrink: 0;
+}
+
+/* =======================================================
+   테마 토글 (사이드바 내부)
+======================================================= */
+.sidebar-theme-toggle {
+    border-bottom: 1px solid var(--border);
+}
+
+.sidebar-theme-toggle .test {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: 10px;
+    transition: var(--transition, all 0.3s);
+}
+
+.sidebar-theme-toggle .test:hover {
+    background: var(--surface3, #e2e8f0);
+}
+
+[data-theme="dark"] .sidebar-theme-toggle .test {
+    background: var(--surface2);
+    border-color: var(--border);
 }
 
 /* =======================================================
@@ -494,7 +524,7 @@
 }
 
 .other-month {
-    color: #cbd5e0 !important;
+    color: var(--text3, #cbd5e0) !important;
 }
 
 .g-day-num.today {
@@ -563,6 +593,8 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    background: var(--surface, #ffffff);
+    border-right: 1px solid var(--border, #e2e8f0);
 }
 
 .calendar-main {
@@ -572,20 +604,21 @@
 
 .sidebar-section {
     margin-bottom: 25px !important; /* 섹션 사이 간격 확보 */
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border);
     border-radius: 8px;
-    background: #fff;
+    background: var(--surface);
 }
 
 .section-header {
     padding: 12px 15px;
-    background: #f8fafc;
+    background: var(--surface2);
     font-size: 13px;
     font-weight: 700;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
 }
 
 .schedule-list {
@@ -601,14 +634,15 @@
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.2s;
+    color: var(--text2);
 }
 
 .list-item:hover {
-    background: #f1f5f9;
+    background: var(--surface2);
 }
 
 .item-date {
-    color: #8e5ae5;
+    color: var(--accent, #8e5ae5);
     font-weight: 600;
     margin-right: 8px;
 }
@@ -623,7 +657,12 @@
     resize: none;
     outline: none;
     line-height: 1.5;
-    background: #fffbeb; /* 연한 노란색 포스트잇 느낌 */
+    background: var(--surface2);
+    color: var(--text);
+}
+
+[data-theme="dark"] #todo-textarea {
+    background: #2d3748;
 }
 
 /* =======================================================
