@@ -71,14 +71,12 @@
             </div>
 
             <div class="login-options" style="margin-top: 25px;">
-                <span>아직 회원이 아니신가요?</span>
-                <a href="account">회원가입 하기</a>
+                <a href="find-password">비밀번호 찾기</a>
+                <span class="divider-bar">|</span>
+                <a href="account" class="btn-primary">회원가입 하기</a>
             </div>
 
         </form>
 
     </div>
 </div>
-
-</body>
-</html>
