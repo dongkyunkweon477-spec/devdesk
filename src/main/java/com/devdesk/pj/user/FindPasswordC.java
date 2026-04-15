@@ -12,7 +12,7 @@ import java.io.IOException;
  * GET  /find-password  → find_password.jsp 보여주기
  * POST /find-password  → 닉네임+이메일 검증 후 세션에 이메일 저장 → 비밀번호 재설정 페이지로 이동
  * <p>
- * POST /find-password?step=reset → 새 비밀번호 저장 후 로그인 페이지로 리다이렉트
+ * POST /find-password?step=reset → 새 비밀번호 저장 후 성공 모달(포워딩) -> 로그인 페이지 이동
  */
 @WebServlet(name = "FindPasswordC", value = "/find-password")
 public class FindPasswordC extends HttpServlet {
@@ -31,7 +31,7 @@ public class FindPasswordC extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/find-password");
                 return;
             }
-            // 비밀번호 재설정 폼 보여주기 (같은 JSP, step 파라미터로 구분)
+            // 비밀번호 재설정 폼 보여주기
             request.setAttribute("step", "reset");
         }
 
@@ -65,6 +65,7 @@ public class FindPasswordC extends HttpServlet {
         String nickname = request.getParameter("nickname");
         String email = request.getParameter("email");
 
+        // 정상적으로 인자 2개 전달
         boolean exists = MemberDAO.MBAO.findMemberByNicknameAndEmail(nickname, email);
 
         if (exists) {
@@ -72,8 +73,8 @@ public class FindPasswordC extends HttpServlet {
             request.getSession().setAttribute("pwResetEmail", email);
             response.sendRedirect(request.getContextPath() + "/find-password?step=reset");
         } else {
-            // 인증 실패 → 에러 메시지와 함께 폼 다시 보여주기
-            request.setAttribute("errorMsg", "닉네임 또는 이메일이 일치하지 않습니다.");
+            // 인증 실패 → 에러 메시지(모달용)와 함께 폼 다시 보여주기
+            request.setAttribute("showErrorModal", "가입된 회원이 아닙니다.");
             request.setAttribute("content", "/user/find_password.jsp");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
@@ -87,7 +88,6 @@ public class FindPasswordC extends HttpServlet {
 
         String verifiedEmail = (String) request.getSession().getAttribute("pwResetEmail");
 
-        // 세션 만료 방어
         if (verifiedEmail == null) {
             response.sendRedirect(request.getContextPath() + "/find-password");
             return;
@@ -96,25 +96,39 @@ public class FindPasswordC extends HttpServlet {
         String newPassword = request.getParameter("new_password");
         String confirmPassword = request.getParameter("confirm_password");
 
-        // 비밀번호 일치 확인
+        // 1. 비밀번호 일치 체크
         if (newPassword == null || !newPassword.equals(confirmPassword)) {
-            request.getSession().setAttribute("pwResetEmail", verifiedEmail); // 세션 유지
             request.setAttribute("step", "reset");
-            request.setAttribute("errorMsg", "비밀번호가 일치하지 않습니다.");
+            request.setAttribute("showErrorModal", "비밀번호가 일치하지 않습니다.");
             request.setAttribute("content", "/user/find_password.jsp");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
             return;
         }
 
+        // ⭐ 2. 기존 비밀번호와 동일한지 체크 (여기 추가!)
+        boolean isSame = MemberDAO.MBAO.isSameAsOldPassword(verifiedEmail, newPassword);
+
+        if (isSame) {
+            request.setAttribute("step", "reset");
+            request.setAttribute("showErrorModal", "이미 사용중인 비밀번호입니다. 다시 입력해주세요.");
+            request.setAttribute("content", "/user/find_password.jsp");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            return;
+        }
+
+        // 3. 비밀번호 변경
         boolean success = MemberDAO.MBAO.resetPassword(verifiedEmail, newPassword);
 
         if (success) {
-            request.getSession().removeAttribute("pwResetEmail"); // 세션 정리
-            request.getSession().setAttribute("pwResetSuccess", "true");
-            response.sendRedirect(request.getContextPath() + "/login");
+            request.getSession().removeAttribute("pwResetEmail");
+
+            request.setAttribute("step", "reset");
+            request.setAttribute("showSuccessModal", "true");
+            request.setAttribute("content", "/user/find_password.jsp");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         } else {
             request.setAttribute("step", "reset");
-            request.setAttribute("errorMsg", "비밀번호 재설정 중 오류가 발생했습니다. 다시 시도해주세요.");
+            request.setAttribute("showErrorModal", "비밀번호 재설정 중 오류가 발생했습니다. 다시 시도해주세요.");
             request.setAttribute("content", "/user/find_password.jsp");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
         }

@@ -493,4 +493,28 @@ public class MemberDAO {
         return result;
     }
 
+    /**
+     * 기존 비밀번호와 동일한지 확인
+     *
+     * @return true : 기존 비밀번호와 같음 / false : 다름
+     */
+    public boolean isSameAsOldPassword(String email, String newPassword) {
+        String sql = "SELECT password FROM member WHERE email = ?";
+
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    // DB에 저장된 비밀번호와 새로 입력한 비밀번호가 일치하면 true 반환
+                    return newPassword.equals(rs.getString("password"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
