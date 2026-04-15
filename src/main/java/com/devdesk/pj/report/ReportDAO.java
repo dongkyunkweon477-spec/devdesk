@@ -214,7 +214,6 @@ public class ReportDAO {
         }
         return false;
     }
-<<<<<<< HEAD
 
     // 💡 [추가된 기능 1] 원문 삭제 시 신고 상태를 완료로 바꾸고 식별자를 NULL 처리함
     public int updateReportStatusToResolvedAndNullify(int reportId) {
@@ -228,8 +227,6 @@ public class ReportDAO {
             return 0;
         }
     }
-=======
->>>>>>> 6ef76002d419921a5a51a40f384222989c737dc9
 
     // 💡 [추가된 기능 2] 회원 번호로 닉네임만 가져오는 메서드
     public String getNicknameByMemberId(int memberId) {
@@ -262,9 +259,4 @@ public class ReportDAO {
         }
         return false;
     }
-<<<<<<< HEAD
-
-} // 클래스를 닫는 진짜 마지막 중괄호 (여기에만 있어야 합니다!)
-=======
 }
->>>>>>> 6ef76002d419921a5a51a40f384222989c737dc9

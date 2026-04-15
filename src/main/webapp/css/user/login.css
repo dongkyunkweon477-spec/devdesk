@@ -94,3 +94,16 @@
 .btn-google svg {
     margin-right: 8px; /* 로고와 텍스트 사이 간격 */
 }
+
+/* 비밀번호 재설정 완료 후 성공 안내 메시지 */
+.reset-success-msg {
+    color: #16a34a;
+    font-size: 13px;
+    text-align: center;
+    margin-top: 14px;
+    font-weight: 600;
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    padding: 10px 14px;
+}

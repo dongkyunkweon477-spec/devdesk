@@ -420,4 +420,77 @@ public class MemberDAO {
             DBManager_new.close(con, pstmt, null);
         }
     }
+
+
+    /**
+     * 비밀번호 찾기 STEP1 - 닉네임 + 이메일로 회원 존재 여부 확인
+     *
+     * @return true : 일치하는 회원 있음 / false : 없음
+     */
+    public boolean findMemberByNicknameAndEmail(String nickname, String email) {
+        String sql = "SELECT COUNT(*) FROM member WHERE nickname = ? AND email = ? AND status != 'deleted'";
+
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setString(1, nickname);
+            pstmt.setString(2, email);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
+    /**
+     * 비밀번호 찾기 STEP2 - 이메일로 비밀번호 업데이트
+     *
+     * @return true : 성공 / false : 실패
+     */
+    public boolean resetPassword(String email, String newPassword) {
+        String sql = "UPDATE member SET password = ? WHERE email = ? AND status != 'deleted'";
+
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setString(1, newPassword);
+            pstmt.setString(2, email);
+
+            return pstmt.executeUpdate() == 1;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * 닉네임 중복 확인
+     *
+     * @return 1 : 이미 사용 중 / 0 : 사용 가능
+     */
+    public int nicknameCheck(String nickname) {
+        int result = 0;
+        String sql = "SELECT COUNT(*) FROM member WHERE nickname = ? AND status != 'deleted'";
+
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setString(1, nickname);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
 }

@@ -65,6 +65,20 @@
                 <a href="account">회원가입 하기</a>
             </div>
 
+            <div class="login-options" style="margin-top: 10px;">
+                <span>비밀번호를 잊으셨나요?</span>
+                <a href="find-password">비밀번호 찾기</a>
+            </div>
+
+            <%-- 비밀번호 재설정 완료 후 로그인 페이지로 돌아왔을 때 성공 메시지 표시 --%>
+            <%
+                String pwResetSuccess = (String) session.getAttribute("pwResetSuccess");
+                if ("true".equals(pwResetSuccess)) {
+                    session.removeAttribute("pwResetSuccess");
+            %>
+            <div class="reset-success-msg">✅ 비밀번호가 성공적으로 변경되었습니다. 새 비밀번호로 로그인해주세요.</div>
+            <% } %>
+
         </form>
 
     </div>
