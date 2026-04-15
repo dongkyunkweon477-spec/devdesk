@@ -18,7 +18,7 @@
     <div class="header">
         <!-- 로고 -->
         <div class="title">
-            <img onclick="" src="${pageContext.request.contextPath}/images/Devlogo.png" alt="">
+            <img onclick="" src="${pageContext.request.contextPath}/images/DevDesk_logo2.png" alt="">
             <a href="${pageContext.request.contextPath}/main">DevDesk</a>
         </div>
         <!-- 메뉴 -->

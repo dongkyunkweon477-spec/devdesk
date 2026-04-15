@@ -25,7 +25,7 @@
     --bg-primary: #1e293b;
     --bg-secondary: #0f172a;
     --bg-tertiary: #334155;
-    --text-primary: #f8fafc;
+    --text-primary: #ffffff;
     --text-secondary: #e2e8f0;
     --text-tertiary: #cbd5e1;
     --border-primary: #334155;
@@ -106,7 +106,7 @@ a:hover {
 .title {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 0px;
 }
 
 /* DevDesk 왼쪽으로 이동 */
@@ -123,7 +123,7 @@ a:hover {
 }
 
 .title img {
-    height: 40px;
+    height: 68px;
     display: block;
 }
 
