@@ -1,4 +1,3 @@
-<%@ page import="com.devdesk.pj.main.RecaptchaUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.devdesk.pj.main.RecaptchaUtil" %>
 <html>
@@ -70,8 +69,9 @@
                 </a>
             </div>
 
-            <div class="login-options" style="margin-top: 25px;">
-                <span>아직 회원이 아니신가요?</span>
+            <div class="login-options">
+                <a href="find-password">비밀번호 찾기</a>
+                <span class="divider-bar">|</span>
                 <a href="account">회원가입 하기</a>
             </div>
 

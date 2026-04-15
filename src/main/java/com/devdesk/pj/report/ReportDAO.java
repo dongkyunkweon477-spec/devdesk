@@ -216,7 +216,37 @@ public class ReportDAO {
         return false;
     }
 
-    // 유저가 처리 중인 신고가 있는지 체크 // 선민 추가
+    // 💡 [추가된 기능 1] 원문 삭제 시 신고 상태를 완료로 바꾸고 식별자를 NULL 처리함
+    public int updateReportStatusToResolvedAndNullify(int reportId) {
+        String sql = "UPDATE report SET board_id = NULL, review_id = NULL, repo_status = 'RESOLVED' WHERE report_id = ?";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, reportId);
+            return pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    // 💡 [추가된 기능 2] 회원 번호로 닉네임만 가져오는 메서드
+    public String getNicknameByMemberId(int memberId) {
+        String sql = "SELECT nickname FROM member WHERE member_id = ?";
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, memberId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("nickname");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return String.valueOf(memberId);
+    }
+
+    // 💡 [선민 추가] 유저가 처리 중인 신고가 있는지 체크
     public boolean hasPendingReport(int memberId) {
         String sql = "SELECT COUNT(*) FROM report WHERE member_id = ? AND repo_status = 'PENDING'";
         try (Connection con = DBManager_new.connect();

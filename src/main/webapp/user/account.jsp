@@ -34,7 +34,11 @@
 
             <div class="form-group">
                 <label>닉네임 <span class="required">*</span></label>
-                <input type="text" name="nickname" placeholder="닉네임을 입력해주세요" required>
+                <div class="input-with-btn">
+                    <input type="text" name="nickname" id="nickname" placeholder="닉네임을 입력해주세요" required>
+                    <button type="button" class="btn-check" onclick="checkNickname()">중복 확인</button>
+                </div>
+                <span id="nicknameCheckMsg" class="check-msg"></span>
             </div>
 
             <div class="form-group">
@@ -59,7 +63,40 @@
 </div>
 
 <script>
-    // [중복확인] 버튼을 누르면 이 함수가 실행됩니다.
+    // [닉네임 중복확인]
+    function checkNickname() {
+        let nickname = document.getElementById("nickname").value;
+        let msgSpan = document.getElementById("nicknameCheckMsg");
+
+        if (nickname.trim() === "") {
+            msgSpan.style.color = "#FF4D4F";
+            msgSpan.innerText = "닉네임을 먼저 입력해주세요!";
+            return;
+        }
+
+        fetch('user-checkNickname', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'nickname=' + encodeURIComponent(nickname)
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data.trim() === "1") {
+                    msgSpan.style.color = "#FF4D4F";
+                    msgSpan.innerText = "이미 사용 중인 닉네임입니다.";
+                } else {
+                    msgSpan.style.color = "#7C3AED";
+                    msgSpan.innerText = "사용 가능한 닉네임입니다.";
+                }
+            })
+            .catch(error => {
+                console.error('에러 발생:', error);
+                msgSpan.style.color = "#FF4D4F";
+                msgSpan.innerText = "중복 체크 중 문제가 발생했습니다.";
+            });
+    }
+
+    // [이메일 중복확인] 버튼을 누르면 이 함수가 실행됩니다.
     function checkId() {
         let email = document.getElementById("email").value;
         let msgSpan = document.getElementById("idCheckMsg"); // 메시지가 뜰 <span> 태그
