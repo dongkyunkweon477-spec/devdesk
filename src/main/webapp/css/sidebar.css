@@ -546,7 +546,7 @@
     padding: 20px;
 }
 
-.sidebar {
+.main-layout .sidebar {
     width: 260px;
     flex-shrink: 0;
     display: flex;

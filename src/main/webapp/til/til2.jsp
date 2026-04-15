@@ -3,9 +3,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <link rel="stylesheet" href="css/base.css">
-<link rel="stylesheet" href="css/til.css">
 <link rel="stylesheet" href="css/index.css">
 <link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/til.css">
 <div class="page-wrap">
 
     <button class="hamburger">☰</button>
@@ -128,7 +128,7 @@
                                 <div class="til-card-title">${t.title}</div>
                                 <c:if test="${not empty t.content}">
                                     <div class="til-card-preview">
-                                            ${fn:substring(t.content, 0, 100)}${fn:length(t.content) > 100 ? '...' : ''}
+                                            ${fn:escapeXml(fn:substring(t.content, 0, 100))}${fn:length(t.content) > 100 ? '...' : ''}
                                     </div>
                                 </c:if>
                                 <div class="til-card-footer">
