@@ -4,8 +4,17 @@
 <html>
 <head>
     <title>DevDesk</title>
+    <%--  선민 추가  --%>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/base.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/account.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/login.css">
+    <%--  선민 추가  --%>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/index.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <%-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> --%>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body class="account-body">

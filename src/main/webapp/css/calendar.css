@@ -13,7 +13,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    background-color: #ffffff;
+    background-color: var(--bg, #ffffff);
 }
 
 .calendar-main {
@@ -24,18 +24,19 @@
     position: relative;
     width: 100%;
 }
+
 /* (이하 기존 코드 동일) */
 
 #calendar {
     flex: 1;
     width: 100%;
     height: 100%;
-    background-color: #ffffff;
+    background-color: var(--surface, #ffffff);
     padding: 0;
     border-radius: 0; /* ★ 테두리 둥글기 제거 */
     box-shadow: none; /* ★ 그림자 제거 */
     border: none; /* ★ 달력 전체를 감싸는 바깥쪽 박스 테두리 제거 */
-    color: var(--text-primary);
+    color: var(--text, #1a1d2e);
     min-height: 0;
     overflow: hidden;
 }
@@ -62,16 +63,16 @@
     margin: 0 15px !important;
     font-size: 1.4em !important;
     font-weight: 500 !important;
-    color: #3c4043;
+    color: var(--text, #3c4043);
     display: flex !important;
     align-items: center;
     gap: 6px;
 }
 
 .fc .fc-button-primary {
-    background-color: transparent !important;
-    border: 1px solid #dadce0 !important;
-    color: #3c4043 !important;
+    background-color: var(--surface, transparent) !important;
+    border: 1px solid var(--border, #dadce0) !important;
+    color: var(--text, #3c4043) !important;
     border-radius: 4px !important;
     transition: all 0.15s;
     text-transform: capitalize !important;
@@ -79,21 +80,48 @@
     font-size: 13px !important;
     font-weight: 500 !important;
 }
+
 .fc .fc-button-primary:hover {
-    background-color: #f1f3f4 !important;
+    background-color: var(--surface2, #f1f3f4) !important;
 }
 
 /* =======================================================
    달력 내부 레이아웃 강제
 ======================================================= */
-#calendar .fc { height: 100%; }
-#calendar .fc-view-harness { height: 100% !important; flex: 1; min-height: 0; }
-#calendar .fc-daygrid-body { width: 100% !important; }
-#calendar .fc-daygrid-body table { height: 100%; }
-#calendar .fc-scrollgrid-sync-table { height: 100% !important; }
-#calendar .fc-daygrid-day { height: auto !important; min-height: 0 !important; }
-#calendar .fc-daygrid-day-frame { min-height: 0 !important; }
-#calendar .fc-daygrid-day-events { min-height: 72px; }
+#calendar .fc {
+    height: 100%;
+}
+
+#calendar .fc-view-harness {
+    height: 100% !important;
+    flex: 1;
+    min-height: 0;
+}
+
+#calendar .fc-daygrid-body {
+    width: 100% !important;
+}
+
+#calendar .fc-daygrid-body table {
+    height: 100%;
+}
+
+#calendar .fc-scrollgrid-sync-table {
+    height: 100% !important;
+}
+
+#calendar .fc-daygrid-day {
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+#calendar .fc-daygrid-day-frame {
+    min-height: 0 !important;
+}
+
+#calendar .fc-daygrid-day-events {
+    min-height: 72px;
+}
 
 /* =======================================================
    달력 그리드 & 선 (구글 캘린더 룩)
@@ -102,7 +130,7 @@
 .fc-theme-standard td,
 .fc-theme-standard th,
 .fc-theme-standard .fc-scrollgrid {
-    border-color: #dadce0 !important;
+    border-color: var(--border, #dadce0) !important;
 }
 
 /* 2. 가장 바깥쪽 테두리를 지워서 화면과 일체화 */
@@ -114,7 +142,7 @@
 
 /* 3. 요일(월, 화, 수) 스타일 */
 .fc .fc-col-header-cell-cushion {
-    color: #70757a;
+    color: var(--text2, #70757a);
     font-weight: 500;
     font-size: 12px;
     padding: 8px 0 !important;
@@ -122,7 +150,7 @@
 
 /* 4. 날짜 숫자 스타일 */
 .fc .fc-daygrid-day-number {
-    color: #3c4043;
+    color: var(--text, #3c4043);
     font-size: 12px;
     font-weight: 500;
     padding: 0 !important;
@@ -139,20 +167,29 @@
 .fc .fc-day-today {
     background-color: transparent !important;
 }
+
 .fc .fc-day-today .fc-daygrid-day-number {
-    background-color: #1a73e8 !important; /* 구글 파란색 */
+    background-color: var(--accent, #1a73e8) !important; /* 구글 파란색 또는 테마 강조색 */
     color: #ffffff !important;
 }
 
-.fc .fc-day-sun .fc-col-header-cell-cushion { color: #d93025 !important; }
-.fc .fc-day-sun .fc-daygrid-day-number       { color: #d93025 !important; }
-.fc .fc-day-today.fc-day-sun .fc-daygrid-day-number { color: #ffffff !important; }
+.fc .fc-day-sun .fc-col-header-cell-cushion {
+    color: #ef4444 !important; /* base.css 에 있는 red 계열로 통일하거나 하드코딩 유지 */
+}
+
+.fc .fc-day-sun .fc-daygrid-day-number {
+    color: #ef4444 !important;
+}
+
+.fc .fc-day-today.fc-day-sun .fc-daygrid-day-number {
+    color: #ffffff !important;
+}
 
 /* =======================================================
    이벤트 블록 (선에 안 붙고 살짝 띄워진 스타일)
 ======================================================= */
 .fc-h-event {
-    background-color: var(--accent-primary, #8e5ae5) !important;
+    background-color: var(--accent2, #8e5ae5) !important;
     border: none !important;
     border-radius: 4px !important;
     margin: 1px 8px !important; /* ★ 칸을 꽉 채우지 않고 양옆에 여백 주기 */
@@ -164,18 +201,20 @@
     box-shadow: none !important;
     transition: opacity 0.2s ease;
 }
+
 .fc-event-main {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 .fc-h-event:hover {
     opacity: 0.82 !important;
 }
 
 .fc-daygrid-more-link {
     font-size: 11px !important;
-    color: #1a73e8 !important;
+    color: var(--accent, #1a73e8) !important;
     font-weight: 600;
     margin-left: 8px !important;
 }
@@ -190,7 +229,7 @@
     border: none;
     font-size: 20px !important;
     font-weight: 500;
-    color: #3c4043 !important;
+    color: var(--text, #3c4043) !important;
     cursor: pointer;
     padding: 2px 20px 2px 2px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233c4043' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
@@ -200,7 +239,16 @@
     outline: none;
     font-family: inherit;
 }
-.fc-custom-select option { font-size: 15px; }
+
+[data-theme="dark"] .fc-custom-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f8fafc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+.fc-custom-select option {
+    font-size: 15px;
+    background-color: var(--surface);
+    color: var(--text);
+}
 
 /* =======================================================
    이벤트 팝업 (기존 유지)
@@ -208,74 +256,306 @@
 #event-popup {
     display: none;
     position: fixed;
-    background: #fff;
-    border: 1px solid #dadce0;
+    background: var(--surface, #fff);
+    border: 1px solid var(--border, #dadce0);
     padding: 16px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     z-index: 1000;
     width: 250px;
 }
+
 #event-popup h3 {
     margin: 0 0 10px 0;
-    color: #1a73e8;
+    color: var(--accent, #1a73e8);
     font-size: 15px;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border, #e2e8f0);
     padding-bottom: 8px;
     padding-right: 20px;
 }
-.pop-info { margin-bottom: 7px; font-size: 13px; color: #5f6368; display: flex; gap: 8px; }
-.pop-info strong { color: #3c4043; font-weight: 600; min-width: 36px; flex-shrink: 0; }
-.pop-close { float: right; cursor: pointer; color: #9aa0a6; font-weight: bold; font-size: 14px; }
-.pop-close:hover { color: #5f6368; }
+
+.pop-info {
+    margin-bottom: 7px;
+    font-size: 13px;
+    color: var(--text2, #5f6368);
+    display: flex;
+    gap: 8px;
+}
+
+.pop-info strong {
+    color: var(--text, #3c4043);
+    font-weight: 600;
+    min-width: 36px;
+    flex-shrink: 0;
+}
+
+.pop-close {
+    float: right;
+    cursor: pointer;
+    color: var(--text3, #9aa0a6);
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.pop-close:hover {
+    color: var(--text2, #5f6368);
+}
 
 /* =======================================================
    모달 (기존 유지)
 ======================================================= */
 #modal-backdrop {
-    display: none; position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%; background: rgba(0,0,0,0.45);
-    z-index: 999; backdrop-filter: blur(3px);
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 999;
+    backdrop-filter: blur(3px);
 }
+
 #schedule-modal {
-    display: none; position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); background: #fff;
-    padding: 26px; border-radius: 14px; width: 350px;
-    z-index: 1000; box-shadow: 0 20px 40px -8px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--surface, #fff);
+    padding: 26px;
+    border-radius: 14px;
+    width: 350px;
+    z-index: 1000;
+    box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.2);
+    max-height: 90vh;
+    overflow-y: auto;
 }
+
 #schedule-modal h3 {
-    margin-top: 0; color: #1a202c; border-bottom: 2px solid #e2e8f0;
-    padding-bottom: 12px; font-size: 17px; margin-bottom: 18px;
+    margin-top: 0;
+    color: var(--text, #1a202c);
+    border-bottom: 2px solid var(--border, #e2e8f0);
+    padding-bottom: 12px;
+    font-size: 17px;
+    margin-bottom: 18px;
 }
-.modal-btn-search { padding: 8px 12px; background: var(--accent-primary, #8e5ae5); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; }
-.modal-btn-search:hover { background: var(--accent-hover, #7c3aed); }
 
-.form-group { margin-bottom: 14px; }
-.form-group label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 5px; color: #64748b; }
-.form-group input, .form-group select { width: 100%; padding: 9px 11px; box-sizing: border-box; background-color: #f8fafc; color: #1a202c; border: 1px solid #cbd5e1; border-radius: 7px; font-size: 13px; font-family: inherit; }
-.form-group input:focus, .form-group select:focus { border-color: var(--accent-primary, #8e5ae5); outline: none; box-shadow: 0 0 0 3px rgba(142, 90, 229, 0.15); }
+.modal-btn-search {
+    padding: 8px 12px;
+    background: var(--accent2, #8e5ae5);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
 
-.btn-group, .btn-group-sm { display: flex; gap: 8px; margin-top: 20px; }
-.btn-group-sm { border-top: 1px solid #e2e8f0; padding-top: 12px; margin-top: 14px; }
-.btn-save, .btn-edit { background: var(--accent-primary, #8e5ae5); color: #fff; flex: 1; border: none; padding: 10px; border-radius: 7px; cursor: pointer; font-weight: 700; font-size: 13px; }
-.btn-cancel { background: #f1f5f9; color: #64748b; flex: 1; border: none; padding: 10px; border-radius: 7px; cursor: pointer; font-weight: 700; font-size: 13px; }
-.btn-delete { background: #ef4444; color: #fff; flex: 1; border: none; padding: 10px; border-radius: 7px; cursor: pointer; font-weight: 700; font-size: 13px; }
+.modal-btn-search:hover {
+    background: var(--accent-hover, #7c3aed);
+}
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--text2, #64748b);
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 9px 11px;
+    box-sizing: border-box;
+    background-color: var(--surface2, #f8fafc);
+    color: var(--text, #1a202c);
+    border: 1px solid var(--border, #cbd5e1);
+    border-radius: 7px;
+    font-size: 13px;
+    font-family: inherit;
+}
+
+.form-group input:focus, .form-group select:focus {
+    border-color: var(--accent2, #8e5ae5);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(142, 90, 229, 0.15);
+}
+
+.btn-group, .btn-group-sm {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.btn-group-sm {
+    border-top: 1px solid var(--border, #e2e8f0);
+    padding-top: 12px;
+    margin-top: 14px;
+}
+
+.btn-save, .btn-edit {
+    background: var(--accent2, #8e5ae5);
+    color: #fff;
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.btn-cancel {
+    background: var(--surface2, #f1f5f9);
+    color: var(--text2, #64748b);
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.btn-delete {
+    background: #ef4444;
+    color: #fff;
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+}
 
 /* =======================================================
    알림/확인 모달 오버레이 (기존 유지)
 ======================================================= */
-.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); z-index: 10001; align-items: center; justify-content: center; }
-.modal-box { background: #fff; padding: 28px 24px; border-radius: 12px; width: 300px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border: 1px solid #e2e8f0; }
-.modal-box p { font-size: 15px; font-weight: 600; color: #1a202c; margin-bottom: 18px; line-height: 1.5; }
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 10001;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-box {
+    background: var(--surface, #fff);
+    padding: 28px 24px;
+    border-radius: 12px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border, #e2e8f0);
+}
+
+.modal-box p {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text, #1a202c);
+    margin-bottom: 18px;
+    line-height: 1.5;
+}
 
 /* =======================================================
    FAB (플로팅 액션 버튼) (기존 유지)
 ======================================================= */
-.fab-container { position: absolute; bottom: 20px; right: 20px; z-index: 99; display: flex; flex-direction: column-reverse; align-items: center; gap: 12px; }
-.fab-main { width: 48px; height: 48px; border-radius: 50%; background: var(--accent-primary, #8e5ae5); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 14px rgba(142, 90, 229, 0.45); cursor: pointer; transition: transform 0.3s cubic-bezier(.34,1.56,.64,1); border: none; outline: none; }
-.fab-main.active { transform: rotate(45deg); }
-.fab-menu { display: none; flex-direction: column-reverse; gap: 10px; margin-bottom: 4px; }
-.fab-item { width: 40px; height: 40px; border-radius: 50%; background: #fff; border: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 17px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); cursor: pointer; position: relative; transition: transform 0.2s; }
-.fab-item:hover { transform: scale(1.12); }
-.fab-label { position: absolute; right: 52px; background: rgba(30, 30, 30, 0.85); color: #fff; padding: 5px 11px; border-radius: 5px; font-size: 12px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.2s; }
-.fab-item:hover .fab-label { opacity: 1; }
+.fab-container {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 12px;
+}
+
+.fab-main {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent2, #8e5ae5);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 4px 14px rgba(142, 90, 229, 0.45);
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(.34, 1.56, .64, 1);
+    border: none;
+    outline: none;
+}
+
+.fab-main.active {
+    transform: rotate(45deg);
+}
+
+.fab-menu {
+    display: none;
+    flex-direction: column-reverse;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.fab-item {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--surface, #fff);
+    border: 1px solid var(--border, #cbd5e1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.fab-item:hover {
+    transform: scale(1.12);
+}
+
+.fab-label {
+    position: absolute;
+    right: 52px;
+    background: rgba(30, 30, 30, 0.85);
+    color: #fff;
+    padding: 5px 11px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.fab-item:hover .fab-label {
+    opacity: 1;
+}
+
+/* Dark mode specific for FullCalendar internal classes that don't pick up variables easily */
+[data-theme="dark"] .fc-theme-standard td, 
+[data-theme="dark"] .fc-theme-standard th, 
+[data-theme="dark"] .fc-theme-standard .fc-scrollgrid {
+    border-color: var(--border, #334155) !important;
+}
+
+[data-theme="dark"] .fc-day-other {
+    background-color: var(--surface3, rgba(0,0,0,0.05));
+}

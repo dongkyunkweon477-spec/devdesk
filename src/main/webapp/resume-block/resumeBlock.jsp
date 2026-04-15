@@ -61,7 +61,7 @@
                     이력서 블록 라이브러리
                 </h1>
                 <p style="font-size:13px;color:var(--text3)">
-                    履歴書の項目をブロック単位で管理 — 志望動機、自己PR、長所短所を体系的に整理しましょう
+                    이력서 항목을 블록 단위로 관리 — 지원 동기, 자기 PR, 장단점을 체계적으로 정리하세요
                 </p>
             </div>
         </div>
@@ -106,15 +106,15 @@
                 <a href="${pageContext.request.contextPath}/resume-block?filter=star"
                    class="rb-filter-chip ${currentFilter == 'star' ? 'active' : ''}">⭐ 즐겨찾기</a>
                 <a href="${pageContext.request.contextPath}/resume-block?filter=shimei"
-                   class="rb-filter-chip ${currentFilter == 'shimei' ? 'active' : ''}">志望動機</a>
+                   class="rb-filter-chip ${currentFilter == 'shimei' ? 'active' : ''}">지원 동기</a>
                 <a href="${pageContext.request.contextPath}/resume-block?filter=jikopr"
-                   class="rb-filter-chip ${currentFilter == 'jikopr' ? 'active' : ''}">自己PR</a>
+                   class="rb-filter-chip ${currentFilter == 'jikopr' ? 'active' : ''}">자기 PR</a>
                 <a href="${pageContext.request.contextPath}/resume-block?filter=chosho"
-                   class="rb-filter-chip ${currentFilter == 'chosho' ? 'active' : ''}">長所・短所</a>
+                   class="rb-filter-chip ${currentFilter == 'chosho' ? 'active' : ''}">장단점</a>
                 <a href="${pageContext.request.contextPath}/resume-block?filter=keireki"
-                   class="rb-filter-chip ${currentFilter == 'keireki' ? 'active' : ''}">職務経歴</a>
+                   class="rb-filter-chip ${currentFilter == 'keireki' ? 'active' : ''}">직무 경력</a>
                 <a href="${pageContext.request.contextPath}/resume-block?filter=other"
-                   class="rb-filter-chip ${currentFilter == 'other' ? 'active' : ''}">その他</a>
+                   class="rb-filter-chip ${currentFilter == 'other' ? 'active' : ''}">기타</a>
             </div>
 
             <%-- Block list --%>
@@ -132,11 +132,11 @@
                             <div class="rb-card-header">
                                 <span class="rb-cat-badge cat-${block.categoryId}">
                                     <c:choose>
-                                        <c:when test="${block.categoryId == 'shimei'}">志望動機</c:when>
-                                        <c:when test="${block.categoryId == 'jikopr'}">自己PR</c:when>
-                                        <c:when test="${block.categoryId == 'chosho'}">長所・短所</c:when>
-                                        <c:when test="${block.categoryId == 'keireki'}">職務経歴</c:when>
-                                        <c:otherwise>その他</c:otherwise>
+                                        <c:when test="${block.categoryId == 'shimei'}">지원 동기</c:when>
+                                        <c:when test="${block.categoryId == 'jikopr'}">자기 PR</c:when>
+                                        <c:when test="${block.categoryId == 'chosho'}">장단점</c:when>
+                                        <c:when test="${block.categoryId == 'keireki'}">직무 경력</c:when>
+                                        <c:otherwise>기타</c:otherwise>
                                     </c:choose>
                                 </span>
                                 <div class="rb-card-meta">
@@ -204,10 +204,10 @@
                 <strong>복사</strong> 버튼으로 외부 지원 사이트에 바로 붙여넣기 할 수 있어요.
             </p>
 
-            <%-- 志望動機 --%>
+            <%-- 지원 동기 --%>
             <div class="rb-compose-card">
                 <div class="rb-compose-header">
-                    <span class="rb-cat-badge cat-shimei">志望動機</span>
+                    <span class="rb-cat-badge cat-shimei">지원 동기</span>
                     <select id="compose-sel-shimei" class="rb-compose-select"
                             onchange="selectCompose('shimei')">
                         <option value="">블록 선택...</option>
@@ -224,10 +224,10 @@
                 </div>
             </div>
 
-            <%-- 自己PR --%>
+            <%-- 자기 PR --%>
             <div class="rb-compose-card">
                 <div class="rb-compose-header">
-                    <span class="rb-cat-badge cat-jikopr">自己PR</span>
+                    <span class="rb-cat-badge cat-jikopr">자기 PR</span>
                     <select id="compose-sel-jikopr" class="rb-compose-select"
                             onchange="selectCompose('jikopr')">
                         <option value="">블록 선택...</option>
@@ -244,10 +244,10 @@
                 </div>
             </div>
 
-            <%-- 長所・短所 --%>
+            <%-- 장단점 --%>
             <div class="rb-compose-card">
                 <div class="rb-compose-header">
-                    <span class="rb-cat-badge cat-chosho">長所・短所</span>
+                    <span class="rb-cat-badge cat-chosho">장단점</span>
                     <select id="compose-sel-chosho" class="rb-compose-select"
                             onchange="selectCompose('chosho')">
                         <option value="">블록 선택...</option>
@@ -264,10 +264,10 @@
                 </div>
             </div>
 
-            <%-- 職務経歴 --%>
+            <%-- 직무 경력 --%>
             <div class="rb-compose-card">
                 <div class="rb-compose-header">
-                    <span class="rb-cat-badge cat-keireki">職務経歴</span>
+                    <span class="rb-cat-badge cat-keireki">직무 경력</span>
                     <select id="compose-sel-keireki" class="rb-compose-select"
                             onchange="selectCompose('keireki')">
                         <option value="">블록 선택...</option>
