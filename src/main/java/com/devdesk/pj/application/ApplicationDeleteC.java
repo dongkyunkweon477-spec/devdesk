@@ -15,9 +15,7 @@ public class ApplicationDeleteC extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ApplicationDAO.deleteApplication(request);
-        ApplicationDAO.selectAllCompanies(request);
-        ApplicationDAO.selectAllApplications(request);
-        request.getRequestDispatcher("/application/application_list.jsp").forward(request, response);
+        response.sendRedirect("application-list");
     }
 
 

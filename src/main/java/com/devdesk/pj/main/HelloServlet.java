@@ -10,8 +10,9 @@ public class HelloServlet extends HttpServlet {
 
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+//        AccountDAO.ADAO.loginCheck(request); // 로그인 하고 확인
         HttpSession session = request.getSession();
-        
+
         if (session.getAttribute("user") != null) {
             // 로그인 한 상태라면 대시보드로 이동
             response.sendRedirect("dashboard");
