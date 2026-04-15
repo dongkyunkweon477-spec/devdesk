@@ -19,7 +19,6 @@
 .sidebar-logo {
     padding: 10px 0px 10px;
     flex-shrink: 0;
-    border-bottom: 1px solid var(--border);
 }
 
 .logo-mark {
