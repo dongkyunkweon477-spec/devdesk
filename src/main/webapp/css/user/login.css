@@ -101,6 +101,7 @@
     margin-right: 8px; /* 로고와 텍스트 사이 간격 */
 }
 
+
 /* 비밀번호 재설정 완료 후 성공 안내 메시지 */
 .reset-success-msg {
     color: #16a34a;
@@ -161,26 +162,27 @@
     color: var(--text-tertiary);
 }
 
-[data-theme="dark"] .login-options a {
-    color: var(--accent-secondary);
-}
+    [data-theme="dark"] .login-options a {
+        color: var(--accent-secondary);
+    }
 
-[data-theme="dark"] .divider {
-    color: var(--text-tertiary);
-}
+    [data-theme="dark"] .divider {
+        color: var(--text-tertiary);
+    }
 
-[data-theme="dark"] .divider::before,
-[data-theme="dark"] .divider::after {
-    border-bottom-color: var(--border-secondary);
-}
+    [data-theme="dark"] .divider::before,
+    [data-theme="dark"] .divider::after {
+        border-bottom-color: var(--border-secondary);
+    }
 
-[data-theme="dark"] .btn-google {
-    background-color: var(--bg-tertiary);
-    color: var(--text-primary);
-    border-color: var(--border-primary);
-}
+    [data-theme="dark"] .btn-google {
+        background-color: var(--bg-tertiary);
+        color: var(--text-primary);
+        border-color: var(--border-primary);
+    }
 
-[data-theme="dark"] .btn-google:hover {
-    background-color: var(--bg-secondary);
-    border-color: var(--accent-secondary);
-}
+    [data-theme="dark"] .btn-google:hover {
+        background-color: var(--bg-secondary);
+        border-color: var(--accent-secondary);
+
+    }

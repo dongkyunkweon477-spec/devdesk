@@ -1,4 +1,4 @@
-var currentBoardPage = 1;
+let currentBoardPage = 1;
 
 $(document).ready(function () {
     // 필터/정렬 변경 시 1페이지부터 재조회
@@ -38,7 +38,7 @@ function loadReviews(page) {
 }
 
 function renderReviews(reviews) {
-    var container = $('#reviewListArea');
+    let container = $('#reviewListArea');
     container.empty();
 
     if (!reviews || reviews.length === 0) {
@@ -46,16 +46,16 @@ function renderReviews(reviews) {
         return;
     }
 
-    var typeText = {CODING: '코딩테스트', TECH: '기술면접', PERSONAL: '인성면접', EXEC: '임원면접', GROUP: '그룹면접', PT: 'PT면접'};
-    var resultText = {PASS: '합격', FAIL: '불합격', PENDING: '대기중'};
-    var atmosText = {FRIENDLY: '화기애애', NORMAL: '보통', SERIOUS: '엄숙', PRESSURE: '압박'};
-    var contactText = {EMAIL: '이메일', PHONE: '전화', WEBSITE: '채용 홈페이지', NONE: '연락 없음'};
+    let typeText = {CODING: '코딩테스트', TECH: '기술면접', PERSONAL: '인성면접', EXEC: '임원면접', GROUP: '그룹면접', PT: 'PT면접'};
+    let resultText = {PASS: '합격', FAIL: '불합격', PENDING: '대기중'};
+    let atmosText = {FRIENDLY: '화기애애', NORMAL: '보통', SERIOUS: '엄숙', PRESSURE: '압박'};
+    let contactText = {EMAIL: '이메일', PHONE: '전화', WEBSITE: '채용 홈페이지', NONE: '연락 없음'};
 
-    var html = '';
+    let html = '';
     $.each(reviews, function (i, r) {
-        var dateStr = '';
+        let dateStr = '';
         if (r.reviewCreatedDate) {
-            var d = new Date(r.reviewCreatedDate);
+            let d = new Date(r.reviewCreatedDate);
             dateStr = d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
         }
 
@@ -98,16 +98,16 @@ function renderReviews(reviews) {
 }
 
 function renderPaging(totalPages) {
-    var pagingArea = $('#reviewPaging');
+    let pagingArea = $('#reviewPaging');
     pagingArea.empty();
 
     if (totalPages <= 1) return;
 
-    var html = '';
+    let html = '';
     if (currentBoardPage > 1) {
         html += '<a class="page-btn" onclick="loadReviews(' + (currentBoardPage - 1) + ')">이전</a>';
     }
-    for (var i = 1; i <= totalPages; i++) {
+    for (let i = 1; i <= totalPages; i++) {
         html += '<a class="page-btn ' + (i === currentBoardPage ? 'active' : '') + '" onclick="loadReviews(' + i + ')">' + i + '</a>';
     }
     if (currentBoardPage < totalPages) {
