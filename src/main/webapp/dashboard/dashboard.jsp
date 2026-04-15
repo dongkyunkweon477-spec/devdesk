@@ -30,7 +30,7 @@
         </div>
         <nav class="sidebar-nav">
             <div class="nav-section-label">메인</div>
-            <a href="${pageContext.request.contextPath}/dashboard" class="nav-item">
+            <a href="${pageContext.request.contextPath}/dashboard" class="nav-item active">
                 <span class="nav-icon">🏠</span>대시보드
             </a>
             <div class="nav-section-label">취업 관리</div>
@@ -41,7 +41,7 @@
                 <span class="nav-icon">📅</span>면접 일정
             </a>
             <div class="nav-section-label">이력서</div>
-            <a href="${pageContext.request.contextPath}/resume-block" class="nav-item active">
+            <a href="${pageContext.request.contextPath}/resume-block" class="nav-item">
                 <span class="nav-icon">📝</span>블록 라이브러리
             </a>
             <div class="nav-section-label">학습</div>

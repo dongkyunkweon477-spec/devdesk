@@ -99,8 +99,9 @@ function openDetail(id) {
         (el.dataset.time > 0
             ? '<span style="font-size:12px;color:var(--text3);margin-left:8px">⏱ ' + el.dataset.time + 'h</span>'
             : '');
-
-    document.getElementById('detailContent').innerHTML = renderMarkdown(el.dataset.content);
+    let result = renderMarkdown(el.dataset.content);
+    console.log(result)
+    document.getElementById('detailContent').innerHTML = result
     document.getElementById('detailEditBtn').onclick = function () {
         closeDetail();
         openTilEditor(id);
@@ -128,28 +129,21 @@ function closeConfirm() {
     document.getElementById('confirmOverlay').classList.remove('open');
 }
 
+function escapeHtml(str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+
 /* ── 마크다운 렌더러 ── */
 function renderMarkdown(text) {
     if (!text) return '<p style="color:var(--text3)">내용이 없어요.</p>';
-
-    // 1) 코드블록을 먼저 추출해서 보호
-    var codeBlocks = [];
-    text = text.replace(/```([\s\S]*?)```/g, function (_, code) {
-        codeBlocks.push(code);
-        return '%%CODEBLOCK_' + (codeBlocks.length - 1) + '%%';
-    });
-
-    var inlineCodes = [];
-    text = text.replace(/`([^`]+)`/g, function (_, code) {
-        inlineCodes.push(code);
-        return '%%INLINE_' + (inlineCodes.length - 1) + '%%';
-    });
-
-    // 2) HTML 태그 이스케이프
-    text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-    // 3) 마크다운 변환
-    text = text
+    text = escapeHtml(text);
+    return text
+        .replace(/```([\s\S]*?)```/g, '<pre class="md-code">$1</pre>')
+        .replace(/`([^`]+)`/g, '<code class="md-inline">$1</code>')
         .replace(/^### (.+)$/gm, '<h3 class="md-h3">$1</h3>')
         .replace(/^## (.+)$/gm, '<h2 class="md-h2">$1</h2>')
         .replace(/^# (.+)$/gm, '<h1 class="md-h1">$1</h1>')
@@ -157,18 +151,6 @@ function renderMarkdown(text) {
         .replace(/^- (.+)$/gm, '<li class="md-li">$1</li>')
         .replace(/\n\n/g, '</p><p class="md-p">')
         .replace(/\n/g, '<br>');
-
-    // 4) 코드블록 복원 (이스케이프된 상태로)
-    text = text.replace(/%%CODEBLOCK_(\d+)%%/g, function (_, i) {
-        var code = codeBlocks[i].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        return '<pre class="md-code">' + code + '</pre>';
-    });
-    text = text.replace(/%%INLINE_(\d+)%%/g, function (_, i) {
-        var code = inlineCodes[i].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        return '<code class="md-inline">' + code + '</code>';
-    });
-
-    return text;
 }
 
 /* ── 에디터 툴바 ── */

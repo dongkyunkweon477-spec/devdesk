@@ -19,7 +19,8 @@ import java.util.regex.Pattern;
 public class Schedule_newDAO {
     public static final Schedule_newDAO SCAO = new Schedule_newDAO();
 
-    private Schedule_newDAO() {}
+    private Schedule_newDAO() {
+    }
 
     public ArrayList<Schedule_newDTO> getCalendarEvents(int memberId) {
         ArrayList<Schedule_newDTO> list = new ArrayList<>();
@@ -60,16 +61,20 @@ public class Schedule_newDAO {
     private String mapTypeToStage(String type) {
         if (type == null) return "APPLIED";
         switch (type) {
-            case "코딩테스트": return "TECH_INTERVIEW";
-            case "1차면접": return "FIRST_INTERVIEW";
-            case "2차면접": return "SECOND_INTERVIEW";
-            case "임원면접": return "THIRD_INTERVIEW";
-            default: return "ETC";
+            case "코딩테스트":
+                return "TECH_INTERVIEW";
+            case "1차면접":
+                return "FIRST_INTERVIEW";
+            case "2차면접":
+                return "SECOND_INTERVIEW";
+            case "임원면접":
+                return "THIRD_INTERVIEW";
+            default:
+                return "ETC";
         }
     }
 
     public void addSchedule(HttpServletRequest request) throws Exception {
-
 
 
         try (Connection con = DBManager_new.connect()) {
@@ -352,7 +357,7 @@ public class Schedule_newDAO {
                     // ==============================================================
                     long timeWindowMillis = 12 * 60 * 60 * 1000L; // 현재 세팅: 12시간
                     // 서버가 꺼져있던 시간 대비해 확인하는 코드입니다
-                    // long timeWindowMillis = 60 * 1000L; // 발표 시연용 세팅: 1분 (나중에 바꿔주세요)
+//                    long timeWindowMillis = 60 * 1000L; // 발표 시연용 세팅: 1분 (나중에 바꿔주세요)
 
                     com.google.api.client.util.DateTime updatedMin =
                             new com.google.api.client.util.DateTime(System.currentTimeMillis() - timeWindowMillis);
@@ -379,20 +384,20 @@ public class Schedule_newDAO {
                             if (summary.contains(comp)) {
                                 matchedCompany = comp;
                                 // DB에서 찾은 회사 ID 조회
-                                try(PreparedStatement idStmt = con.prepareStatement("SELECT COMPANY_ID FROM COMPANY WHERE COMPANY_NAME = ?")) {
+                                try (PreparedStatement idStmt = con.prepareStatement("SELECT COMPANY_ID FROM COMPANY WHERE COMPANY_NAME = ?")) {
                                     idStmt.setString(1, matchedCompany);
                                     ResultSet idRs = idStmt.executeQuery();
-                                    if(idRs.next()) companyId = idRs.getInt("COMPANY_ID");
+                                    if (idRs.next()) companyId = idRs.getInt("COMPANY_ID");
                                 }
                                 break;
                             }
                         }
 
                         // 면접 전형(type) 유추
-                        if(summary.contains("코딩테스트")) type = "코딩테스트";
-                        else if(summary.contains("1차")) type = "1차면접";
-                        else if(summary.contains("2차")) type = "2차면접";
-                        else if(summary.contains("임원")) type = "임원면접";
+                        if (summary.contains("코딩테스트")) type = "코딩테스트";
+                        else if (summary.contains("1차")) type = "1차면접";
+                        else if (summary.contains("2차")) type = "2차면접";
+                        else if (summary.contains("임원")) type = "임원면접";
 
                         // 2. 시간 및 메모 정리
                         String memo = "[구글 자동등록] 원본: " + summary; // 유저가 쓴 원문 보존
@@ -437,13 +442,13 @@ public class Schedule_newDAO {
                             try {
                                 // 4-1. APP_ID 생성 및 APPLICATION 인서트
                                 int newAppId = 0;
-                                try(PreparedStatement seqStmt = con.prepareStatement("SELECT APPLICATION_SEQ.NEXTVAL FROM DUAL");
-                                    ResultSet seqRs = seqStmt.executeQuery()) {
-                                    if(seqRs.next()) newAppId = seqRs.getInt(1);
+                                try (PreparedStatement seqStmt = con.prepareStatement("SELECT APPLICATION_SEQ.NEXTVAL FROM DUAL");
+                                     ResultSet seqRs = seqStmt.executeQuery()) {
+                                    if (seqRs.next()) newAppId = seqRs.getInt(1);
                                 }
 
                                 String appSql = "INSERT INTO APPLICATION (APP_ID, MEMBER_ID, COMPANY_ID, POSITION, STAGE, CREATED_DATE) VALUES (?, ?, ?, ?, ?, SYSDATE)";
-                                try(PreparedStatement appStmt = con.prepareStatement(appSql)) {
+                                try (PreparedStatement appStmt = con.prepareStatement(appSql)) {
                                     appStmt.setInt(1, newAppId);
                                     appStmt.setInt(2, memberId);
                                     appStmt.setInt(3, companyId);
@@ -455,7 +460,7 @@ public class Schedule_newDAO {
                                 // 4-2. SCHEDULE 인서트 (이때 matchedCompany와 합쳐진 memo를 넣습니다)
                                 String schSql = "INSERT INTO SCHEDULE (SCHEDULE_ID, MEMBER_ID, COMPANY_NAME, SCHEDULE_DATE, SCHEDULE_TIME, INTERVIEW_TYPE, MEMO, APP_ID) " +
                                         "VALUES (SEQ_SCHEDULE.nextval, ?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ?)";
-                                try(PreparedStatement schStmt = con.prepareStatement(schSql)) {
+                                try (PreparedStatement schStmt = con.prepareStatement(schSql)) {
                                     schStmt.setInt(1, memberId);
                                     schStmt.setString(2, matchedCompany);
                                     schStmt.setString(3, dateStr);
