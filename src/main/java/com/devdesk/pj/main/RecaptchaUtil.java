@@ -19,7 +19,7 @@ public class RecaptchaUtil {
             Properties prop = new Properties();
             prop.load(input);
             secretKey = prop.getProperty("recaptcha.secret.key");
-            siteKey   = prop.getProperty("recaptcha.site.key");
+            siteKey = prop.getProperty("recaptcha.site.key");
             System.out.println("[reCAPTCHA] siteKey loaded: " + siteKey);
             System.out.println("[reCAPTCHA] secretKey loaded: " + secretKey);
         } catch (Exception e) {
@@ -32,7 +32,8 @@ public class RecaptchaUtil {
     }
 
     /**
-     * g-recaptcha-response 토큰을 Google API로 검증
+     * g-recaptcha-response 토큰을 Google Apps 검증
+     *
      * @return true면 사람, false면 봇 or 실패
      */
     public static boolean verify(String token) {

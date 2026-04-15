@@ -6,9 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @WebServlet("/company-search/ajax")
@@ -59,16 +57,12 @@ public class CompanySearchAjaxC extends HttpServlet {
                 .companySearchPaged(conditions, page, pageSize);
 
 // JSON 응답
-        List<String> companies = (List<String>) result.get("companies");
-        String json = "{"
-                + "\"companies\":[" + String.join(",", companies) + "],"
-                + "\"totalCount\":" + result.get("totalCount") + ","
-                + "\"totalPages\":" + result.get("totalPages") + ","
-                + "\"currentPage\":" + result.get("currentPage")
-                + "}";
+        com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
+                .setDateFormat("yyyy-MM-dd")
+                .create();
 
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(json);
+        response.getWriter().write(gson.toJson(result));
     }
 
     public void destroy() {

@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $('#likeBtn').on('click', function () {
-        var reviewId = $(this).data('id');
+        let reviewId = $(this).data('id');
 
         $.ajax({
             url: contextPath + '/review/like',
@@ -28,7 +28,7 @@ $(document).ready(function () {
 
 
     $('#bookmarkBtn').on('click', function () {
-        var reviewId = $(this).data('id');
+        let reviewId = $(this).data('id');
 
         $.ajax({
             url: contextPath + '/review/bookmark', // 북마크 컨트롤러 주소
