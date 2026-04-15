@@ -33,7 +33,7 @@
                 <input type="password" name="password" placeholder="비밀번호를 입력해주세요" required>
             </div>
 
-            <div class="g-recaptcha" data-sitekey="<%= RecaptchaUtil.getSiteKey() %>"></div>
+            <div class="g-recaptcha" style="display: flex; justify-content: center; margin-bottom: 15px;" data-sitekey="<%= RecaptchaUtil.getSiteKey() %>"></div>
 
             <div class="form-actions">
                 <button type="submit" class="btn-submit email-login-btn">이메일 로그인</button>

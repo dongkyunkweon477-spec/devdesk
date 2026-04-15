@@ -1,5 +1,5 @@
 $(function () {
-    var totalCompanyCount = parseInt($('#resultCount').text()) || 0;
+    let totalCompanyCount = parseInt($('#resultCount').text()) || 0;
     initToggleBtns();
     initSearch();
     initClear(totalCompanyCount);
@@ -30,7 +30,7 @@ function initToggleBtns() {
 
 let currentPage = 1;
 let currentFilteredReviewPage = 1;
-var activeSearchConditions = null;
+let activeSearchConditions = null;
 
 function doSearch(page) {
     if (!page) page = 1;
@@ -66,7 +66,7 @@ function doSearch(page) {
         showResult(data.companies);
         renderPagination(data.totalPages);
 
-        var conditions = {
+        let conditions = {
             companyName: $('#companyName').val(),
             companyIndustry: industries.join(','),
             companyLocation: locations.join(','),
@@ -86,7 +86,7 @@ function doSearch(page) {
 function loadFilteredReviews(conditions, page) {
     activeSearchConditions = conditions;
     currentFilteredReviewPage = page;
-    var cp = $('#contextPath').val();
+    let cp = $('#contextPath').val();
     $.ajax({
         url: cp + '/review/filter/ajax',
         type: 'get',
@@ -117,15 +117,15 @@ function loadFilteredReviews(conditions, page) {
 }
 
 function renderFilteredPaging(totalPages) {
-    var pagingArea = $('#reviewPaging');
+    let pagingArea = $('#reviewPaging');
     pagingArea.empty();
     if (totalPages <= 1) return;
 
-    var html = '';
+    let html = '';
     if (currentFilteredReviewPage > 1) {
         html += '<a class="page-btn" onclick="loadFilteredReviews(activeSearchConditions, ' + (currentFilteredReviewPage - 1) + ')">이전</a>';
     }
-    for (var i = 1; i <= totalPages; i++) {
+    for (let i = 1; i <= totalPages; i++) {
         html += '<a class="page-btn ' + (i === currentFilteredReviewPage ? 'active' : '') + '" onclick="loadFilteredReviews(activeSearchConditions, ' + i + ')">' + i + '</a>';
     }
     if (currentFilteredReviewPage < totalPages) {
@@ -170,7 +170,7 @@ function initSearch() {
 
 /* ===== 결과 카드 렌더링 ===== */
 function showResult(data) {
-    var container = $('#resultArea');
+    let container = $('#resultArea');
     container.empty();
 
     if (!data || data.length === 0) {
@@ -178,17 +178,17 @@ function showResult(data) {
         return;
     }
 
-    var role = $('#userRole').val();
-    var html = '<div class="cs-grid">';
+    let role = $('#userRole').val();
+    let html = '<div class="cs-grid">';
 
     $.each(data, function (i, c) {
-        var rating = c.calcRating || 0;
-        var stars = '';
-        for (var s = 1; s <= 5; s++) {
+        let rating = c.calcRating || 0;
+        let stars = '';
+        for (let s = 1; s <= 5; s++) {
             stars += '<span class="' + (s <= rating ? 'on' : '') + '">★</span>';
         }
 
-        var editLink = '';
+        let editLink = '';
         if (role === 'ADMIN') {
             editLink = '<span class="cs-action" onclick="event.preventDefault(); location.href=\'/company/edit?companyId=' + c.companyId + '\'">수정</span>';
         }

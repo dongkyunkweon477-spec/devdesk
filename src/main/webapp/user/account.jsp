@@ -47,7 +47,7 @@
                 </select>
             </div>
 
-            <div class="g-recaptcha" data-sitekey="<%= RecaptchaUtil.getSiteKey() %>"></div>
+            <div class="g-recaptcha" style="display: flex; justify-content: center; margin-bottom: 15px;" data-sitekey="<%= RecaptchaUtil.getSiteKey() %>"></div>
 
             <div class="form-actions">
                 <button type="submit" class="btn-submit">가입완료</button>
