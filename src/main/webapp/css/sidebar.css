@@ -1,18 +1,18 @@
 /* ═══════════════════════════════
    SIDEBAR BASE
 ═══════════════════════════════ */
+/* 선민 수정 */
 .sidebar {
+    width: 240px;
     position: fixed;
     left: 0;
-    top: 70px;
-    bottom: 0;
-    width: 240px;
-    background: var(--surface, #ffffff);
-    border-right: 1px solid var(--border, #e2e8f0);
+    background: var(--surface);
     display: flex;
     flex-direction: column;
-    z-index: 200;
-    overflow: hidden;
+    z-index: 100;
+    transition: transform 0.25s;
+    top: 0;
+    height: 100vh;
 }
 
 /* 선민 수정 */
@@ -140,6 +140,7 @@
 ======================================================= */
 .week-nav-toggle {
     display: flex;
+    margin-top: 70px;
     align-items: center;
     gap: 10px;
     padding: 9px 12px;
@@ -423,8 +424,8 @@
 ======================================================= */
 #sidebar-mini-calendar {
     flex-shrink: 0;
-    margin: 0;
-    /* 기존 패딩 유지 */
+    margin-top: auto !important; /* 위쪽 공간을 다 채우고 바닥으로 밀어냄 */
+    /*↑ 기존 margin: 0*/
     padding: 10px 14px 16px;
     border-top: 1px solid var(--border, #e2e8f0);
     background: transparent;

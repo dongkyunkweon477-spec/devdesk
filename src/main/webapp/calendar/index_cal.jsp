@@ -558,7 +558,7 @@
 
             var firstDay = new Date(year, month, 1), lastDay = new Date(year, month + 1, 0);
             var prevLast = new Date(year, month, 0).getDate();
-            var firstIdx = (firstDay.getDay() + 6) % 7;
+            var firstIdx = firstDay.getDay();
             var html = '';
 
             for (var i = firstIdx; i > 0; i--)

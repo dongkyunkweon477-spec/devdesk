@@ -44,7 +44,8 @@
             </a>
         </nav>
 
-        <div id="sidebar-mini-calendar" style="margin-top: auto; border-top: 1px solid var(--border, #e2e8f0); padding-top: 15px; padding-bottom: 20px;">
+        <div id="sidebar-mini-calendar" style="margin-top: auto; ">
+<%-- 원본서식 :border-top: 1px solid var(--border, #e2e8f0); padding-top: 15px; padding-bottom: 20px;--%>
             <div class="g-cal-header">
                 <button class="g-nav-btn" id="g-prev-month">❮</button>
                 <span class="g-cal-title" id="g-cal-title"></span>
@@ -310,16 +311,19 @@
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
+    // 1. 서버 데이터(JSTL)를 JS 변수로 변환 (이 부분은 외부 JS파일에서 실행 불가하므로 JSP에 남겨야 함)
     const TAG_STATS = [
         <c:forEach var="entry" items="${tagStats}" varStatus="vs">
         {tag: '${entry.key}', count: ${entry.value}}${vs.last ? '' : ','}
         </c:forEach>
     ];
+
     const RAW_EVENTS = [
         <c:forEach var="sch" items="${schList}">
         '<fmt:formatDate value="${sch.schedule_date}" pattern="yyyy-MM-dd" />',
         </c:forEach>
     ];
+
     const CTX_PATH = '${pageContext.request.contextPath}';
 </script>
 <script src="${pageContext.request.contextPath}/js/til/til.js"></script>
