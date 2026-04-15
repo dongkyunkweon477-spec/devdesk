@@ -101,7 +101,6 @@
     margin-right: 8px; /* 로고와 텍스트 사이 간격 */
 }
 
-<<<<<<< HEAD
 /* 비밀번호 재설정 완료 후 성공 안내 메시지 */
 .reset-success-msg {
     color: #16a34a;
@@ -155,8 +154,8 @@
 
 .form-actions {
     margin-top: 10px;
+}
 
-=======
 /* ===== 다크 모드 (주야간 토글) =====  선민 추가 */
 [data-theme="dark"] .login-options {
     color: var(--text-tertiary);
@@ -184,5 +183,4 @@
 [data-theme="dark"] .btn-google:hover {
     background-color: var(--bg-secondary);
     border-color: var(--accent-secondary);
->>>>>>> 47913c593aa4770f5f941787c5393a39c66befad
 }
