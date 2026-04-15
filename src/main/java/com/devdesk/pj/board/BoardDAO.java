@@ -304,7 +304,8 @@ ps.setString(4, request.getParameter("txt"));
                     String updated_date = rs.getString("b_updated_date");
                     int view_count = rs.getInt("b_view_count");
                     int like_count = rs.getInt("b_like_count");
-                    char hidden_yn = rs.getString("b_hidden_yn").charAt(0);
+                    String hiddenYnStr = rs.getString("b_hidden_yn");
+                    char hidden_yn = (hiddenYnStr != null && !hiddenYnStr.isEmpty()) ? hiddenYnStr.charAt(0) : 'N';
                     String nickname = rs.getString("nickname");
 
                     boardVO = new BoardVO();
@@ -349,6 +350,9 @@ ps.setString(4, request.getParameter("txt"));
                 "JOIN member m ON b.member_id = m.member_id ";
 
         // 검색 타입에 따른 WHERE 절 추가
+        if (searchType == null) {
+            return showAllBoard(request);
+        }
         switch (searchType) {
             case "title":
                 sql += "WHERE b.b_title LIKE ? ";
