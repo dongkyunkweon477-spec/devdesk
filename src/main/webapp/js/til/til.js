@@ -1,21 +1,23 @@
 /* TAG_STATS, RAW_EVENTS, CTX_PATH 는 til2.jsp 인라인 스크립트에서 주입됩니다. */
 
 const TAG_CONFIG = {
-    'Java':       {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
-    'Spring':     {color: '#56e39f', bg: 'rgba(86,227,159,0.12)'},
-    'SQL':        {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
+    'Java': {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
+    'Spring': {color: '#56e39f', bg: 'rgba(86,227,159,0.12)'},
+    'SQL': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
     'JavaScript': {color: '#ffd166', bg: 'rgba(255,209,102,0.12)'},
-    'Git':        {color: '#ff6b6b', bg: 'rgba(255,107,107,0.12)'},
-    'Python':     {color: '#5b7cf8', bg: 'rgba(91,124,248,0.12)'},
-    'CSS':        {color: '#8b6ef5', bg: 'rgba(139,110,245,0.12)'},
-    'React':      {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
-    '기타':       {color: '#9da3b8', bg: 'rgba(157,163,184,0.12)'}
+    'Git': {color: '#ff6b6b', bg: 'rgba(255,107,107,0.12)'},
+    'Python': {color: '#5b7cf8', bg: 'rgba(91,124,248,0.12)'},
+    'CSS': {color: '#8b6ef5', bg: 'rgba(139,110,245,0.12)'},
+    'React': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
+    '기타': {color: '#9da3b8', bg: 'rgba(157,163,184,0.12)'}
 };
 
 /* ── 도넛 차트 ── */
 function drawDonut() {
     if (!TAG_STATS.length) return;
-    var total = TAG_STATS.reduce(function (a, d) { return a + d.count; }, 0);
+    var total = TAG_STATS.reduce(function (a, d) {
+        return a + d.count;
+    }, 0);
     var canvas = document.getElementById('donutCanvas');
     var ctx = canvas.getContext('2d');
     var cx = 65, cy = 65, r = 50, ir = 30, gap = 0.04;
@@ -97,8 +99,9 @@ function openDetail(id) {
         (el.dataset.time > 0
             ? '<span style="font-size:12px;color:var(--text3);margin-left:8px">⏱ ' + el.dataset.time + 'h</span>'
             : '');
-
-    document.getElementById('detailContent').innerHTML = renderMarkdown(el.dataset.content);
+    let result = renderMarkdown(el.dataset.content);
+    console.log(result)
+    document.getElementById('detailContent').innerHTML = result
     document.getElementById('detailEditBtn').onclick = function () {
         closeDetail();
         openTilEditor(id);
@@ -126,9 +129,18 @@ function closeConfirm() {
     document.getElementById('confirmOverlay').classList.remove('open');
 }
 
+function escapeHtml(str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+
 /* ── 마크다운 렌더러 ── */
 function renderMarkdown(text) {
     if (!text) return '<p style="color:var(--text3)">내용이 없어요.</p>';
+    text = escapeHtml(text);
     return text
         .replace(/```([\s\S]*?)```/g, '<pre class="md-code">$1</pre>')
         .replace(/`([^`]+)`/g, '<code class="md-inline">$1</code>')

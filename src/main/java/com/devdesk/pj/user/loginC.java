@@ -1,6 +1,12 @@
 package com.devdesk.pj.user;
 
+<<<<<<< HEAD
 //import com.devdesk.pj.main.RecaptchaUtil;
+=======
+// import com.devdesk.pj.main.RecaptchaUtil;
+
+import com.devdesk.pj.main.RecaptchaUtil;
+>>>>>>> 47913c593aa4770f5f941787c5393a39c66befad
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +29,11 @@ public class loginC extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
+<<<<<<< HEAD
 //        String token = request.getParameter("g-recaptcha-response");
+=======
+        String token = request.getParameter("g-recaptcha-response");
+>>>>>>> 47913c593aa4770f5f941787c5393a39c66befad
 //        System.out.println("[reCAPTCHA] token: [" + token + "]");
 //        if (!RecaptchaUtil.verify(token)) {
 //            request.setAttribute("msg", "보안 인증에 실패했습니다. 다시 시도해주세요.");

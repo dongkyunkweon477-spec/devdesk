@@ -268,3 +268,111 @@
     box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
 
 }
+
+/* ───────────────────────────────────────────
+   🌙 [NEW] 다크 모드 (주야간 토글 대응) 선민 추가
+─────────────────────────────────────────── */
+[data-theme="dark"] .myboard-wrap {
+    background: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .myboard-title {
+    color: #f8fafc;
+}
+
+[data-theme="dark"] .myboard-sub {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .tab-menu {
+    background: #0f172a;
+}
+
+[data-theme="dark"] .tab-btn {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .tab-btn:hover {
+    color: #f8fafc;
+}
+
+[data-theme="dark"] .tab-btn.active {
+    background: #1e293b;
+    color: #a78bfa;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .list-table th {
+    border-bottom-color: #334155;
+    color: #64748b;
+}
+
+[data-theme="dark"] .list-table td {
+    background: #1e293b;
+    color: #cbd5e1;
+    border-bottom-color: #334155;
+}
+
+[data-theme="dark"] .list-table tbody tr:hover td {
+    background-color: #334155;
+}
+
+[data-theme="dark"] .list-table .td-title a {
+    color: #f8fafc;
+}
+
+[data-theme="dark"] .list-table tbody tr:hover .td-title a {
+    color: #a78bfa;
+}
+
+[data-theme="dark"] .category-badge {
+    background: #0f172a;
+    color: #cbd5e1;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .list-table tbody tr:hover .category-badge {
+    background: #1e293b;
+    color: #a78bfa;
+    border-color: #4c1d95;
+}
+
+[data-theme="dark"] .list-table .td-title span {
+    background: #4c1d95;
+    color: #ddd6fe !important;
+}
+
+[data-theme="dark"] .empty-msg {
+    color: #64748b;
+}
+
+[data-theme="dark"] #tab-comments .list-table tbody tr:hover td {
+    background-color: #0f172a !important;
+}
+
+[data-theme="dark"] #tab-comments .list-table tbody tr:hover .td-title a {
+    color: #c4b5fd;
+}
+
+[data-theme="dark"] #tab-comments .list-table tbody tr:hover td:first-child {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .page-btn {
+    background: #1e293b;
+    border-color: #334155;
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .page-btn:hover {
+    border-color: #a78bfa;
+    color: #a78bfa;
+}
+
+[data-theme="dark"] .page-btn.active {
+    background: #7c3aed;
+    color: #ffffff;
+    border-color: #7c3aed;
+}

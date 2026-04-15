@@ -8,7 +8,7 @@
     const GLOBAL_BOARD_ID = "${board.board_id}";
     const GLOBAL_MEMBER_ID = "${not empty sessionScope.user ? sessionScope.user.member_id : ''}";
 </script>
-<script src="${pageContext.request.contextPath}/js/boardDetail.js" defer></script>
+<script src="${pageContext.request.contextPath}/js/board/board-detail.js" defer></script>
 
 
 <html>

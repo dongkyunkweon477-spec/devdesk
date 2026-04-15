@@ -43,6 +43,10 @@ dependencies {
     implementation 'com.google.apis:google-api-services-calendar:v3-rev20220715-2.0.0'
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.34.1'
     implementation 'org.json:json:20231013'
+<<<<<<< HEAD
+=======
+
+>>>>>>> 47913c593aa4770f5f941787c5393a39c66befad
     implementation 'org.quartz-scheduler:quartz:2.3.2'
 }
 
