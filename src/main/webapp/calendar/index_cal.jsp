@@ -7,7 +7,7 @@
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<script src="${pageContext.request.contextPath}/js/companySearchModal.js"></script>
+<script src="${pageContext.request.contextPath}/js/company/company-search-modal.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
