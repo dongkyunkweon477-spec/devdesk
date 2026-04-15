@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%-- <%@ page import="com.devdesk.pj.main.RecaptchaUtil" %> --%>
+<%@ page import="com.devdesk.pj.main.RecaptchaUtil" %>
 <html>
 <head>
     <title>DevDesk</title>
@@ -41,7 +41,7 @@
                 <input type="password" name="password" placeholder="비밀번호를 입력해주세요" required>
             </div>
 
-            <%-- <div class="g-recaptcha" data-sitekey="<%= RecaptchaUtil.getSiteKey() %>"></div> --%>
+            <div class="g-recaptcha" data-sitekey="<%= RecaptchaUtil.getSiteKey() %>"></div>
 
             <div class="form-actions">
                 <button type="submit" class="btn-submit email-login-btn">이메일 로그인</button>
@@ -68,8 +68,9 @@
                 </a>
             </div>
 
-            <div class="login-options" style="margin-top: 25px;">
-                <span>아직 회원이 아니신가요?</span>
+            <div class="login-options">
+                <a href="find-password">비밀번호 찾기</a>
+                <span class="divider-bar">|</span>
                 <a href="account">회원가입 하기</a>
             </div>
 
