@@ -75,7 +75,6 @@
                 <input type="text" id="companyName" placeholder="기업명을 입력하세요"/>
             </div>
         </div>
-        <button class="cs-search-btn" onclick="location.href='/company/insert'">임시버튼</button>
     </div>
 
     <%-- ===== 검색 바 ===== --%>
@@ -94,4 +93,4 @@
     <div id="companyPaging" class="cs-paging"></div>
 </div>
 
-<script src="${pageContext.request.contextPath}/js/companySearch.js"></script>
+<script src="${pageContext.request.contextPath}/js/company/company-search.js"></script>

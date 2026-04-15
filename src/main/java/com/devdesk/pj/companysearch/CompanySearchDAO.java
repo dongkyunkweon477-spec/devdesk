@@ -92,7 +92,7 @@ public class CompanySearchDAO {
     }
 
     public List<String> getAllIndustries() {
-        String sql = "select distinct company_industry from company order by company_industry";
+        String sql = "select distinct company_industry from company where company_industry != '미정' order by company_industry";
         List<String> list = new ArrayList<>();
         try (
                 Connection con = DBManager_new.connect();
@@ -110,7 +110,7 @@ public class CompanySearchDAO {
 
     public List<String> getAllLocation() {
         String sql = "SELECT DISTINCT company_location FROM company"
-                + " WHERE company_location IS NOT NULL"
+                + " WHERE company_location IS NOT NULL AND company_location != '미정'"
                 + " ORDER BY company_location";
         List<String> list = new ArrayList<>();
         try (

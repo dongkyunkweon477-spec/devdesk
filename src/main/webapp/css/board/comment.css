@@ -1,7 +1,5 @@
 /* 1. 댓글 섹션 전체 레이아웃 */
 .comment-section {
-    margin-top: 50px;
-    padding-top: 30px;
     border-top: 2px solid #f1f1f1;
     font-family: 'Pretendard', -apple-system, sans-serif;
 }
@@ -9,11 +7,15 @@
 .comment-section h3 {
     font-size: 1.2rem;
     color: #333;
-    margin-bottom: 20px;
     margin-left: 30px;
+    margin-top: 0px;
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+.comment-divider {
+    display: flex;
 }
 
 /* 2. 댓글 작성 폼 */

@@ -224,5 +224,5 @@
 </div>
 
 <!-- JS는 모달 HTML 아래에서 로드 → DOM 순서 보장 -->
-<script src="${ctx}/js/companySearchModal.js"></script>
+<script src="${ctx}/js/company/company-search-modal.js"></script>
 <script src="${ctx}/js/application_list.js"></script>

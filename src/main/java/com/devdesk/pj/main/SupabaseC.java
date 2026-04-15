@@ -20,6 +20,7 @@ public class SupabaseC extends HttpServlet {
         System.out.println("--supa --");
         resp.setContentType("text/html;charset=UTF-8");
         resp.getWriter().println(SupabaseDAO.upload(req, resp));
+        // resp.getWriter().println(SupabaseDAO.SUPADAO.upload(req, resp));
     }
 
     public void destroy() {

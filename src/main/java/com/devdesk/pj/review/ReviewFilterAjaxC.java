@@ -13,11 +13,17 @@ public class ReviewFilterAjaxC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setCharacterEncoding("UTF-8");
-        String companyIds = request.getParameter("companyIds");   // 복수: 기업검색 연동 (쉼표 구분)
-        if (companyIds == null || companyIds.isBlank()) {
-            String single = request.getParameter("companyId");    // 단수: 기업 상세에서 단건 조회
-            if (single != null && !single.isBlank()) companyIds = single;
-        }
+
+        // 기업 검색 조건 파라미터 (기업검색 페이지 연동)
+        String companyName     = request.getParameter("companyName");
+        String companyIndustry = request.getParameter("companyIndustry");
+        String companyLocation = request.getParameter("companyLocation");
+        String minRating       = request.getParameter("minRating");
+        String maxRating       = request.getParameter("maxRating");
+
+        // 기업 단건 조회용 (기업상세 페이지)
+        String companyId = request.getParameter("companyId");
+
         String interviewType = request.getParameter("interviewType");
         String result = request.getParameter("result");
         String sort = request.getParameter("sort");
@@ -26,8 +32,23 @@ public class ReviewFilterAjaxC extends HttpServlet {
         if (request.getParameter("page") != null) {
             page = Integer.parseInt(request.getParameter("page"));
         }
-        Map<String, Object> data = ReviewDAO.REVIEW_DAO
-                .getFilteredReviews(companyIds, interviewType, result, sort, page, pageSize);
+
+        boolean hasCompanyCondition = (companyName != null && !companyName.isBlank())
+                || (companyIndustry != null && !companyIndustry.isBlank())
+                || (companyLocation != null && !companyLocation.isBlank())
+                || (minRating != null && !minRating.isBlank())
+                || (maxRating != null && !maxRating.isBlank());
+
+        Map<String, Object> data;
+        if (hasCompanyCondition) {
+            data = ReviewDAO.REVIEW_DAO.getFilteredReviewsByCondition(
+                    companyName, companyIndustry, companyLocation, minRating, maxRating,
+                    interviewType, result, sort, page, pageSize);
+        } else {
+            // companyId 단건 또는 조건 없는 전체 조회
+            data = ReviewDAO.REVIEW_DAO
+                    .getFilteredReviews(companyId, interviewType, result, sort, page, pageSize);
+        }
         com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                 .create();
