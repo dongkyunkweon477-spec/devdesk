@@ -49,6 +49,7 @@ public class TilDAO {
 
     public static void addTil(HttpServletRequest request) {
         MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
+        if (loginUser == null) return;
         int memberId = loginUser.getMember_id();
 
         String sql = "INSERT INTO til "

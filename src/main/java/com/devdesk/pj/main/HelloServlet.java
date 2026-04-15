@@ -14,8 +14,6 @@ public class HelloServlet extends HttpServlet {
         request.setAttribute("content", "home.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
 
-        response.sendRedirect("main");
-
     }
 
     public void destroy() {
