@@ -78,7 +78,7 @@ public class ApplicationDAO {
                 "a.position,\n" +
                 "a.stage,\n" +
                 "a.apply_date,\n" +
-                "a.memo FROM application a JOIN company c ON a.company_id = c.company_id where member_id = ? ORDER BY a.created_date DESC";
+                "a.memo, a.IS_STAR FROM application a JOIN company c ON a.company_id = c.company_id where member_id = ? ORDER BY a.created_date DESC";
 
         try (Connection con = DBManager_new.connect();
              PreparedStatement pstmt = con.prepareStatement(sql)) {
@@ -100,6 +100,7 @@ public class ApplicationDAO {
                     dto.setStatusName(getStatusName(rs.getString("stage"))); // 한글
                     dto.setAppDate(rs.getDate("apply_date"));
                     dto.setMemo(rs.getString("memo"));
+                    dto.setIsStar(rs.getInt("is_star"));
                     dtos.add(dto);
                 }
             }
