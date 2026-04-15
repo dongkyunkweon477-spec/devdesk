@@ -9,16 +9,14 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class CommentDAO {
-    public static void addComment(HttpServletRequest request) {
+    public static int addComment(HttpServletRequest request) {
         String sql = "insert into comments (c_comments_id, b_board_id, member_id, c_content, parent_id, c_created_date) " +
                 "values (seq_comments.nextval, ?, ?, ?, ?, sysdate)";
+        int generatedId = -1;
 
         try (Connection con = DBManager_new.connect();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(sql, new String[]{"c_comments_id"})) {
 
-            System.out.println("board_id: [" + request.getParameter("board_id") + "]");
-            System.out.println("member_id: [" + request.getParameter("member_id") + "]");
-            System.out.println("content: [" + request.getParameter("content") + "]");
             request.setCharacterEncoding("UTF-8");
 
             ps.setInt(1, Integer.parseInt(request.getParameter("board_id")));
@@ -34,13 +32,18 @@ public class CommentDAO {
 
             int result = ps.executeUpdate();
             if (result == 1) {
-                System.out.println("add success");
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        generatedId = rs.getInt(1);
+                    }
+                }
+                System.out.println("add success, id: " + generatedId);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        return generatedId;
     }
 
     public static ArrayList<CommentVO> getComment(HttpServletRequest request, int boardId) {
@@ -81,7 +84,7 @@ public class CommentDAO {
         return comments;
     }
 
-    public static void delComment(HttpServletRequest request) {
+    public static boolean delComment(HttpServletRequest request) {
         String sql = "DELETE FROM comments WHERE c_comments_id = ?";
 
         try (Connection con = DBManager_new.connect();
@@ -94,11 +97,13 @@ public class CommentDAO {
 
             if (result == 1) {
                 System.out.println("delete success");
+                return true;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public static boolean updateComment(HttpServletRequest request) {

@@ -6,24 +6,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
-@WebServlet(name = "CommentDelC", value = "/comment_del")
+@WebServlet("/comment_del")
 public class CommentDelC extends HttpServlet {
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.setCharacterEncoding("UTF-8");
-
-        CommentDAO.delComment(request);
-
-        int boardId = Integer.parseInt(request.getParameter("board_id"));
-
-        response.sendRedirect("BoardDetailC?id=" + boardId);
-    }
-
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json; charset=UTF-8");
+        
+        boolean isSuccess = CommentDAO.delComment(request);
 
-    public void destroy() {
+        PrintWriter out = response.getWriter();
+        out.print("{\"success\": " + isSuccess + "}");
+        out.flush();
     }
 }
