@@ -1,4 +1,3 @@
-<%@ page import="com.devdesk.pj.main.RecaptchaUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.devdesk.pj.main.RecaptchaUtil" %>
 <html>
