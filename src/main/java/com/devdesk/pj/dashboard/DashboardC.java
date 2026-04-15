@@ -48,6 +48,13 @@ public class DashboardC extends HttpServlet {
         // recentTils 가공
         TilDAO tilDao = new TilDAO();
         MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
+
+        // 로그인 체크 (세션이 만료되거나 로그인 없이 접근했을 때 예외 방지) // 선민 추가
+        if (loginUser == null) {
+            response.sendRedirect("login");
+            return;
+        }
+
         int memberId = loginUser.getMember_id();
 
         List<String> colors = new ArrayList<>(Arrays.asList(

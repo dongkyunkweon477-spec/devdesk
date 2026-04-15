@@ -19,7 +19,18 @@ public class BoardDetailC extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         // 0. 게시글 번호 받기
-        int boardId = Integer.parseInt(request.getParameter("id"));
+        String idParam = request.getParameter("id");
+        if (idParam == null || idParam.trim().isEmpty()) {
+            response.sendRedirect("board");
+            return;
+        }
+        int boardId;
+        try {
+            boardId = Integer.parseInt(idParam.trim());
+        } catch (NumberFormatException e) {
+            response.sendRedirect("board");
+            return;
+        }
 
         // 1. 게시물 정보 가져오기
         BoardDAO.getBoard(request);
