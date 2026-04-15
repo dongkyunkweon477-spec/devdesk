@@ -584,7 +584,7 @@ body::before {
 .star-btn {
     background: none;
     border: none;
-    font-size: 16px;
+    font-size: 28px;
     cursor: pointer;
     padding: 2px 4px;
     color: var(--yellow);
@@ -597,6 +597,10 @@ body::before {
 
 .star-btn:hover {
     transform: scale(1.2);
+}
+
+.star-delete {
+    display: flex;
 }
 
 /* 상태 변경 영역 */
