@@ -12,10 +12,8 @@
     flex-direction: column;
     z-index: 100;
     transition: transform 0.25s;
-=======
     top: 0;
     height: 100vh;
->>>>>>> 023ab330db83e36a66a3108cfc592a712c4c07e5
 }
 
 /* sidebar.css와 달리 TIL 페이지 사이드바 로고 여백 */
