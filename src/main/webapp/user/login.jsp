@@ -69,16 +69,13 @@
                 </a>
             </div>
 
-            <div class="login-options">
+            <div class="login-options" style="margin-top: 25px;">
                 <a href="find-password">비밀번호 찾기</a>
                 <span class="divider-bar">|</span>
-                <a href="account">회원가입 하기</a>
+                <a href="account" class="btn-primary">회원가입 하기</a>
             </div>
 
         </form>
 
     </div>
 </div>
-
-</body>
-</html>
