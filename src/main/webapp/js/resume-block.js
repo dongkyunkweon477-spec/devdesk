@@ -89,11 +89,11 @@ function openNewBlockModal() {
             <div class="form-group">
                 <label class="form-label">카테고리</label>
                 <select name="categoryId" class="form-select" required>
-                    <option value="shimei">志望動機</option>
-                    <option value="jikopr">自己PR</option>
-                    <option value="chosho">長所・短所</option>
-                    <option value="keireki">職務経歴</option>
-                    <option value="other">その他</option>
+                    <option value="shimei">지망동기</option>
+                    <option value="jikopr">자기PR</option>
+                    <option value="chosho">장단점</option>
+                    <option value="keireki">직무경력</option>
+                    <option value="other">그 외</option>
                 </select>
             </div>
             <div class="form-group">
