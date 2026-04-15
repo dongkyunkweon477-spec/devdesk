@@ -326,3 +326,9 @@ tr.is-deleted td {
     cursor: not-allowed;
     pointer-events: none;
 }
+
+.admin-table th,
+.admin-table td {
+    text-align: center;
+    vertical-align: middle;
+}
