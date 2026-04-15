@@ -5,6 +5,7 @@
 :root {
     /* 라이트 모드 기본값 */
     --bg: #d4daf0; /* 배경: 더 짙은 청회색 */
+    --surface: #ffffff;
     --yellow: #ffd166;
     --teal: #4ecdc4;
     --red: #ff6b6b;
@@ -383,7 +384,7 @@ body::before {
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     border: none;
     border-radius: 9px;
-    color: #fff;
+    color: var(--text2);
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;

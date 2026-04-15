@@ -122,7 +122,3 @@
 
 <%-- 🌟 맨 아랫줄에 페이징 전용 JS 파일 연결! --%>
 <script src="${pageContext.request.contextPath}/js/admin/admin_report.js"></script>
-</div>
-
-</div>
-</div>

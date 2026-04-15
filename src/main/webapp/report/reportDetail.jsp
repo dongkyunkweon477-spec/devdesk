@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+
 <%-- 🌟 어드민 공통 CSS & 리포트 전용 CSS 연결 --%>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/admin.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/report/report_detail.css">
@@ -21,9 +22,17 @@
 
     <%-- 🌟 오른쪽 메인 컨텐츠 영역 --%>
     <div class="admin-content">
-        <div class="board-container detail">
-            <div class="board-header detail">
-                <h2>신고 상세</h2>
+        <div class="board-container report-container-admin detail" style="padding: 20px;">
+
+            <%-- 상단 헤더 --%>
+            <div class="board-header detail"
+                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <div>
+                    <h2 style="margin-bottom: 5px;">🚨 신고 상세 내역</h2>
+                    <p class="admin-page-desc" style="color: #64748b; font-size: 14px; margin: 0;">신고된 콘텐츠의 상세
+                        내용을 확인하고
+                        조치합니다.</p>
+                </div>
                 <div class="board-actions">
                     <button class="write-btn" onclick="location.href='${pageContext.request.contextPath}/admin/report'">
                         목록으로

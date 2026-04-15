@@ -23,7 +23,7 @@
         </div>
         <!-- 메뉴 -->
         <div class="menu-left">
-            <a href="${pageContext.request.contextPath}/ws">워크 스페이스</a>
+            <a href="${pageContext.request.contextPath}/dashboard">워크 스페이스</a>
             <a href="${pageContext.request.contextPath}/calendar">면접 일정</a>
             <a href="${pageContext.request.contextPath}/review">면접 후기</a>
             <a href="${pageContext.request.contextPath}/board">커뮤니티</a>
