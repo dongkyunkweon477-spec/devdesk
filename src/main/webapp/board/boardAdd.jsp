@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/base.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/board/board-all.css">
-
 <html>
 <head>
     <title>Title</title>
@@ -42,7 +43,8 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px;">
                 <label style="margin-bottom: 0;">내용</label>
                 <div style="text-align: right;">
-                    <label for="imageFile" style="cursor: pointer; border: 1px solid #d1d5db; padding: 6px 12px; border-radius: 6px; background-color: #fff; font-size: 0.85rem; color: #495057; transition: all 0.2s ease-in-out; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                    <label for="imageFile"
+                           style="cursor: pointer; border: 1px solid var(--border, #d1d5db); padding: 6px 12px; border-radius: 6px; background-color: var(--surface, #fff); font-size: 0.85rem; color: var(--text, #495057); transition: all 0.2s ease-in-out; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
                         <span style="margin-right: 4px;">📷</span>이미지 첨부
                     </label>
                     <input type="file" id="imageFile" style="display: none;" accept="image/*"/>
@@ -61,72 +63,7 @@
     </form>
 
     <script type="text/javascript">
-        const textarea = document.querySelector("textarea[name='txt']");
-        const cntSpan = document.querySelector("#cntSpan");
-        textarea.addEventListener('input', () => {
-            const len = textarea.value.length;
-            cntSpan.innerText = len;
-        });
 
-        // Handle file selection for automatic upload
-        document.getElementById('imageFile').addEventListener('change', function (e) {
-            e.preventDefault();
-
-            const fileInput = this;
-            const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
-
-            if (fileInput.files.length === 0) {
-                return;
-            }
-
-            console.log('File selected, starting upload...');
-
-            fetch('supa-upload', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.text())
-                .then(data => {
-                    console.log('Server response:', data);
-
-                    // Try multiple patterns to extract URL
-                    let imageUrl = null;
-
-                    // Pattern 1: Full Supabase URL
-                    let urlMatch = data.match(/(https:\/\/[a-zA-Z0-9-]+\.supabase\.co\/storage\/v1\/object\/public\/upload\/file\/[^\s]+)/);
-                    if (urlMatch) {
-                        imageUrl = urlMatch[1];
-                    }
-
-                    // Pattern 2: Any https URL (fallback)
-                    if (!imageUrl) {
-                        urlMatch = data.match(/(https:\/\/[^\s]+)/);
-                        if (urlMatch) {
-                            imageUrl = urlMatch[1];
-                        }
-                    }
-
-                    if (imageUrl) {
-                        console.log('Extracted URL:', imageUrl);
-                        // Insert URL into textarea
-                        textarea.value += '\n\n' + imageUrl;
-                        // Update character count
-                        cntSpan.innerText = textarea.value.length;
-                        // Clear file input
-                        fileInput.value = '';
-                        console.log('Image uploaded and URL inserted:', imageUrl);
-                        alert('Image uploaded successfully!');
-                    } else {
-                        console.error('URL extraction failed. Response:', data);
-                        alert('Failed to extract image URL from response. Check console for details.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Upload error:', error);
-                    alert('Image upload failed. Please try again.');
-                });
-        });
 
     </script>
 </div>

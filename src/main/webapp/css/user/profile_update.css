@@ -149,3 +149,59 @@
 .btn-submit:hover {
     background: #6d28d9;
 }
+
+/* ===== 다크 모드 (주야간 토글)  선민 추가 ===== */
+[data-theme="dark"] .update-container {
+    background: var(--bg-secondary);
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .btn-select-photo {
+    background: var(--bg-tertiary);
+    border-color: var(--border-primary);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .btn-select-photo:hover {
+    background: var(--border-primary);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .info-input-section {
+    border-top-color: var(--border-primary);
+}
+
+[data-theme="dark"] .input-group label {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .input-group input,
+[data-theme="dark"] .input-group select {
+    background: var(--bg-primary);
+    border-color: var(--border-primary);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .input-group input:focus,
+[data-theme="dark"] .input-group select:focus {
+    border-color: var(--accent-primary);
+}
+
+[data-theme="dark"] .static-group p {
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .badge-lock {
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .btn-cancel {
+    background: var(--bg-tertiary);
+    border-color: var(--border-primary);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .btn-cancel:hover {
+    background: var(--border-primary);
+    color: var(--text-primary);
+}

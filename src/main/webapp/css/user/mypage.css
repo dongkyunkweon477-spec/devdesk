@@ -280,3 +280,113 @@
 .pw-modal-btn.btn-danger:hover {
     background: #dc2626;
 }
+
+/* ===== 다크 모드 (주야간 토글) =====  선민 추가 */
+[data-theme="dark"] .mypage-wrapper {
+    background: var(--bg-primary);
+    box-shadow: 0 4px 10px var(--shadow);
+}
+
+[data-theme="dark"] .mypage-title {
+    color: var(--text-primary);
+    border-bottom-color: var(--border-primary);
+}
+
+[data-theme="dark"] .profile-info-box {
+    background: var(--bg-secondary);
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .profile-details p {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .profile-details .nickname {
+    color: var(--accent-primary);
+}
+
+[data-theme="dark"] .btn-admin-page {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .menu-card {
+    background: var(--bg-primary);
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .menu-card:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 4px 12px rgba(167, 139, 250, 0.15);
+}
+
+[data-theme="dark"] .menu-card h4 {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .menu-card p {
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .menu-card.danger:hover {
+    border-color: #f43f5e;
+    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.15);
+}
+
+[data-theme="dark"] .menu-card.danger h4 {
+    color: #f43f5e;
+}
+
+[data-theme="dark"] .pw-modal-box {
+    background: var(--bg-primary);
+    box-shadow: 0 10px 25px var(--shadow);
+}
+
+[data-theme="dark"] .pw-modal-title {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .pw-modal-title[style*="color: #ef4444"] {
+    color: #f43f5e !important;
+}
+
+[data-theme="dark"] .pw-modal-desc {
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .modal-warning-box {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+[data-theme="dark"] .modal-warning-box span {
+    color: #f87171;
+}
+
+[data-theme="dark"] .modal-input {
+    background: var(--bg-secondary);
+    border-color: var(--border-primary);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .modal-input:focus {
+    border-color: #f43f5e;
+}
+
+[data-theme="dark"] .pw-modal-btn.btn-cancel {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .pw-modal-btn.btn-cancel:hover {
+    background: var(--border-primary);
+}
+
+[data-theme="dark"] .pw-modal-btn.btn-danger {
+    background: #e11d48;
+}
+
+[data-theme="dark"] .pw-modal-btn.btn-danger:hover {
+    background: #be123c;
+}
