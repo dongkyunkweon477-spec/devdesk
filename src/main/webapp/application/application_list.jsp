@@ -25,6 +25,9 @@
             <form class="rb-filter" action="application-star" method="get">
                 <button>즐겨찾기✨</button>
             </form>
+            <form class="rb-filter" action="application-list" method="get">
+                <button>전체보기</button>
+            </form>
         </div>
     </div>
 </div>
@@ -106,16 +109,17 @@
                     </div>
                     <div class="card-footer">
                         <span class="card-date">📅 ${app.appDate}</span>
+                        <form class="star-form ${app.isStar == 1 ? 'is-starred' : ''}" action="application-star"
+                              method="post">
+                            <input type="hidden" name="app_id" value="${app.appId}">
+                            <input type="hidden" name="is_star" value="${app.isStar}">
+                            <button class="star-btn" title="즐겨찾기">${app.isStar == 1 ? '★' : '☆'}</button>
+                        </form>
                         <div class="card-actions">
                             <button class="btn-delete"
                                     data-app-id="${app.appId}"
                                     data-company="${app.companyName}">삭제
                             </button>
-                            <form action="application-star" method="post">
-                                <input type="hidden" name="app_id" value="${app.appId}">
-                                <input type="hidden" name="is_star" value="${app.isStar}">
-                                <button>⭐</button>
-                            </form>
                         </div>
                     </div>
                 </div>

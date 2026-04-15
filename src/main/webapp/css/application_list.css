@@ -1,21 +1,46 @@
+/* ===== 폰트 ===== */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Pretendard:wght@400;500;600&display=swap');
+
+/* ===== CSS 변수 (테마 시스템) ===== */
 :root {
-    --bg: #f4f6fb;
-    --surface: #ffffff;
-    --surface2: #f0f3f9;
-    --surface3: #e6eaf4;
-    --border: #dde2ee;
-    --border2: #c8cfdf;
-    --accent: #5b7cf8;
-    --accent2: #8b6ef5;
-    --text: #1a1d2e;
-    --text2: #4a5070;
-    --text3: #8a90a8;
-    --green: #2ecc8a;
+    /* 라이트 모드 기본값 */
+    --bg: #d4daf0; /* 배경: 더 짙은 청회색 */
     --yellow: #ffd166;
     --teal: #4ecdc4;
-    --orange: #ff9f69;
     --red: #ff6b6b;
-    --stage-color: var(--accent); /* 또는 원하는 색상으로 지정 - 선민 수정 */
+    --stage-color: var(--accent);
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --text-primary: #1e293b;
+    --text-secondary: #334155;
+    --text-tertiary: #64748b;
+    --border-primary: #e2e8f0;
+    --border-secondary: #cbd5e1;
+    --accent-primary: #8e5ae5;
+    --accent-secondary: #a78bfa;
+    --accent-light: #ede9fe;
+    --accent-hover: #8d75b3;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+/* 다크 모드 테마 */
+[data-theme="dark"] {
+    --bg-primary: #1e293b;
+    --bg-secondary: #0f172a;
+    --bg-tertiary: #334155;
+    --text-primary: #f8fafc;
+    --text-secondary: #e2e8f0;
+    --text-tertiary: #cbd5e1;
+    --border-primary: #334155;
+    --border-secondary: #475569;
+    --accent-primary: #a78bfa;
+    --accent-secondary: #c4b5fd;
+    --accent-light: #4c1d95;
+    --accent-hover: #b99dfa;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --transition: all 0.3s ease;
 }
 
 * {
@@ -84,7 +109,7 @@ body::before {
     gap: 6px;
     padding: 10px 20px;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff;
+    color: var(--text-secondary);
     border: none;
     border-radius: 10px;
     font-size: 13px;
@@ -103,7 +128,7 @@ body::before {
     gap: 12px;
     padding: 10px 20px;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff;
+    color: var(--text-secondary);
     border: none;
     border-radius: 10px;
     font-size: 13px;
@@ -121,7 +146,7 @@ body::before {
     gap: 6px;
     padding: 10px 20px;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff;
+    color: var(--text-secondary);
     border: none;
     border-radius: 10px;
     font-size: 13px;
@@ -381,7 +406,7 @@ body::before {
 }
 
 .stage-chip {
-    background: var(--surface);
+    background: var(--bg-primary);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 12px 10px;
@@ -413,7 +438,7 @@ body::before {
 }
 
 .stage-chip-name {
-    font-size: 10px;
+    font-size: 15px;
     color: var(--text3);
     margin-top: 2px;
 }
@@ -427,7 +452,7 @@ body::before {
 
 /* ── 개별 카드 ── */
 .app-card {
-    background: var(--surface);
+    background: var(--bg-primary);
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 18px 20px;
@@ -438,7 +463,7 @@ body::before {
     animation: fadeUp 0.35s ease both;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(91, 124, 248, 0.05);
+    box-shadow: 0 4px 16px rgba(91, 124, 248, 0.12), 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 @keyframes fadeUp {
@@ -543,6 +568,35 @@ body::before {
 
 .app-card:hover .card-actions {
     opacity: 1;
+}
+
+/* 별 버튼: 기본은 호버 시 표시, is-starred면 항상 표시 */
+.star-form {
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.app-card:hover .star-form,
+.star-form.is-starred {
+    opacity: 1;
+}
+
+.star-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 2px 4px;
+    color: var(--yellow);
+    transition: transform 0.15s;
+}
+
+.star-form.is-starred .star-btn {
+    font-size: 22px;
+}
+
+.star-btn:hover {
+    transform: scale(1.2);
 }
 
 /* 상태 변경 영역 */
@@ -729,4 +783,12 @@ body::before {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+/* ════════════════════════
+   DARK MODE OVERRIDES
+════════════════════════ */
+[data-theme="dark"] {
+    --bg: #080f1e; /* 배경: 더 어두운 네이비 */
+    --bg-secondary: #1e293b; /* 카드: base.css --surface 다크값 */
 }
