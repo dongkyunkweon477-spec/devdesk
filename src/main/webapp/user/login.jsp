@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.devdesk.pj.main.RecaptchaUtil" %>
+<%-- <%@ page import="com.devdesk.pj.main.RecaptchaUtil" %> --%>
 <html>
 <head>
     <title>DevDesk</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/account.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/login.css">
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <%-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> --%>
 </head>
 <body class="account-body">
 
@@ -33,7 +33,7 @@
                 <input type="password" name="password" placeholder="비밀번호를 입력해주세요" required>
             </div>
 
-            <div class="g-recaptcha" data-sitekey="<%= RecaptchaUtil.getSiteKey() %>"></div>
+            <%-- <div class="g-recaptcha" data-sitekey="<%= RecaptchaUtil.getSiteKey() %>"></div> --%>
 
             <div class="form-actions">
                 <button type="submit" class="btn-submit email-login-btn">이메일 로그인</button>

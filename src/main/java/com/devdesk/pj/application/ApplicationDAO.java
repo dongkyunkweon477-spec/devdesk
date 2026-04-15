@@ -26,6 +26,7 @@ public class ApplicationDAO {
 
             // 파라미터 받기
             MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
+            if (loginUser == null) return;
             int memberId = loginUser.getMember_id();
             String companyId = request.getParameter("companyId");
             String position = request.getParameter("position");
@@ -84,6 +85,7 @@ public class ApplicationDAO {
 
             ArrayList<ApplicationV0> dtos = new ArrayList<>();
             MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
+            if (loginUser == null) return;
             int memberId = loginUser.getMember_id();
             pstmt.setInt(1, memberId);
 
@@ -146,6 +148,7 @@ public class ApplicationDAO {
              PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             MemberDTO loginUser = (MemberDTO) request.getSession().getAttribute("user");
+            if (loginUser == null) return;
             pstmt.setInt(1, loginUser.getMember_id());
 
             ArrayList<ApplicationV0> dtos = new ArrayList<>();

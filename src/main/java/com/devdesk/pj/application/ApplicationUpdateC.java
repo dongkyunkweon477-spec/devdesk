@@ -13,8 +13,8 @@ public class ApplicationUpdateC extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ApplicationV0 dto = ApplicationDAO.selectApplication(request);
         request.setAttribute("app", dto);
-
-        request.getRequestDispatcher("/application/applicationUpdate.jsp").forward(request, response);
+        request.setAttribute("content", "/application/applicationUpdate.jsp");
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
