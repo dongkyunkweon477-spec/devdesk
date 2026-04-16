@@ -232,13 +232,16 @@
 
 .reply-item {
     margin-left: 50px;
-    margin-top: 0px;
-    padding: 2px 4px 2px 8px;
+    margin-top: 10px;
+    padding: 10px 15px;
     background-color: #f8f9fa;
     border-left: 4px solid #7c3aed;
     border-radius: 0 6px 6px 0;
     transition: background-color 0.2s;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .reply-item::before {
@@ -280,7 +283,6 @@
     font-size: 1rem;
     line-height: 1.6;
     color: #555;
-    white-space: pre-wrap;
     text-align: left !important;
     margin-bottom: 1px;
 }
@@ -419,6 +421,13 @@
     color: var(--text-primary);
 }
 
+/* 구분선 가독성 개선 */
+[data-theme="dark"] .comment-divider {
+    border: none;
+    border-top: 1px solid var(--border-secondary);
+    opacity: 0.5;
+}
+
 [data-theme="dark"] .comment-form {
     background: var(--bg-tertiary);
     border-color: var(--border-primary);
@@ -431,15 +440,15 @@
 }
 
 [data-theme="dark"] .comment-item {
-    border-color: var(--border-primary);
+    border-bottom: 1px solid var(--border-secondary);
 }
 
 [data-theme="dark"] .comment-item:hover {
-    background: var(--bg-tertiary);
+    background: rgba(255, 255, 255, 0.02);
 }
 
 [data-theme="dark"] .comment-writer {
-    color: var(--text-secondary);
+    color: var(--accent-primary); /* 강조색으로 변경 */
 }
 
 [data-theme="dark"] .comment-date {
@@ -450,8 +459,30 @@
     color: var(--text-secondary);
 }
 
+/* 수정/삭제 버튼 색상 */
+[data-theme="dark"] .comment-actions button,
+[data-theme="dark"] .reply-actions button {
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .comment-actions button:hover,
+[data-theme="dark"] .reply-actions button:hover {
+    color: var(--accent-primary);
+}
+
+/* 답글 버튼 */
+[data-theme="dark"] .reply-btn {
+    border-color: var(--border-secondary);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .reply-btn:hover {
+    background-color: var(--accent-primary);
+    color: var(--bg-primary);
+}
+
 [data-theme="dark"] .reply-form {
-    background: var(--bg-tertiary);
+    background: var(--bg-secondary);
     border-color: var(--border-primary);
 }
 
@@ -462,11 +493,12 @@
 }
 
 [data-theme="dark"] .reply-item {
-    background: var(--bg-tertiary);
+    background: rgba(255, 255, 255, 0.03); /* 약간 밝은 배경 */
+    border-left-color: var(--accent-primary);
 }
 
 [data-theme="dark"] .reply-writer {
-    color: var(--text-secondary);
+    color: var(--accent-secondary);
 }
 
 [data-theme="dark"] .reply-date {

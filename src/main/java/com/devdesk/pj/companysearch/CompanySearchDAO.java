@@ -16,67 +16,67 @@ public class CompanySearchDAO {
     }
 
 
-    public List<String> companySearch(Map<String, String> conditions) {
-        Set<String> allowedText = Set.of("company_name", "company_industry", "company_location");
-        Set<String> allowedRange = Set.of("company_rating", "company_size");
-        StringBuilder sql = new StringBuilder("SELECT c.*, "
-                + "NVL(ROUND(AVG(r.r_rating), 1), 0) AS calc_rating, "
-                + "COUNT(r.r_id) AS review_count "
-                + "FROM company c "
-                + "LEFT JOIN review r ON c.company_id = r.r_company_id "
-                + "WHERE c.is_verified = 'Y'");
-        List<Object> params = new ArrayList<>();
-
-        for (String col : allowedText) {
-            if (conditions.containsKey(col)) {
-                sql.append(" and c.").append(col).append(" like ?");
-                params.add("%" + conditions.get(col) + "%");
-            }
-
-        }
-        for (String col : allowedRange) {
-            String minVal = conditions.get("min_" + col);
-            String maxVal = conditions.get("max_" + col);
-            if (minVal != null && !minVal.isBlank()) {
-                sql.append(" and c. ").append(col).append(">= ?");
-                params.add(Double.parseDouble(minVal));
-            }
-            if (maxVal != null && !maxVal.isBlank()) {
-                sql.append(" and c.").append(col).append("<= ?");
-                params.add(Double.parseDouble(maxVal));
-            }
-        }
-        sql.append(" GROUP BY c.company_id, c.company_name, c.company_industry, "
-                + "c.company_location, c.company_rating, c.company_size, "
-                + "c.company_created_date, c.company_application_date, c.is_verified");
-
-
-        List<String> companies = new ArrayList<>();
-        try (Connection con = DBManager_new.connect();
-             PreparedStatement pstmt = con.prepareStatement(sql.toString())
-        ) {
-            for (int i = 0; i < params.size(); i++) {
-                pstmt.setObject(i + 1, params.get(i));
-            }
-            try (ResultSet rs = pstmt.executeQuery()) {
-                CompanySearchVO company = new CompanySearchVO();
-                while (rs.next()) {
-                    company = CompanySearchVO.fromRS(rs);
-                    companies.add(company.toJson());
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return companies;
-    }
+//    public List<String> companySearch(Map<String, String> conditions) {
+//        Set<String> allowedText = Set.of("company_name", "company_industry", "company_location");
+//        Set<String> allowedRange = Set.of("company_rating", "company_size");
+//        StringBuilder SQL = new StringBuilder("SELECT c.*, "
+//                + "NVL(ROUND(AVG(r.r_rating), 1), 0) AS calc_rating, "
+//                + "COUNT(r.r_id) AS review_count "
+//                + "FROM company c "
+//                + "LEFT JOIN review r ON c.company_id = r.r_company_id "
+//                + "WHERE c.is_verified = 'Y'");
+//        List<Object> params = new ArrayList<>();
+//
+//        for (String col : allowedText) {
+//            if (conditions.containsKey(col)) {
+//                sql.append(" and c.").append(col).append(" like ?");
+//                params.add("%" + conditions.get(col) + "%");
+//            }
+//
+//        }
+//        for (String col : allowedRange) {
+//            String minVal = conditions.get("min_" + col);
+//            String maxVal = conditions.get("max_" + col);
+//            if (minVal != null && !minVal.isBlank()) {
+//                sql.append(" and c. ").append(col).append(">= ?");
+//                params.add(Double.parseDouble(minVal));
+//            }
+//            if (maxVal != null && !maxVal.isBlank()) {
+//                sql.append(" and c.").append(col).append("<= ?");
+//                params.add(Double.parseDouble(maxVal));
+//            }
+//        }
+//        sql.append(" GROUP BY c.company_id, c.company_name, c.company_industry, "
+//                + "c.company_location, c.company_rating, c.company_size, "
+//                + "c.company_created_date, c.company_application_date, c.is_verified");
+//
+//
+//        List<String> companies = new ArrayList<>();
+//        try (Connection con = DBManager_new.connect();
+//             PreparedStatement pstmt = con.prepareStatement(sql.toString())
+//        ) {
+//            for (int i = 0; i < params.size(); i++) {
+//                pstmt.setObject(i + 1, params.get(i));
+//            }
+//            try (ResultSet rs = pstmt.executeQuery()) {
+//                CompanySearchVO company = new CompanySearchVO();
+//                while (rs.next()) {
+//                    company = CompanySearchVO.fromRS(rs);
+//                    companies.add(company.toJson());
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return companies;
+//    }
 
     public CompanySearchVO getCompanyById(int companyId) {
         String sql = "select * from company where company_id = ? ";
         try (
                 Connection con = DBManager_new.connect();
-                PreparedStatement pstmt = con.prepareStatement(sql);
+                PreparedStatement pstmt = con.prepareStatement(sql)
         ) {
             pstmt.setInt(1, companyId);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -97,7 +97,7 @@ public class CompanySearchDAO {
         try (
                 Connection con = DBManager_new.connect();
                 PreparedStatement pstmt = con.prepareStatement(sql);
-                ResultSet rs = pstmt.executeQuery();
+                ResultSet rs = pstmt.executeQuery()
         ) {
             while (rs.next()) {
                 list.add(rs.getString("company_industry"));
@@ -116,7 +116,7 @@ public class CompanySearchDAO {
         try (
                 Connection con = DBManager_new.connect();
                 PreparedStatement pstmt = con.prepareStatement(sql);
-                ResultSet rs = pstmt.executeQuery();
+                ResultSet rs = pstmt.executeQuery()
         ) {
             while (rs.next()) {
                 String region = rs.getString("company_location");
@@ -137,7 +137,7 @@ public class CompanySearchDAO {
                 "values(company_seq.nextval, ?, ?, ?, ?, ?, ?, ?, 'N')"; // 영은 추가-기업 승인용
         try (
                 Connection con = DBManager_new.connect();
-                PreparedStatement pstmt = con.prepareStatement(sql);
+                PreparedStatement pstmt = con.prepareStatement(sql)
         ) {
             pstmt.setString(1, vo.getCompanyName());
             pstmt.setString(2, vo.getCompanyIndustry());
@@ -166,7 +166,7 @@ public class CompanySearchDAO {
         String sqlDelRev = "delete from review where r_company_id = ?";
         String sqlDelComp = "delete from company where company_id = ?";
         try (
-                Connection con = DBManager_new.connect();
+                Connection con = DBManager_new.connect()
         ) {
             try (PreparedStatement pstmt = con.prepareStatement(sqlDelRev)) {
                 pstmt.setInt(1, companyId);
@@ -187,7 +187,7 @@ public class CompanySearchDAO {
                 " where company_id=?";
         try (
                 Connection con = DBManager_new.connect();
-                PreparedStatement pstmt = con.prepareStatement(sql);
+                PreparedStatement pstmt = con.prepareStatement(sql)
         ) {
             pstmt.setString(1, vo.getCompanyName());
             pstmt.setString(2, vo.getCompanyIndustry());
@@ -235,7 +235,7 @@ public class CompanySearchDAO {
         try (
                 Connection con = DBManager_new.connect();
                 PreparedStatement pstmt = con.prepareStatement(sql);
-                ResultSet rs = pstmt.executeQuery();
+                ResultSet rs = pstmt.executeQuery()
         ) {
 
             if (rs.next()) {
@@ -252,7 +252,7 @@ public class CompanySearchDAO {
 
     public Map<String, Object> companySearchPaged(Map<String, String> conditions, int page, int pageSize) {
         Set<String> allowedText = Set.of("company_name", "company_industry", "company_location");
-        Set<String> allowedRange = Set.of("company_rating", "company_size");
+        Set<String> allowedRange = Set.of("company_size");
 
         StringBuilder baseSql = new StringBuilder(
                 "SELECT c.*, "
@@ -303,6 +303,21 @@ public class CompanySearchDAO {
                 + "c.company_created_date, c.company_application_date" +
                 ", c.is_verified");
 
+        // 유저 평점(리뷰 평균) 필터 — WHERE 절 대신 HAVING 절 사용
+        String minRating = conditions.get("min_company_rating");
+        String maxRating = conditions.get("max_company_rating");
+        if (minRating != null && !minRating.isBlank()) {
+            baseSql.append(" HAVING NVL(ROUND(AVG(r.r_rating), 1), 0) >= ?");
+            params.add(Double.parseDouble(minRating));
+            if (maxRating != null && !maxRating.isBlank()) {
+                baseSql.append(" AND NVL(ROUND(AVG(r.r_rating), 1), 0) <= ?");
+                params.add(Double.parseDouble(maxRating));
+            }
+        } else if (maxRating != null && !maxRating.isBlank()) {
+            baseSql.append(" HAVING NVL(ROUND(AVG(r.r_rating), 1), 0) <= ?");
+            params.add(Double.parseDouble(maxRating));
+        }
+
 
         String countSql = "SELECT COUNT(*) FROM (" + baseSql + ")";
         // 페이징
@@ -334,10 +349,10 @@ public class CompanySearchDAO {
                 pstmt.setInt(params.size() + 1, start);
                 pstmt.setInt(params.size() + 2, end);
 
-                List<String> companies = new ArrayList<>();
+                List<CompanySearchVO> companies = new ArrayList<>();
                 try (ResultSet rs = pstmt.executeQuery()) {
                     while (rs.next()) {
-                        companies.add(CompanySearchVO.fromRS(rs).toJson());
+                        companies.add(CompanySearchVO.fromRS(rs));
                     }
                 }
                 result.put("companies", companies);
@@ -362,7 +377,7 @@ public class CompanySearchDAO {
                 "company_seq.nextval, ? , '미정', '미정', 0, 0, sysdate, sysdate, 'N')";
         try (
                 Connection con = DBManager_new.connect();
-                PreparedStatement pstmt = con.prepareStatement(sql, new String[]{"company_id"});
+                PreparedStatement pstmt = con.prepareStatement(sql, new String[]{"company_id"})
         ) {
             pstmt.setString(1, companyName);
             pstmt.executeUpdate();

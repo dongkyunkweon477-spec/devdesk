@@ -11,7 +11,7 @@
 
         <div class="logo-container">
             <div class="success-brand">
-                <img src="${pageContext.request.contextPath}/images/Devlogo.png" alt="DevDesk Logo">
+                <img src="${pageContext.request.contextPath}/images/DevDesk_new.png" alt="DevDesk Logo">
                 <span>DevDesk</span>
             </div>
         </div>

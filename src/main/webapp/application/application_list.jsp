@@ -25,6 +25,9 @@
             <form class="rb-filter" action="application-star" method="get">
                 <button>즐겨찾기✨</button>
             </form>
+            <form class="rb-filter" action="application-list" method="get">
+                <button>전체보기</button>
+            </form>
         </div>
     </div>
 </div>
@@ -106,16 +109,19 @@
                     </div>
                     <div class="card-footer">
                         <span class="card-date">📅 ${app.appDate}</span>
-                        <div class="card-actions">
-                            <button class="btn-delete"
-                                    data-app-id="${app.appId}"
-                                    data-company="${app.companyName}">삭제
-                            </button>
-                            <form action="application-star" method="post">
+                        <div class="star-delete">
+                            <form class="star-form ${app.isStar == 1 ? 'is-starred' : ''}" action="application-star"
+                                  method="post">
                                 <input type="hidden" name="app_id" value="${app.appId}">
                                 <input type="hidden" name="is_star" value="${app.isStar}">
-                                <button>⭐</button>
+                                <button class="star-btn" title="즐겨찾기">${app.isStar == 1 ? '★' : '☆'}</button>
                             </form>
+                            <div class="card-actions">
+                                <button class="btn-delete"
+                                        data-app-id="${app.appId}"
+                                        data-company="${app.companyName}">삭제
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -139,7 +145,7 @@
                 <div style="display:flex; align-items:center; gap:8px;">
                     <input type="text" id="selectedCompanyName" class="form-input"
                            readonly placeholder="기업을 선택해주세요" style="cursor:pointer;"/>
-                    <button type="button" id="btnOpenCompany" class="modal-btn-search">기업 선택</button>
+                    <button type="button" id="btnOpenCompany" class="csm-btn-search">기업 선택</button>
                 </div>
                 <jsp:include page="/company/company-search/companySearchModal.jsp"/>
                 <input type="hidden" name="companyId" id="selectedCompanyId"/>

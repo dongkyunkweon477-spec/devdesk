@@ -132,6 +132,10 @@
         <div style="display:flex;align-items:center;gap:8px;">
             <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요" style="cursor:pointer;flex:1;" onclick="openCompanyModal()"/>
             <button type="button" onclick="openCompanyModal()" class="modal-btn-search">선택</button>
+            <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요"
+                   style="cursor:pointer;flex:1;" onclick="openCompanyModal()"/>
+
+            <button type="button" onclick="openCompanyModal()" class="csm-btn-search">선택</button>
         </div>
         <input type="hidden" name="companyId" id="selectedCompanyId"/>
     </div>

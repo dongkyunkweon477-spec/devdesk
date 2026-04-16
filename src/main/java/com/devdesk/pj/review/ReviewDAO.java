@@ -22,7 +22,7 @@ public class ReviewDAO {
         }
         try (
                 Connection con = DBManager_new.connect();
-                PreparedStatement pstmt = con.prepareStatement(sql);
+                PreparedStatement pstmt = con.prepareStatement(sql)
         ) {
             if (companyId != null) {
                 pstmt.setInt(1, companyId);
@@ -59,7 +59,7 @@ public class ReviewDAO {
         ArrayList<ReviewVO> reviews = new ArrayList<>();
         try (
                 Connection con = DBManager_new.connect();
-                PreparedStatement pstmt = con.prepareStatement(sql);
+                PreparedStatement pstmt = con.prepareStatement(sql)
         ) {
             pstmt.setInt(1, companyId);
             pstmt.setInt(2, start);
@@ -92,7 +92,7 @@ public class ReviewDAO {
         ArrayList<ReviewVO> reviews = new ArrayList<>();
         try (
                 Connection con = DBManager_new.connect();
-                PreparedStatement pstmt = con.prepareStatement(sql);
+                PreparedStatement pstmt = con.prepareStatement(sql)
 
         ) {
             pstmt.setInt(1, start);
@@ -117,7 +117,7 @@ public class ReviewDAO {
                 + " VALUES (review_seq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (
                 Connection con = DBManager_new.connect();
-                PreparedStatement pstmt = con.prepareStatement(sql);
+                PreparedStatement pstmt = con.prepareStatement(sql)
         ) {
             pstmt.setInt(1, vo.getReviewCompanyId());
             pstmt.setInt(2, vo.getReviewMemberId());
@@ -154,7 +154,7 @@ public class ReviewDAO {
                 + " r_updated_date=SYSDATE"
                 + " WHERE r_id=?";
         try (Connection con = DBManager_new.connect();
-             PreparedStatement pstmt = con.prepareStatement(sql);
+             PreparedStatement pstmt = con.prepareStatement(sql)
         ) {
             pstmt.setString(1, vo.getReviewTitle());
             pstmt.setString(2, vo.getReviewJobPosition());
@@ -196,14 +196,13 @@ public class ReviewDAO {
                     pstmt2.executeUpdate();
                 }
 
-                int result = 0;
+                int result;
                 try (PreparedStatement pstmt3 = con.prepareStatement(deleteReviewSql)) {
                     pstmt3.setInt(1, reviewId);
                     result = pstmt3.executeUpdate();
                 }
 
                 con.commit();
-                return result;
             } catch (Exception e) {
                 con.rollback();
                 e.printStackTrace();
@@ -212,7 +211,6 @@ public class ReviewDAO {
             e.printStackTrace();
         }
         return 0;
-
     }
 
     public ReviewVO getReviewById(int reviewId) {
@@ -221,7 +219,7 @@ public class ReviewDAO {
                 "where r.r_id = ?";
         ReviewVO review = null;
         try (Connection con = DBManager_new.connect();
-             PreparedStatement pstmt = con.prepareStatement(sql);
+             PreparedStatement pstmt = con.prepareStatement(sql)
         ) {
             pstmt.setInt(1, reviewId);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -238,7 +236,7 @@ public class ReviewDAO {
     public void increaseViewCount(int reviewId) {
         String sql = "update review set r_view_count = r_view_count + 1 where r_id = ?";
         try (Connection con = DBManager_new.connect();
-             PreparedStatement pstmt = con.prepareStatement(sql);
+             PreparedStatement pstmt = con.prepareStatement(sql)
         ) {
             pstmt.setInt(1, reviewId);
             pstmt.executeUpdate();
@@ -258,7 +256,7 @@ public class ReviewDAO {
         try (Connection con = DBManager_new.connect()) {
             con.setAutoCommit(false);
 
-            boolean exists = false;
+            boolean exists;
             try (PreparedStatement pstmt = con.prepareStatement(checkSql)) {
                 pstmt.setInt(1, memberId);
                 pstmt.setInt(2, reviewId);
@@ -307,7 +305,7 @@ public class ReviewDAO {
         String sql = "SELECT COUNT(*) FROM review_like WHERE member_id = ? AND review_id = ?";
         try (
                 Connection con = DBManager_new.connect();
-                PreparedStatement pstmt = con.prepareStatement(sql);
+                PreparedStatement pstmt = con.prepareStatement(sql)
         ) {
             pstmt.setInt(1, memberId);
             pstmt.setInt(2, reviewId);
@@ -382,7 +380,7 @@ public class ReviewDAO {
         String sql = "SELECT COUNT(*) FROM review_bookmark WHERE member_id = ? AND review_id = ?";
         try (
                 Connection con = DBManager_new.connect();
-                PreparedStatement pstmt = con.prepareStatement(sql);
+                PreparedStatement pstmt = con.prepareStatement(sql)
         ) {
             pstmt.setInt(1, memberId);
             pstmt.setInt(2, reviewId);
@@ -423,12 +421,12 @@ public class ReviewDAO {
         }
 
         // 2. ORDER BY 추가 전에 COUNT 쿼리 생성 (성능 향상)
-        String countSql = "SELECT COUNT(*) FROM (" + baseSql.toString() + ")";
+        String countSql = "SELECT COUNT(*) FROM (" + baseSql + ")";
 
         // 3. 정렬 문자열 앞 공백 추가 및 baseSql에 병합
-        String orderBy = " order by r.r_created_date desc"; // 컬럼명 확인 요망
-        if ("difficulty_desc".equals(sort)) {
-            orderBy = " order by r.r_difficulty desc";
+        String orderBy = " order by r.r_created_date desc";
+        if ("like_desc".equals(sort)) {
+            orderBy = " order by r.r_like_count desc";
         } else if ("difficulty_asc".equals(sort)) {
             orderBy = " order by r.r_difficulty asc";
         }
@@ -436,7 +434,7 @@ public class ReviewDAO {
 
         // 페이징 쿼리 조립
         String pagedSql = "SELECT * FROM ("
-                + "  SELECT ROWNUM rn, t.* FROM (" + baseSql.toString() + ") t"
+                + "  SELECT ROWNUM rn, t.* FROM (" + baseSql + ") t"
                 + ") WHERE rn BETWEEN ? AND ?";
         int start = (page - 1) * pageSize + 1;
         int end = page * pageSize;
@@ -486,8 +484,8 @@ public class ReviewDAO {
 
         StringBuilder baseSql = new StringBuilder(
                 "SELECT r.*, c.company_name FROM review r " +
-                "JOIN company c ON r.r_company_id = c.company_id " +
-                "WHERE c.is_verified = 'Y'"
+                        "JOIN company c ON r.r_company_id = c.company_id " +
+                        "WHERE c.is_verified = 'Y'"
         );
         List<Object> params = new ArrayList<>();
 
@@ -531,8 +529,8 @@ public class ReviewDAO {
         }
 
         String orderBy = " ORDER BY r.r_created_date DESC";
-        if ("difficulty_desc".equals(sort)) {
-            orderBy = " ORDER BY r.r_difficulty DESC";
+        if ("like_desc".equals(sort)) {
+            orderBy = " ORDER BY r.r_like_count DESC";
         } else if ("difficulty_asc".equals(sort)) {
             orderBy = " ORDER BY r.r_difficulty ASC";
         }
@@ -572,92 +570,92 @@ public class ReviewDAO {
         return data;
     }
 
-    public int insertReviewWithReturnId(ReviewVO vo) {
-        int generatedId = 0;
-        String seqSql = "SELECT review_seq.nextval FROM dual";
-        String insertSql = "INSERT INTO review (r_id, r_company_id, r_member_id, r_job_position, r_interview_type, r_difficulty, r_result, r_content, r_rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//    public int insertReviewWithReturnId(ReviewVO vo) {
+//        int generatedId = 0;
+//        String seqSql = "SELECT review_seq.nextval FROM dual";
+//        String insertSql = "INSERT INTO review (r_id, r_company_id, r_member_id, r_job_position, r_interview_type, r_difficulty, r_result, r_content, r_rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//
+//        try (Connection con = DBManager_new.connect()) {
+//            con.setAutoCommit(false);
+//            try {
+//                try (PreparedStatement seqStmt = con.prepareStatement(seqSql);
+//                     ResultSet rs = seqStmt.executeQuery()) {
+//                    if (rs.next()) generatedId = rs.getInt(1);
+//                }
+//
+//                if (generatedId == 0) throw new Exception("시퀀스 조회 실패");
+//
+//                try (PreparedStatement pstmt = con.prepareStatement(insertSql)) {
+//                    pstmt.setInt(1, generatedId);
+//                    pstmt.setInt(2, vo.getReviewCompanyId());
+//                    pstmt.setInt(3, vo.getReviewMemberId());
+//                    pstmt.setString(4, vo.getReviewJobPosition());
+//                    pstmt.setString(5, vo.getReviewInterviewType());
+//                    pstmt.setInt(6, vo.getReviewDifficulty());
+//                    pstmt.setString(7, vo.getReviewResult());
+//                    pstmt.setString(8, vo.getReviewContent());
+//                    pstmt.setInt(9, vo.getReviewRating());
+//                    pstmt.executeUpdate();
+//                }
+//
+//                con.commit();
+//            } catch (Exception e) {
+//                con.rollback();
+//                e.printStackTrace();
+//                generatedId = 0;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            generatedId = 0;
+//        }
+//        return generatedId;
+//    }
 
-        try (Connection con = DBManager_new.connect()) {
-            con.setAutoCommit(false);
-            try {
-                try (PreparedStatement seqStmt = con.prepareStatement(seqSql);
-                     ResultSet rs = seqStmt.executeQuery()) {
-                    if (rs.next()) generatedId = rs.getInt(1);
-                }
-
-                if (generatedId == 0) throw new Exception("시퀀스 조회 실패");
-
-                try (PreparedStatement pstmt = con.prepareStatement(insertSql)) {
-                    pstmt.setInt(1, generatedId);
-                    pstmt.setInt(2, vo.getReviewCompanyId());
-                    pstmt.setInt(3, vo.getReviewMemberId());
-                    pstmt.setString(4, vo.getReviewJobPosition());
-                    pstmt.setString(5, vo.getReviewInterviewType());
-                    pstmt.setInt(6, vo.getReviewDifficulty());
-                    pstmt.setString(7, vo.getReviewResult());
-                    pstmt.setString(8, vo.getReviewContent());
-                    pstmt.setInt(9, vo.getReviewRating());
-                    pstmt.executeUpdate();
-                }
-
-                con.commit();
-            } catch (Exception e) {
-                con.rollback();
-                e.printStackTrace();
-                generatedId = 0;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            generatedId = 0;
-        }
-        return generatedId;
-    }
-
-    public void insertTags(int reviewId, String tagsString) {
-        if (tagsString == null || tagsString.trim().isEmpty()) return;
-
-        String[] tags = tagsString.split(",");
-        // MERGE: 태그 없으면 INSERT, 있으면 무시 → race condition 없음
-        String mergeSql = "MERGE INTO tag t " +
-                "USING (SELECT ? AS tag_name FROM dual) src " +
-                "ON (t.tag_name = src.tag_name) " +
-                "WHEN NOT MATCHED THEN INSERT (tag_id, tag_name) VALUES (tag_seq.nextval, src.tag_name)";
-        String selectTagSql = "SELECT tag_id FROM tag WHERE tag_name = ?";
-        String insertMappingSql = "INSERT INTO review_tag (review_id, tag_id) VALUES (?, ?)";
-
-        try (Connection con = DBManager_new.connect()) {
-            for (String tag : tags) {
-                String tagName = tag.trim();
-                if (tagName.isEmpty()) continue;
-
-                // MERGE로 태그 upsert (존재하면 그대로, 없으면 신규 삽입)
-                try (PreparedStatement mergePstmt = con.prepareStatement(mergeSql)) {
-                    mergePstmt.setString(1, tagName);
-                    mergePstmt.executeUpdate();
-                }
-
-                // MERGE 후 tag_id 조회 (항상 존재 보장)
-                int tagId = -1;
-                try (PreparedStatement selectPstmt = con.prepareStatement(selectTagSql)) {
-                    selectPstmt.setString(1, tagName);
-                    try (ResultSet rs = selectPstmt.executeQuery()) {
-                        if (rs.next()) tagId = rs.getInt(1);
-                    }
-                }
-
-                if (tagId != -1) {
-                    try (PreparedStatement mapPstmt = con.prepareStatement(insertMappingSql)) {
-                        mapPstmt.setInt(1, reviewId);
-                        mapPstmt.setInt(2, tagId);
-                        mapPstmt.executeUpdate();
-                    } catch (Exception e) {
-                        // 이미 매핑된 경우 무시
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public void insertTags(int reviewId, String tagsString) {
+//        if (tagsString == null || tagsString.trim().isEmpty()) return;
+//
+//        String[] tags = tagsString.split(",");
+//        // MERGE: 태그 없으면 INSERT, 있으면 무시 → race condition 없음
+//        String mergeSql = "MERGE INTO tag t " +
+//                "USING (SELECT ? AS tag_name FROM dual) src " +
+//                "ON (t.tag_name = src.tag_name) " +
+//                "WHEN NOT MATCHED THEN INSERT (tag_id, tag_name) VALUES (tag_seq.nextval, src.tag_name)";
+//        String selectTagSql = "SELECT tag_id FROM tag WHERE tag_name = ?";
+//        String insertMappingSql = "INSERT INTO review_tag (review_id, tag_id) VALUES (?, ?)";
+//
+//        try (Connection con = DBManager_new.connect()) {
+//            for (String tag : tags) {
+//                String tagName = tag.trim();
+//                if (tagName.isEmpty()) continue;
+//
+//                // MERGE로 태그 upsert (존재하면 그대로, 없으면 신규 삽입)
+//                try (PreparedStatement mergePstmt = con.prepareStatement(mergeSql)) {
+//                    mergePstmt.setString(1, tagName);
+//                    mergePstmt.executeUpdate();
+//                }
+//
+//                // MERGE 후 tag_id 조회 (항상 존재 보장)
+//                int tagId = -1;
+//                try (PreparedStatement selectPstmt = con.prepareStatement(selectTagSql)) {
+//                    selectPstmt.setString(1, tagName);
+//                    try (ResultSet rs = selectPstmt.executeQuery()) {
+//                        if (rs.next()) tagId = rs.getInt(1);
+//                    }
+//                }
+//
+//                if (tagId != -1) {
+//                    try (PreparedStatement mapPstmt = con.prepareStatement(insertMappingSql)) {
+//                        mapPstmt.setInt(1, reviewId);
+//                        mapPstmt.setInt(2, tagId);
+//                        mapPstmt.executeUpdate();
+//                    } catch (Exception e) {
+//                        // 이미 매핑된 경우 무시
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

@@ -11,6 +11,7 @@
     font-weight: 600;
     color: #1e293b;
     margin-bottom: 20px;
+    margin-top: -20px;
 }
 
 /* ===== 검색 박스 ===== */
@@ -88,11 +89,8 @@
     font-size: 14px;
     font-family: 'Pretendard', sans-serif;
     color: #1e293b;
-    background: #f8fafc;
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%2364748b' d='M5 7L1 3h8L5 7z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
+    background: #f8fafc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%2364748b' d='M5 7L1 3h8L5 7z'/%3E%3C/svg%3E") no-repeat right 8px center;
     cursor: pointer;
 }
 
@@ -406,40 +404,166 @@
 }
 
 /* Dark Mode */
-[data-theme="dark"] .cs-title { color: #f8fafc; }
-[data-theme="dark"] .cs-search-box { background: #1e293b; border-color: #334155; }
-[data-theme="dark"] .cs-label { color: #cbd5e1; }
-[data-theme="dark"] .cs-divider { background: #334155; }
-[data-theme="dark"] .cs-opt-btn { background: #1e293b; border-color: #334155; color: #e2e8f0; }
-[data-theme="dark"] .cs-opt-btn:hover { border-color: #a78bfa; color: #c4b5fd; }
-[data-theme="dark"] .cs-opt-btn.active { background: #a78bfa; border-color: #a78bfa; color: #ffffff; }
+[data-theme="dark"] .cs-title {
+    color: #f8fafc;
+}
+
+[data-theme="dark"] .cs-search-box {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .cs-label {
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .cs-divider {
+    background: #334155;
+}
+
+[data-theme="dark"] .cs-opt-btn {
+    background: #1e293b;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .cs-opt-btn:hover {
+    border-color: #a78bfa;
+    color: #c4b5fd;
+}
+
+[data-theme="dark"] .cs-opt-btn.active {
+    background: #a78bfa;
+    border-color: #a78bfa;
+    color: #ffffff;
+}
+
 [data-theme="dark"] .cs-range-group select,
 [data-theme="dark"] .cs-range-group input[type="number"],
-[data-theme="dark"] .cs-input-group input[type="text"] { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+[data-theme="dark"] .cs-input-group input[type="text"] {
+    background: #0f172a;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
 [data-theme="dark"] .cs-range-group select:focus,
 [data-theme="dark"] .cs-range-group input[type="number"]:focus,
-[data-theme="dark"] .cs-input-group input[type="text"]:focus { border-color: #a78bfa; background: #1e293b; }
-[data-theme="dark"] .cs-tilde { color: #cbd5e1; }
-[data-theme="dark"] .cs-range-unit { color: #94a3b8; }
-[data-theme="dark"] .cs-action-bar { background: #1e293b; border-color: #334155; }
-[data-theme="dark"] .cs-result-count { color: #cbd5e1; }
-[data-theme="dark"] .cs-result-count span { color: #c4b5fd; }
-[data-theme="dark"] .cs-clear-btn { background: #1e293b; border-color: #334155; color: #cbd5e1; }
-[data-theme="dark"] .cs-clear-btn:hover { border-color: #475569; color: #e2e8f0; }
-[data-theme="dark"] .cs-search-btn { background: #a78bfa; color: #ffffff; }
-[data-theme="dark"] .cs-search-btn:hover { background: #8b5cf6; }
-[data-theme="dark"] .cs-card { background: #1e293b; border-color: #334155; }
-[data-theme="dark"] .cs-logo { background: #334155; color: #c4b5fd; }
-[data-theme="dark"] .cs-name { color: #f8fafc; }
-[data-theme="dark"] .cs-industry-text { color: #94a3b8; }
-[data-theme="dark"] .cs-card-body { border-top-color: #334155; }
-[data-theme="dark"] .cs-meta-label { color: #94a3b8; }
-[data-theme="dark"] .cs-meta-value { color: #f8fafc; }
-[data-theme="dark"] .cs-action { background: #0f172a; border-color: #334155; color: #cbd5e1; }
-[data-theme="dark"] .cs-action:hover { border-color: #a78bfa; color: #c4b5fd; }
-[data-theme="dark"] .cs-action.primary { background: #a78bfa; border-color: #a78bfa; color: #ffffff; }
-[data-theme="dark"] .cs-action.primary:hover { background: #8b5cf6; }
-[data-theme="dark"] .cs-no-result { background: #1e293b; border-color: #334155; color: #cbd5e1; }
-[data-theme="dark"] .cs-page { background: #1e293b; border-color: #334155; color: #e2e8f0; }
-[data-theme="dark"] .cs-page:hover { border-color: #a78bfa; color: #c4b5fd; }
-[data-theme="dark"] .cs-page.active { background: #a78bfa; border-color: #a78bfa; color: #ffffff; }
+[data-theme="dark"] .cs-input-group input[type="text"]:focus {
+    border-color: #a78bfa;
+    background: #1e293b;
+}
+
+[data-theme="dark"] .cs-tilde {
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .cs-range-unit {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .cs-action-bar {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .cs-result-count {
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .cs-result-count span {
+    color: #c4b5fd;
+}
+
+[data-theme="dark"] .cs-clear-btn {
+    background: #1e293b;
+    border-color: #334155;
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .cs-clear-btn:hover {
+    border-color: #475569;
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .cs-search-btn {
+    background: #a78bfa;
+    color: #ffffff;
+}
+
+[data-theme="dark"] .cs-search-btn:hover {
+    background: #8b5cf6;
+}
+
+[data-theme="dark"] .cs-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .cs-logo {
+    background: #334155;
+    color: #c4b5fd;
+}
+
+[data-theme="dark"] .cs-name {
+    color: #f8fafc;
+}
+
+[data-theme="dark"] .cs-industry-text {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .cs-card-body {
+    border-top-color: #334155;
+}
+
+[data-theme="dark"] .cs-meta-label {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .cs-meta-value {
+    color: #f8fafc;
+}
+
+[data-theme="dark"] .cs-action {
+    background: #0f172a;
+    border-color: #334155;
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .cs-action:hover {
+    border-color: #a78bfa;
+    color: #c4b5fd;
+}
+
+[data-theme="dark"] .cs-action.primary {
+    background: #a78bfa;
+    border-color: #a78bfa;
+    color: #ffffff;
+}
+
+[data-theme="dark"] .cs-action.primary:hover {
+    background: #8b5cf6;
+}
+
+[data-theme="dark"] .cs-no-result {
+    background: #1e293b;
+    border-color: #334155;
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .cs-page {
+    background: #1e293b;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .cs-page:hover {
+    border-color: #a78bfa;
+    color: #c4b5fd;
+}
+
+[data-theme="dark"] .cs-page.active {
+    background: #a78bfa;
+    border-color: #a78bfa;
+    color: #ffffff;
+}

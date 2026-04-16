@@ -3,7 +3,7 @@ console.log("qqqq")
 
 
 function openCompanyModal() {
-    $('#companySearchModal').show();
+    $('#companySearchModal').css('display', 'flex');
 }
 
 function closeCompanyModal() {
