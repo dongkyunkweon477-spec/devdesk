@@ -424,9 +424,9 @@ public class ReviewDAO {
         String countSql = "SELECT COUNT(*) FROM (" + baseSql + ")";
 
         // 3. 정렬 문자열 앞 공백 추가 및 baseSql에 병합
-        String orderBy = " order by r.r_created_date desc"; // 컬럼명 확인 요망
-        if ("difficulty_desc".equals(sort)) {
-            orderBy = " order by r.r_difficulty desc";
+        String orderBy = " order by r.r_created_date desc";
+        if ("like_desc".equals(sort)) {
+            orderBy = " order by r.r_like_count desc";
         } else if ("difficulty_asc".equals(sort)) {
             orderBy = " order by r.r_difficulty asc";
         }
@@ -529,8 +529,8 @@ public class ReviewDAO {
         }
 
         String orderBy = " ORDER BY r.r_created_date DESC";
-        if ("difficulty_desc".equals(sort)) {
-            orderBy = " ORDER BY r.r_difficulty DESC";
+        if ("like_desc".equals(sort)) {
+            orderBy = " ORDER BY r.r_like_count DESC";
         } else if ("difficulty_asc".equals(sort)) {
             orderBy = " ORDER BY r.r_difficulty ASC";
         }

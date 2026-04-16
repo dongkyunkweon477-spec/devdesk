@@ -39,7 +39,7 @@
             </select>
             <select id="sortOrder">
                 <option value="latest">최신순</option>
-                <option value="difficulty_desc">난이도 높은순</option>
+                <option value="like_desc">추천순</option>
                 <option value="difficulty_asc">난이도 낮은순</option>
             </select>
         </div>
@@ -60,7 +60,6 @@
                                 ${r.companyName}
                         </a>
                     </div>
-                    <div>[북마크] ${r.reviewBookmarkCount}</div>
                 </div>
                 <h2 class="card-title">${r.reviewTitle} </h2>
                 <div class="card-body">
@@ -114,11 +113,19 @@
                 </div>
 
                 <div class="card-footer">
-                    <div>[추천] ${r.reviewLikeCount}</div>
+                    <div class="footer-left">
+                        <span class="card-like">♥ <span class="like-num">${r.reviewLikeCount}</span></span>
+                        <c:if test="${r.reviewRating > 0}">
+                            <span class="card-rating">
+                                <c:forEach begin="1" end="5" var="i">
+                                    <span class="card-star ${i <= r.reviewRating ? 'on' : ''}">★</span>
+                                </c:forEach>
+                                <span class="card-rating-num">${r.reviewRating}.0</span>
+                            </span>
+                        </c:if>
+                    </div>
                     <div class="footer-right">
-                    <span>
-                        <fmt:formatDate value="${r.reviewCreatedDate}" pattern="yyyy년 M월 d일"/>
-                    </span>
+                        <span><fmt:formatDate value="${r.reviewCreatedDate}" pattern="yyyy년 M월 d일"/></span>
                     </div>
                 </div>
             </div>

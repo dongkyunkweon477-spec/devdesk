@@ -2,11 +2,6 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/base.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/board/board-all.css">
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>
 <div class="write-container">
 
 
@@ -66,6 +61,6 @@
 
 
     </script>
+    <script src="${pageContext.request.contextPath}/js/board/board-add.js"></script>
 </div>
-</body>
-</html>
+
