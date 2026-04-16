@@ -40,7 +40,6 @@ html {
 }
 
 body {
-    font-family: 'Noto Sans KR', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
@@ -74,20 +73,6 @@ input, textarea, select {
     font-family: inherit;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--border2);
-    border-radius: 3px;
-}
 
 /* ── Animations ── */
 @keyframes fadeUp {
