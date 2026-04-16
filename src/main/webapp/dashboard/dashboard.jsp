@@ -460,23 +460,7 @@
         });
     })();
 
-<<<<<<< HEAD
     // 2. TIL 모달 및 마크다운 관련 함수 모음 (TAG_CONFIG 는 til.js 에서 로드됨)
-=======
-    // 2. TIL 모달 및 마크다운 관련 함수 모음
-    const TAG_CONFIG = {
-        'Java': {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
-        'Spring': {color: '#56e39f', bg: 'rgba(86,227,159,0.12)'},
-        'SQL': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
-        'JavaScript': {color: '#ffd166', bg: 'rgba(255,209,102,0.12)'},
-        'Git': {color: '#ff6b6b', bg: 'rgba(255,107,107,0.12)'},
-        'Python': {color: '#5b7cf8', bg: 'rgba(91,124,248,0.12)'},
-        'CSS': {color: '#8b6ef5', bg: 'rgba(139,110,245,0.12)'},
-        'React': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
-        '기타': {color: '#9da3b8', bg: 'rgba(157,163,184,0.12)'}
-    };
-
->>>>>>> 8474611e038126b97b2b674caf7e6f9637f4df6c
     function renderMarkdown(text) {
         if (!text) return '<p style="color:var(--text3)">내용이 없어요.</p>';
         return text
@@ -558,14 +542,7 @@
             const firstDay = new Date(year, month, 1);
             const lastDay = new Date(year, month + 1, 0);
             const prevMonthLastDay = new Date(year, month, 0).getDate();
-<<<<<<< HEAD
-            let firstDayIndex = firstDay.getDay() - 1;
-            if (firstDayIndex === -1) firstDayIndex = 6;
-=======
-
-            // 🌟 수정 완료: 일요일 시작으로 변경 (- 1 삭제)
             let firstDayIndex = firstDay.getDay();
->>>>>>> 8474611e038126b97b2b674caf7e6f9637f4df6c
 
             const calTitle = document.getElementById('g-cal-title');
             if (calTitle) calTitle.textContent = year + '년 ' + (month + 1) + '월';
