@@ -314,7 +314,8 @@ input, textarea, select {
     position: fixed;
     inset: 0;
     background: rgba(30, 34, 60, 0.75);
-<!-- 사이드바가 모달 안에 들어오는 문제 해결 위해 0.45 - > 0.75 --> backdrop-filter: blur(8px);
+    /* 사이드바가 모달 안에 들어오는 문제 해결 위해 0.45 → 0.75 */
+    backdrop-filter: blur(8px);
     z-index: 500;
     display: flex;
     align-items: center;

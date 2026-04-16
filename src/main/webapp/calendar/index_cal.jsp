@@ -9,8 +9,7 @@
 
 <script src="${pageContext.request.contextPath}/js/company/company-search-modal.js" defer></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
-<%-- base.css 선민추가 --%>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/base.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/workspace_ui.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
 
@@ -127,7 +126,7 @@
     <input type="hidden" id="form-appId" value="1">
     <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}"/>
 
-    <div class="form-group">
+    <div class="cal-form-group">
         <label>기업</label>
         <div style="display:flex;align-items:center;gap:8px;">
             <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요" style="cursor:pointer;flex:1;" onclick="openCompanyModal()"/>
@@ -139,19 +138,19 @@
         </div>
         <input type="hidden" name="companyId" id="selectedCompanyId"/>
     </div>
-    <div class="form-group">
+    <div class="cal-form-group">
         <label>지원 직무</label>
         <input type="text" id="form-position" placeholder="ex) 백엔드 개발자">
     </div>
-    <div class="form-group">
+    <div class="cal-form-group">
         <label>서류 지원 일자 <span style="font-weight:400;color:var(--text3);">(선택)</span></label>
         <input type="date" id="form-apply-date">
     </div>
-    <div class="form-group">
+    <div class="cal-form-group">
         <label>면접 날짜</label>
         <input type="date" id="form-date">
     </div>
-    <div class="form-group">
+    <div class="cal-form-group">
         <label>시간</label>
         <div style="display:flex;gap:8px;">
             <select id="form-hour" style="flex:1;">
@@ -178,7 +177,7 @@
             </select>
         </div>
     </div>
-    <div class="form-group">
+    <div class="cal-form-group">
         <label>면접 전형</label>
         <select id="form-type">
             <option value="코딩테스트">코딩테스트</option>
@@ -189,7 +188,7 @@
         </select>
         <input type="text" id="form-type-direct" placeholder="ex) SPI, 인성면접" style="display:none;margin-top:6px;">
     </div>
-    <div class="form-group">
+    <div class="cal-form-group">
         <label>메모</label>
         <input type="text" id="form-memo">
     </div>
@@ -199,14 +198,14 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="customAlertModal" style="display:none;">
-    <div class="modal-box">
+<div class="cal-modal-overlay" id="customAlertModal" style="display:none;">
+    <div class="cal-modal-box">
         <p id="alertMessage"></p>
         <button class="btn-save" id="btn-alert-ok" style="width:100%;">확인</button>
     </div>
 </div>
-<div class="modal-overlay" id="customConfirmModal" style="display:none;">
-    <div class="modal-box">
+<div class="cal-modal-overlay" id="customConfirmModal" style="display:none;">
+    <div class="cal-modal-box">
         <p style="font-weight:700;color:#e53e3e;margin-bottom:6px;">정말 삭제하시겠습니까?</p>
         <p style="font-size:13px;color:var(--text3);margin-bottom:20px;">삭제된 일정은 복구할 수 없습니다.</p>
         <div style="display:flex;gap:10px;">
