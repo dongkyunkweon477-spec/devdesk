@@ -8,10 +8,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
 <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}"/>
-<div id="companySearchModal" class="modal-overlay" style="display:none;">
-    <div class="modal-box">
+<div id="companySearchModal" class="csm-overlay" style="display:none;">
+    <div class="csm-box">
         <h3>기업 검색</h3>
-        <div class="modal-search-row">
+        <div class="csm-search-row">
             <input type="text" id="miniSearchInput" placeholder="기업명을 입력하세요"
                    onkeydown="if(event.key==='Enter') searchMiniCompany()">
             <button type="button" onclick="searchMiniCompany()"

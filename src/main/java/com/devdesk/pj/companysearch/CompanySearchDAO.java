@@ -252,7 +252,7 @@ public class CompanySearchDAO {
 
     public Map<String, Object> companySearchPaged(Map<String, String> conditions, int page, int pageSize) {
         Set<String> allowedText = Set.of("company_name", "company_industry", "company_location");
-        Set<String> allowedRange = Set.of("company_rating", "company_size");
+        Set<String> allowedRange = Set.of("company_size");
 
         StringBuilder baseSql = new StringBuilder(
                 "SELECT c.*, "
@@ -302,6 +302,21 @@ public class CompanySearchDAO {
                 + "c.company_location, c.company_rating, c.company_size, "
                 + "c.company_created_date, c.company_application_date" +
                 ", c.is_verified");
+
+        // 유저 평점(리뷰 평균) 필터 — WHERE 절 대신 HAVING 절 사용
+        String minRating = conditions.get("min_company_rating");
+        String maxRating = conditions.get("max_company_rating");
+        if (minRating != null && !minRating.isBlank()) {
+            baseSql.append(" HAVING NVL(ROUND(AVG(r.r_rating), 1), 0) >= ?");
+            params.add(Double.parseDouble(minRating));
+            if (maxRating != null && !maxRating.isBlank()) {
+                baseSql.append(" AND NVL(ROUND(AVG(r.r_rating), 1), 0) <= ?");
+                params.add(Double.parseDouble(maxRating));
+            }
+        } else if (maxRating != null && !maxRating.isBlank()) {
+            baseSql.append(" HAVING NVL(ROUND(AVG(r.r_rating), 1), 0) <= ?");
+            params.add(Double.parseDouble(maxRating));
+        }
 
 
         String countSql = "SELECT COUNT(*) FROM (" + baseSql + ")";

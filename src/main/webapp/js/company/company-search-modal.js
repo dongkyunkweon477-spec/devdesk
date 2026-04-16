@@ -1,6 +1,6 @@
 // 1. 미니 모달 열기/닫기
 function openCompanyModal() {
-    $('#companySearchModal').show();
+    $('#companySearchModal').css('display', 'flex');
 }
 
 function closeCompanyModal() {
