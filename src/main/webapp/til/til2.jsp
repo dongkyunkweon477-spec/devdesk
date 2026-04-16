@@ -44,15 +44,15 @@
             </a>
         </nav>
 
-        <div id="sidebar-mini-calendar">
+        <div id="sidebar-mini-calendar" style="margin-top: auto; ">
+<%-- 원본서식 :border-top: 1px solid var(--border, #e2e8f0); padding-top: 15px; padding-bottom: 20px;--%>
             <div class="g-cal-header">
-                <button id="g-prev-month" class="g-nav-btn">‹</button>
-                <span id="g-cal-title" class="g-cal-title-text"></span>
-                <button id="g-next-month" class="g-nav-btn">›</button>
+                <button class="g-nav-btn" id="g-prev-month">❮</button>
+                <span class="g-cal-title" id="g-cal-title"></span>
+                <button class="g-nav-btn" id="g-next-month">❯</button>
             </div>
             <div class="g-cal-weekdays">
-                <span>월</span><span>화</span><span>수</span>
-                <span>목</span><span>금</span><span>토</span><span>일</span>
+                <div class="sun">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
             </div>
             <div class="g-cal-days" id="g-cal-days"></div>
         </div>
@@ -311,16 +311,19 @@
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
+    // 1. 서버 데이터(JSTL)를 JS 변수로 변환 (이 부분은 외부 JS파일에서 실행 불가하므로 JSP에 남겨야 함)
     const TAG_STATS = [
         <c:forEach var="entry" items="${tagStats}" varStatus="vs">
         {tag: '${entry.key}', count: ${entry.value}}${vs.last ? '' : ','}
         </c:forEach>
     ];
+
     const RAW_EVENTS = [
         <c:forEach var="sch" items="${schList}">
         '<fmt:formatDate value="${sch.schedule_date}" pattern="yyyy-MM-dd" />',
         </c:forEach>
     ];
+
     const CTX_PATH = '${pageContext.request.contextPath}';
 </script>
 <script src="${pageContext.request.contextPath}/js/til/til.js"></script>

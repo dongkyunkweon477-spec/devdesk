@@ -58,25 +58,17 @@
         </nav>
 
 
-        <div id="sidebar-mini-calendar">
+        <div id="sidebar-mini-calendar" style="margin-top: auto; ">
+<%--    원본 서식: border-top: 1px solid var(--border, #e2e8f0); padding-top: 15px; padding-bottom: 20px;--%>
             <div class="g-cal-header">
-                <div class="g-cal-title" id="g-cal-title">2026년 4월</div>
-                <div class="g-cal-nav">
-                    <button class="g-nav-btn" id="g-prev-month">‹</button>
-                    <button class="g-nav-btn" id="g-next-month">›</button>
-                </div>
+                <button class="g-nav-btn" id="g-prev-month">❮</button>
+                <span class="g-cal-title" id="g-cal-title"></span>
+                <button class="g-nav-btn" id="g-next-month">❯</button>
             </div>
             <div class="g-cal-weekdays">
-                <div>월</div>
-                <div>화</div>
-                <div>수</div>
-                <div>목</div>
-                <div>금</div>
-                <div>토</div>
-                <div>일</div>
+                <div class="sun">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
             </div>
-            <div class="g-cal-days" id="g-cal-days">
-            </div>
+            <div class="g-cal-days" id="g-cal-days"></div>
         </div>
     </aside>
 
@@ -173,7 +165,7 @@
 
 
         </div>
-       
+
 
         <!-- ── 2×2 카드 그리드 ────────────────────────── -->
         <div class="dash-grid">
@@ -384,7 +376,7 @@
         });
     })();
 
-    // 2. TIL 모달 및 마크다운 관련 함수 모음 (중복 제거됨)
+    // 2. TIL 모달 및 마크다운 관련 함수 모음
     const TAG_CONFIG = {
         'Java': {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
         'Spring': {color: '#56e39f', bg: 'rgba(86,227,159,0.12)'},
@@ -438,11 +430,11 @@
         if (modal) modal.classList.remove('open');
     }
 
-    // ESC 키 & 오버레이 클릭으로 닫기
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closeDetail();
     });
 
+    // 🌟 수정 완료: 여기서 중괄호(})를 닫아줘서 캘린더 코드가 모달 유무와 상관없이 실행되게 독립시켰습니다!
     var modalOverlay = document.getElementById('tilDetailModal');
     if (modalOverlay) {
         modalOverlay.addEventListener('click', function (e) {
@@ -460,7 +452,6 @@
             </c:forEach>
         ];
 
-        // 날짜별로 일정이 몇 개인지 카운트 ({'2026-04-10': 2, '2026-04-15': 1 ...})
         const eventCounts = {};
         rawEvents.forEach(date => {
             if (date && date.trim() !== '') {
@@ -470,9 +461,8 @@
         });
 
         let currentDispDate = new Date();
-        const todayStr = '${todayStr}'; // 컨트롤러에서 내려주는 오늘 날짜 문자열
+        const todayStr = '${todayStr}';
 
-        // 달력을 그리는 핵심 함수
         function renderMiniCalendar(date) {
             const year = date.getFullYear();
             const month = date.getMonth();
@@ -481,15 +471,14 @@
             const lastDay = new Date(year, month + 1, 0);
             const prevMonthLastDay = new Date(year, month, 0).getDate();
 
-            let firstDayIndex = firstDay.getDay() - 1;
-            if (firstDayIndex === -1) firstDayIndex = 6;
+            // 🌟 수정 완료: 일요일 시작으로 변경 (- 1 삭제)
+            let firstDayIndex = firstDay.getDay();
 
             const calTitle = document.getElementById('g-cal-title');
             if (calTitle) calTitle.textContent = year + '년 ' + (month + 1) + '월';
 
             let daysHTML = '';
 
-            // 지난 달 날짜 (회색 처리)
             // 1. 이전 달 날짜 흐리게 채우기
             for (let i = firstDayIndex; i > 0; i--) {
                 daysHTML += `<div class="g-day-cell" onclick="location.href='${pageContext.request.contextPath}/calendar'">
@@ -497,28 +486,32 @@
                              </div>`;
             }
 
-            // 2. 이번 달 1일부터 말일까지 채우기 및 일정 점 찍기
+            // 2. 이번 달 날짜 채우기 및 일정 점 찍기
             for (let i = 1; i <= lastDay.getDate(); i++) {
                 const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(i).padStart(2, '0');
                 let isToday = (dateStr === todayStr) ? ' today' : '';
 
+                // 🌟 수정 완료: 일요일일 경우 ' sun' 클래스 추가
+                let isSun = new Date(year, month, i).getDay() === 0 ? ' sun' : '';
+
                 let dotsHTML = '';
                 if (eventCounts[dateStr]) {
                     dotsHTML = '<div class="g-dots">';
-                    let dotCount = Math.min(eventCounts[dateStr], 3); // 최대 3개까지만 표시
+                    let dotCount = Math.min(eventCounts[dateStr], 3);
                     for (let k = 0; k < dotCount; k++) {
                         dotsHTML += '<span class="g-dot"></span>';
                     }
                     dotsHTML += '</div>';
                 }
 
+                // 🌟 수정 완료: 클래스 부분에 \${isSun} 변수 추가
                 daysHTML += `<div class="g-day-cell" onclick="location.href='${pageContext.request.contextPath}/calendar'">
-                                <div class="g-day-num\${isToday}">\${i}</div>
+                                <div class="g-day-num\${isToday}\${isSun}">\${i}</div>
                                 \${dotsHTML}
                              </div>`;
             }
 
-            // 3. 달력 모양 유지를 위해 남은 빈칸은 다음 달 날짜로 채우기
+            // 3. 남은 빈칸 다음 달 날짜로 채우기
             const totalCells = firstDayIndex + lastDay.getDate();
             let nextMonthDay = 1;
             while (totalCells + nextMonthDay - 1 < 42) {
@@ -530,7 +523,6 @@
             document.getElementById('g-cal-days').innerHTML = daysHTML;
         }
 
-        // 이전 달 버튼 이벤트
         const prevBtn = document.getElementById('g-prev-month');
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
@@ -539,7 +531,6 @@
             });
         }
 
-        // 다음 달 버튼 이벤트
         const nextBtn = document.getElementById('g-next-month');
         if (nextBtn) {
             nextBtn.addEventListener('click', () => {
@@ -548,7 +539,6 @@
             });
         }
 
-        // 페이지 로드 시 최초 달력 렌더링
         renderMiniCalendar(currentDispDate);
     });
 
