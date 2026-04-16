@@ -1,0 +1,181 @@
+/* =========================================
+   DevDesk 관리자 - 신고 관리 전용 CSS
+   경로: src/main/webapp/css/admin/admin_report.css
+========================================= */
+
+/* ===== 신고 컨테이너 ===== */
+.report-container-admin {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* ===== 신고 상세 - detail-view ===== */
+.detail-view {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.detail-info-group {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 4px 20px;
+    margin-bottom: 20px;
+}
+
+.detail-row {
+    display: flex;
+    align-items: flex-start;
+    padding: 13px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
+    gap: 16px;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    width: 110px;
+    flex-shrink: 0;
+    font-weight: 600;
+    color: #64748b;
+    font-size: 13px;
+    padding-top: 3px;
+}
+
+.detail-content {
+    flex: 1;
+    color: #1e293b;
+    line-height: 1.6;
+    word-break: break-word;
+}
+
+.detail-content.text-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: #334155;
+    white-space: pre-wrap;
+}
+
+/* ===== 신고 유형 배지 (리뷰 / 게시글) ===== */
+.report-type-badge {
+    display: inline-block;
+    width: 60px;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.report-type-badge.review {
+    color: #7c3aed;
+    background-color: #f5f3ff;
+}
+
+.report-type-badge.board {
+    color: #0369a1;
+    background-color: #e0f2fe;
+}
+
+/* ===== 신고 사유 배지 ===== */
+.report-reason-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 4px;
+    color: #374151;
+    background-color: #f3f4f6;
+    white-space: nowrap;
+}
+
+/* ===== 처리 상태 배지 ===== */
+.report-status-badge {
+    display: inline-block;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.report-status-badge.pending {
+    color: #dc2626;
+    background-color: #fee2e2;
+}
+
+.report-status-badge.done {
+    color: #16a34a;
+    background-color: #dcfce7;
+}
+
+/* ===== 목록 버튼 (reset-btn / search-btn) 어드민 스타일 통일 ===== */
+.reset-btn {
+    padding: 8px 18px;
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.reset-btn:hover {
+    background: #e2e8f0;
+}
+
+.search-btn {
+    padding: 8px 18px;
+    background: #7c3aed;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.search-btn:hover {
+    opacity: 0.85;
+}
+
+/* 👇 수정 및 추가된 부분 👇 */
+.detail-info-group.grid-2x2 {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 16px 20px; /* 위아래 여백 살짝 조절 */
+    margin-bottom: 20px;
+
+    /* Grid 속성 추가 (2x2 분할) */
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 정확히 반반(50:50)으로 나눔 */
+    column-gap: 40px; /* 좌우 칸 사이 여백 */
+    row-gap: 0; /* 위아래 칸 사이 여백 (detail-row 패딩이 있어서 0으로 둠) */
+}
+
+/* 그리드 안쪽에 있는 detail-row는 테두리(border)를 다르게 처리해야 깔끔합니다 */
+.detail-info-group.grid-2x2 .detail-row {
+    border-bottom: 1px solid #e2e8f0;
+    margin: 0;
+    padding: 12px 0;
+}
+
+/* 2x2 구조에서 밑에 있는 2개(3, 4번째)는 밑줄 제거 */
+.detail-info-group.grid-2x2 .detail-row:nth-last-child(1),
+.detail-info-group.grid-2x2 .detail-row:nth-last-child(2) {
+    border-bottom: none;
+}

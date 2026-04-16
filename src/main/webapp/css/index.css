@@ -1,6 +1,43 @@
 /* ===== 폰트 ===== */
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Pretendard:wght@400;500;600&display=swap');
 
+/* ===== CSS 변수 (테마 시스템) ===== */
+:root {
+    /* 라이트 모드 기본값 */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --text-primary: #1e293b;
+    --text-secondary: #334155;
+    --text-tertiary: #64748b;
+    --border-primary: #e2e8f0;
+    --border-secondary: #cbd5e1;
+    --accent-primary: #8e5ae5;
+    --accent-secondary: #a78bfa;
+    --accent-light: #ede9fe;
+    --accent-hover: #8d75b3;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+/* 다크 모드 테마 */
+[data-theme="dark"] {
+    --bg-primary: #1e293b;
+    --bg-secondary: #0f172a;
+    --bg-tertiary: #334155;
+    --text-primary: #ffffff;
+    --text-secondary: #e2e8f0;
+    --text-tertiary: #cbd5e1;
+    --border-primary: #334155;
+    --border-secondary: #475569;
+    --accent-primary: #a78bfa;
+    --accent-secondary: #c4b5fd;
+    --accent-light: #4c1d95;
+    --accent-hover: #b99dfa;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --transition: all 0.3s ease;
+}
+
 /* ===== 기본 ===== */
 * {
     box-sizing: border-box;
@@ -10,19 +47,20 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Pretendard', sans-serif;
-    background-color: #f8fafc;
-    color: #1e293b;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: var(--transition);
 }
 
 /* 링크 */
 a {
     text-decoration: none;
-    color: #334155;
+    color: var(--text-secondary);
     transition: 0.3s;
 }
 
 a:hover {
-    color: #a78bfa; /* 연보라 포인트 */
+    color: var(--accent-secondary);
 }
 
 /* 헤더처럼 묶기 위해 container 기준 */
@@ -30,6 +68,7 @@ a:hover {
     display: flex;
     position: relative;
     flex-direction: column;
+
 }
 
 /* ===== 타이틀 ===== */
@@ -40,28 +79,36 @@ a:hover {
     position: static; /* 🔥 fixed 제거 */
 }
 
-/* ===== 헤더 ===== */
+/* ───────────────────────────────────────────
+   🔥 [수정됨] 헤더: Grid 레이아웃으로 겹침 완벽 방지
+─────────────────────────────────────────── */
 .header {
-    display: flex;
+    display: grid; /* flex 대신 grid 사용! */
+    grid-template-columns: 1fr auto 1fr; /* 왼쪽(1):가운데(내용만큼):오른쪽(1) 비율 고정 */
     align-items: center;
     justify-content: space-between;
 
     height: 70px;
-    padding: 0 40px;
+    padding: 0 20px;
 
     position: sticky;
     top: 0;
     z-index: 1000;
 
-    background: #ffffff;
-    border-bottom: 1px solid #e2e8f0;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-primary);
+    transition: var(--transition);
+
+
+    min-width: 0; /* Prevent flex items from overflowing */
 }
 
 .title {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 0px;
 }
+
 /* DevDesk 왼쪽으로 이동 */
 .title {
     justify-content: flex-start;
@@ -70,12 +117,13 @@ a:hover {
 .title a {
     font-size: 24px;
     font-family: 'JetBrains Mono', monospace;
-    color: #7c3aed;
+    color: var(--accent-primary);
     letter-spacing: 1px;
     gap: 10px;
 }
+
 .title img {
-    height: 40px;
+    height: 68px;
     display: block;
 }
 
@@ -84,13 +132,17 @@ a:hover {
     display: flex;
     align-items: center;
     gap: 30px;
+    flex: 1;
+    justify-content: center;
+    min-width: 0; /* Prevent flex items from overflowing */
 }
 
 .menu-left a {
     font-size: 15px;
     position: relative;
-    color: #475569;
+    color: var(--text-secondary);
     padding-bottom: 4px;
+    white-space: nowrap; /* 🔥 창 줄어들 때 글씨 줄바꿈 방지 */
 }
 
 /* 밑줄 효과 유지 */
@@ -101,13 +153,13 @@ a:hover {
     bottom: 0;
     width: 0;
     height: 2px;
-    background: #a78bfa;
+    background: var(--accent-secondary);
     transition: width 0.3s ease;
 }
 
 
 .menu-left a:hover {
-    color: #7c3aed;
+    color: var(--accent-primary);
 }
 
 .menu-left a:hover::after {
@@ -120,48 +172,89 @@ a:hover {
     z-index: 1100; /* title보다 높게 */
 }
 
-/* 메뉴 오른쪽 */
+/* ===== 메뉴 오른쪽 (수정됨) ===== */
 .menu-right {
     display: flex;
     align-items: center;
+    justify-content: flex-end; /* 오른쪽 정렬 */
     gap: 6px;
+    flex-shrink: 0; /* Prevent shrinking */
+    min-width: 0; /* Prevent overflow */
 }
 
+/* 기본 a 태그 뼈대 */
 .menu-right a {
     font-size: 14px;
-    color: #64748b;
+    color: var(--text-tertiary);
+    padding: 6px 12px;
+    border-radius: 6px;
 }
 
-.menu-right a:hover {
-    color: #7c3aed;
-}
-
-.menu-right span {
+/* 구분선 ( | ) */
+.menu-right .divider {
     margin: 0 4px;
-    color: #cbd5f5;
+    color: var(--border-secondary);
 }
 
-/* ===== 메뉴 구분선 ===== */
-.menu-left::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: -40px;
-    width: 100vw;
-    height: 1px;
-    display: none;
-    pointer-events: none;
-    background-color: #e2e8f0;
+/* 환영 메시지 (ㅇㅇㅇ님 환영합니다!) */
+.menu-right .welcome-msg {
+    color: var(--accent-primary);
+    font-weight: 600;
+    margin-right: 15px;
+    white-space: nowrap; /* Prevent text wrapping */
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+/* [버튼 1] 로그인, 마이페이지 (텍스트 버튼) */
+.menu-right a.btn-text:hover {
+    color: var(--accent-primary);
+    background-color: var(--bg-tertiary); /* 마우스 올렸을 때 아주 연한 배경 */
+}
+
+/* [버튼 2] 회원가입 (보라색 강조 버튼) */
+.menu-right a.btn-primary {
+    background: var(--accent-light) !important;
+    color: var(--accent-hover) !important;
+    padding: 6px 12px !important;
+    border-radius: 6px !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    transition: none !important; /* 애니메이션 제거 */
+    border: none !important;
+    box-shadow: none !important; /* 그림자 제거 */
+    transform: none !important; /* 움직임 제거 */
+    outline: none !important; /* 포커스 테두리 제거 */
+}
+
+.menu-right a.btn-primary:hover {
+    background: var(--accent-secondary) !important;
+    color: white !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* [버튼 3] 로그아웃 (회색 차분한 버튼) */
+.menu-right a.btn-secondary {
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+.menu-right a.btn-secondary:hover {
+    background-color: var(--border-primary);
 }
 
 /* ===== 콘텐츠 ===== */
 .content {
-    margin-top: 30px;
+    background-color: var(--bg-secondary);
     padding: 30px;
     min-height: 800px;
+    transition: var(--transition);
 }
 
 /* 로그인 버튼 스타일 유지 */
+/* 로그인/로그아웃 버튼 스타일 유지 */
 .menu-right a:first-child {
     padding: 6px 12px;
     border-radius: 6px;
@@ -170,21 +263,49 @@ a:hover {
 .menu-right a:last-child {
     padding: 6px 12px;
     border-radius: 6px;
-    background-color: #ede9fe;
-    color: #6d28d9;
+    background-color: var(--accent-light);
+    color: var(--accent-hover);
 }
 
 .menu-right a:last-child:hover {
-    background-color: #ddd6fe;
+    background-color: var(--accent-secondary);
 }
+
+/* ===== Theme Toggle Button ===== */
+.menu-right .test {
+    padding: 6px 12px;
+    border: 1px solid var(--border-primary);
+    border-radius: 6px;
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+    font-size: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.menu-right .test:hover {
+    background-color: var(--accent-light);
+    color: var(--accent-hover);
+    border-color: var(--accent-secondary);
+}
+
 
 /* ===== 푸터 ===== */
 .footer {
     width: 100%;
-    border-top: 1px solid #e2e8f0;
-    background-color: #ffffff;
-    margin-top: 60px;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
+    border-top: 1px solid var(--border-primary);
+    background-color: var(--bg-primary);
+    margin-top: 30px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
+    transition: var(--transition);
+}
+
+/* 사이드바가 있는 경우 푸터 레이아웃 조정 (겹침 방지) */
+@media (min-width: 901px) {
+    .container:has(.sidebar) + .footer {
+        margin-left: 240px;
+        width: calc(100% - 240px);
+    }
 }
 
 .footer-inner {
@@ -195,23 +316,128 @@ a:hover {
     justify-content: space-between;
     align-items: center;
     font-size: 13px;
-    color: #94a3b8;
+    color: var(--text-tertiary);
 }
 
 /* 오른쪽 메뉴 */
 .footer-right a {
     margin-left: 20px;
-    color: #64748b;
+    color: var(--text-tertiary);
     transition: 0.3s;
 }
 
 .footer-right a:hover {
-    color: #7c3aed;
+    color: var(--accent-primary);
 }
 
 .footer-message {
     margin-top: 5px;
     font-size: 12px;
-    color: #94a3b8;
+    color: var(--text-tertiary);
 }
 
+/* ===== 반응형 디자인 ===== */
+@media (max-width: 1200px) {
+    .header {
+        padding: 0 20px;
+    }
+
+    .menu-left {
+        gap: 20px;
+    }
+
+    .menu-left a {
+        font-size: 14px;
+    }
+
+    .menu-right .welcome-msg {
+        font-size: 13px;
+        margin-right: 10px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .menu-left {
+        gap: 15px;
+    }
+
+    .menu-left a {
+        font-size: 13px;
+    }
+
+    .menu-right .welcome-msg {
+        font-size: 12px;
+        margin-right: 8px;
+    }
+
+    .menu-right a {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+}
+
+@media (max-width: 850px) {
+    .header {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px 20px;
+    }
+
+    .title {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .menu-left {
+        position: static;
+        transform: none;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .menu-right {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* 주야간 토글 기능 */
+/* 버튼 기본 스타일 */
+.test {
+    background: transparent;
+    border: 1px solid #ddd; /* DevDesk 스타일과 맞춤 */
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 라이트 모드일 때 (기본) */
+html[data-theme='light'] .sun-icon {
+    display: block;
+}
+
+html[data-theme='light'] .moon-icon {
+    display: none;
+}
+
+/* 다크 모드일 때 */
+html[data-theme='dark'] .sun-icon {
+    display: none;
+}
+
+html[data-theme='dark'] .moon-icon {
+    display: block;
+    color: #f1c40f;
+}
+
+/* 텍스트 대신 아이콘만 쓰고 싶다면 버튼 크기를 조절하세요 */
+.test svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+}

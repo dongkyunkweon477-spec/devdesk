@@ -1,0 +1,346 @@
+/* ===== 후기 목록 페이지 ===== */
+/* index.css 기준: Pretendard, 보라색 포인트(#7c3aed), 슬레이트 계열 */
+
+.board-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* ===== 카드 ===== */
+.card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    transition: box-shadow 0.2s;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+/* ===== 카드 헤더 ===== */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.card-header a {
+    color: #7c3aed;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.card-header a:hover {
+    color: #6d28d9;
+}
+
+.badge-new {
+    background: #7c3aed;
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 11px;
+    margin-right: 8px;
+    letter-spacing: 0.5px;
+}
+
+/* ===== 카드 타이틀 ===== */
+.card-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 16px 0;
+}
+
+/* ===== 카드 바디 ===== */
+.card-body {
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.avatar {
+    width: 52px;
+    height: 52px;
+    background: #ede9fe;
+    border-radius: 50%;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+    font-size: 14px;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.info-label {
+    font-weight: 600;
+    width: 90px;
+    color: #475569;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.info-value {
+    margin-right: 16px;
+    color: #334155;
+}
+
+.tag {
+    display: inline-block;
+    background: #f1f5f9;
+    padding: 3px 12px;
+    border-radius: 20px;
+    margin-right: 6px;
+    color: #475569;
+    font-size: 13px;
+}
+
+/* ===== 계속 읽기 ===== */
+.read-more-container {
+    text-align: center;
+    margin: 16px 0;
+}
+
+.read-more-btn {
+    display: inline-block;
+    background: #ffffff;
+    border: 1px solid #7c3aed;
+    color: #7c3aed;
+    padding: 8px 40px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Pretendard', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.read-more-btn:hover {
+    background: #f5f3ff;
+    color: #6d28d9;
+}
+
+/* ===== 카드 푸터 ===== */
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 14px;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.footer-right span {
+    margin-left: 12px;
+}
+
+/* ===== 페이징 ===== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 28px;
+}
+
+.page-btn {
+    padding: 8px 14px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #475569;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
+    transition: all 0.2s;
+}
+
+.page-btn:hover {
+    border-color: #a78bfa;
+    color: #7c3aed;
+}
+
+.page-btn.active {
+    background: #7c3aed;
+    color: #ffffff;
+    border-color: #7c3aed;
+}
+
+/* ===== 툴바 (필터 + 후기 작성 버튼) ===== */
+.review-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0 16px;
+}
+
+.review-filter-bar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.review-filter-bar select {
+    height: 36px;
+    padding: 0 28px 0 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Pretendard', sans-serif;
+    color: #475569;
+    background: #f8fafc;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8.5L1 3.5h10L6 8.5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    transition: border-color 0.2s;
+}
+
+.review-filter-bar select:focus {
+    outline: none;
+    border-color: #a78bfa;
+    background-color: #ffffff;
+}
+
+.btn-write {
+    padding: 9px 22px;
+    background: #7c3aed;
+    color: #ffffff;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Pretendard', sans-serif;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.btn-write:hover {
+    background: #6d28d9;
+    color: #ffffff;
+}
+
+/* ===== 테이블 내 후기쓰기 링크 ===== */
+.write-link {
+    color: #7c3aed;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.write-link:hover {
+    color: #6d28d9;
+    text-decoration: underline;
+}
+
+/* ===== 푸터 좌측 그룹 ===== */
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ===== 기업 평점 ===== */
+.card-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 13px;
+}
+
+.card-star {
+    font-size: 13px;
+    color: #e2e8f0;
+    line-height: 1;
+}
+
+.card-star.on {
+    color: #f59e0b;
+}
+
+.card-rating-num {
+    font-size: 12px;
+    font-weight: 600;
+    color: #b45309;
+    margin-left: 3px;
+}
+
+/* ===== 추천 뱃지 ===== */
+.card-like {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #fdf2f8;
+    color: #db2777;
+    border: 1px solid #fbcfe8;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.card-like:hover {
+    background: #fce7f3;
+    border-color: #f9a8d4;
+}
+
+.like-num {
+    font-weight: 600;
+    color: #be185d;
+}
+
+/* ===== 결과 없음 ===== */
+.no-result {
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+    font-size: 15px;
+}
+
+/* Dark Mode */
+[data-theme="dark"] .card { background: #1e293b; border-color: #334155; }
+[data-theme="dark"] .card-title { color: #f8fafc; }
+[data-theme="dark"] .card-header { color: #cbd5e1; }
+[data-theme="dark"] .card-header a { color: #a78bfa; }
+[data-theme="dark"] .info-label { color: #cbd5e1; }
+[data-theme="dark"] .info-value { color: #e2e8f0; }
+[data-theme="dark"] .tag { background: #334155; color: #e2e8f0; }
+[data-theme="dark"] .card-footer { border-top-color: #334155; color: #cbd5e1; }
+[data-theme="dark"] .read-more-btn { background: #1e293b; color: #a78bfa; border-color: #a78bfa; }
+[data-theme="dark"] .read-more-btn:hover { background: #334155; color: #c4b5fd; }
+[data-theme="dark"] .page-btn { background: #1e293b; border-color: #334155; color: #e2e8f0; }
+[data-theme="dark"] .page-btn:hover { border-color: #a78bfa; color: #c4b5fd; }
+[data-theme="dark"] .page-btn.active { background: #a78bfa; color: #ffffff; border-color: #a78bfa; }
+[data-theme="dark"] .review-filter-bar select { background-color: #1e293b; border-color: #334155; color: #e2e8f0; }
+[data-theme="dark"] .review-filter-bar select:focus { border-color: #a78bfa; background-color: #334155; }
+[data-theme="dark"] .review-toolbar { color: #e2e8f0; }
+[data-theme="dark"] .no-result { color: #cbd5e1; }
+[data-theme="dark"] .card-like { background: #4c0519; border-color: #9f1239; color: #fda4af; }
+[data-theme="dark"] .card-like:hover { background: #881337; border-color: #e11d48; }
+[data-theme="dark"] .like-num { color: #fb7185; }
+[data-theme="dark"] .card-rating { background: #1c1917; border-color: #78350f; }
+[data-theme="dark"] .card-star { color: #334155; }
+[data-theme="dark"] .card-star.on { color: #fbbf24; }
+[data-theme="dark"] .card-rating-num { color: #fbbf24; }

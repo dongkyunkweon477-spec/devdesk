@@ -6,14 +6,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/company-search")
 public class CompanySearchC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-
-        request.setAttribute("content", "/company-search/companySearch.jsp");
+        List<String> industries = CompanySearchDAO.COMPANY_SEARCH_DAO.getAllIndustries();
+        List<String> locations = CompanySearchDAO.COMPANY_SEARCH_DAO.getAllLocation();
+        int totalCompanyCount = CompanySearchDAO.COMPANY_SEARCH_DAO.getTotalCompanyCount();
+        request.setAttribute("totalCompanyCount", totalCompanyCount);
+        request.setAttribute("locations", locations);
+        request.setAttribute("industries", industries);
+        request.setAttribute("content", "/company/company-search/companySearch.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 

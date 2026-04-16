@@ -17,12 +17,34 @@ CREATE TABLE application (
                                      REFERENCES company(company_id),
 
                              CONSTRAINT chk_stage
-                                 CHECK (stage IN ('APPLIED', 'DOCUMENT', 'INTERVIEW', 'PASS', 'FAIL'))
+                                 CHECK (stage IN ('APPLIED', 'DOCUMENT', 'FIRST_INTERVIEW', 'SECOND_INTERVIEW','THIRD_INTERVIEW','PASS', 'FAIL')));
+
+-------------   체크 조건 수정  -------------------
+
+ALTER TABLE APPLICATION
+                             DROP CONSTRAINT chk_stage;
+
+-- 2. 새 값을 포함한 체크 제약조건 추가
+ALTER TABLE APPLICATION
+    ADD CONSTRAINT chk_stage
+        CHECK (stage IN ('APPLIED', 'DOCUMENT', 'FIRST_INTERVIEW', 'SECOND_INTERVIEW', 'THIRD_INTERVIEW', 'PASS', 'FAIL'));
+
+
+
 
 
 
 );
 ALTER TABLE application ADD interview_date DATE;
+ALTER TABLE application ADD is_star NUMBER;
+
+ALTER TABLE application
+ADD CONSTRAINT chk_is_star
+        CHECK (is_star IN (0, 1));
+
+
+
+
 ALTER TABLE application MODIFY interview_time VARCHAR2(20);
 ALTER TABLE application MODIFY interview_type VARCHAR2(50);
 
@@ -37,6 +59,8 @@ CREATE TABLE til (
                          FOREIGN KEY (member_id)
                              REFERENCES member(member_id)
 );
+ALTER TABLE til ADD tag VARCHAR2(50) DEFAULT '기타';
+ALTER TABLE til ADD study_time NUMBER(4,1) DEFAULT  0;
 CREATE TABLE resume (
                         resume_id NUMBER PRIMARY KEY,
                         member_id NUMBER NOT NULL,

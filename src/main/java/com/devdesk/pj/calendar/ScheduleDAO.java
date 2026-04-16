@@ -2,12 +2,10 @@ package com.devdesk.pj.calendar;
 
 import com.devdesk.pj.main.DBManager_new;
 
-import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ScheduleDAO {
     public static final ScheduleDAO SCAO = new ScheduleDAO();
@@ -15,18 +13,15 @@ public class ScheduleDAO {
     private ScheduleDAO() {}
 
 
-    public ArrayList<ScheduleDTO> showAllSch(HttpServletRequest request) {
+    public ArrayList<ScheduleDTO> showAllSch() {
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
         String sql = "select * from schedule ";
                             // 작업끝나면 sql에 추가할게요=> where id = ?
-        try {
-            con = DBManager_new.connect();
-            pstmt = con.prepareStatement(sql);
-            rs = pstmt.executeQuery();
-            ScheduleDTO scheduleDTO = null;
+
+        try (Connection con = DBManager_new.connect();
+             PreparedStatement pstmt = con.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
             ArrayList<ScheduleDTO> schedules = new ArrayList<>();
 
             while (rs.next()) {
@@ -51,9 +46,7 @@ public class ScheduleDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            DBManager_new.close(con, pstmt, rs);
         }
-            return null;
+        return null;
     }
 }

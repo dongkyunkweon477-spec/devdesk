@@ -1,45 +1,67 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>DevDesk</title>
-<%--    <link rel="stylesheet" href="css/index.css">--%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/index.js"></script>
+
 
 </head>
 <body>
-
-<div azclass="login-area">
-    <%--  <span style="color: red">${msg}</span>--%>
-    <%--  <jsp:include page="${loginPage}"></jsp:include>--%>
-</div>
 
 <div class="container">
     <div class="header">
         <!-- 로고 -->
         <div class="title">
-            <img onclick="" src="images/Devlogo.png" alt="">
-            <a href="main">DevDesk</a>
+            <img onclick="" src="${pageContext.request.contextPath}/images/DevDesk_logo2.png" alt="">
+            <a href="${pageContext.request.contextPath}/main">DevDesk</a>
         </div>
         <!-- 메뉴 -->
         <div class="menu-left">
-            <a href="ws">워크 스페이스</a>
-            <a href="report">이력서 관리</a>
-            <a href="#">면접 일정</a>
-            <a href="review">면접 후기</a>
-            <a href="board">커뮤니티</a>
+            <a href="${pageContext.request.contextPath}/dashboard">워크 스페이스</a>
+            <a href="${pageContext.request.contextPath}/calendar">면접 일정</a>
+            <a href="${pageContext.request.contextPath}/review">면접 후기</a>
+            <a href="${pageContext.request.contextPath}/board">커뮤니티</a>
         </div>
         <!-- 로그인 -->
         <div class="menu-right">
-            <a href="login">로그인</a>
-            <span>|</span>
-            <a href="account">회원가입</a>
+
+            <c:choose>
+                <%-- 1. 로그인 전 --%>
+                <c:when test="${empty sessionScope.user}">
+                    <a href="${pageContext.request.contextPath}/login" class="btn-text">로그인</a>
+                    <span class="divider">|</span>
+                    <a href="${pageContext.request.contextPath}/account" class="btn-primary">회원가입</a>
+                </c:when>
+
+                <%-- 2. 로그인 후 --%>
+                <c:otherwise>
+                    <span class="welcome-msg">${sessionScope.user.nickname}님 환영합니다!</span>
+
+                    <a href="${pageContext.request.contextPath}/mypage" class="btn-text">마이페이지</a>
+                    <a href="${pageContext.request.contextPath}/logout" class="btn-secondary">로그아웃</a>
+                </c:otherwise>
+            </c:choose>
+            <button class="test">
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                </svg>
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+
         </div>
     </div>
 
     <div class="content">
-            <jsp:include page="${content}"></jsp:include>
+        <jsp:include page="${content}"></jsp:include>
     </div>
 
 </div>
@@ -60,6 +82,7 @@
         </div>
     </div>
 </div>
+
 
 </body>
 </html>

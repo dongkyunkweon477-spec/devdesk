@@ -1,0 +1,378 @@
+/* ===== 내 게시글/댓글 관리 전용 CSS (myboard.css) ===== */
+
+/* 🔥 1. 메인 랩퍼 */
+.myboard-wrap {
+    max-width: 900px;
+    margin: 50px auto 100px;
+    background: #ffffff;
+    border-radius: 32px;
+    padding: 60px 50px;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.04);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+/* 🔥 2. 헤더 */
+.myboard-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.myboard-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+
+.myboard-sub {
+    color: #64748b;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+/* 🔥 3. 탭 메뉴 */
+.tab-menu {
+    display: flex;
+    justify-content: center;
+    background: #f1f5f9;
+    border-radius: 20px;
+    padding: 8px;
+    width: max-content;
+    margin: 0 auto 40px auto;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    padding: 14px 36px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #64748b;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    color: #1e293b;
+}
+
+.tab-btn.active {
+    background: #ffffff;
+    color: #7c3aed;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* ───────────────────────────────────────────
+   🔥 4. [공통 리스트] 그림자 쪼개짐 제거!
+─────────────────────────────────────────── */
+.list-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: center;
+}
+
+.list-table th {
+    padding: 0 12px 16px 12px;
+    color: #94a3b8;
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+/* 🤍 기본 행 디자인 */
+.list-table td {
+    background: #ffffff;
+    padding: 22px 12px;
+    color: #475569;
+    font-size: 15px;
+    border-bottom: 1px solid #f1f5f9;
+    /* 그림자 애니메이션 삭제, 배경색 부드럽게 변하는 효과만 남김 */
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* 양끝 모서리 둥글게 */
+.list-table td:first-child {
+    border-radius: 12px 0 0 12px;
+}
+
+.list-table td:last-child {
+    border-radius: 0 12px 12px 0;
+}
+
+/* 마지막 줄 바닥선 제거 */
+.list-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* 🌟 [게시글 탭] 호버 시 쪼개지는 그림자 대신 '통짜 연회색 배경' 적용! */
+.list-table tbody tr:hover td {
+    background-color: #f8fafc; /* 한 줄 전체가 깔끔한 연회색으로 칠해짐 */
+    border-bottom-color: transparent;
+}
+
+/* 🔥 5. 글 제목 & 뱃지 디테일 */
+.list-table .td-title {
+    text-align: left;
+    font-weight: 500;
+}
+
+.list-table .td-title a {
+    color: #1e293b;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.2s;
+}
+
+/* 호버 시 제목 보라색 (게시글 탭) */
+.list-table tbody tr:hover .td-title a {
+    color: #7c3aed;
+}
+
+/* 뱃지 */
+.category-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background: #ffffff;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.list-table tbody tr:hover .category-badge {
+    background: #f3e8ff;
+    color: #7c3aed;
+    border-color: #e9d5ff;
+}
+
+/* 🔥 6. 댓글 숫자 감성 스타일 */
+.list-table .td-title span {
+    color: #8b5cf6 !important;
+    background: #f5f3ff;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px !important;
+    font-weight: 700;
+    margin-left: 8px !important;
+    display: inline-block;
+}
+
+.empty-msg {
+    text-align: center;
+    padding: 80px 0;
+    color: #94a3b8;
+    font-size: 15px;
+}
+
+/* ───────────────────────────────────────────
+   🔥 7. [NEW] 내가 쓴 댓글 탭 "전용" 통짜 배경 효과!
+─────────────────────────────────────────── */
+
+/* 1) 댓글 탭은 마우스 올릴 시 한 줄 전체가 감성적인 '연보라색'으로 변함 */
+#tab-comments .list-table tbody tr:hover td {
+    background-color: #f5f3ff !important;
+    border-bottom-color: transparent;
+}
+
+/* 2) 댓글 텍스트 색상: 차분하고 세련된 딥 퍼플(다크 보라) */
+#tab-comments .list-table tbody tr:hover .td-title a {
+    color: #4c1d95;
+}
+
+/* 3) 원본 글 제목(회색 텍스트): 살짝 또렷하게 */
+#tab-comments .list-table tbody tr:hover td:first-child {
+    color: #64748b !important;
+
+}
+
+/* ───────────────────────────────────────────
+   🔥 8. [NEW] 감성 페이징 버튼 스타일
+─────────────────────────────────────────── */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+
+.page-btn {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-btn:hover {
+    border-color: #c4b5fd;
+    color: #7c3aed;
+}
+
+/* 현재 보고 있는 페이지 버튼 */
+.page-btn.active {
+    background: #7c3aed;
+    color: #ffffff;
+    border-color: #7c3aed;
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
+}
+
+/* ───────────────────────────────────────────
+   [NEW] 감성 페이징 버튼 스타일
+─────────────────────────────────────────── */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+
+.page-btn {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-btn:hover {
+    border-color: #c4b5fd;
+    color: #7c3aed;
+}
+
+/* 현재 보고 있는 페이지 버튼 */
+.page-btn.active {
+    background: #7c3aed;
+    color: #ffffff;
+    border-color: #7c3aed;
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
+
+}
+
+/* ───────────────────────────────────────────
+   🌙 [NEW] 다크 모드 (주야간 토글 대응) 선민 추가
+─────────────────────────────────────────── */
+[data-theme="dark"] .myboard-wrap {
+    background: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .myboard-title {
+    color: #f8fafc;
+}
+
+[data-theme="dark"] .myboard-sub {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .tab-menu {
+    background: #0f172a;
+}
+
+[data-theme="dark"] .tab-btn {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .tab-btn:hover {
+    color: #f8fafc;
+}
+
+[data-theme="dark"] .tab-btn.active {
+    background: #1e293b;
+    color: #a78bfa;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .list-table th {
+    border-bottom-color: #334155;
+    color: #64748b;
+}
+
+[data-theme="dark"] .list-table td {
+    background: #1e293b;
+    color: #cbd5e1;
+    border-bottom-color: #334155;
+}
+
+[data-theme="dark"] .list-table tbody tr:hover td {
+    background-color: #334155;
+}
+
+[data-theme="dark"] .list-table .td-title a {
+    color: #f8fafc;
+}
+
+[data-theme="dark"] .list-table tbody tr:hover .td-title a {
+    color: #a78bfa;
+}
+
+[data-theme="dark"] .category-badge {
+    background: #0f172a;
+    color: #cbd5e1;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .list-table tbody tr:hover .category-badge {
+    background: #1e293b;
+    color: #a78bfa;
+    border-color: #4c1d95;
+}
+
+[data-theme="dark"] .list-table .td-title span {
+    background: #4c1d95;
+    color: #ddd6fe !important;
+}
+
+[data-theme="dark"] .empty-msg {
+    color: #64748b;
+}
+
+[data-theme="dark"] #tab-comments .list-table tbody tr:hover td {
+    background-color: #0f172a !important;
+}
+
+[data-theme="dark"] #tab-comments .list-table tbody tr:hover .td-title a {
+    color: #c4b5fd;
+}
+
+[data-theme="dark"] #tab-comments .list-table tbody tr:hover td:first-child {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .page-btn {
+    background: #1e293b;
+    border-color: #334155;
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .page-btn:hover {
+    border-color: #a78bfa;
+    color: #a78bfa;
+}
+
+[data-theme="dark"] .page-btn.active {
+    background: #7c3aed;
+    color: #ffffff;
+    border-color: #7c3aed;
+}

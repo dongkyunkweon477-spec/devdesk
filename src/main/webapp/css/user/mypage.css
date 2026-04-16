@@ -1,0 +1,392 @@
+@charset "UTF-8";
+
+/* 마이페이지 전체 감싸게 */
+.mypage-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* 마이페이지 타이틀 */
+.mypage-title {
+    color: #1e293b;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+/* 1. 프로필 정보 영역 */
+.profile-info-box {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    padding: 25px;
+    background: #f8fafc;
+    border-radius: 10px;
+    margin-bottom: 40px;
+    border: 1px solid #e2e8f0;
+    position: relative;
+}
+
+.btn-admin-page {
+    position: absolute; /* 회색 상자 안에서 자유롭게 이동 */
+    right: 25px; /* 오른쪽에서 25px 떨어짐 */
+    bottom: 25px; /* 아래쪽에서 25px 떨어짐 */
+
+    background: #1e293b; /* 어드민 느낌이 나는 다크 네이비 색상 */
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+/*.btn-admin-page:hover {*/
+/*    background: #0f172a;*/
+/*    transform: translateY(-2px);*/
+/*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);*/
+/*}*/
+
+/* 동그란 프로필 사진(아바타) */
+.profile-avatar {
+    width: 70px;
+    height: 70px;
+    background: #a78bfa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: white;
+    font-weight: bold;
+}
+
+/* 프로필 텍스트 정보 */
+.profile-details p {
+    margin: 5px 0;
+    color: #475569;
+    font-size: 15px;
+}
+
+.profile-details .nickname {
+    font-size: 20px;
+    font-weight: bold;
+    color: #7c3aed;
+    margin-bottom: 10px;
+}
+
+/* 2. 메뉴 버튼 영역 (그리드 레이아웃) */
+.mypage-menu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2칸씩 배치 */
+    gap: 20px;
+}
+
+/* 개별 메뉴 카드 */
+.menu-card {
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.menu-card:hover {
+    border-color: #a78bfa;
+    box-shadow: 0 4px 12px rgba(167, 139, 250, 0.15);
+    transform: translateY(-2px);
+}
+
+.menu-card h4 {
+    margin: 0 0 8px 0;
+    color: #334155;
+    font-size: 17px;
+}
+
+.menu-card p {
+    margin: 0;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+/* 탈퇴 버튼 전용 빨간색 테마 */
+.menu-card.danger:hover {
+    border-color: #f43f5e;
+    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.15);
+}
+
+.menu-card.danger h4 {
+    color: #e11d48;
+}
+
+/* ===== 마이페이지 성공 모달 CSS ===== */
+
+/* 화면 전체를 덮는 반투명 검은색 배경 */
+.pw-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999; /* 화면 제일 맨 앞으로 가져오기 */
+    animation: fadeIn 0.2s ease-out; /* 부드럽게 나타나는 효과 */
+}
+
+/* 하얀색 모달 박스 */
+.pw-modal-box {
+    background: #ffffff;
+    width: 320px;
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.3s ease-out;
+}
+
+.pw-modal-icon {
+    margin-bottom: 16px;
+}
+
+.pw-modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+}
+
+.pw-modal-desc {
+    font-size: 15px;
+    color: #64748b;
+    margin: 0 0 24px 0;
+}
+
+/* 확인 버튼 */
+.pw-modal-btn {
+    width: 100%;
+    height: 44px;
+    background: #7c3aed; /* 영은님 메인 테마색! */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.pw-modal-btn:hover {
+    background: #6d28d9;
+}
+
+/* 애니메이션 효과 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ===== 모달창 전용 추가 디자인 ===== */
+
+/* 가독성 높은 경고 박스 디자인 (가운데 정렬 & 예쁜 줄바꿈 완성!) */
+.modal-warning-box {
+    background: #fef2f2;
+    color: #b91c1c;
+    padding: 16px 14px; /* 위아래 여백을 살짝 늘려서 숨통 트이게 함 */
+    border-radius: 8px;
+    text-align: center; /* 영은님 픽! 가운데 정렬 */
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    border: 1px solid #fee2e2;
+    word-break: keep-all; /* 🌟 핵심: 단어가 어색하게 쪼개지는 걸 막아줍니다! */
+}
+
+.modal-warning-box span {
+    color: #ef4444;
+    font-size: 12px; /* 괄호 설명은 폰트를 살짝 줄여서 메인 텍스트를 돋보이게 */
+    display: block;
+    margin-top: 8px; /* 위 텍스트랑 살짝 띄워주기 */
+}
+
+/* 비밀번호 입력칸 디자인 */
+.modal-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 15px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.modal-input:focus {
+    outline: none;
+    border-color: #ef4444;
+}
+
+/* 버튼들을 나란히 배치 */
+.modal-btn-group {
+    display: flex;
+    gap: 10px;
+}
+
+/* 버튼 1: 취소 버튼 (회색) */
+.pw-modal-btn.btn-cancel {
+    background: #f1f5f9;
+    color: #475569;
+    flex: 1; /* 크기를 반반으로 동일하게 */
+}
+
+.pw-modal-btn.btn-cancel:hover {
+    background: #e2e8f0;
+}
+
+/* 버튼 2: 위험 버튼 (빨간색) */
+.pw-modal-btn.btn-danger {
+    background: #ef4444;
+    color: white;
+    flex: 1; /* 크기를 반반으로 동일하게 */
+}
+
+.pw-modal-btn.btn-danger:hover {
+    background: #dc2626;
+}
+
+/* ===== 다크 모드 (주야간 토글) =====  선민 추가 */
+[data-theme="dark"] .mypage-wrapper {
+    background: var(--bg-primary);
+    box-shadow: 0 4px 10px var(--shadow);
+}
+
+[data-theme="dark"] .mypage-title {
+    color: var(--text-primary);
+    border-bottom-color: var(--border-primary);
+}
+
+[data-theme="dark"] .profile-info-box {
+    background: var(--bg-secondary);
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .profile-details p {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .profile-details .nickname {
+    color: var(--accent-primary);
+}
+
+[data-theme="dark"] .btn-admin-page {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .menu-card {
+    background: var(--bg-primary);
+    border-color: var(--border-primary);
+}
+
+[data-theme="dark"] .menu-card:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 4px 12px rgba(167, 139, 250, 0.15);
+}
+
+[data-theme="dark"] .menu-card h4 {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .menu-card p {
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .menu-card.danger:hover {
+    border-color: #f43f5e;
+    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.15);
+}
+
+[data-theme="dark"] .menu-card.danger h4 {
+    color: #f43f5e;
+}
+
+[data-theme="dark"] .pw-modal-box {
+    background: var(--bg-primary);
+    box-shadow: 0 10px 25px var(--shadow);
+}
+
+[data-theme="dark"] .pw-modal-title {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .pw-modal-title[style*="color: #ef4444"] {
+    color: #f43f5e !important;
+}
+
+[data-theme="dark"] .pw-modal-desc {
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .modal-warning-box {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+[data-theme="dark"] .modal-warning-box span {
+    color: #f87171;
+}
+
+[data-theme="dark"] .modal-input {
+    background: var(--bg-secondary);
+    border-color: var(--border-primary);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .modal-input:focus {
+    border-color: #f43f5e;
+}
+
+[data-theme="dark"] .pw-modal-btn.btn-cancel {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .pw-modal-btn.btn-cancel:hover {
+    background: var(--border-primary);
+}
+
+[data-theme="dark"] .pw-modal-btn.btn-danger {
+    background: #e11d48;
+}
+
+[data-theme="dark"] .pw-modal-btn.btn-danger:hover {
+    background: #be123c;
+}
