@@ -59,7 +59,7 @@
             </div>
         </div>
 
-        <div class="detail-row content-area">
+        <div class="detail-row board-content-area">
             <div class="detail-label">내용</div>
             <div class="detail-content text-box">${board.content}</div>
         </div>

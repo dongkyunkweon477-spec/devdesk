@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/base.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/workspace_ui.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/board/board-all.css">
 <div class="write-container">
@@ -16,7 +16,7 @@
         <input type="hidden" name="member_id" value="${sessionScope.user.member_id}">
 
         <!-- 카테고리 -->
-        <div class="form-group">
+        <div class="board-form-group">
             <label>카테고리</label>
             <select name="category" required>
                 <option value="">선택하세요</option>
@@ -28,13 +28,13 @@
         </div>
 
         <!-- 제목 -->
-        <div class="form-group">
+        <div class="board-form-group">
             <label>제목</label>
             <input type="text" name="title" placeholder="제목을 입력하세요" required>
         </div>
 
         <!-- 내용 -->
-        <div class="form-group">
+        <div class="board-form-group">
             <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px;">
                 <label style="margin-bottom: 0;">내용</label>
                 <div style="text-align: right;">

@@ -4,8 +4,7 @@
 <head>
     <title>DevDesk</title>
     <%--  선민 추가  --%>
-    <%--    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/base.css">--%>
-    <%--로그인 jsp에는 버튼 겹쳐서 주석 처리했습니다!--%>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/workspace_ui.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/account.css">

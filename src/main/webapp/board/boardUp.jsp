@@ -13,7 +13,7 @@
     <form action="board_update" method="post">
         <input type="hidden" name="board_id" value="${board.board_id}">
 
-        <div class="form-group">
+        <div class="board-form-group">
             <label>카테고리</label>
             <select name="category" required>
                 <option value="자유토크" ${board.category == '자유토크' ? 'selected' : ''}>자유토크</option>
@@ -23,12 +23,12 @@
             </select>
         </div>
 
-        <div class="form-group">
+        <div class="board-form-group">
             <label>제목</label>
             <input type="text" name="title" value="${board.title}" required>
         </div>
 
-        <div class="form-group">
+        <div class="board-form-group">
             <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px;">
                 <label style="margin-bottom: 0;">내용</label>
                 <div style="text-align: right;">
