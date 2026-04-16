@@ -1,4 +1,7 @@
 // 1. 미니 모달 열기/닫기
+console.log("qqqq")
+
+
 function openCompanyModal() {
     $('#companySearchModal').css('display', 'flex');
 }
@@ -9,10 +12,12 @@ function closeCompanyModal() {
 
 // 2. 회사 검색 (기존 Ajax 컨트롤러 재사용)
 function searchMiniCompany() {
+    console.log('search func?')
     let keyword = $('#miniSearchInput').val();
-
+    let url = $('#contextPath').val() + '/company-search/ajax';
+    console.log(url)
     $.ajax({
-        url: $('#contextPath').val() + '/company-search/ajax',
+        url: url,
         type: 'GET',
         data: {companyName: keyword}, // 이름만 보내서 검색
         dataType: 'json'

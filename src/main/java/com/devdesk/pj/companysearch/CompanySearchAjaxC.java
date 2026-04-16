@@ -14,7 +14,7 @@ public class CompanySearchAjaxC extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setCharacterEncoding("UTF-8");
-
+        System.out.println("entered?");
         Map<String, String> conditions = new HashMap<>();
 
 // 텍스트 필드

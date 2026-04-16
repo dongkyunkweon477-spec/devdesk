@@ -278,6 +278,7 @@ public class Schedule_newDAO {
 
     // --- Delete ---
     public void deleteSchedule(int scheduleId) {
+        System.out.println("✅ [DAO 진입] DB 삭제 로직 시작. 삭제할 ID: " + scheduleId);
 
         try (Connection con = DBManager_new.connect()) {
             con.setAutoCommit(false);
@@ -291,26 +292,33 @@ public class Schedule_newDAO {
                     }
                 }
 
+                System.out.println("👉 조회된 APP_ID: " + appId);
+
                 String delSchSql = "DELETE FROM SCHEDULE WHERE SCHEDULE_ID = ?";
                 try (PreparedStatement pstmt = con.prepareStatement(delSchSql)) {
                     pstmt.setInt(1, scheduleId);
-                    pstmt.executeUpdate();
+                    int result = pstmt.executeUpdate();
+                    System.out.println("👉 SCHEDULE 테이블 삭제 결과(영향받은 행): " + result);
                 }
 
                 if (appId > 0) {
                     String delAppSql = "DELETE FROM APPLICATION WHERE APP_ID = ?";
                     try (PreparedStatement pstmt = con.prepareStatement(delAppSql)) {
                         pstmt.setInt(1, appId);
-                        pstmt.executeUpdate();
+                        int result = pstmt.executeUpdate();
+                        System.out.println("👉 APPLICATION 테이블 삭제 결과(영향받은 행): " + result);
                     }
                 }
 
                 con.commit();
+                System.out.println("✅ [DB 삭제 완료 및 커밋 성공]");
             } catch (Exception e) {
                 con.rollback();
+                System.out.println("❌ [DB 삭제 중 에러 발생 - 롤백 처리됨]");
                 e.printStackTrace();
             }
         } catch (Exception e) {
+            System.out.println("❌ [DB 연결 실패]");
             e.printStackTrace();
         }
     }
