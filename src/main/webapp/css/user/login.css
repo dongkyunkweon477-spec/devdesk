@@ -127,12 +127,12 @@
 
 .pw-find-right a {
     font-size: 13px;
-    color: #64748b; /* 눈에 덜 띄는 회색톤 */
+    color: #64748b;
     text-decoration: none;
 }
 
 .pw-find-right a:hover {
-    color: #7c3aed; /* 마우스 올리면 메인 컬러로 */
+    color: #7c3aed;
     text-decoration: underline;
 }
 
@@ -140,25 +140,26 @@
    옵션 2번용 스타일 (회원가입 버튼 옆 나란히)
 ======================================= */
 .login-options {
-    margin-top: 15px !important; /* 간격을 살짝 올려서 정돈 */
+    margin-top: 15px !important;
 }
 
 .divider-bar {
     color: #cbd5e1;
     font-size: 14px;
-    margin: 0 8px; /* 짝대기 양옆 간격 */
+    margin: 0 8px;
 }
-
-/*.google-action {*/
-/*    margin-top: 10px;*/
-/*}*/
 
 .form-actions {
     margin-top: 10px;
 }
 
-/* ===== 다크 모드 (주야간 토글) =====  선민 추가 */
-[data-theme="dark"] .login-options {
+
+
+
+
+    /* ===== 다크 모드 (주야간 토글) =====  선민 추가 */
+[ data-theme = "dark" ] . login-options {
+
     color: var(--text-tertiary);
 }
 
