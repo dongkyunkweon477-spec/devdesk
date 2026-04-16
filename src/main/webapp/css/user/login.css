@@ -101,7 +101,10 @@
     margin-right: 8px; /* 로고와 텍스트 사이 간격 */
 }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> dd78069d4847bec21e87d4ff9ff29f61fc7926fe
 /* 비밀번호 재설정 완료 후 성공 안내 메시지 */
 .reset-success-msg {
     color: #16a34a;
@@ -127,12 +130,12 @@
 
 .pw-find-right a {
     font-size: 13px;
-    color: #64748b; /* 눈에 덜 띄는 회색톤 */
+    color: #64748b;
     text-decoration: none;
 }
 
 .pw-find-right a:hover {
-    color: #7c3aed; /* 마우스 올리면 메인 컬러로 */
+    color: #7c3aed;
     text-decoration: underline;
 }
 
@@ -140,25 +143,32 @@
    옵션 2번용 스타일 (회원가입 버튼 옆 나란히)
 ======================================= */
 .login-options {
-    margin-top: 15px !important; /* 간격을 살짝 올려서 정돈 */
+    margin-top: 15px !important;
 }
 
 .divider-bar {
     color: #cbd5e1;
     font-size: 14px;
-    margin: 0 8px; /* 짝대기 양옆 간격 */
+    margin: 0 8px;
 }
-
-/*.google-action {*/
-/*    margin-top: 10px;*/
-/*}*/
 
 .form-actions {
     margin-top: 10px;
 }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 /* ===== 다크 모드 (주야간 토글) =====  선민 추가 */
 [data-theme="dark"] .login-options {
+=======
+= = = = = = =
+    /* ===== 다크 모드 (주야간 토글) =====  선민 추가 */
+[ data-theme = "dark" ] . login-options {
+>>>>>>> dd78069d4847bec21e87d4ff9ff29f61fc7926fe
+=======
+/* ===== 다크 모드 (주야간 토글) =====  선민 추가 */
+[data-theme="dark"] .login-options {
+>>>>>>> 078a20a98a33040af9a97271d0348346603fe6f7
     color: var(--text-tertiary);
 }
 
@@ -181,8 +191,18 @@
         border-color: var(--border-primary);
     }
 
+<<<<<<< HEAD
+[data-theme="dark"] .btn-google:hover {
+    background-color: var(--bg-secondary);
+    border-color: var(--accent-secondary);
+=======
     [data-theme="dark"] .btn-google:hover {
         background-color: var(--bg-secondary);
         border-color: var(--accent-secondary);
 
     }
+<<<<<<< HEAD
+>>>>>>> dd78069d4847bec21e87d4ff9ff29f61fc7926fe
+}
+=======
+>>>>>>> 078a20a98a33040af9a97271d0348346603fe6f7
