@@ -130,6 +130,8 @@
     <div class="form-group">
         <label>기업</label>
         <div style="display:flex;align-items:center;gap:8px;">
+            <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요" style="cursor:pointer;flex:1;" onclick="openCompanyModal()"/>
+            <button type="button" onclick="openCompanyModal()" class="modal-btn-search">선택</button>
             <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요"
                    style="cursor:pointer;flex:1;" onclick="openCompanyModal()"/>
 
@@ -283,38 +285,17 @@
 
             eventClick: function (info) {
                 currentEvent = info.event;
-                var x = info.jsEvent.clientX, y = info.jsEvent.clientY;
+                var x = info.jsEvent.pageX, y = info.jsEvent.pageY;
                 $('#pop-title').text(currentEvent.title);
                 $('#pop-position').text(currentEvent.extendedProps.position || '미정');
                 $('#pop-date').text(currentEvent.startStr);
                 $('#pop-time').text(currentEvent.extendedProps.time || '미정');
                 $('#pop-type').text(currentEvent.extendedProps.type || '-');
                 $('#pop-memo').text(currentEvent.extendedProps.memo || '-');
-                
-                var $pop = $('#event-popup');
-                // 높이 계산을 위해 임시로 렌더링
-                $pop.css({display: 'block', visibility: 'hidden'});
-                var popW = $pop.outerWidth() || 260;
-                var popH = $pop.outerHeight() || 200;
-                var winW = $(window).width();
-                var winH = $(window).height();
-                $pop.css({display: 'none', visibility: 'visible'});
-
-                var finalTop = y + 15;
-                if (finalTop + popH > winH) {
-                    finalTop = y - popH - 15; // 팝업을 클릭한 마우스 위로 올림
-                    if (finalTop < 0) finalTop = 15; // 화면 위를 벗어나면 여백 15px로 제한
-                }
-
-                var finalLeft = x + 15;
-                if (finalLeft + popW > winW) {
-                    finalLeft = x - popW - 15; // 팝업을 클릭한 마우스 왼쪽으로
-                    if (finalLeft < 0) finalLeft = 15; // 화면 왼쪽 벗어나면 여백 15px로 제한
-                }
-
-                $pop.css({
-                    top: finalTop + 'px',
-                    left: finalLeft + 'px'
+                var popW = 260, winW = $(window).width();
+                $('#event-popup').css({
+                    top: y + 15 + 'px',
+                    left: (x + 15 + popW > winW ? x - popW - 15 : x + 15) + 'px'
                 }).fadeIn(150);
             },
 
@@ -380,7 +361,7 @@
                 $.ajax({
                     url: $('#contextPath').val() + '/delete-calendar',
                     type: 'POST',
-                    data: {"schedule_id": targetId},
+                    data: { "schedule_id": targetId },
                     success: function (res) {
                         console.log("▶ 3. 서버 삭제 완료!");
                         alert("일정이 정상적으로 삭제되었습니다.");
@@ -459,7 +440,7 @@
                         // [추가 모드]
                         alert('저장되었습니다!');
                         location.reload();
-                        // showCustomAlert('저장되었습니다!', true);
+                       // showCustomAlert('저장되었습니다!', true);
                     }
                 },
                 error: function () {
