@@ -434,7 +434,6 @@
         if (e.key === 'Escape') closeDetail();
     });
 
-    // 🌟 수정 완료: 여기서 중괄호(})를 닫아줘서 캘린더 코드가 모달 유무와 상관없이 실행되게 독립시켰습니다!
     var modalOverlay = document.getElementById('tilDetailModal');
     if (modalOverlay) {
         modalOverlay.addEventListener('click', function (e) {
