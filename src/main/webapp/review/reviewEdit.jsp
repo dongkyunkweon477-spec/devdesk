@@ -92,6 +92,21 @@
                     </div>
                 </div>
             </div>
+
+            <div class="field-row two-col">
+                <div class="field-group">
+                    <label class="field-label required">기업 평점</label>
+                    <div class="difficulty-stars" id="ratingStars">
+                        <input type="hidden" name="rating" id="rating" value="${r.reviewRating}"/>
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                        <span class="difficulty-label" id="ratingLabel"></span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <%-- ===== 섹션 2: 면접 상세 ===== --%>

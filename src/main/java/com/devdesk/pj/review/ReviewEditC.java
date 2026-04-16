@@ -56,6 +56,8 @@ public class ReviewEditC extends HttpServlet {
         vo.setReviewDifficulty(Integer.parseInt(request.getParameter("difficulty")));
         vo.setReviewResult(request.getParameter("result"));
         vo.setReviewContent(request.getParameter("content"));
+        String ratingParam = request.getParameter("rating");
+        if (ratingParam != null && !ratingParam.isBlank()) vo.setReviewRating(Integer.parseInt(ratingParam));
 
         String ic = request.getParameter("interviewerCount");
         if (ic != null && !ic.isBlank()) vo.setReviewInterviewerCount(Integer.parseInt(ic));
