@@ -21,8 +21,6 @@
 
     <%-- 1. 상단 스크롤 영역 (일정 전용) --%>
     <div class="sidebar-nav">
-        <span class="nav-section-label">일정</span>
-
         <%-- 이번 주 일정 토글 버튼 --%>
         <div class="week-nav-toggle" id="weekToggle">
             <span class="nav-icon">📅</span>
@@ -130,7 +128,8 @@
     <div class="form-group">
         <label>기업</label>
         <div style="display:flex;align-items:center;gap:8px;">
-            <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요" style="cursor:pointer;flex:1;" onclick="openCompanyModal()"/>
+            <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요" style="cursor:pointer;flex:1;"
+                   onclick="openCompanyModal()"/>
             <button type="button" onclick="openCompanyModal()" class="modal-btn-search">선택</button>
             <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요"
                    style="cursor:pointer;flex:1;" onclick="openCompanyModal()"/>
@@ -361,7 +360,7 @@
                 $.ajax({
                     url: $('#contextPath').val() + '/delete-calendar',
                     type: 'POST',
-                    data: { "schedule_id": targetId },
+                    data: {"schedule_id": targetId},
                     success: function (res) {
                         console.log("▶ 3. 서버 삭제 완료!");
                         alert("일정이 정상적으로 삭제되었습니다.");
@@ -440,7 +439,7 @@
                         // [추가 모드]
                         alert('저장되었습니다!');
                         location.reload();
-                       // showCustomAlert('저장되었습니다!', true);
+                        // showCustomAlert('저장되었습니다!', true);
                     }
                 },
                 error: function () {

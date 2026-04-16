@@ -12,7 +12,8 @@
     flex-direction: column;
     z-index: 100;
     transition: transform 0.25s;
-    height: calc(100vh - 70px);
+    top: 0;
+    height: 100vh;
 }
 
 /* 선민 수정 */
