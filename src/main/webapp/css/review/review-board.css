@@ -250,6 +250,67 @@
     text-decoration: underline;
 }
 
+/* ===== 푸터 좌측 그룹 ===== */
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ===== 기업 평점 ===== */
+.card-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 13px;
+}
+
+.card-star {
+    font-size: 13px;
+    color: #e2e8f0;
+    line-height: 1;
+}
+
+.card-star.on {
+    color: #f59e0b;
+}
+
+.card-rating-num {
+    font-size: 12px;
+    font-weight: 600;
+    color: #b45309;
+    margin-left: 3px;
+}
+
+/* ===== 추천 뱃지 ===== */
+.card-like {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #fdf2f8;
+    color: #db2777;
+    border: 1px solid #fbcfe8;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.card-like:hover {
+    background: #fce7f3;
+    border-color: #f9a8d4;
+}
+
+.like-num {
+    font-weight: 600;
+    color: #be185d;
+}
+
 /* ===== 결과 없음 ===== */
 .no-result {
     text-align: center;
@@ -276,3 +337,10 @@
 [data-theme="dark"] .review-filter-bar select:focus { border-color: #a78bfa; background-color: #334155; }
 [data-theme="dark"] .review-toolbar { color: #e2e8f0; }
 [data-theme="dark"] .no-result { color: #cbd5e1; }
+[data-theme="dark"] .card-like { background: #4c0519; border-color: #9f1239; color: #fda4af; }
+[data-theme="dark"] .card-like:hover { background: #881337; border-color: #e11d48; }
+[data-theme="dark"] .like-num { color: #fb7185; }
+[data-theme="dark"] .card-rating { background: #1c1917; border-color: #78350f; }
+[data-theme="dark"] .card-star { color: #334155; }
+[data-theme="dark"] .card-star.on { color: #fbbf24; }
+[data-theme="dark"] .card-rating-num { color: #fbbf24; }

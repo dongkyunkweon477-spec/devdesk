@@ -7,6 +7,7 @@
     // JSP에서 EL 표현식으로 값을 읽어 전역 JS 변수로 설정 (외부 JS 파일에서 참조하기 위함)
     const GLOBAL_BOARD_ID = "${board.board_id}";
     const GLOBAL_MEMBER_ID = "${not empty sessionScope.user ? sessionScope.user.member_id : ''}";
+    const GLOBAL_USER_NICKNAME = "${not empty sessionScope.user ? sessionScope.user.nickname : ''}";
 </script>
 <script src="${pageContext.request.contextPath}/js/board/board-detail.js" defer></script>
 
@@ -88,7 +89,7 @@
 
         <c:if test="${not empty sessionScope.user}">
             <div class="comment-form">
-                <form action="comment_add" method="post">
+                <form id="commentForm">
                     <input type="hidden" name="board_id" value="${board.board_id}">
                     <input type="hidden" name="member_id" value="${sessionScope.user.member_id}">
                     <div class="comment-input-wrapper">

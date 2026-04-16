@@ -520,6 +520,10 @@
     document.getElementById('confirmOverlay').addEventListener('click', e => {
         if (e.target === e.currentTarget) closeConfirm();
     });
+
+
+
+
 </script>
 </body>
 </html>

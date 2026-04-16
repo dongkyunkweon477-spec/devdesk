@@ -214,85 +214,101 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-/* ── 미니 캘린더 ── */
+/* ==========================================
+   미니 캘린더 렌더링 로직
+========================================== */
 document.addEventListener('DOMContentLoaded', function () {
-    var eventCounts = {};
-    RAW_EVENTS.forEach(function (date) {
-        if (date && date.trim() !== '') {
-            var pureDate = date.split(' ')[0];
-            eventCounts[pureDate] = (eventCounts[pureDate] || 0) + 1;
+    const eventCounts = {};
+
+    // JSP에서 넘겨준 RAW_EVENTS가 정상적으로 있는지 확인 후 점 찍을 데이터 세팅
+    if (typeof RAW_EVENTS !== 'undefined') {
+        RAW_EVENTS.forEach(date => {
+            if (date && date.trim() !== '') {
+                const pureDate = date.split(' ')[0];
+                eventCounts[pureDate] = (eventCounts[pureDate] || 0) + 1;
+            }
+        });
+    }
+
+    let currentDispDate = new Date();
+
+    function renderMiniCalendar(date) {
+        const year = date.getFullYear();
+        const month = date.getMonth();
+
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+        // 일요일(0) 시작
+        let firstDayIndex = firstDay.getDay();
+
+        const calTitle = document.getElementById('g-cal-title');
+        if (calTitle) calTitle.textContent = year + '년 ' + (month + 1) + '월';
+
+        let daysHTML = '';
+        const today = new Date();
+        const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+        // 지난 달
+        for (let i = firstDayIndex; i > 0; i--) {
+            // 🚨 수정 완료: \${prevMonthLastDay} -> ${prevMonthLastDay}
+            daysHTML += `<div class="g-day-cell" onclick="location.href='${CTX_PATH}/calendar'">
+                            <div class="g-day-num other-month">${prevMonthLastDay - i + 1}</div>
+                         </div>`;
         }
-    });
 
-    var currentDispDate = new Date();
+        // 이번 달 (점 찍기 포함)
+        for (let i = 1; i <= lastDay.getDate(); i++) {
+            const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(i).padStart(2, '0');
+            let isToday = (dateStr === todayStr) ? ' today' : '';
+            let isSun = new Date(year, month, i).getDay() === 0 ? ' sun' : ''; // 일요일 빨간색
 
-    function renderMiniCalendar(dateToRender) {
-        var year = dateToRender.getFullYear();
-        var month = dateToRender.getMonth();
-        var today = new Date();
-        var todayStr = today.getFullYear() + '-' +
-            String(today.getMonth() + 1).padStart(2, '0') + '-' +
-            String(today.getDate()).padStart(2, '0');
-
-        document.getElementById('g-cal-title').textContent = year + '년 ' + (month + 1) + '월';
-
-        var firstDay = new Date(year, month, 1);
-        var lastDay = new Date(year, month + 1, 0);
-        var prevMonthLastDay = new Date(year, month, 0).getDate();
-
-        var firstDayIndex = firstDay.getDay() - 1;
-        if (firstDayIndex === -1) firstDayIndex = 6;
-
-        var daysHTML = '';
-
-        for (var i = firstDayIndex; i > 0; i--) {
-            daysHTML += '<div class="g-day-cell" onclick="location.href=\'' + CTX_PATH + '/calendar\'">' +
-                '<div class="g-day-num other-month">' + (prevMonthLastDay - i + 1) + '</div>' +
-                '</div>';
-        }
-
-        for (var d = 1; d <= lastDay.getDate(); d++) {
-            var dateStr = year + '-' +
-                String(month + 1).padStart(2, '0') + '-' +
-                String(d).padStart(2, '0');
-            var isToday = (dateStr === todayStr) ? ' today' : '';
-
-            var dotsHTML = '';
+            let dotsHTML = '';
             if (eventCounts[dateStr]) {
                 dotsHTML = '<div class="g-dots">';
-                var dotCount = Math.min(eventCounts[dateStr], 3);
-                for (var k = 0; k < dotCount; k++) {
+                let dotCount = Math.min(eventCounts[dateStr], 3);
+                for (let k = 0; k < dotCount; k++) {
                     dotsHTML += '<span class="g-dot"></span>';
                 }
                 dotsHTML += '</div>';
             }
 
-            daysHTML += '<div class="g-day-cell" onclick="location.href=\'' + CTX_PATH + '/calendar\'">' +
-                '<div class="g-day-num' + isToday + '">' + d + '</div>' +
-                dotsHTML +
-                '</div>';
+            // 🚨 수정 완료: \${isToday}, \${isSun} 등 역슬래시 모두 제거!
+            daysHTML += `<div class="g-day-cell" onclick="location.href='${CTX_PATH}/calendar'">
+                            <div class="g-day-num${isToday}${isSun}">${i}</div>
+                            ${dotsHTML}
+                         </div>`;
         }
 
-        var totalCells = firstDayIndex + lastDay.getDate();
-        var nextMonthDay = 1;
+        // 다음 달
+        const totalCells = firstDayIndex + lastDay.getDate();
+        let nextMonthDay = 1;
         while (totalCells + nextMonthDay - 1 < 42) {
-            daysHTML += '<div class="g-day-cell" onclick="location.href=\'' + CTX_PATH + '/calendar\'">' +
-                '<div class="g-day-num other-month">' + nextMonthDay + '</div>' +
-                '</div>';
+            // 🚨 수정 완료: \${nextMonthDay} -> ${nextMonthDay}
+            daysHTML += `<div class="g-day-cell" onclick="location.href='${CTX_PATH}/calendar'">
+                            <div class="g-day-num other-month">${nextMonthDay}</div>
+                         </div>`;
             nextMonthDay++;
         }
 
-        document.getElementById('g-cal-days').innerHTML = daysHTML;
+        const calDays = document.getElementById('g-cal-days');
+        if (calDays) calDays.innerHTML = daysHTML;
     }
 
-    document.getElementById('g-prev-month').addEventListener('click', function () {
+    // 버튼 클릭 이벤트 연결
+    const prevBtn = document.getElementById('g-prev-month');
+    if (prevBtn) prevBtn.addEventListener('click', () => {
         currentDispDate.setMonth(currentDispDate.getMonth() - 1);
         renderMiniCalendar(currentDispDate);
     });
-    document.getElementById('g-next-month').addEventListener('click', function () {
+
+    const nextBtn = document.getElementById('g-next-month');
+    if (nextBtn) nextBtn.addEventListener('click', () => {
         currentDispDate.setMonth(currentDispDate.getMonth() + 1);
         renderMiniCalendar(currentDispDate);
     });
 
+    // 최초 화면 렌더링
     renderMiniCalendar(currentDispDate);
 });

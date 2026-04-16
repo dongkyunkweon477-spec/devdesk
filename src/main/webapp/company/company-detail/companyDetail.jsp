@@ -22,7 +22,7 @@
                 <div class="cd-rating-row">
                     <span class="cd-stars-hero">
                         <c:forEach begin="1" end="5" var="i">
-                            <span class="star-h ${stats.avgRating}">★</span>
+                            <span class="star-h ${i <= stats.avgRating ? 'on' : ''}">★</span>
                         </c:forEach>
                     </span>
                     <span class="cd-rating-num">${stats.avgRating}</span>

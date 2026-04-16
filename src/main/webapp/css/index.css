@@ -300,6 +300,14 @@ a:hover {
     transition: var(--transition);
 }
 
+/* 사이드바가 있는 경우 푸터 레이아웃 조정 (겹침 방지) */
+@media (min-width: 901px) {
+    .container:has(.sidebar) + .footer {
+        margin-left: 240px;
+        width: calc(100% - 240px);
+    }
+}
+
 .footer-inner {
     max-width: 1200px;
     margin: 0 auto;

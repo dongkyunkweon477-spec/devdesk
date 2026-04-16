@@ -116,6 +116,6 @@
     <c:remove var="pwSuccess" scope="session"/>
 </c:if>
 
-<script src="js/mypage.js"></script>
+<script src="${pageContext.request.contextPath}/js/mypage.js"></script>
 </body>
 </html>

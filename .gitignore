@@ -57,3 +57,5 @@ package.json
 process_css.js
 wrap_jsp.py
 node_modules
+src/main/resources
+
