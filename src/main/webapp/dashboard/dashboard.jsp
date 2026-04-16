@@ -17,12 +17,6 @@
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/sidebar.css">
-    <script>
-        const TAG_STATS = [];
-        const RAW_EVENTS = [];
-        const CTX_PATH = '${pageContext.request.contextPath}';
-    </script>
-    <script src="js/til/til.js"></script>
 </head>
 <body>
 <div class="page-wrap">
@@ -64,13 +58,17 @@
         </nav>
 
 
-        <div id="sidebar-mini-calendar">
         <div id="sidebar-mini-calendar" style="margin-top: auto; ">
 <%--    원본 서식: border-top: 1px solid var(--border, #e2e8f0); padding-top: 15px; padding-bottom: 20px;--%>
             <div class="g-cal-header">
+                <button class="g-nav-btn" id="g-prev-month">❮</button>
+                <span class="g-cal-title" id="g-cal-title"></span>
+                <button class="g-nav-btn" id="g-next-month">❯</button>
             </div>
             <div class="g-cal-weekdays">
+                <div class="sun">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
             </div>
+            <div class="g-cal-days" id="g-cal-days"></div>
         </div>
     </aside>
 
@@ -90,7 +88,7 @@
             </div>
             <div class="dash-header-actions">
                 <a href="application-list" class="btn btn-ghost btn-sm">지원 현황 관리</a>
-                <button onclick="openTilEditor()" class="btn btn-primary btn-sm">+ TIL 작성</button>
+                <a href="til-write" class="btn btn-primary btn-sm">+ TIL 작성</a>
             </div>
         </div>
 
@@ -130,7 +128,7 @@
                 <span class="stage-chip-unit">회</span>
             </a>
 
-            <a href="application-list?stage=DOCUMENT" class="stage-chip" style="--chip-color:#ffd166">
+            <a href="application-list?stage=DOCUMENT_PASS" class="stage-chip" style="--chip-color:#ffd166">
                 <span class="stage-chip-icon">✅</span>
                 <span class="stage-chip-name">서류 합격</span>
                 <span class="stage-chip-count">${stageCounts.documentPass}</span>
@@ -158,7 +156,7 @@
                 <span class="stage-chip-unit">회</span>
             </a>
 
-            <a href="application-list?stage=PASS" class="stage-chip" style="--chip-color:#56e39f">
+            <a href="application-list?stage=PASSED" class="stage-chip" style="--chip-color:#56e39f">
                 <span class="stage-chip-icon">🎉</span>
                 <span class="stage-chip-name">합격</span>
                 <span class="stage-chip-count">${stageCounts.passed}</span>
@@ -270,7 +268,7 @@
                              data-time="${t.studyTime}"
                              data-date="${t.timeAgo}"
                              data-content="${fn:escapeXml(t.content)}"
-                             onclick="openDashTilDetail('${t.tilId}')">
+                             onclick="openDetail('${t.tilId}')">
                             <span class="til-num">${vs.count < 10 ? '0' : ''}${vs.count}</span>
                             <div class="til-dot" style="background:${t.tagColor}"></div>
                             <div class="til-info">
@@ -338,91 +336,9 @@
 <%-- /.dash-grid --%>
 </main>
 
-<!-- TIL 등록 / 수정 모달 -->
-<div class="modal-overlay" id="tilEditorModal">
-    <div class="modal modal-lg">
-        <div class="modal-header">
-            <div class="modal-title" id="editorTitle">TIL 작성</div>
-            <button class="modal-close" onclick="closeEditor()">✕</button>
-        </div>
-
-        <form id="tilForm" method="post">
-            <input type="hidden" name="til_id" id="formTilId">
-            <input type="hidden" name="member_id" value="${sessionScope.loginUser.memberId}">
-
-            <div class="form-group">
-                <label class="form-label">제목 *</label>
-                <input class="form-input" name="title" id="tilTitle"
-                       placeholder="오늘 배운 것을 한 줄로 요약해보세요" required>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">태그</label>
-                    <select class="form-select" name="tag" id="tilTag">
-                        <option value="Java">Java</option>
-                        <option value="Spring">Spring</option>
-                        <option value="SQL">SQL</option>
-                        <option value="JavaScript">JavaScript</option>
-                        <option value="Git">Git</option>
-                        <option value="Python">Python</option>
-                        <option value="CSS">CSS</option>
-                        <option value="React">React</option>
-                        <option value="기타">기타</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">학습 시간 (시간)</label>
-                    <input class="form-input" name="study_time" id="tilTime"
-                           type="number" min="0.5" max="24" step="0.5" placeholder="예: 2">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">내용</label>
-                <div class="editor-toolbar">
-                    <button type="button" class="toolbar-btn" onclick="insertMd('## ')">H2</button>
-                    <button type="button" class="toolbar-btn" onclick="insertMd('### ')">H3</button>
-                    <button type="button" class="toolbar-btn" onclick="wrapMd('**','**')"><b>B</b></button>
-                    <button type="button" class="toolbar-btn" onclick="wrapMd('&grave;','&grave;')">{ }</button>
-                    <button type="button" class="toolbar-btn" onclick="insertMd('- ')">—</button>
-                    <button type="button" class="toolbar-btn" onclick="insertMd('\n```\n','\n```')">⌨</button>
-                    <span class="toolbar-sep"></span>
-                    <button type="button" class="toolbar-btn preview-toggle"
-                            onclick="togglePreview()" id="previewBtn">👁 미리보기
-                    </button>
-                </div>
-                <textarea class="form-textarea editor-textarea" name="content" id="tilContent"
-                          placeholder="## 오늘 배운 내용&#10;&#10;- 핵심 개념&#10;&#10;## 느낀 점"
-                          style="min-height:220px"></textarea>
-                <div class="editor-preview" id="editorPreview" style="display:none"></div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-ghost" onclick="closeEditor()">취소</button>
-                <button type="submit" class="btn btn-primary">저장</button>
-            </div>
-        </form>
-    </div>
 </div>
-
 
 <%-- TIL 상세 모달 --%>
-<div class="modal-overlay" id="tilDetailModal">
-    <div class="modal modal-lg">
-        <div class="modal-header">
-            <div class="modal-title" id="detailTitle"></div>
-            <button class="modal-close" onclick="closeDashTilDetail()">✕</button>
-        </div>
-        <div class="modal-body">
-            <div id="detailMeta" style="margin-bottom:12px"></div>
-            <div id="detailContent" style="line-height:1.7"></div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-ghost" onclick="closeDashTilDetail()">닫기</button>
-        </div>
-    </div>
-</div>
 
 <script>
     // 1. 도넛 차트 그리기
@@ -460,7 +376,19 @@
         });
     })();
 
-    // 2. TIL 모달 및 마크다운 관련 함수 모음 (TAG_CONFIG 는 til.js 에서 로드됨)
+    // 2. TIL 모달 및 마크다운 관련 함수 모음
+    const TAG_CONFIG = {
+        'Java': {color: '#ff9f69', bg: 'rgba(255,159,105,0.12)'},
+        'Spring': {color: '#56e39f', bg: 'rgba(86,227,159,0.12)'},
+        'SQL': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
+        'JavaScript': {color: '#ffd166', bg: 'rgba(255,209,102,0.12)'},
+        'Git': {color: '#ff6b6b', bg: 'rgba(255,107,107,0.12)'},
+        'Python': {color: '#5b7cf8', bg: 'rgba(91,124,248,0.12)'},
+        'CSS': {color: '#8b6ef5', bg: 'rgba(139,110,245,0.12)'},
+        'React': {color: '#4ecdc4', bg: 'rgba(78,205,196,0.12)'},
+        '기타': {color: '#9da3b8', bg: 'rgba(157,163,184,0.12)'}
+    };
+
     function renderMarkdown(text) {
         if (!text) return '<p style="color:var(--text3)">내용이 없어요.</p>';
         return text
@@ -475,7 +403,7 @@
             .replace(/\n/g, '<br>');
     }
 
-    function openDashTilDetail(id) {
+    function openDetail(id) {
         var el = document.getElementById('til_data_' + id);
         if (!el) return;
         var cfg = TAG_CONFIG[el.dataset.tag] || TAG_CONFIG['기타'];
@@ -497,20 +425,19 @@
         if (modal) modal.classList.add('open');
     }
 
-    function closeDashTilDetail() {
+    function closeDetail() {
         var modal = document.getElementById('tilDetailModal');
         if (modal) modal.classList.remove('open');
     }
 
     document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closeDashTilDetail();
+        if (e.key === 'Escape') closeDetail();
     });
 
-    // 🌟 수정 완료: 여기서 중괄호(})를 닫아줘서 캘린더 코드가 모달 유무와 상관없이 실행되게 독립시켰습니다!
     var modalOverlay = document.getElementById('tilDetailModal');
     if (modalOverlay) {
         modalOverlay.addEventListener('click', function (e) {
-            if (e.target === e.currentTarget) closeDashTilDetail();
+            if (e.target === e.currentTarget) closeDetail();
         });
     }
 
@@ -542,6 +469,8 @@
             const firstDay = new Date(year, month, 1);
             const lastDay = new Date(year, month + 1, 0);
             const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+            // 🌟 수정 완료: 일요일 시작으로 변경 (- 1 삭제)
             let firstDayIndex = firstDay.getDay();
 
             const calTitle = document.getElementById('g-cal-title');
@@ -611,40 +540,6 @@
 
         renderMiniCalendar(currentDispDate);
     });
-
-    /* til ── 등록 / 수정 모달 ── */
-    function openTilEditor(id) {
-        var form = document.getElementById('tilForm');
-        document.getElementById('editorTitle').textContent = id ? 'TIL 수정' : 'TIL 작성';
-        form.action = id ? 'til_update' : 'til_insert';
-
-        document.getElementById('editorPreview').style.display = 'none';
-        document.getElementById('tilContent').style.display = 'block';
-        document.getElementById('previewBtn').textContent = '👁 미리보기';
-
-        if (id) {
-            var el = document.getElementById('til_data_' + id);
-            document.getElementById('formTilId').value = id;
-            document.getElementById('tilTitle').value = el.dataset.title;
-            document.getElementById('tilTag').value = el.dataset.tag;
-            document.getElementById('tilTime').value = el.dataset.time;
-            document.getElementById('tilContent').value = el.dataset.content;
-        } else {
-            document.getElementById('formTilId').value = '';
-            document.getElementById('tilTitle').value = '';
-            document.getElementById('tilTag').value = 'Java';
-            document.getElementById('tilTime').value = '';
-            document.getElementById('tilContent').value = '';
-        }
-
-        document.getElementById('tilEditorModal').classList.add('open');
-        document.getElementById('tilTitle').focus();
-    }
-
-    function closeEditor() {
-        document.getElementById('tilEditorModal').classList.remove('open');
-    }
-
 
 </script>
 </body>
