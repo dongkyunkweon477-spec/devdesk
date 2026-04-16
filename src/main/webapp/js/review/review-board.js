@@ -59,12 +59,17 @@ function renderReviews(reviews) {
             dateStr = d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
         }
 
+        let ic = r.reviewInterviewerCount || 0;
+        let sc = r.reviewStudentCount || 0;
+        let interviewerStr = (ic > 0 || sc > 0)
+            ? '면접관 ' + ic + '명 / 학생 ' + sc + '명'
+            : '미응답';
+
         html += '<div class="card">'
             + '<div class="card-header">'
             + '  <div>'
             + '  <a href="' + contextPath + '/review?companyId=' + r.reviewCompanyId + '">' + (r.companyName || '') + '</a>'
             + '  </div>'
-            + '  <div>[북마크] ' + r.reviewBookmarkCount + '</div>'
             + '</div>'
             + '<h2 class="card-title">' + r.reviewTitle + '</h2>'
             + '<div class="card-body">'
@@ -72,15 +77,15 @@ function renderReviews(reviews) {
             + '  <div class="info-grid">'
             + '    <div class="info-row">'
             + '      <span class="info-label">면접관/학생</span>'
-            + '      <span class="info-value">면접관 ' + r.reviewInterviewerCount + '명 / 학생 ' + r.reviewStudentCount + '명</span>'
+            + '      <span class="info-value">' + interviewerStr + '</span>'
             + '      <span class="info-label">연락 방법</span>'
-            + '      <span class="tag">' + (contactText[r.reviewContactMethod] || r.reviewContactMethod) + '</span>'
+            + '      <span class="tag">' + (contactText[r.reviewContactMethod] || '미응답') + '</span>'
             + '    </div>'
             + '    <div class="info-row">'
             + '      <span class="info-label">분위기</span>'
-            + '      <span class="info-value">' + (atmosText[r.reviewAtmosphere] || r.reviewAtmosphere) + '</span>'
+            + '      <span class="info-value">' + (atmosText[r.reviewAtmosphere] || '미응답') + '</span>'
             + '      <span class="info-label">면접 유형</span>'
-            + '      <span class="tag">' + (typeText[r.reviewInterviewType] || r.reviewInterviewType) + '</span>'
+            + '      <span class="tag">' + (typeText[r.reviewInterviewType] || '미응답') + '</span>'
             + '    </div>'
             + '  </div>'
             + '</div>'
@@ -88,7 +93,19 @@ function renderReviews(reviews) {
             + '  <a href="' + contextPath + '/review/detail?reviewId=' + r.reviewId + '" class="read-more-btn">계속 읽기</a>'
             + '</div>'
             + '<div class="card-footer">'
-            + '  <div>[추천] ' + r.reviewLikeCount + '</div>'
+            + '  <div class="footer-left">'
+            + '    <span class="card-like">♥ <span class="like-num">' + r.reviewLikeCount + '</span></span>'
+            + (r.reviewRating > 0 ? '    <span class="card-rating">'
+                + (function() {
+                    let stars = '';
+                    for (let s = 1; s <= 5; s++) {
+                        stars += '<span class="card-star ' + (s <= r.reviewRating ? 'on' : '') + '">★</span>';
+                    }
+                    return stars;
+                })()
+                + '      <span class="card-rating-num">' + r.reviewRating + '.0</span>'
+                + '    </span>' : '')
+            + '  </div>'
             + '  <div class="footer-right"><span>' + dateStr + '</span></div>'
             + '</div>'
             + '</div>';

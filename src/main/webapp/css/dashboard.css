@@ -6,11 +6,10 @@
     position: fixed;
     left: 0;
     background: var(--surface);
-    border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     z-index: 100;
-    box-shadow: 2px 0 16px rgba(91, 124, 248, 0.06);
+
 }
 
 /* 선민 수정 */

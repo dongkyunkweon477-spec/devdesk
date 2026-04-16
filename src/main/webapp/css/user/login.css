@@ -157,6 +157,7 @@
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* ===== 다크 모드 (주야간 토글) =====  선민 추가 */
 [data-theme="dark"] .login-options {
 =======
@@ -164,6 +165,10 @@
     /* ===== 다크 모드 (주야간 토글) =====  선민 추가 */
 [ data-theme = "dark" ] . login-options {
 >>>>>>> dd78069d4847bec21e87d4ff9ff29f61fc7926fe
+=======
+/* ===== 다크 모드 (주야간 토글) =====  선민 추가 */
+[data-theme="dark"] .login-options {
+>>>>>>> 078a20a98a33040af9a97271d0348346603fe6f7
     color: var(--text-tertiary);
 }
 
@@ -196,5 +201,8 @@
         border-color: var(--accent-secondary);
 
     }
+<<<<<<< HEAD
 >>>>>>> dd78069d4847bec21e87d4ff9ff29f61fc7926fe
 }
+=======
+>>>>>>> 078a20a98a33040af9a97271d0348346603fe6f7

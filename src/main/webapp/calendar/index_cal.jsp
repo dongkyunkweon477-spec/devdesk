@@ -4,10 +4,10 @@
 
 <title>DevDesk - 내 면접 일정</title>
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet'/>
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
 
-<script src="${pageContext.request.contextPath}/js/company/company-search-modal.js"></script>
+<script src="${pageContext.request.contextPath}/js/company/company-search-modal.js" defer></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/company/company-search-modal.css">
 <%-- base.css 선민추가 --%>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/base.css">
@@ -115,8 +115,12 @@
     </div>
 </div>
 
+<%-- 이부분이.. 안나옴.... ㅠㅠ base.css의 modal-overlay 부분--%>
 <div id="modal-backdrop"
      style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:999;"></div>
+
+<jsp:include page="/company/company-search/companySearchModal.jsp"/>
+
 <div id="schedule-modal" style="display:none;">
     <h3 id="modal-title">새 일정 추가</h3>
     <input type="hidden" id="form-id">
@@ -126,11 +130,13 @@
     <div class="form-group">
         <label>기업</label>
         <div style="display:flex;align-items:center;gap:8px;">
+            <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요" style="cursor:pointer;flex:1;" onclick="openCompanyModal()"/>
+            <button type="button" onclick="openCompanyModal()" class="modal-btn-search">선택</button>
             <input type="text" id="selectedCompanyName" readonly placeholder="기업을 선택해주세요"
                    style="cursor:pointer;flex:1;" onclick="openCompanyModal()"/>
-            <button type="button" onclick="openCompanyModal()" class="modal-btn-search">선택</button>
+
+            <button type="button" onclick="openCompanyModal()" class="csm-btn-search">선택</button>
         </div>
-        <jsp:include page="/company/company-search/companySearchModal.jsp"/>
         <input type="hidden" name="companyId" id="selectedCompanyId"/>
     </div>
     <div class="form-group">
@@ -218,9 +224,10 @@
 
         function showCustomAlert(msg, reload) {
             $('#alertMessage').text(msg);
-            $('#customAlertModal').css('display', 'flex').hide().fadeIn(200);
+            $('#customAlertModal').css({'display': 'flex', 'z-index': '10005'});
+
             $('#btn-alert-ok').off('click').on('click', function () {
-                $('#customAlertModal').fadeOut(200);
+                $('#customAlertModal').hide(); // 닫을 때도 즉시 닫기
                 if (reload) location.reload();
             });
         }
@@ -338,43 +345,103 @@
             }
             $('#modal-backdrop, #schedule-modal').fadeIn(200);
         });
-
         /* ── 삭제 ── */
-        $('#btn-do-delete').click(function () {
-            $('#event-popup').fadeOut(150);
-            $('#customConfirmModal').css('display', 'flex').hide().fadeIn(200);
-            $('#btn-real-delete').off('click').on('click', function () {
-                $('#customConfirmModal').fadeOut(200);
+        $('#btn-do-delete').off('click').on('click', function () {
+            var targetId = currentEvent.id;
+            console.log("▶ 1. 삭제 버튼 클릭! 타겟 ID: ", targetId);
+
+            // 숨어버리는 커스텀 모달 대신, 절대 실패하지 않는 기본 경고창 사용!
+            var isConfirmed = confirm("정말 삭제하시겠습니까?\n삭제된 일정은 복구할 수 없습니다.");
+
+            if (isConfirmed) {
+                console.log("▶ 2. 확인창에서 '확인' 누름! 서버로 ID 전송: ", targetId);
+                $('#event-popup').fadeOut(150);
+
+                // 서버로 즉시 전송
                 $.ajax({
-                    url: '/delete-calendar', type: 'POST', data: {schedule_id: currentEvent.id},
-                    success: function () {
-                        showCustomAlert('일정이 삭제되었습니다.', true);
+                    url: $('#contextPath').val() + '/delete-calendar',
+                    type: 'POST',
+                    data: { "schedule_id": targetId },
+                    success: function (res) {
+                        console.log("▶ 3. 서버 삭제 완료!");
+                        alert("일정이 정상적으로 삭제되었습니다.");
+                        location.reload(); // 화면 새로고침하여 달력 갱신
                     },
-                    error: function () {
-                        showCustomAlert('DELETE ERROR');
+                    error: function (xhr) {
+                        console.error("▶ 3. 통신 에러! 상태코드: ", xhr.status);
+                        alert("삭제 통신 실패 (에러코드: " + xhr.status + ")");
                     }
                 });
-            });
+            } else {
+                console.log("▶ 삭제 취소함");
+            }
         });
 
-        /* ── 저장 ── */
+        /* ── 저장/수정 AJAX ── 대체 */
         $('#btn-save-schedule').click(function () {
-            var id = $('#form-id').val(), st = $('#form-type').val();
+            var id = $('#form-id').val();
+            var st = $('#form-type').val();
             var ft = (st === 'direct') ? $('#form-type-direct').val() : st;
-            if (!$('#selectedCompanyName').val().trim() || (st === 'direct' && !ft.trim())) {
+
+            // 입력값 변수화
+            var companyName = $('#selectedCompanyName').val();
+            var position = $('#form-position').val();
+            var targetDate = $('#form-date').val();
+            var targetTime = $('#form-hour').val() + ':' + $('#form-minute').val();
+            var memoText = $('#form-memo').val();
+
+            if (!companyName.trim() || (st === 'direct' && !ft.trim())) {
                 showCustomAlert('회사 이름과 면접 전형을 확인해 주세요.');
                 return;
             }
+
             $.ajax({
-                url: id ? '/update-calendar' : '/add-calendar', type: 'POST',
+                url: $('#contextPath').val() + (id ? '/update-calendar' : '/add-calendar'),
+                type: 'POST',
                 data: {
-                    schedule_id: id, app_id: $('#form-appId').val(),
-                    company_name: $('#selectedCompanyName').val(), position: $('#form-position').val(),
-                    apply_date: $('#form-apply-date').val(), date: $('#form-date').val(),
-                    time: $('#form-hour').val() + ':' + $('#form-minute').val(), type: ft, memo: $('#form-memo').val()
+                    schedule_id: id,
+                    app_id: $('#form-appId').val(),
+                    company_name: companyName,
+                    position: position,
+                    apply_date: $('#form-apply-date').val(),
+                    date: targetDate,
+                    time: targetTime,
+                    type: ft,
+                    memo: memoText
                 },
+
                 success: function () {
-                    showCustomAlert('저장되었습니다!', true);
+                    console.log("▶ 서버 통신 성공!");
+                    $('#modal-backdrop, #schedule-modal').hide();
+
+                    if (id) {
+                        try {
+                            // [수정 모드] 달력 이벤트 즉시 업데이트
+                            var eventToUpdate = window.calendar.getEventById(id);
+                            if (eventToUpdate) {
+                                eventToUpdate.setProp('title', companyName + ' 면접');
+                                eventToUpdate.setStart(targetDate);
+                                eventToUpdate.setExtendedProp('company', companyName);
+                                eventToUpdate.setExtendedProp('position', position);
+                                eventToUpdate.setExtendedProp('time', targetTime);
+                                eventToUpdate.setExtendedProp('type', ft);
+                                eventToUpdate.setExtendedProp('memo', memoText);
+                            }
+                        } catch (e) {
+                            console.error("▶ 달력 렌더링 에러: ", e);
+                        }
+
+                        console.log("▶ 수정 완료 알림창 호출!");
+                        // 2. 알림창 즉시 호출
+                        alert('일정이 성공적으로 수정되었습니다.');
+                        location.reload();
+                        // showCustomAlert('일정이 성공적으로 수정되었습니다.', false);
+                    } else {
+                        // [추가 모드]
+                        alert('저장되었습니다!');
+                        location.reload();
+                       // showCustomAlert('저장되었습니다!', true);
+                    }
                 },
                 error: function () {
                     showCustomAlert('저장 중 오류가 발생했습니다.');

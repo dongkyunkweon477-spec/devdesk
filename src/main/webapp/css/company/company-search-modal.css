@@ -1,5 +1,5 @@
 /* 모달 뒷배경 */
-#companySearchModal { /* .modal-overlay → #companySearchModal */
+#companySearchModal.csm-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -13,7 +13,7 @@
 }
 
 /* 모달 창 본체 */
-#companySearchModal .modal-box {
+#companySearchModal .csm-box {
     background: white;
     padding: 25px;
     border-radius: 8px;
@@ -22,12 +22,12 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-#companySearchModal .modal-box h3 {
+#companySearchModal .csm-box h3 {
     margin-top: 0;
     margin-bottom: 15px;
 }
 
-#companySearchModal .modal-box input[type="text"] {
+#companySearchModal .csm-box input[type="text"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -36,7 +36,7 @@
     box-sizing: border-box;
 }
 
-#companySearchModal .modal-box button {
+#companySearchModal .csm-box button {
     padding: 8px 15px;
     cursor: pointer;
     background: #007bff;
@@ -45,7 +45,7 @@
     border-radius: 4px;
 }
 
-#companySearchModal .modal-box ul {
+#companySearchModal .csm-box ul {
     list-style: none;
     padding: 0;
     margin: 15px 0;
@@ -54,24 +54,24 @@
     border-top: 1px solid #eee;
 }
 
-#companySearchModal .modal-box ul li {
+#companySearchModal .csm-box ul li {
     border-bottom: 1px solid #eee;
     padding: 8px 0;
 }
 
-#companySearchModal .modal-box ul li a {
+#companySearchModal .csm-box ul li a {
     text-decoration: none;
     color: #333;
     display: block;
 }
 
-#companySearchModal .modal-box ul li a:hover {
+#companySearchModal .csm-box ul li a:hover {
     color: #7c3aed;
     background: #f8fafc;
 }
 
 /* 기업 선택 버튼 (부모 페이지용) */
-.modal-btn-search {
+.csm-btn-search {
     height: 38px;
     padding: 0 16px;
     background: #7c3aed;
@@ -85,17 +85,17 @@
     transition: background 0.2s;
 }
 
-.modal-btn-search:hover {
+.csm-btn-search:hover {
     background: #6d28d9;
 }
 
 /* 모달 내부 검색창 레이아웃 */
-.modal-search-row {
+.csm-search-row {
     display: flex;
     margin-bottom: 15px;
 }
 
-.modal-search-row input[type="text"] {
+.csm-search-row input[type="text"] {
     margin-bottom: 0;
     border-radius: 8px 0 0 8px;
     flex: 1;
@@ -120,22 +120,22 @@
 }
 
 /* 모달 닫기 버튼 */
-#companySearchModal .modal-box > button[onclick^="close"] {
+#companySearchModal .csm-box > button[onclick^="close"] {
     width: 100%;
     background: #94a3b8;
     margin-top: 10px;
 }
 
 /* Dark Mode */
-[data-theme="dark"] #companySearchModal .modal-box { background: #1e293b; color: #f8fafc; }
-[data-theme="dark"] #companySearchModal .modal-box input[type="text"] { background: #0f172a; border-color: #334155; color: #e2e8f0; }
-[data-theme="dark"] #companySearchModal .modal-box ul { border-top-color: #334155; }
-[data-theme="dark"] #companySearchModal .modal-box ul li { border-bottom-color: #334155; }
-[data-theme="dark"] #companySearchModal .modal-box ul li a { color: #e2e8f0; }
-[data-theme="dark"] #companySearchModal .modal-box ul li a:hover { color: #c4b5fd; background: #334155; }
-[data-theme="dark"] .modal-btn-search { background: #a78bfa; color: #ffffff; }
-[data-theme="dark"] .modal-btn-search:hover { background: #8b5cf6; }
+[data-theme="dark"] #companySearchModal .csm-box { background: #1e293b; color: #f8fafc; }
+[data-theme="dark"] #companySearchModal .csm-box input[type="text"] { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+[data-theme="dark"] #companySearchModal .csm-box ul { border-top-color: #334155; }
+[data-theme="dark"] #companySearchModal .csm-box ul li { border-bottom-color: #334155; }
+[data-theme="dark"] #companySearchModal .csm-box ul li a { color: #e2e8f0; }
+[data-theme="dark"] #companySearchModal .csm-box ul li a:hover { color: #c4b5fd; background: #334155; }
+[data-theme="dark"] .csm-btn-search { background: #a78bfa; color: #ffffff; }
+[data-theme="dark"] .csm-btn-search:hover { background: #8b5cf6; }
 [data-theme="dark"] #miniResultList button { background: #0f172a; color: #cbd5e1; border-color: #475569; }
 [data-theme="dark"] #miniResultList button:hover { background: #334155; color: #c4b5fd; border-color: #a78bfa; }
-[data-theme="dark"] #companySearchModal .modal-box > button[onclick^="close"] { background: #475569; color: #f8fafc; }
-[data-theme="dark"] #companySearchModal .modal-box > button[onclick^="close"]:hover { background: #334155; }
+[data-theme="dark"] #companySearchModal .csm-box > button[onclick^="close"] { background: #475569; color: #f8fafc; }
+[data-theme="dark"] #companySearchModal .csm-box > button[onclick^="close"]:hover { background: #334155; }

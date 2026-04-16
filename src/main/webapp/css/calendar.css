@@ -559,3 +559,11 @@
 [data-theme="dark"] .fc-day-other {
     background-color: var(--surface3, rgba(0,0,0,0.05));
 }
+
+#companySearchModal.modal-overlay {
+    z-index: 10005;
+}
+
+#companySearchModal .modal-box {
+    z-index: 10006;
+}

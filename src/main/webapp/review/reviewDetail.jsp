@@ -61,6 +61,15 @@
                     </c:forEach>
                 </span>
             </div>
+            <div class="info-item">
+                <span class="info-label">기업 평점</span>
+                <span class="info-value">
+                    <c:forEach begin="1" end="5" var="i">
+                        <span class="star rating-star ${i <= r.reviewRating ? 'on' : ''}">★</span>
+                    </c:forEach>
+                    <span class="rating-num">${r.reviewRating}.0</span>
+                </span>
+            </div>
         </div>
     </div>
 
@@ -144,10 +153,6 @@
         <button class="rd-pill rd-pill-like ${isLiked ? 'active' : ''}"
                 id="likeBtn" data-id="${r.reviewId}">
             ♥ 추천 <span id="likeCount">${r.reviewLikeCount}</span>
-        </button>
-        <button class="rd-pill rd-pill-bookmark ${isBookmarked ? 'active' : ''}"
-                id="bookmarkBtn" data-id="${r.reviewId}">
-            ★ 북마크 <span id="bookmarkCount">${r.reviewBookmarkCount}</span>
         </button>
     </div>
 

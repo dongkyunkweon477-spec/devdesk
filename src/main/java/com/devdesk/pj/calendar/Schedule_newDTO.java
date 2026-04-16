@@ -13,7 +13,7 @@ import java.util.Date;
 public class Schedule_newDTO {
     // SCHEDULE 테이블 데이터
     private int schedule_id;
-    private Date schedule_date;
+    private java.sql.Date schedule_date;
     private String schedule_time;
     private String interview_type;
     private String schedule_memo;
