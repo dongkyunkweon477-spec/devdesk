@@ -37,7 +37,7 @@
     <div class="detail-view">
         <div class="detail-row">
             <div class="detail-label">제목</div>
-            <div class="detail-content title-bold">${board.title}</div>
+            <div class="detail-content title-bold"><c:out value="${board.title}"/></div>
         </div>
 
         <div class="detail-info-group">
@@ -45,7 +45,7 @@
                 <div class="detail-label">작성자</div>
                 <div class="detail-content">(ID:
                     <span class="writer" data-id="${board.member_id}">
-                        ${board.nickname}
+                        <c:out value="${board.nickname}"/>
                     </span>)
                 </div>
             </div>
@@ -61,7 +61,7 @@
 
         <div class="detail-row board-content-area">
             <div class="detail-label">내용</div>
-            <div class="detail-content text-box">${board.content}</div>
+            <div class="detail-content text-box"><c:out value="${board.content}"/></div>
         </div>
     </div>
 
@@ -106,11 +106,11 @@
                 <c:if test="${empty comment.parent_id}">
                     <div class="comment-item" data-comment-id="${comment.comments_id}">
                         <div class="comment-info">
-                            <span class="comment-writer">사용자(ID: ${comment.nickname})</span>
+                            <span class="comment-writer">사용자(ID: <c:out value="${comment.nickname}"/>)</span>
                             <span class="comment-date">${comment.created_date}</span>
                         </div>
                         <div class="comment-content">
-                                ${comment.content}
+                                <c:out value="${comment.content}"/>
                         </div>
 
                         <button class="reply-btn"
@@ -135,11 +135,11 @@
                         <c:if test="${reply.parent_id == comment.comments_id}">
                             <div class="reply-item" data-reply-id="${reply.comments_id}">
                                 <div class="reply-info">
-                                    <span class="reply-writer">사용자(ID: ${reply.nickname})</span>
+                                    <span class="reply-writer">사용자(ID: <c:out value="${reply.nickname}"/>)</span>
                                     <span class="reply-date">${reply.created_date}</span>
                                 </div>
                                 <div class="reply-content">
-                                        ${reply.content}
+                                        <c:out value="${reply.content}"/>
                                 </div>
                                 <c:if test="${sessionScope.user.member_id == reply.member_id}">
                                     <div class="reply-actions">

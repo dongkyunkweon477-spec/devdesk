@@ -18,7 +18,7 @@
                 </span>
             </div>
             <div class="cd-hero-info">
-                <h1 class="cd-company-name">${company.companyName}</h1>
+                <h1 class="cd-company-name"><c:out value="${company.companyName}"/></h1>
                 <div class="cd-rating-row">
                     <span class="cd-stars-hero">
                         <c:forEach begin="1" end="5" var="i">
@@ -29,8 +29,8 @@
                     <span class="cd-review-count">면접 후기(${stats.totalCount}건)</span>
                 </div>
                 <div class="cd-company-meta">
-                    <span>업종 : ${company.companyIndustry}</span>
-                    <span>위치 : ${company.companyLocation}</span>
+                    <span>업종 : <c:out value="${company.companyIndustry}"/></span>
+                    <span>위치 : <c:out value="${company.companyLocation}"/></span>
                     <span>규모 : <fmt:formatNumber value="${company.companySize}"/>명</span>
                 </div>
             </div>
@@ -105,7 +105,7 @@
         <c:forEach var="r" items="${reviews}">
             <div class="cd-card">
                 <div class="cd-card-top">
-                    <span class="cd-card-position">${r.reviewJobPosition}</span>
+                    <span class="cd-card-position"><c:out value="${r.reviewJobPosition}"/></span>
                     <span class="cd-card-stars">
                     <c:forEach begin="1" end="5" var="i">
                         <span class="star-sm ${i <= r.reviewDifficulty ? 'on' : ''}">★</span>
@@ -113,7 +113,7 @@
                 </span>
                 </div>
                 <a href="${pageContext.request.contextPath}/review/detail?reviewId=${r.reviewId}"
-                   class="cd-card-title">${r.reviewTitle}</a>
+                   class="cd-card-title"><c:out value="${r.reviewTitle}"/></a>
                 <div class="cd-card-tags">
                 <span class="cd-tag">
                     <c:choose>
@@ -122,7 +122,7 @@
                         <c:when test="${r.reviewInterviewType == 'PERSONAL'}">인성면접</c:when>
                         <c:when test="${r.reviewInterviewType == 'EXEC'}">임원면접</c:when>
                         <c:when test="${r.reviewInterviewType == 'GROUP'}">그룹면접</c:when>
-                        <c:otherwise>${r.reviewInterviewType}</c:otherwise>
+                        <c:otherwise><c:out value="${r.reviewInterviewType}"/></c:otherwise>
                     </c:choose>
                 </span>
                     <c:if test="${r.reviewInterviewerCount > 0}">
@@ -135,7 +135,7 @@
                             <c:when test="${r.reviewAtmosphere == 'NORMAL'}">보통</c:when>
                             <c:when test="${r.reviewAtmosphere == 'SERIOUS'}">엄숙</c:when>
                             <c:when test="${r.reviewAtmosphere == 'PRESSURE'}">압박</c:when>
-                            <c:otherwise>${r.reviewAtmosphere}</c:otherwise>
+                            <c:otherwise><c:out value="${r.reviewAtmosphere}"/></c:otherwise>
                         </c:choose>
                     </span>
                     </c:if>
@@ -144,7 +144,7 @@
                         <c:when test="${r.reviewResult == 'PASS'}">합격</c:when>
                         <c:when test="${r.reviewResult == 'FAIL'}">불합격</c:when>
                         <c:when test="${r.reviewResult == 'PENDING'}">대기중</c:when>
-                        <c:otherwise>${r.reviewResult}</c:otherwise>
+                        <c:otherwise><c:out value="${r.reviewResult}"/></c:otherwise>
                     </c:choose>
                 </span>
                 </div>

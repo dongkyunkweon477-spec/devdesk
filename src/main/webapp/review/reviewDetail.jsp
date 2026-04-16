@@ -9,9 +9,9 @@
 <div class="detail-wrap">
 
     <div class="detail-header">
-        <div class="company-badge">${company.companyName}</div>
-        <p class="company-meta">${company.companyIndustry} · ${company.companyLocation} · ${company.companySize}명</p>
-        <h2 class="detail-title">${r.reviewTitle}</h2>
+        <div class="company-badge"><c:out value="${company.companyName}"/></div>
+        <p class="company-meta"><c:out value="${company.companyIndustry}"/> · <c:out value="${company.companyLocation}"/> · ${company.companySize}명</p>
+        <h2 class="detail-title"><c:out value="${r.reviewTitle}"/></h2>
         <div class="detail-meta">
             <span><fmt:formatDate value="${r.reviewCreatedDate}" pattern="yyyy년 M월 d일"/></span>
             <span>조회 ${r.reviewViewCount}</span>
@@ -27,7 +27,7 @@
         <div class="info-grid-detail">
             <div class="info-item">
                 <span class="info-label">지원 직무</span>
-                <span class="info-value">${r.reviewJobPosition}</span>
+                <span class="info-value"><c:out value="${r.reviewJobPosition}"/></span>
             </div>
             <div class="info-item">
                 <span class="info-label">면접 유형</span>
@@ -38,7 +38,7 @@
                         <c:when test="${r.reviewInterviewType == 'PERSONAL'}">인성면접</c:when>
                         <c:when test="${r.reviewInterviewType == 'EXEC'}">임원면접</c:when>
                         <c:when test="${r.reviewInterviewType == 'GROUP'}">그룹면접</c:when>
-                        <c:otherwise>${r.reviewInterviewType}</c:otherwise>
+                        <c:otherwise><c:out value="${r.reviewInterviewType}"/></c:otherwise>
                     </c:choose>
                 </span>
             </div>
@@ -49,7 +49,7 @@
                         <c:when test="${r.reviewResult == 'PASS'}">합격</c:when>
                         <c:when test="${r.reviewResult == 'FAIL'}">불합격</c:when>
                         <c:when test="${r.reviewResult == 'PENDING'}">대기중</c:when>
-                        <c:otherwise>${r.reviewResult}</c:otherwise>
+                        <c:otherwise><c:out value="${r.reviewResult}"/></c:otherwise>
                     </c:choose>
                 </span>
             </div>
@@ -101,7 +101,7 @@
                             <c:when test="${r.reviewAtmosphere == 'NORMAL'}">보통</c:when>
                             <c:when test="${r.reviewAtmosphere == 'SERIOUS'}">엄숙</c:when>
                             <c:when test="${r.reviewAtmosphere == 'PRESSURE'}">압박</c:when>
-                            <c:otherwise>${r.reviewAtmosphere}</c:otherwise>
+                            <c:otherwise><c:out value="${r.reviewAtmosphere}"/></c:otherwise>
                         </c:choose>
                     </span>
                 </div>
@@ -114,7 +114,7 @@
                             <c:when test="${r.reviewContactMethod == 'EMAIL'}">이메일</c:when>
                             <c:when test="${r.reviewContactMethod == 'PHONE'}">전화</c:when>
                             <c:when test="${r.reviewContactMethod == 'WEBSITE'}">채용 홈페이지</c:when>
-                            <c:otherwise>${r.reviewContactMethod}</c:otherwise>
+                            <c:otherwise><c:out value="${r.reviewContactMethod}"/></c:otherwise>
                         </c:choose>
                     </span>
                 </div>
@@ -144,7 +144,7 @@
             상세 후기
         </div>
         <div class="detail-content">
-            ${r.reviewContent}
+            <c:out value="${r.reviewContent}"/>
         </div>
     </div>
 
