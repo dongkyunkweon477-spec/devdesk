@@ -40,7 +40,6 @@
             <select id="sortOrder">
                 <option value="latest">최신순</option>
                 <option value="like_desc">추천순</option>
-                <option value="difficulty_asc">난이도 낮은순</option>
             </select>
         </div>
         <a href="${pageContext.request.contextPath}/review/write" class="btn-write">
