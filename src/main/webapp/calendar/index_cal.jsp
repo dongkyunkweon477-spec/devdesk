@@ -111,7 +111,8 @@
     </div>
 </div>
 
-<%-- 이부분이.. 안나옴.... ㅠㅠ base.css의 modal-overlay 부분--%>
+
+
 <div id="modal-backdrop"
      style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:999;"></div>
 

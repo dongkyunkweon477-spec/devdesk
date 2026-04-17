@@ -344,10 +344,10 @@ function copyCompose(catId) {
 /* ── 이력서 조합: 전체 복사 ── */
 function copyAllCompose() {
     const categories = [
-        {id: 'shimei', label: '志望動機'},
-        {id: 'jikopr', label: '自己PR'},
-        {id: 'chosho', label: '長所・短所'},
-        {id: 'keireki', label: '職務経歴'}
+        {id: 'shimei', label: '지원 동기'},
+        {id: 'jikopr', label: '자기 PR'},
+        {id: 'chosho', label: '성격의 장단점'},
+        {id: 'keireki', label: '직무 경험'}
     ];
 
     let texts = [];
