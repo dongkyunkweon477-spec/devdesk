@@ -4,7 +4,7 @@
 <%-- 🌟 분리한 외부 CSS 파일 연결 --%>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/admin.css">
 <%-- 🌟 상세 모달창 디자인을 위해 회원관리용 CSS도 같이 불러옵니다! --%>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/admin_member.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/admin-member.css">
 
 <%-- 🌟 Chart.js 라이브러리 연결 --%>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="card">
-                    
+
                     <div class="card-title">오늘의 신규 가입</div>
                     <div class="card-value" style="color: var(--success-color);">+ ${todayNewMembers} 명</div>
                 </div>

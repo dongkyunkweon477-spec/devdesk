@@ -3,7 +3,7 @@
 
 <%-- 기존 어드민 기본 CSS와 회원관리용 CSS(리스트 디자인)를 재활용합니다! --%>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/admin.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/admin_member.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/admin-member.css">
 
 <div class="admin-wrapper">
 

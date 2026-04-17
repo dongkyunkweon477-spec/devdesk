@@ -2,8 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/admin.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/admin_member.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/admin_company.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/admin-member.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/admin-company.css">
 
 <div class="admin-wrapper">
 
