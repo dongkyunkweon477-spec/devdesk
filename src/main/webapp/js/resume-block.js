@@ -104,7 +104,7 @@ function openNewBlockModal() {
             <div class="form-group">
                 <label class="form-label">내용</label>
                 <textarea name="content" class="form-textarea" rows="6"
-                          placeholder="일본어로 내용을 작성하세요..."
+                          placeholder="내용을 작성하세요..."
                           oninput="updateCharCount(this)" required></textarea>
                 <div style="text-align:right;margin-top:4px">
                     <span class="rb-char-count" id="modalCharCount">0자</span>
