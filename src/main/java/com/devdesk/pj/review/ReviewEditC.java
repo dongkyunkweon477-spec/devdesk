@@ -30,7 +30,7 @@ public class ReviewEditC extends HttpServlet {
         CompanySearchVO company = CompanySearchDAO.COMPANY_SEARCH_DAO.getCompanyById(review.getReviewCompanyId());
         request.setAttribute("r", review);
         request.setAttribute("company", company);
-        request.setAttribute("content", "/review/reviewEdit.jsp");
+        request.setAttribute("content", "/review/review_edit.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 

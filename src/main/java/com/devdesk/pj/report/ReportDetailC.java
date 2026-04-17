@@ -46,7 +46,7 @@ public class ReportDetailC extends HttpServlet {
                     com.devdesk.pj.board.BoardDAO.getBoardById(report.getRepoBoardId()));
         }
 
-        request.setAttribute("content", "report/reportDetail.jsp");
+        request.setAttribute("content", "report/report_detail.jsp");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 

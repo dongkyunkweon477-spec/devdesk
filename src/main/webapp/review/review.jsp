@@ -10,7 +10,7 @@
 <script src="${pageContext.request.contextPath}/js/company/company-search-modal.js"></script>
 <script src="${pageContext.request.contextPath}/js/review/review-board.js"></script>
 
-<jsp:include page="/company/company-search/companySearch.jsp"/>
+<jsp:include page="/company/company-search/company_search.jsp"/>
 
 
 <div class="board-container">
@@ -136,4 +136,4 @@
 </div>
 
 
-<jsp:include page="/company/company-search/companySearchModal.jsp"/>
+<jsp:include page="/company/company-search/company_search_modal.jsp"/>

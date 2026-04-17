@@ -147,7 +147,7 @@
                            readonly placeholder="기업을 선택해주세요" style="cursor:pointer;"/>
                     <button type="button" id="btnOpenCompany" class="csm-btn-search">기업 선택</button>
                 </div>
-                <jsp:include page="/company/company-search/companySearchModal.jsp"/>
+                <jsp:include page="/company/company-search/company_search_modal.jsp"/>
                 <input type="hidden" name="companyId" id="selectedCompanyId"/>
             </div>
 

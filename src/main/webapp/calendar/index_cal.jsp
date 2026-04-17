@@ -115,7 +115,7 @@
 <div id="modal-backdrop"
      style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:999;"></div>
 
-<jsp:include page="/company/company-search/companySearchModal.jsp"/>
+<jsp:include page="/company/company-search/company_search_modal.jsp"/>
 
 <div id="schedule-modal" style="display:none;">
     <h3 id="modal-title">새 일정 추가</h3>
